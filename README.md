@@ -3,9 +3,9 @@
 [![Platform](https://img.shields.io/badge/platform-Windows%2011-blue.svg)](https://www.microsoft.com/windows)
 [![Flutter](https://img.shields.io/badge/Flutter-3.10+-02569B.svg?logo=flutter)](https://flutter.dev)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![Release](https://img.shields.io/github/v/release/yourusername/ZapTweaks.svg)](https://github.com/PrimeBuild-pc/ZapTweaks/releases/tag/v1.0)
+[![Release](https://img.shields.io/github/v/release/PrimeBuild-pc/ZapTweaks.svg)](https://github.com/PrimeBuild-pc/ZapTweaks/releases)
 
-> **Professional Windows 11 Gaming System Optimizer by PrimeBuild**
+> **Simple & Fast Windows 11 Gaming System Optimizer by PrimeBuild**
 
 ZapTweaks is a simple desktop application designed to optimize Windows 11 systems for better gaming performance through basic system tweaks and optimizations.
 
