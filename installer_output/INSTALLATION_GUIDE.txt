@@ -1,0 +1,163 @@
+╔══════════════════════════════════════════════════════════════════════════╗
+║             ZapTweaks v1.0 - Guida all'Installazione                    ║
+║                        by PrimeBuild                                     ║
+╚══════════════════════════════════════════════════════════════════════════╝
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📦 CONTENUTO PACCHETTO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Il pacchetto ZapTweaks_v1.0_Windows.zip contiene:
+
+• script_utility.exe           - Applicazione principale
+• Run_as_Admin.bat             - Launcher con privilegi amministratore
+• README.txt                   - Documentazione completa
+• data/                        - Assets e risorse dell'app
+  └── flutter_assets/
+      └── resources/
+          └── Powerplans/      - 21 Power Plans ottimizzati
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🚀 INSTALLAZIONE RAPIDA (3 STEP)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1️⃣  ESTRAI I FILE
+   • Tasto destro su ZapTweaks_v1.0_Windows.zip
+   • Seleziona "Estrai tutto..."
+   • Scegli una destinazione (consigliato: C:\Program Files\ZapTweaks\)
+   • Clicca "Estrai"
+
+2️⃣  ESEGUI COME AMMINISTRATORE
+   Opzione A (Consigliata):
+   • Doppio click su "Run_as_Admin.bat"
+   • Conferma l'elevazione privilegi (UAC)
+
+   Opzione B (Manuale):
+   • Tasto destro su "script_utility.exe"
+   • Seleziona "Esegui come amministratore"
+
+3️⃣  APPLICA OTTIMIZZAZIONI
+   • Seleziona i tweaks desiderati usando gli switch
+   • Importa/Attiva power plan (opzionale)
+   • Riavvia il sistema quando richiesto
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚠️ REQUISITI E RACCOMANDAZIONI
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✓ Sistema Operativo:    Windows 11 (64-bit)
+✓ Privilegi:            Amministratore OBBLIGATORI
+✓ Spazio Disco:         50 MB liberi
+✓ RAM:                  Minimo 4 GB
+
+⚠️ IMPORTANTE PRIMA DI INIZIARE:
+
+1. CREA UN PUNTO DI RIPRISTINO del sistema
+   - Cerca "Crea punto di ripristino" nel menu Start
+   - Clicca "Crea..." e assegna un nome (es. "Prima di ZapTweaks")
+
+2. CHIUDI TUTTI I PROGRAMMI aperti
+
+3. DISABILITA TEMPORANEAMENTE l'antivirus (opzionale)
+   - Alcuni antivirus potrebbero bloccare le modifiche di registro
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+💡 UTILIZZO DELL'APP
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔧 ATTIVARE/DISATTIVARE TWEAKS:
+   • Toggle ON (arancione) = Tweak ATTIVO
+   • Toggle OFF (grigio) = Tweak DISATTIVATO
+   • Ogni modifica viene applicata istantaneamente
+
+⚡ POWER PLANS:
+   • Dropdown menu: Seleziona e attiva power plan
+   • Bottone "Bundled": Importa power plan inclusi (21 disponibili)
+   • Bottone "Custom": Importa power plan personalizzati (.pow)
+   • Box arancione: Mostra power plan attualmente attivo
+
+🔄 RIAVVIO SISTEMA:
+   • Notifica arancione appare quando richiesto
+   • Alcune modifiche richiedono riavvio per attivarsi
+   • Riavvia appena possibile per applicare completamente
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🛡️ RIPRISTINARE IMPOSTAZIONI PREDEFINITE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Per disabilitare un tweak:
+1. Apri ZapTweaks come amministratore
+2. Disattiva lo switch del tweak (toggle OFF)
+3. L'app ripristinerà i valori predefiniti
+
+Per ripristino completo:
+1. Usa il punto di ripristino creato in precedenza
+   - Cerca "Ripristino configurazione di sistema"
+   - Seleziona il punto creato prima dell'installazione
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📋 CATEGORIE OTTIMIZZAZIONI INCLUSE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✓ BCD Optimizations       - Boot configuration, timer, HPET, TSC
+✓ CPU Unparking           - Disabilita core parking, massime prestazioni
+✓ CPU Power Management    - Win32Priority, throttling, C-States
+✓ NVIDIA GPU              - HAGS, TDR, priorità GPU massima
+✓ AMD GPU                 - ULPS, PowerPlay, DRR, VRAM clocks
+✓ Intel Arc GPU           - ReBAR, shader cache, ASPM, DPST
+✓ RAM Optimizations       - Paging executive, cache, superfetch
+✓ Storage Optimizations   - NTFS, TRIM, AHCI power management
+✓ Network Optimizations   - TCP optimizer, throttling, DPC
+✓ Timer & Latency         - MMCSS, audio latency, timer resolution
+✓ Visual Effects          - Disabilita animazioni, trasparenze
+✓ System Responsiveness   - Menu delay, timeouts, kill apps
+✓ UI Optimizations        - Taskbar, widgets, search box
+✓ Explorer Optimizations  - Thumbnails, cache, file extensions
+✓ Telemetry Disable       - DiagTrack, feedback, Cortana
+✓ Privacy Tracking        - Ads, location, sync, activity history
+✓ Services Disable        - Xbox, diagnostics, search, maps
+✓ Notifications Minimal   - Toast notifications, focus assist
+✓ Game Mode               - Disabilita Game Mode e Game Bar
+✓ Fullscreen Optimizations- FSE, Game DVR, HAGS
+✓ Windows Update          - Auto-reboot, P2P, bandwidth limits
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+❓ FAQ - DOMANDE FREQUENTI
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Q: L'app non si avvia
+A: Verifica di eseguirla come amministratore. Usa Run_as_Admin.bat
+
+Q: L'antivirus blocca l'app
+A: ZapTweaks modifica il registro di sistema per ottimizzare Windows.
+   Aggiungi un'eccezione nell'antivirus per script_utility.exe
+
+Q: Posso usare ZapTweaks su Windows 10?
+A: ZapTweaks è ottimizzato per Windows 11. Su Windows 10 alcune
+   funzionalità potrebbero non essere disponibili.
+
+Q: Devo riavviare per ogni tweak?
+A: No, riavvia solo quando appare la notifica arancione nell'app.
+
+Q: Come disinstallo ZapTweaks?
+A: Disattiva tutti i tweaks dall'app, poi elimina la cartella.
+
+Q: I power plan importati vengono rimossi?
+A: No, rimangono salvati in Windows anche dopo aver chiuso l'app.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📞 INFORMAZIONI
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Nome:        ZapTweaks
+Versione:    1.0
+Sviluppato:  PrimeBuild
+Engine:      Flutter Windows Desktop
+Anno:        2025
+Categoria:   System Optimization / Gaming Performance
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+© 2025 PrimeBuild. Tutti i diritti riservati.
+
+Buon gaming! 🎮⚡
