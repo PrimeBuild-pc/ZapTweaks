@@ -9,7 +9,7 @@
 
 ZapTweaks is a powerful desktop application designed to optimize Windows 11 systems for maximum gaming performance through comprehensive system tweaks and optimizations.
 
-![ZapTweaks](https://via.placeholder.com/800x450/1C1C1C/FF6B00?text=ZapTweaks+Screenshot)
+<img width="641" height="966" alt="image" src="https://github.com/user-attachments/assets/1c492a00-9364-48eb-a8ab-a7803ef9bfe1" />
 
 ## ✨ Features
 
@@ -56,7 +56,7 @@ ZapTweaks is a powerful desktop application designed to optimize Windows 11 syst
 
 ### Download & Install
 
-1. Download the latest release from [Releases](https://github.com/yourusername/ZapTweaks/releases)
+1. Download the latest release from [Releases](https://github.com/PrimeBuild-pc/ZapTweaks/releases)
 2. Extract `ZapTweaks_v1.0_Windows.zip` to your desired location
 3. Run `script_utility.exe` as Administrator
 4. Apply your desired tweaks
