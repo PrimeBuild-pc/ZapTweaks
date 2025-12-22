@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
+import 'dart:convert';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:path/path.dart' as path;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 void main() {
   runApp(const ZapTweaksApp());
@@ -49,6 +51,10 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  // App version for update checking
+  static const String currentVersion = '1.0.0';
+  static const String githubRepo = 'PrimeBuild-pc/ZapTweaks';
+
   // Tweak states
   Map<String, bool> tweaks = {
     // Boot & BCD
@@ -115,7 +121,7 @@ class _MainScreenState extends State<MainScreen> {
         tweaks[key] = _prefs!.getBool(key) ?? false;
       });
 
-      // Carica lo stato di riavvio necessario
+      // Load restart required state
       needsRestart = _prefs!.getBool('needsRestart') ?? false;
     });
   }
@@ -131,13 +137,13 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   bool _tweakRequiresRestart(String key) {
-    // Quasi tutti i tweaks richiedono riavvio (modificano registry o servizi)
-    // Solo l'importazione dei power plan non richiede riavvio
+    // Almost all tweaks require restart (they modify registry or services)
+    // Only power plan imports don't require restart
     const noRestartRequired = [
-      // Power plans si applicano immediatamente
+      // Power plans apply immediately
     ];
 
-    // Tutti gli altri tweaks richiedono riavvio
+    // All other tweaks require restart
     return !noRestartRequired.contains(key);
   }
 
@@ -226,7 +232,7 @@ class _MainScreenState extends State<MainScreen> {
                             children: [
                               Row(
                                 children: [
-                                  // Icona riavvio (visibile solo se necessario)
+                                  // Restart icon (visible only when needed)
                                   if (needsRestart)
                                     Container(
                                       padding: const EdgeInsets.all(4),
@@ -270,9 +276,33 @@ class _MainScreenState extends State<MainScreen> {
                         ),
                       ),
                     ),
-                    // Pulsante riavvio (sempre visibile)
+                    // Check for updates button
                     Tooltip(
-                      message: needsRestart ? 'Riavvia il sistema' : 'Nessun riavvio necessario',
+                      message: 'Check for updates',
+                      child: MouseRegion(
+                        cursor: SystemMouseCursors.click,
+                        child: GestureDetector(
+                          onTap: _checkForUpdates,
+                          child: Container(
+                            width: 46,
+                            height: 32,
+                            decoration: const BoxDecoration(
+                              color: Colors.transparent,
+                            ),
+                            child: const Center(
+                              child: Icon(
+                                Icons.system_update,
+                                color: Color(0xFFFF6B00),
+                                size: 20,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    // Restart button (always visible)
+                    Tooltip(
+                      message: needsRestart ? 'Restart system' : 'No restart required',
                       child: MouseRegion(
                         cursor: needsRestart ? SystemMouseCursors.click : SystemMouseCursors.basic,
                         child: GestureDetector(
@@ -577,6 +607,24 @@ class _MainScreenState extends State<MainScreen> {
                         () => _applyWindowsUpdate,
                       ),
                     ],
+                  ),
+
+                  // Check App Updates Button
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+                    child: ElevatedButton.icon(
+                      onPressed: _checkAppUpdates,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFFFF6B00),
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      icon: const Icon(Icons.update),
+                      label: const Text('Check App Updates'),
+                    ),
                   ),
 
                   const SizedBox(height: 16),
@@ -941,24 +989,24 @@ class _MainScreenState extends State<MainScreen> {
       onTap: () async {
         bool newValue = !value;
         
-        // Determina SUBITO se richiede riavvio (prima di applicare)
+        // Determine IMMEDIATELY if restart is required (before applying)
         final requiresRestart = _tweakRequiresRestart(key);
-        
+
         setState(() {
           tweaks[key] = newValue;
-          // Attiva l'icona di riavvio IMMEDIATAMENTE se necessario
+          // Activate restart icon IMMEDIATELY if needed
           if (requiresRestart && newValue) {
             needsRestart = true;
           }
         });
 
-        // Salva lo stato
+        // Save state
         await _saveTweakState(key, newValue);
         if (requiresRestart && newValue) {
           await _saveRestartState(true);
         }
 
-        // Applica il tweak in background (non blocca l'UI)
+        // Apply tweak in background (doesn't block UI)
         applyFunction()();
       },
       child: AnimatedContainer(
@@ -2061,7 +2109,7 @@ foreach (\$dev in \$devs) {
   }
 
   Future<void> _runWinScript() async {
-    // Mostra dialog di conferma
+    // Show confirmation dialog
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
@@ -2109,7 +2157,7 @@ foreach (\$dev in \$devs) {
           'winscript.bat',
         );
 
-        // Esegui lo script in una nuova finestra cmd (non silente)
+        // Run script in a new cmd window (not silent)
         await Process.start(
           'cmd',
           ['/c', 'start', 'cmd', '/k', scriptPath],
@@ -2117,7 +2165,7 @@ foreach (\$dev in \$devs) {
         );
 
         if (mounted) {
-          // Attiva il riavvio necessario
+          // Activate restart required
           setState(() {
             needsRestart = true;
           });
@@ -2147,7 +2195,7 @@ foreach (\$dev in \$devs) {
   }
 
   Future<void> _runChrisTitusTool() async {
-    // Mostra dialog di conferma
+    // Show confirmation dialog
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
@@ -2187,7 +2235,7 @@ foreach (\$dev in \$devs) {
 
     if (confirmed == true) {
       try {
-        // Esegui il comando PowerShell come admin in una nuova finestra
+        // Execute PowerShell command as admin in a new window
         await Process.start(
           'powershell',
           [
@@ -2223,7 +2271,7 @@ foreach (\$dev in \$devs) {
   }
 
   Future<void> _restartSystem() async {
-    // Mostra dialog di conferma
+    // Show confirmation dialog
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
@@ -2232,17 +2280,17 @@ foreach (\$dev in \$devs) {
           children: [
             Icon(Icons.restart_alt, color: Color(0xFFFF6B00)),
             SizedBox(width: 12),
-            Text('Riavvio Sistema', style: TextStyle(color: Colors.white)),
+            Text('System Restart', style: TextStyle(color: Colors.white)),
           ],
         ),
         content: const Text(
-          'Il sistema verrà riavviato per applicare le modifiche.\n\nVuoi continuare?',
+          'The system will restart to apply changes.\n\nDo you want to continue?',
           style: TextStyle(color: Colors.white),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('Annulla', style: TextStyle(color: Colors.white70)),
+            child: const Text('Cancel', style: TextStyle(color: Colors.white70)),
           ),
           ElevatedButton(
             onPressed: () => Navigator.of(context).pop(true),
@@ -2250,33 +2298,351 @@ foreach (\$dev in \$devs) {
               backgroundColor: const Color(0xFFFF6B00),
               foregroundColor: Colors.white,
             ),
-            child: const Text('Riavvia Ora'),
+            child: const Text('Restart Now'),
           ),
         ],
       ),
     );
 
     if (confirmed == true) {
-      // Resetta lo stato di riavvio necessario
+      // Reset restart required state
       setState(() {
         needsRestart = false;
       });
       await _saveRestartState(false);
 
-      // Esegui il riavvio del sistema
-      await Process.run('shutdown', ['/r', '/t', '5', '/c', 'ZapTweaks: Riavvio per applicare le modifiche...'], runInShell: true);
+      // Execute system restart
+      await Process.run('shutdown', ['/r', '/t', '5', '/c', 'ZapTweaks: Restarting to apply changes...'], runInShell: true);
 
-      // Mostra messaggio di conferma
+      // Show confirmation message
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Il sistema si riavvierà tra 5 secondi...'),
+            content: Text('System will restart in 5 seconds...'),
             backgroundColor: Color(0xFFFF6B00),
             duration: Duration(seconds: 4),
             behavior: SnackBarBehavior.floating,
           ),
         );
       }
+    }
+  }
+
+  Future<void> _checkForUpdates() async {
+    // Show loading snackbar
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Row(
+          children: [
+            SizedBox(
+              width: 20,
+              height: 20,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                color: Colors.white,
+              ),
+            ),
+            SizedBox(width: 12),
+            Text('Checking for updates...'),
+          ],
+        ),
+        backgroundColor: Color(0xFF2A2A2A),
+        duration: Duration(seconds: 10),
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+
+    try {
+      final response = await http.get(
+        Uri.parse('https://api.github.com/repos/$githubRepo/releases/latest'),
+        headers: {'Accept': 'application/vnd.github.v3+json'},
+      );
+
+      // Close loading snackbar
+      if (mounted) {
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+      }
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        final latestVersion = (data['tag_name'] as String).replaceAll('v', '');
+        final releaseUrl = data['html_url'] as String;
+
+        if (_isNewerVersion(latestVersion, currentVersion)) {
+          // New version available - open release page
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('New version $latestVersion available! Opening download page...'),
+                backgroundColor: const Color(0xFFFF6B00),
+                duration: const Duration(seconds: 3),
+                behavior: SnackBarBehavior.floating,
+              ),
+            );
+          }
+          await Process.run('cmd', ['/c', 'start', releaseUrl], runInShell: true);
+        } else {
+          // App is up to date - show popup
+          if (mounted) {
+            showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                backgroundColor: const Color(0xFF2A2A2A),
+                title: const Row(
+                  children: [
+                    Icon(Icons.check_circle, color: Color(0xFFFF6B00)),
+                    SizedBox(width: 12),
+                    Text('All up to date!', style: TextStyle(color: Colors.white)),
+                  ],
+                ),
+                content: Text(
+                  'ZapTweaks v$currentVersion is the latest version.',
+                  style: const TextStyle(color: Colors.white70),
+                ),
+                actions: [
+                  ElevatedButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFFF6B00),
+                      foregroundColor: Colors.white,
+                    ),
+                    child: const Text('OK'),
+                  ),
+                ],
+              ),
+            );
+          }
+        }
+      } else if (response.statusCode == 404) {
+        // No release found
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('No release found'),
+              backgroundColor: Colors.orange,
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
+        }
+      } else {
+        throw Exception('HTTP Error: ${response.statusCode}');
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error checking for updates: $e'),
+            backgroundColor: Colors.red,
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
+    }
+  }
+
+  bool _isNewerVersion(String latest, String current) {
+    final latestParts = latest.split('.').map((e) => int.tryParse(e) ?? 0).toList();
+    final currentParts = current.split('.').map((e) => int.tryParse(e) ?? 0).toList();
+
+    for (int i = 0; i < 3; i++) {
+      final l = i < latestParts.length ? latestParts[i] : 0;
+      final c = i < currentParts.length ? currentParts[i] : 0;
+      if (l > c) return true;
+      if (l < c) return false;
+    }
+    return false;
+  }
+
+  Future<void> _checkAppUpdates() async {
+    // State variables for the dialog
+    String currentApp = 'Checking for updates...';
+    double progress = 0.0;
+    bool isComplete = false;
+    String resultMessage = '';
+    int updatedCount = 0;
+
+    // Show progress dialog
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (dialogContext) {
+        return StatefulBuilder(
+          builder: (context, setDialogState) {
+            // Start winget upgrade process
+            if (!isComplete && progress == 0.0) {
+              _runWingetUpgrade((app, prog, complete, message, count) {
+                setDialogState(() {
+                  currentApp = app;
+                  progress = prog;
+                  isComplete = complete;
+                  resultMessage = message;
+                  updatedCount = count;
+                });
+              });
+              progress = 0.01; // Mark as started
+            }
+
+            return AlertDialog(
+              backgroundColor: const Color(0xFF2A2A2A),
+              title: Row(
+                children: [
+                  Icon(
+                    isComplete ? Icons.check_circle : Icons.update,
+                    color: const Color(0xFFFF6B00),
+                  ),
+                  const SizedBox(width: 12),
+                  Text(
+                    isComplete ? 'Update Complete' : 'Updating Apps',
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                ],
+              ),
+              content: SizedBox(
+                width: 300,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (!isComplete) ...[
+                      Text(
+                        currentApp,
+                        style: const TextStyle(color: Colors.white70, fontSize: 13),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 16),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: LinearProgressIndicator(
+                          value: progress > 0.01 ? progress : null,
+                          backgroundColor: const Color(0xFF1C1C1C),
+                          valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFFFF6B00)),
+                          minHeight: 8,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        progress > 0.01 ? '${(progress * 100).toInt()}%' : 'Starting...',
+                        style: const TextStyle(color: Colors.white54, fontSize: 12),
+                      ),
+                    ] else ...[
+                      Text(
+                        resultMessage,
+                        style: const TextStyle(color: Colors.white70),
+                      ),
+                      if (updatedCount > 0) ...[
+                        const SizedBox(height: 8),
+                        Text(
+                          '$updatedCount app(s) updated successfully',
+                          style: const TextStyle(color: Color(0xFFFF6B00), fontSize: 13),
+                        ),
+                      ],
+                    ],
+                  ],
+                ),
+              ),
+              actions: [
+                if (isComplete)
+                  ElevatedButton(
+                    onPressed: () => Navigator.of(dialogContext).pop(),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFFF6B00),
+                      foregroundColor: Colors.white,
+                    ),
+                    child: const Text('OK'),
+                  ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Future<void> _runWingetUpgrade(Function(String, double, bool, String, int) onUpdate) async {
+    try {
+      // First, list available updates
+      onUpdate('Scanning for available updates...', 0.05, false, '', 0);
+
+      final listResult = await Process.run(
+        'winget',
+        ['upgrade', '--include-unknown'],
+        runInShell: true,
+      );
+
+      // Parse the list output to count available updates
+      final listOutput = listResult.stdout.toString();
+      final lines = listOutput.split('\n');
+      int availableUpdates = 0;
+
+      for (final line in lines) {
+        if (line.contains('winget upgrade') || line.trim().isEmpty || line.contains('Name') || line.contains('---')) {
+          continue;
+        }
+        if (line.trim().isNotEmpty && !line.contains('upgrade available') && !line.contains('upgrades available')) {
+          availableUpdates++;
+        }
+      }
+
+      if (availableUpdates == 0 || listOutput.contains('No installed package found matching')) {
+        onUpdate('', 1.0, true, 'All apps are up to date!', 0);
+        return;
+      }
+
+      onUpdate('Found $availableUpdates update(s). Starting upgrade...', 0.1, false, '', 0);
+
+      // Run winget upgrade --all
+      final process = await Process.start(
+        'winget',
+        [
+          'upgrade',
+          '--all',
+          '--silent',
+          '--accept-package-agreements',
+          '--accept-source-agreements',
+          '--disable-interactivity',
+        ],
+        runInShell: true,
+      );
+
+      int updatedApps = 0;
+      String lastApp = '';
+
+      // Listen to stdout
+      process.stdout.transform(const SystemEncoding().decoder).listen((data) {
+        final outputLines = data.split('\n');
+        for (final line in outputLines) {
+          if (line.trim().isEmpty) continue;
+
+          // Try to extract app name being updated
+          if (line.contains('Successfully installed') || line.contains('Successfully upgraded')) {
+            updatedApps++;
+            final progress = (0.1 + (0.85 * updatedApps / availableUpdates)).clamp(0.1, 0.95);
+            onUpdate('Completed: $line', progress, false, '', updatedApps);
+          } else if (line.contains('Installing') || line.contains('Downloading') || line.contains('Found')) {
+            lastApp = line.trim();
+            final progress = (0.1 + (0.85 * updatedApps / availableUpdates)).clamp(0.1, 0.95);
+            onUpdate(lastApp, progress, false, '', updatedApps);
+          }
+        }
+      });
+
+      // Listen to stderr
+      process.stderr.transform(const SystemEncoding().decoder).listen((data) {
+        // Ignore most stderr as winget outputs progress there
+      });
+
+      // Wait for process to complete
+      final exitCode = await process.exitCode;
+
+      if (exitCode == 0 || updatedApps > 0) {
+        onUpdate('', 1.0, true, 'Update process completed!', updatedApps);
+      } else {
+        onUpdate('', 1.0, true, 'Update completed. Some apps may have been skipped.', updatedApps);
+      }
+    } catch (e) {
+      onUpdate('', 1.0, true, 'Error: $e', 0);
     }
   }
 }
