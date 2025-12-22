@@ -32,8 +32,6 @@ TweakHub provides advanced system-level optimizations focused on improving overa
 
 </details>
 
----
-
 <details>
 <summary><strong>⚙️ System Configuration</strong></summary>
 
@@ -52,8 +50,6 @@ Fine-tune core Windows system components to balance performance, stability, and 
   Reduce UI overhead by disabling unnecessary animations, transparency effects, and visual flourishes to prioritize performance.
 
 </details>
-
----
 
 <details>
 <summary><strong>🎮 Gaming Enhancements</strong></summary>
@@ -74,8 +70,6 @@ Enhancements specifically designed to improve gaming performance and consistency
 
 </details>
 
----
-
 <details>
 <summary><strong>🔒 Privacy & Telemetry</strong></summary>
 
@@ -92,8 +86,6 @@ Take back control over your data and reduce unnecessary background communication
 
 </details>
 
----
-
 <details>
 <summary><strong>🔧 Advanced Tools</strong></summary>
 
@@ -109,8 +101,6 @@ Powerful tools for advanced users who want deeper control over their system:
   Direct access to the popular CTT Windows Utility for additional system tuning and configuration.
 
 </details>
-
----
 
 <details>
 <summary><strong>💡 Smart Features</strong></summary>
