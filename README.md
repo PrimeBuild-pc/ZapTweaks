@@ -164,14 +164,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
-
-- Chris Titus Tech for Windows optimization utilities
-- Community power plan creators (Atlas, Bitsum, Kaisen, etc.)
-- Flutter framework and Windows desktop support
-- All contributors and testers
-
-💖 Support the project
+##💖 Support the project
 
 Do you like this tool? Buy me a coffee ☕:
 
