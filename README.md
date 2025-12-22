@@ -171,12 +171,13 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Flutter framework and Windows desktop support
 - All contributors and testers
 
-## 📞 Support
+💖 Support the project
 
-- **Issues**: [GitHub Issues](https://github.com/yourusername/ZapTweaks/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/yourusername/ZapTweaks/discussions)
+Do you like this tool? Buy me a coffee ☕:
 
-## ⚡ Made by PrimeBuild
+[![PayPal](https://img.shields.io/badge/Supporta%20su-PayPal-blue?logo=paypal)](https://paypal.me/PrimeBuildOfficial?country.x=IT&locale.x=it_IT)
+
+**Made with ❤️ and ☕ by PrimeBuild⚡**
 
 ---
 
