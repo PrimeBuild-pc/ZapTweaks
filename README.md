@@ -177,7 +177,7 @@ Do you like this tool? Buy me a coffee ☕:
 
 [![PayPal](https://img.shields.io/badge/Supporta%20su-PayPal-blue?logo=paypal)](https://paypal.me/PrimeBuildOfficial?country.x=IT&locale.x=it_IT)
 
-**Made with ❤️ and ☕ by PrimeBuild⚡**
+**Made with ❤️ by PrimeBuild⚡**
 
 ---
 
