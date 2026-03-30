@@ -9,7 +9,7 @@
 
 ZapTweaks is a simple desktop application designed to optimize Windows 11 systems for better gaming performance through basic system tweaks and optimizations.
 
-<img width="627" height="930" alt="image" src="https://github.com/user-attachments/assets/349d6ca8-bb03-4500-8d99-bc0a16eff798" />
+<img width="1004" height="1164" alt="image" src="https://github.com/user-attachments/assets/d12299e8-7efb-43f5-9623-0026ff9c6489" />
 
 ## ✨ Features
 
