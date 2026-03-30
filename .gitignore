@@ -66,3 +66,8 @@ app.*.map.json
 # Local configuration
 *.local
 .env
+
+# Portable/build artifacts
+/output/
+/installer_output/
+*.zip
