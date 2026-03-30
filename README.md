@@ -165,6 +165,7 @@ flutter build windows --release
 - **Restart required** for most tweaks to take effect
 - Some tweaks may affect system stability - use at your own discretion
 - **Not recommended for production workstations** - optimized for gaming
+- **Power plans on modern CPUs**: on Intel P/E-core and recent AMD Ryzen systems, keep the Windows **Balanced** plan as default; use aggressive custom plans only for targeted troubleshooting.
 
 ## 🔄 Reverting Changes
 
