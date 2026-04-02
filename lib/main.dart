@@ -89,6 +89,7 @@ class _MainScreenState extends State<MainScreen> {
   };
 
   bool needsRestart = false;
+  bool _isLoading = true;
   List<String> availablePowerPlans = [];
   String? activePowerPlan;
   final Set<String> _aggressivePowerPlans = <String>{};
@@ -109,12 +110,21 @@ class _MainScreenState extends State<MainScreen> {
 
   Future<void> _initializeApp() async {
     _prefs = await SharedPreferences.getInstance();
-    await _detectHardware();
-    await _loadSavedState();
-    await _cleanAllDuplicatePowerPlans();
-    await _loadAvailablePowerPlans();
-    await _loadAggressivePowerPlans();
-    await _getActivePowerPlan();
+    try {
+      await _detectHardware();
+      await _loadDetectedTweakStates();
+      await _loadSavedRestartState();
+      await _cleanAllDuplicatePowerPlans();
+      await _loadAvailablePowerPlans();
+      await _loadAggressivePowerPlans();
+      await _getActivePowerPlan();
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
   }
 
   bool get _isIntelCpu => _detectedCpuVendor == 'intel';
@@ -195,20 +205,21 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
-  Future<void> _loadSavedState() async {
-    if (_prefs == null) return;
+  Future<void> _loadDetectedTweakStates() async {
+    final detectedStates = await _tweakManager.detectCurrentTweakStates();
+    if (!mounted) return;
 
     setState(() {
-      tweaks.forEach((key, value) {
-        tweaks[key] = _prefs!.getBool(key) ?? false;
-      });
-
-      final migratedFlipModel = _prefs!.getBool('flip_model_optimizations');
-      final legacyFullscreen = _prefs!.getBool('fullscreen_optimizations');
-      if (migratedFlipModel == null && legacyFullscreen != null) {
-        tweaks['flip_model_optimizations'] = legacyFullscreen;
+      for (final key in tweaks.keys) {
+        tweaks[key] = detectedStates[key] ?? false;
       }
+    });
+  }
 
+  Future<void> _loadSavedRestartState() async {
+    if (_prefs == null || !mounted) return;
+
+    setState(() {
       needsRestart = _prefs!.getBool('needsRestart') ?? false;
     });
   }
@@ -294,11 +305,29 @@ class _MainScreenState extends State<MainScreen> {
             ),
 
             Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+              child: _isLoading
+                  ? const Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              Color(0xFFFF6B00),
+                            ),
+                          ),
+                          SizedBox(height: 16),
+                          Text(
+                            'Reading current system tweaks...',
+                            style: TextStyle(color: Colors.white70),
+                          ),
+                        ],
+                      ),
+                    )
+                  : SingleChildScrollView(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
                     if (needsRestart)
                       Container(
                         margin: const EdgeInsets.only(bottom: 16),
@@ -792,9 +821,9 @@ class _MainScreenState extends State<MainScreen> {
                         onTap: _runChrisTitusTool,
                       ),
                     ]),
-                  ],
-                ),
-              ),
+                        ],
+                      ),
+                    ),
             ),
 
             Container(
@@ -952,6 +981,67 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
+  void _showTweakApplyError() {
+    if (!mounted) return;
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        backgroundColor: Color(0xFF8B0000),
+        content: Text(
+          'Impossibile applicare la modifica. Verifica i permessi e riprova.',
+        ),
+      ),
+    );
+  }
+
+  void _rollbackTweakToggle(String key, bool previousValue) {
+    if (!mounted) return;
+
+    setState(() {
+      tweaks[key] = previousValue;
+      _pendingTweaks.remove(key);
+    });
+  }
+
+  Future<void> _handleTweakToggleTap(String key, {bool isEnabled = true}) async {
+    if (!isEnabled || _pendingTweaks.contains(key)) return;
+
+    final previousValue = tweaks[key] ?? false;
+    final newValue = !previousValue;
+    final requiresRestart = _tweakRequiresRestart(key);
+
+    setState(() {
+      tweaks[key] = newValue;
+      _pendingTweaks.add(key);
+    });
+
+    try {
+      final result = await _tweakManager.applyTweak(key, newValue);
+      if (!result.success) {
+        _rollbackTweakToggle(key, previousValue);
+        _showTweakApplyError();
+        return;
+      }
+
+      if (!mounted) return;
+      setState(() {
+        if (requiresRestart && newValue) {
+          needsRestart = true;
+        }
+        _pendingTweaks.remove(key);
+      });
+
+      await _saveTweakState(key, newValue);
+      if (requiresRestart && newValue) {
+        await _saveRestartState(true);
+      }
+    } catch (e, stackTrace) {
+      debugPrint('Tweak apply failure for $key: $e\n$stackTrace');
+      _rollbackTweakToggle(key, previousValue);
+      _showTweakApplyError();
+    }
+  }
+
   Widget _buildToggleSwitch(String key, {bool isEnabled = true}) {
     final value = tweaks[key] ?? false;
     final isPending = _pendingTweaks.contains(key);
@@ -972,50 +1062,7 @@ class _MainScreenState extends State<MainScreen> {
 
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onTap: () async {
-        if (!isEnabled || _pendingTweaks.contains(key)) return;
-
-        final newValue = !value;
-        final requiresRestart = _tweakRequiresRestart(key);
-
-        setState(() {
-          _pendingTweaks.add(key);
-        });
-
-        final result = await _tweakManager.applyTweak(key, newValue);
-        if (!result.success) {
-          final failureMessage = result.errors.isNotEmpty
-              ? result.errors.first
-              : 'One or more commands failed while applying this tweak.';
-
-          if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                backgroundColor: const Color(0xFF8B0000),
-                content: Text('Failed to apply "$key": $failureMessage'),
-              ),
-            );
-          }
-
-          setState(() {
-            _pendingTweaks.remove(key);
-          });
-          return;
-        }
-
-        setState(() {
-          tweaks[key] = newValue;
-          if (requiresRestart && newValue) {
-            needsRestart = true;
-          }
-          _pendingTweaks.remove(key);
-        });
-
-        await _saveTweakState(key, newValue);
-        if (requiresRestart && newValue) {
-          await _saveRestartState(true);
-        }
-      },
+      onTap: () => _handleTweakToggleTap(key, isEnabled: isEnabled),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         width: 50,
