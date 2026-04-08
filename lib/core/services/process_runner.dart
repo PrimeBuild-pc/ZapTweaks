@@ -417,7 +417,11 @@ class ProcessRunner {
     return value.runes.any(
       (codePoint) =>
           codePoint == 0 ||
-          (codePoint >= 0x00 && codePoint <= 0x1F && codePoint != 0x09),
+          (codePoint >= 0x00 &&
+              codePoint <= 0x1F &&
+              codePoint != 0x09 &&
+              codePoint != 0x0A &&
+              codePoint != 0x0D),
     );
   }
 

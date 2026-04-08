@@ -85,6 +85,12 @@ class TweakController extends ChangeNotifier {
   );
   final ValueNotifier<List<double>> _memoryHistory =
       ValueNotifier<List<double>>(const <double>[]);
+  final ValueNotifier<List<double>> _gpuHistory = ValueNotifier<List<double>>(
+    const <double>[],
+  );
+  final ValueNotifier<List<double>> _vramHistory = ValueNotifier<List<double>>(
+    const <double>[],
+  );
 
   String _loadingStatus = 'Initializing...';
   final Map<String, String> _selectedPresets = <String, String>{};
@@ -104,6 +110,8 @@ class TweakController extends ChangeNotifier {
       _latestMetrics;
   ValueListenable<List<double>> get cpuHistoryListenable => _cpuHistory;
   ValueListenable<List<double>> get memoryHistoryListenable => _memoryHistory;
+  ValueListenable<List<double>> get gpuHistoryListenable => _gpuHistory;
+  ValueListenable<List<double>> get vramHistoryListenable => _vramHistory;
 
   List<String> presetsForCategory(String category) {
     return _categoryPresetService.availablePresetsForCategory(category);
@@ -523,6 +531,14 @@ class TweakController extends ChangeNotifier {
         _memoryHistory.value,
         snapshot.memoryUsagePercent,
       );
+      _gpuHistory.value = _pushMetricValue(
+        _gpuHistory.value,
+        snapshot.gpuUsagePercent,
+      );
+      _vramHistory.value = _pushMetricValue(
+        _vramHistory.value,
+        snapshot.vramUsagePercent,
+      );
     } finally {
       _isSamplingMetrics = false;
     }
@@ -605,6 +621,8 @@ class TweakController extends ChangeNotifier {
     _latestMetrics.dispose();
     _cpuHistory.dispose();
     _memoryHistory.dispose();
+    _gpuHistory.dispose();
+    _vramHistory.dispose();
     super.dispose();
   }
 }

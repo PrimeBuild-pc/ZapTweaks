@@ -11,12 +11,16 @@ class HomeStatsPage extends StatelessWidget {
     required this.latestMetrics,
     required this.cpuHistory,
     required this.memoryHistory,
+    required this.gpuHistory,
+    required this.vramHistory,
   });
 
   final HardwareProfile hardwareProfile;
   final SystemMetricsSnapshot latestMetrics;
   final List<double> cpuHistory;
   final List<double> memoryHistory;
+  final List<double> gpuHistory;
+  final List<double> vramHistory;
 
   @override
   Widget build(BuildContext context) {
@@ -27,20 +31,42 @@ class HomeStatsPage extends StatelessWidget {
         const SizedBox(height: 12),
         _buildHardwareGrid(context),
         const SizedBox(height: 12),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        Wrap(
+          spacing: 12,
+          runSpacing: 12,
           children: <Widget>[
-            Expanded(
+            SizedBox(
+              width: 380,
               child: MetricCard(
                 title: 'CPU Usage',
                 value: latestMetrics.cpuLabel,
-                subtitle: 'Rolling average from system counters',
+                subtitle: 'Realtime utilization from Windows counters',
                 color: const Color(0xFF4CAF50),
                 history: cpuHistory,
               ),
             ),
-            const SizedBox(width: 12),
-            Expanded(
+            SizedBox(
+              width: 380,
+              child: MetricCard(
+                title: 'GPU Usage',
+                value: latestMetrics.gpuLabel,
+                subtitle: 'Realtime engine utilization',
+                color: const Color(0xFFFF9800),
+                history: gpuHistory,
+              ),
+            ),
+            SizedBox(
+              width: 380,
+              child: MetricCard(
+                title: 'VRAM Usage',
+                value: latestMetrics.vramPercentLabel,
+                subtitle: latestMetrics.vramDetailLabel,
+                color: const Color(0xFFE91E63),
+                history: vramHistory,
+              ),
+            ),
+            SizedBox(
+              width: 380,
               child: MetricCard(
                 title: 'Memory Usage',
                 value: latestMetrics.memoryPercentLabel,

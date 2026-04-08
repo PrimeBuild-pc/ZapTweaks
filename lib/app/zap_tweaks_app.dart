@@ -279,6 +279,8 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
         widget.controller.latestMetricsListenable,
         widget.controller.cpuHistoryListenable,
         widget.controller.memoryHistoryListenable,
+        widget.controller.gpuHistoryListenable,
+        widget.controller.vramHistoryListenable,
       ]),
       builder: (_, child) {
         return HomeStatsPage(
@@ -286,6 +288,8 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
           latestMetrics: widget.controller.latestMetricsListenable.value,
           cpuHistory: widget.controller.cpuHistoryListenable.value,
           memoryHistory: widget.controller.memoryHistoryListenable.value,
+          gpuHistory: widget.controller.gpuHistoryListenable.value,
+          vramHistory: widget.controller.vramHistoryListenable.value,
         );
       },
     );
