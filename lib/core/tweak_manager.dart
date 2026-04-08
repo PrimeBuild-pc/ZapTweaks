@@ -1,6 +1,7 @@
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
+import 'services/logging_service.dart';
+import 'services/process_runner.dart';
 
 import 'registry_manager.dart';
 
@@ -12,7 +13,12 @@ class TweakApplyResult {
 }
 
 class TweakManager {
-  TweakManager();
+  TweakManager({LoggingService? loggingService, ProcessRunner? processRunner})
+    : _loggingService = loggingService ?? LoggingService.instance,
+      _processRunner = processRunner ?? ProcessRunner.shared;
+
+  final LoggingService _loggingService;
+  final ProcessRunner _processRunner;
 
   bool _commandBatchHasFailure = false;
   final List<String> _commandBatchErrors = <String>[];
@@ -86,9 +92,7 @@ foreach ($dev in $devs) {
   }
 
   Future<Map<String, bool>> detectCurrentTweakStates() async {
-    final states = <String, bool>{
-      for (final key in _handlers.keys) key: false,
-    };
+    final states = <String, bool>{for (final key in _handlers.keys) key: false};
 
     Future<bool> dwordEquals(
       String keyPath,
@@ -197,6 +201,7 @@ foreach ($dev in $devs) {
       4,
     );
 
+    // TODO: Check override with resources/interactive_scripts/6 Windows/14 Control Panel Settings.ps1
     states['ui_optimizations'] = await dwordEquals(
       r'HKCU\Software\Microsoft\Windows\CurrentVersion\Search',
       'SearchboxTaskbarMode',
@@ -218,22 +223,11 @@ foreach ($dev in $devs) {
       'GameDVR_Enabled',
       0,
     );
-    states['disable_mpo'] = await dwordEquals(
-      r'HKLM\SOFTWARE\Microsoft\Windows\Dwm',
-      'OverlayTestMode',
-      5,
-    );
     states['windows_update'] = await dwordEquals(
       r'HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU',
       'NoAutoRebootWithLoggedOnUsers',
       1,
     );
-
-    final fseBehaviorMode = await RegistryManager.readDword(
-      r'HKCU\System\GameConfigStore',
-      'GameDVR_FSEBehaviorMode',
-    );
-    states['flip_model_optimizations'] = fseBehaviorMode == null;
 
     return states;
   }
@@ -284,13 +278,16 @@ foreach ($dev in $devs) {
 
   Future<String?> _importPowerPlanAndGetGuid(String powerPlanPath) async {
     final beforeImport = await _listPowerSchemeGuids();
-    final importResult = await Process.run('powercfg', [
+    final importResult = await _runProcessLogged('powercfg', [
       '/import',
       powerPlanPath,
     ], runInShell: true);
 
     if (importResult.exitCode != 0) {
-      debugPrint('Failed to import power plan for detection: $powerPlanPath');
+      await _loggingService.logWarning(
+        'Failed to import power plan for detection: $powerPlanPath',
+        source: 'TweakManager',
+      );
       return null;
     }
 
@@ -305,7 +302,9 @@ foreach ($dev in $devs) {
   }
 
   Future<Set<String>> _listPowerSchemeGuids() async {
-    final result = await Process.run('powercfg', ['/list'], runInShell: true);
+    final result = await _runProcessLogged('powercfg', [
+      '/list',
+    ], runInShell: true);
     if (result.exitCode != 0) {
       return <String>{};
     }
@@ -334,7 +333,7 @@ foreach ($dev in $devs) {
     String schemeGuid,
     String settingAlias,
   ) async {
-    final result = await Process.run('powercfg', [
+    final result = await _runProcessLogged('powercfg', [
       '/query',
       schemeGuid,
       'sub_processor',
@@ -390,7 +389,10 @@ foreach ($dev in $devs) {
   }
 
   Future<void> _deletePowerScheme(String schemeGuid) async {
-    await Process.run('powercfg', ['/delete', schemeGuid], runInShell: true);
+    await _runProcessLogged('powercfg', [
+      '/delete',
+      schemeGuid,
+    ], runInShell: true);
   }
 
   String _extractPowerPlanBasename(String filePath) {
@@ -423,13 +425,12 @@ foreach ($dev in $devs) {
       'system_responsiveness': _applySystemResponsiveness,
       'telemetry_disable': _applyTelemetryDisable,
       'privacy_tracking': _applyPrivacyTracking,
+      // TODO: Check override with resources/interactive_scripts/8 Advanced/17 Services.ps1
       'services_disable': _applyServicesDisable,
       'ui_optimizations': _applyUiOptimizations,
       'explorer_optimizations': _applyExplorerOptimizations,
       'notifications_minimal': _applyNotificationsMinimal,
       'game_mode': _applyGameMode,
-      'flip_model_optimizations': _applyFlipModelOptimizations,
-      'disable_mpo': _applyDisableMpo,
       'windows_update': _applyWindowsUpdate,
     };
   }
@@ -456,44 +457,15 @@ foreach ($dev in $devs) {
   Future<void> _applyCpuUnparking(bool enable) async {
     if (enable) {
       await _writeRegistryDword(
-        r'HKLM\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\0cc5b647-c1df-4637-891a-dec35c318583',
-        'ValueMax',
-        0,
-      );
-      await _writeRegistryDword(
-        r'HKLM\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\0cc5b647-c1df-4637-891a-dec35c318583',
-        'ValueMin',
-        0,
-      );
-      await _writeRegistryDword(
-        r'HKLM\SYSTEM\ControlSet001\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\0cc5b647-c1df-4637-891a-dec35c318583',
-        'Attributes',
-        0,
-      );
-      await _writeRegistryDword(
-        r'HKLM\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\0cc5b647-c1df-4637-891a-dec35c318583',
-        'Attributes',
-        0,
-      );
-      await _writeRegistryDword(
         r'HKLM\SYSTEM\CurrentControlSet\Control\Power',
         'CoreParkingDisabled',
         1,
       );
       await _runCommand(
-        'powercfg -setacvalueindex scheme_current sub_processor HETEROPOLICY 4',
+        'powercfg -setacvalueindex scheme_current sub_processor 0cc5b647-c1df-4637-891a-dec35c318583 100',
       );
       await _runCommand(
-        'powercfg -setacvalueindex scheme_current sub_processor CPMINCORES 100',
-      );
-      await _runCommand(
-        'powercfg -setdcvalueindex scheme_current sub_processor CPMINCORES 100',
-      );
-      await _runCommand(
-        'powercfg -setacvalueindex scheme_current sub_processor PROCTHROTTLEMIN 100',
-      );
-      await _runCommand(
-        'powercfg -setdcvalueindex scheme_current sub_processor PROCTHROTTLEMIN 100',
+        'powercfg -setdcvalueindex scheme_current sub_processor 0cc5b647-c1df-4637-891a-dec35c318583 100',
       );
       await _runCommand('powercfg -setactive scheme_current');
     } else {
@@ -503,16 +475,10 @@ foreach ($dev in $devs) {
         0,
       );
       await _runCommand(
-        'powercfg -setacvalueindex scheme_current sub_processor CPMINCORES 0',
+        'powercfg -setacvalueindex scheme_current sub_processor 0cc5b647-c1df-4637-891a-dec35c318583 0',
       );
       await _runCommand(
-        'powercfg -setdcvalueindex scheme_current sub_processor CPMINCORES 0',
-      );
-      await _runCommand(
-        'powercfg -setacvalueindex scheme_current sub_processor PROCTHROTTLEMIN 0',
-      );
-      await _runCommand(
-        'powercfg -setdcvalueindex scheme_current sub_processor PROCTHROTTLEMIN 0',
+        'powercfg -setdcvalueindex scheme_current sub_processor 0cc5b647-c1df-4637-891a-dec35c318583 0',
       );
       await _runCommand('powercfg -setactive scheme_current');
     }
@@ -963,36 +929,16 @@ foreach ($dev in $devs) {
         'SystemResponsiveness',
         0,
       );
-      await _writeRegistryDword(
-        tcpipParametersPath,
-        'TcpAckFrequency',
-        1,
-      );
-      await _writeRegistryDword(
-        tcpipParametersPath,
-        'TCPNoDelay',
-        1,
-      );
-      await _writeRegistryDword(
-        tcpipParametersPath,
-        'Tcp1323Opts',
-        1,
-      );
-      await _writeRegistryDword(
-        tcpipParametersPath,
-        'TcpMaxDupAcks',
-        2,
-      );
+      await _writeRegistryDword(tcpipParametersPath, 'TcpAckFrequency', 1);
+      await _writeRegistryDword(tcpipParametersPath, 'TCPNoDelay', 1);
+      await _writeRegistryDword(tcpipParametersPath, 'Tcp1323Opts', 1);
+      await _writeRegistryDword(tcpipParametersPath, 'TcpMaxDupAcks', 2);
       await _writeRegistryDword(
         kernelSessionManagerPath,
         'DpcWatchdogProfileOffset',
         10000,
       );
-      await _writeRegistryDword(
-        kernelSessionManagerPath,
-        'DpcTimeout',
-        0,
-      );
+      await _writeRegistryDword(kernelSessionManagerPath, 'DpcTimeout', 0);
     } else {
       await _writeRegistryDword(
         multimediaProfilePath,
@@ -1004,30 +950,15 @@ foreach ($dev in $devs) {
         'SystemResponsiveness',
         20,
       );
-      await _deleteRegistryValue(
-        tcpipParametersPath,
-        'TcpAckFrequency',
-      );
-      await _deleteRegistryValue(
-        tcpipParametersPath,
-        'TCPNoDelay',
-      );
-      await _deleteRegistryValue(
-        tcpipParametersPath,
-        'Tcp1323Opts',
-      );
-      await _deleteRegistryValue(
-        tcpipParametersPath,
-        'TcpMaxDupAcks',
-      );
+      await _deleteRegistryValue(tcpipParametersPath, 'TcpAckFrequency');
+      await _deleteRegistryValue(tcpipParametersPath, 'TCPNoDelay');
+      await _deleteRegistryValue(tcpipParametersPath, 'Tcp1323Opts');
+      await _deleteRegistryValue(tcpipParametersPath, 'TcpMaxDupAcks');
       await _deleteRegistryValue(
         kernelSessionManagerPath,
         'DpcWatchdogProfileOffset',
       );
-      await _deleteRegistryValue(
-        kernelSessionManagerPath,
-        'DpcTimeout',
-      );
+      await _deleteRegistryValue(kernelSessionManagerPath, 'DpcTimeout');
     }
   }
 
@@ -1803,67 +1734,6 @@ foreach ($dev in $devs) {
     }
   }
 
-  Future<void> _applyFlipModelOptimizations(bool enable) async {
-    if (enable) {
-      await _deleteRegistryValue(
-        r'HKCU\System\GameConfigStore',
-        'GameDVR_DXGIHonorFSEWindowsCompatible',
-      );
-      await _deleteRegistryValue(
-        r'HKCU\System\GameConfigStore',
-        'GameDVR_FSEBehaviorMode',
-      );
-      await _deleteRegistryValue(
-        r'HKCU\System\GameConfigStore',
-        'GameDVR_HonorUserFSEBehaviorMode',
-      );
-      await _deleteRegistryValue(
-        r'HKCU\System\GameConfigStore',
-        'GameDVR_DSEBehavior',
-      );
-      await _deleteRegistryValue(
-        r'HKCU\System\GameConfigStore',
-        'GameDVR_EFSEFeatureFlags',
-      );
-      await _writeRegistryDword(
-        r'HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers',
-        'HwSchMode',
-        2,
-      );
-    } else {
-      await _writeRegistryDword(
-        r'HKCU\System\GameConfigStore',
-        'GameDVR_DXGIHonorFSEWindowsCompatible',
-        0,
-      );
-      await _writeRegistryDword(
-        r'HKCU\System\GameConfigStore',
-        'GameDVR_FSEBehaviorMode',
-        2,
-      );
-      await _writeRegistryDword(
-        r'HKCU\System\GameConfigStore',
-        'GameDVR_HonorUserFSEBehaviorMode',
-        1,
-      );
-    }
-  }
-
-  Future<void> _applyDisableMpo(bool enable) async {
-    if (enable) {
-      await _writeRegistryDword(
-        r'HKLM\SOFTWARE\Microsoft\Windows\Dwm',
-        'OverlayTestMode',
-        5,
-      );
-    } else {
-      await _deleteRegistryValue(
-        r'HKLM\SOFTWARE\Microsoft\Windows\Dwm',
-        'OverlayTestMode',
-      );
-    }
-  }
-
   Future<void> _applyWindowsUpdate(bool enable) async {
     if (enable) {
       await _writeRegistryDword(
@@ -1992,7 +1862,7 @@ foreach ($dev in $devs) {
 
   Future<void> _runPowerShellScript(String script, String operationName) async {
     try {
-      final result = await Process.run('powershell', [
+      final result = await _runProcessLogged('powershell', [
         '-NoProfile',
         '-ExecutionPolicy',
         'Bypass',
@@ -2001,12 +1871,17 @@ foreach ($dev in $devs) {
       ], runInShell: true);
 
       if (result.exitCode != 0) {
-        debugPrint('PowerShell failed: $operationName');
-        debugPrint('Error: ${result.stderr}');
+        await _loggingService.logError(
+          'PowerShell failed: $operationName | ${result.stderr}',
+          source: 'TweakManager',
+        );
         _recordCommandFailure(operationName, result: result);
       }
     } catch (e) {
-      debugPrint('PowerShell exception: $e');
+      await _loggingService.logError(
+        'PowerShell exception for $operationName: $e',
+        source: 'TweakManager',
+      );
       _recordCommandFailure(
         operationName,
         reason: 'Exception while running PowerShell script',
@@ -2017,20 +1892,25 @@ foreach ($dev in $devs) {
 
   Future<void> _runCommand(String command) async {
     try {
-      final result = await Process.run('cmd', [
+      final result = await _runProcessLogged('cmd', [
         '/c',
         command,
       ], runInShell: true);
 
       if (result.exitCode != 0) {
-        debugPrint('Command failed: $command');
-        debugPrint('Error: ${result.stderr}');
+        await _loggingService.logError(
+          'Command failed: $command | ${result.stderr}',
+          source: 'TweakManager',
+        );
         if (!_isIgnorableCommandFailure(command, result)) {
           _recordCommandFailure(command, result: result);
         }
       }
     } catch (e) {
-      debugPrint('Exception running command: $e');
+      await _loggingService.logError(
+        'Exception running command "$command": $e',
+        source: 'TweakManager',
+      );
       _recordCommandFailure(
         command,
         reason: 'Exception while running command',
@@ -2046,7 +1926,7 @@ foreach ($dev in $devs) {
 
   void _recordCommandFailure(
     String command, {
-    ProcessResult? result,
+    CommandResult? result,
     String? reason,
     String? details,
   }) {
@@ -2067,7 +1947,7 @@ foreach ($dev in $devs) {
     );
   }
 
-  bool _isIgnorableCommandFailure(String command, ProcessResult result) {
+  bool _isIgnorableCommandFailure(String command, CommandResult result) {
     final cmd = command.toLowerCase();
     final stderr = result.stderr.toString().toLowerCase();
     final stdout = result.stdout.toString().toLowerCase();
@@ -2102,6 +1982,19 @@ foreach ($dev in $devs) {
     return false;
   }
 
+  Future<CommandResult> _runProcessLogged(
+    String executable,
+    List<String> arguments, {
+    bool runInShell = true,
+  }) async {
+    return _processRunner.run(
+      executable,
+      arguments,
+      runInShell: runInShell,
+      timeout: const Duration(minutes: 2),
+    );
+  }
+
   Future<void> applyMsiMode(bool enable) async {
     await _runPowerShellScript(
       enable ? _msiEnableScript : _msiDisableScript,
@@ -2109,6 +2002,3 @@ foreach ($dev in $devs) {
     );
   }
 }
-
-
-

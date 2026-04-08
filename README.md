@@ -11,6 +11,26 @@ ZapTweaks is a simple desktop application designed to optimize Windows 11 system
 
 <img width="1004" height="1164" alt="image" src="https://github.com/user-attachments/assets/d12299e8-7efb-43f5-9623-0026ff9c6489" />
 
+## ⚠️ Security and Disclaimers
+
+> **Please read this section before using ZapTweaks.**
+
+### Antivirus and False Positives
+
+ZapTweaks includes system-level actions such as batch scripts, PowerShell commands, registry imports, and bundled low-level tweaking tools. Because of this behavior profile, some Antivirus engines and Microsoft Defender may flag the installer or executable as a **false positive** or **Potentially Unwanted Application (PUA)**.
+
+This is expected for software in this category. If your security suite blocks execution, you may need to create a manual exclusion for the ZapTweaks installation folder and related release files.
+
+### Third-Party Content Disclaimer
+
+ZapTweaks acts as an aggregator and launcher for tweaks, scripts, and utilities created by independent third-party tweakers and developers.
+
+### Liability and Use at Your Own Risk
+
+PrimeBuild and the ZapTweaks project do **not** guarantee the safety, stability, compatibility, or performance impact of third-party tweaks and tools included or linked by the application.
+
+By using ZapTweaks, you acknowledge that all actions are performed at your own risk. PrimeBuild and the ZapTweaks project are not responsible for any system instability, crashes, hardware damage, data loss, or other direct/indirect consequences resulting from use of the app or its integrated third-party components.
+
 ## ✨ Features
 
 <details>
@@ -131,8 +151,8 @@ Quality-of-life features designed to make system tweaking safe and user-friendly
 ### Download & Install
 
 1. Download the latest release from [Releases](https://github.com/PrimeBuild-pc/ZapTweaks/releases)
-2. Extract `ZapTweaks_v1.0_Windows.zip` to your desired location
-3. Run `script_utility.exe` as Administrator
+2. Extract `ZapTweaks_v1.3.0_Windows.zip` (or the latest release archive) to your desired location
+3. Run `ZapTweaks.exe` as Administrator
 4. Apply your desired tweaks
 5. Restart when prompted
 
@@ -155,7 +175,7 @@ flutter pub get
 # Build for Windows
 flutter build windows --release
 
-# Output: build/windows/x64/runner/Release/script_utility.exe
+# Output: build/windows/x64/runner/Release/ZapTweaks.exe
 ```
 
 ## ⚠️ Important Notes

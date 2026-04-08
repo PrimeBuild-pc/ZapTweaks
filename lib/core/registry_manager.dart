@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'services/process_runner.dart';
 
 class RegistryException implements Exception {
   RegistryException(this.message, {this.exitCode});
@@ -13,12 +13,12 @@ class RegistryException implements Exception {
 class RegistryManager {
   static Future<int?> readDword(String keyPath, String valueName) async {
     try {
-      final result = await Process.run('reg', [
+      final result = await _runRegProcess('reg', [
         'query',
         keyPath,
         '/v',
         valueName,
-      ], runInShell: true);
+      ]);
 
       if (result.exitCode != 0) {
         return null;
@@ -34,8 +34,6 @@ class RegistryManager {
       }
 
       return _parseDword(rawValue);
-    } on ProcessException {
-      return null;
     } catch (_) {
       return null;
     }
@@ -43,12 +41,12 @@ class RegistryManager {
 
   static Future<String?> readString(String keyPath, String valueName) async {
     try {
-      final result = await Process.run('reg', [
+      final result = await _runRegProcess('reg', [
         'query',
         keyPath,
         '/v',
         valueName,
-      ], runInShell: true);
+      ]);
 
       if (result.exitCode != 0) {
         return null;
@@ -69,8 +67,6 @@ class RegistryManager {
       }
 
       return trimmed;
-    } on ProcessException {
-      return null;
     } catch (_) {
       return null;
     }
@@ -82,20 +78,17 @@ class RegistryManager {
     int value,
   ) async {
     final normalizedValue = value.toUnsigned(32);
-    await _runReg(
-      <String>[
-        'add',
-        _quote(keyPath),
-        '/v',
-        _quote(valueName),
-        '/t',
-        'REG_DWORD',
-        '/d',
-        normalizedValue.toString(),
-        '/f',
-      ],
-      operation: 'write REG_DWORD $keyPath/$valueName',
-    );
+    await _runReg(<String>[
+      'add',
+      _quote(keyPath),
+      '/v',
+      _quote(valueName),
+      '/t',
+      'REG_DWORD',
+      '/d',
+      normalizedValue.toString(),
+      '/f',
+    ], operation: 'write REG_DWORD $keyPath/$valueName');
   }
 
   static Future<void> writeString(
@@ -103,20 +96,17 @@ class RegistryManager {
     String valueName,
     String value,
   ) async {
-    await _runReg(
-      <String>[
-        'add',
-        _quote(keyPath),
-        '/v',
-        _quote(valueName),
-        '/t',
-        'REG_SZ',
-        '/d',
-        value,
-        '/f',
-      ],
-      operation: 'write REG_SZ $keyPath/$valueName',
-    );
+    await _runReg(<String>[
+      'add',
+      _quote(keyPath),
+      '/v',
+      _quote(valueName),
+      '/t',
+      'REG_SZ',
+      '/d',
+      value,
+      '/f',
+    ], operation: 'write REG_SZ $keyPath/$valueName');
   }
 
   static Future<void> writeBinary(
@@ -124,33 +114,27 @@ class RegistryManager {
     String valueName,
     String hexValue,
   ) async {
-    await _runReg(
-      <String>[
-        'add',
-        _quote(keyPath),
-        '/v',
-        _quote(valueName),
-        '/t',
-        'REG_BINARY',
-        '/d',
-        hexValue,
-        '/f',
-      ],
-      operation: 'write REG_BINARY $keyPath/$valueName',
-    );
+    await _runReg(<String>[
+      'add',
+      _quote(keyPath),
+      '/v',
+      _quote(valueName),
+      '/t',
+      'REG_BINARY',
+      '/d',
+      hexValue,
+      '/f',
+    ], operation: 'write REG_BINARY $keyPath/$valueName');
   }
 
   static Future<void> deleteValue(String keyPath, String valueName) async {
-    await _runReg(
-      <String>[
-        'delete',
-        _quote(keyPath),
-        '/v',
-        _quote(valueName),
-        '/f',
-      ],
-      operation: 'delete value $keyPath/$valueName',
-    );
+    await _runReg(<String>[
+      'delete',
+      _quote(keyPath),
+      '/v',
+      _quote(valueName),
+      '/f',
+    ], operation: 'delete value $keyPath/$valueName');
   }
 
   static Future<void> _runReg(
@@ -158,7 +142,7 @@ class RegistryManager {
     required String operation,
   }) async {
     try {
-      final result = await Process.run('reg.exe', arguments, runInShell: true);
+      final result = await _runRegProcess('reg.exe', arguments);
       if (result.exitCode != 0) {
         final stderr = result.stderr.toString().trim();
         final stdout = result.stdout.toString().trim();
@@ -171,11 +155,22 @@ class RegistryManager {
           exitCode: result.exitCode,
         );
       }
-    } on ProcessException catch (e) {
-      throw RegistryException(
-        'Unable to execute reg.exe: ${e.message}',
-      );
+    } catch (e) {
+      throw RegistryException('Unable to execute reg.exe: ${e.toString()}');
     }
+  }
+
+  static Future<CommandResult> _runRegProcess(
+    String executable,
+    List<String> arguments, {
+    bool runInShell = true,
+  }) async {
+    return ProcessRunner.shared.run(
+      executable,
+      arguments,
+      runInShell: runInShell,
+      timeout: const Duration(seconds: 30),
+    );
   }
 
   static String _quote(String value) {

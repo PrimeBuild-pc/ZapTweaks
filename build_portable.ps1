@@ -41,6 +41,14 @@ if (-not $BuildPath) {
     throw "Build output not found. Checked: $($BuildPathCandidates -join ', ')"
 }
 
+$UninstallerPath = Join-Path $RepoRoot 'uninstaller.bat'
+if (Test-Path $UninstallerPath) {
+    Copy-Item $UninstallerPath (Join-Path $BuildPath 'uninstaller.bat') -Force
+    Write-Host '[->] Included uninstaller.bat in release folder.' -ForegroundColor Yellow
+} else {
+    Write-Host '[!] uninstaller.bat not found in repo root, skipping inclusion.' -ForegroundColor DarkYellow
+}
+
 Write-Host '[->] Creating portable ZIP...' -ForegroundColor Yellow
 if (Test-Path $PortableZipPath) {
     Remove-Item $PortableZipPath -Force
