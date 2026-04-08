@@ -15,6 +15,7 @@ migrate_working_dir/
 dist/
 installer/
 nul
+migration_report.md
 
 # IntelliJ related
 *.iml
