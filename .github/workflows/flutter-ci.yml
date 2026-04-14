@@ -1,0 +1,39 @@
+name: Flutter CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+permissions:
+  contents: read
+
+jobs:
+  analyze-and-test:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Flutter pub get
+        run: flutter pub get
+
+      - name: Analyze
+        run: flutter analyze
+
+      - name: Run tests if present
+        shell: pwsh
+        run: |
+          $hasTests = (Get-ChildItem -Path "test" -Recurse -File -ErrorAction SilentlyContinue | Measure-Object).Count -gt 0
+          if ($hasTests) {
+            flutter test
+          } else {
+            Write-Host "No tests detected in /test, skipping flutter test."
+          }

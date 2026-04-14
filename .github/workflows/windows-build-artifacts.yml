@@ -1,0 +1,63 @@
+name: Windows Build Artifacts
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Flutter pub get
+        run: flutter pub get
+
+      - name: Build Windows release
+        run: flutter build windows --release
+
+      - name: Build portable zip
+        shell: pwsh
+        run: ./build_portable.ps1 -SkipFlutterBuild
+
+      - name: Install Inno Setup
+        shell: pwsh
+        run: choco install innosetup -y
+
+      - name: Build installer
+        shell: pwsh
+        run: '& "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" "installer.iss"'
+
+      - name: Upload portable zip artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ZapTweaks-Portable
+          path: output/ZapTweaks_Portable.zip
+          if-no-files-found: error
+
+      - name: Upload setup artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ZapTweaks-Setup
+          path: output/ZapTweaks_Setup_v*.exe
+          if-no-files-found: error
+
+      - name: Upload raw release folder artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ZapTweaks-Runner-Release
+          path: build/windows/x64/runner/Release
+          if-no-files-found: error

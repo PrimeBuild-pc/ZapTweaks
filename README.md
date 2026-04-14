@@ -186,10 +186,13 @@ flutter build windows --release
 - Some tweaks may affect system stability - use at your own discretion
 - **Not recommended for production workstations** - optimized for gaming
 - **Power plans on modern CPUs**: on Intel P/E-core and recent AMD Ryzen systems, keep the Windows **Balanced** plan as default; use aggressive custom plans only for targeted troubleshooting.
+- **WinSux by Fr33hty** is an invasive remote debloat action with no in-app revert. Run it only if you fully trust the source and accept manual recovery responsibility.
 
 ## 🔄 Reverting Changes
 
-All tweaks can be instantly reverted by toggling the switches back to their OFF position. The app maintains the exact registry/system state for proper restoration.
+Most tweaks can be reverted by toggling the switches back to their OFF position. The app maintains the exact registry/system state for restoration where supported.
+
+Exception: specific remote actions such as **WinSux by Fr33hty** do not provide in-app revert and may require manual rollback/reinstall steps.
 
 ## 🤝 Contributing
 

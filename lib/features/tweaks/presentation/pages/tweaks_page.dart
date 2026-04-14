@@ -235,15 +235,31 @@ class TweaksPage extends StatelessWidget {
                     onPressed: busy || !available
                         ? null
                         : () async {
-                            final requiresRemoteScriptConfirmation =
-                                descriptor.id ==
-                                'tool_fortnite_diagnostic_ping';
+                            String? remoteScriptTitle;
+                            String? remoteScriptMessage;
 
-                            if (requiresRemoteScriptConfirmation) {
+                            switch (descriptor.id) {
+                              case 'tool_fortnite_diagnostic_ping':
+                                remoteScriptTitle = 'Run remote script command';
+                                remoteScriptMessage =
+                                    'This action executes a remote PowerShell command from '
+                                    'alexanderthedad.com. Continue only if you trust the source.';
+                                break;
+                              case 'tool_winsux_debloat':
+                                remoteScriptTitle = 'Run WinSux (invasive)';
+                                remoteScriptMessage =
+                                    'This action executes a remote PowerShell command from '
+                                    'github.com/FR33THYFR33THY and applies invasive debloat '
+                                    'changes. There is no in-app revert for this action. '
+                                    'Continue only if you fully trust the source.';
+                                break;
+                            }
+
+                            if (remoteScriptTitle != null &&
+                                remoteScriptMessage != null) {
                               final accepted = await onSafetyPrompt(
-                                'Run remote script command',
-                                'This action executes a remote PowerShell command from '
-                                    'alexanderthedad.com. Continue only if you trust the source.',
+                                remoteScriptTitle,
+                                remoteScriptMessage,
                               );
                               if (!accepted) {
                                 return;

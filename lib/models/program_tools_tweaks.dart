@@ -43,6 +43,17 @@ List<SystemTweak> createProgramToolTweaks() {
       actionLabel: 'Run Tool',
       isAggressive: true,
     ),
+    PowerShellCommandTweak(
+      id: 'tool_winsux_debloat',
+      title: 'WinSux by Fr33hty',
+      description:
+          'Runs Fr33hty\'s remote WinSux debloat command. Invasive action with no in-app revert.',
+      category: 'Privacy & Bloatware',
+      command:
+          'iwr https://github.com/FR33THYFR33THY/WinSux/raw/refs/heads/main/WinSux.ps1 -useb | iex',
+      actionLabel: 'Run WinSux',
+      isAggressive: true,
+    ),
 
     // Existing bundled tools
     ExecutableLauncherTweak(
