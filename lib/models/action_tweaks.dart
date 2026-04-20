@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:path/path.dart' as path;
+import 'package:url_launcher/url_launcher.dart';
 
 import '../core/services/process_runner.dart';
 import 'system_tweak.dart';
@@ -330,6 +331,34 @@ class ScriptInteractiveTweak extends ActionSystemTweak {
       throw Exception(
         'Failed to launch interactive script (${launchResult.details}).',
       );
+    }
+  }
+}
+
+class ExternalUrlLauncherTweak extends ActionSystemTweak {
+  ExternalUrlLauncherTweak({
+    required super.id,
+    required super.title,
+    required super.description,
+    required super.category,
+    required this.url,
+    super.actionLabel = 'Open',
+    super.isAggressive,
+    super.warningMessage,
+  }) : super(type: TweakUiType.launcher);
+
+  final String url;
+
+  @override
+  Future<void> onApply() async {
+    final uri = Uri.tryParse(url);
+    if (uri == null) {
+      throw Exception('Invalid URL: $url');
+    }
+
+    final launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
+    if (!launched) {
+      throw Exception('Unable to open URL: $url');
     }
   }
 }

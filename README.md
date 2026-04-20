@@ -6,7 +6,7 @@ Windows 11 optimization workstation focused on gaming performance, system respon
 
 <img width="1400" height="956" alt="image" src="https://github.com/user-attachments/assets/c4c6ca99-89f4-41d7-bce8-40a8f1512e2e" />
 
-Current version: v1.4.0
+Current version: v1.4.1
 
 ## Features
 - Fluent UI desktop app built with Flutter for Windows.
@@ -28,6 +28,18 @@ Current version: v1.4.0
 Download the latest installer from Releases:
 
 https://github.com/PrimeBuild-pc/ZapTweaks/releases
+
+Install latest release via PowerShell (run PowerShell as Administrator):
+
+```powershell
+irm https://raw.githubusercontent.com/PrimeBuild-pc/ZapTweaks/main/scripts/installer-latest.ps1 | iex
+```
+
+Alternative using iwr:
+
+```powershell
+iwr https://raw.githubusercontent.com/PrimeBuild-pc/ZapTweaks/main/scripts/installer-latest.ps1 -UseBasicParsing | iex
+```
 
 ## Tweaks Categories
 - Home: dashboard and quick access overview.

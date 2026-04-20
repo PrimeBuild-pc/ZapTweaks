@@ -46,6 +46,38 @@ List<SystemTweak> createProgramToolTweaks() {
           'This action executes a remote PowerShell command from '
           'alexanderthedad.com. Continue only if you trust the source.',
     ),
+    ExternalUrlLauncherTweak(
+      id: 'tool_winslopr_releases',
+      title: 'Download Winslopr',
+      description:
+          'Opens the official Winslopr releases page on GitHub in your browser.',
+      category: 'Drivers & Installers',
+      url: 'https://github.com/builtbybel/Winslopr/releases',
+      actionLabel: 'Open Releases',
+    ),
+    PowerShellTerminalCommandTweak(
+      id: 'tool_usb_latency_analyzer_v2_marius_heier',
+      title: 'USB Latency Analyzer V2 by marius heier',
+      description:
+          'Runs Marius Heier\'s diagnostic tool in a visible elevated PowerShell window. This does not apply tweaks and is intended for console diagnostics output.',
+      category: 'Drivers & Installers',
+      command: 'irm https://tools.mariusheier.com/cpudirect.ps1 | iex',
+      actionLabel: 'Run Tool',
+      warningMessage:
+          'This action executes a remote PowerShell command from tools.mariusheier.com. Continue only if you trust the source.',
+    ),
+    PowerShellTerminalCommandTweak(
+      id: 'tool_install_win11_debloat_raphire',
+      title: 'Install Win11 Debloat',
+      description:
+          'Runs the official Win11Debloat remote command in a visible elevated PowerShell window.',
+      category: 'Drivers & Installers',
+      command: '& ([scriptblock]::Create((irm "https://debloat.raphi.re/")))',
+      actionLabel: 'Install',
+      isAggressive: true,
+      warningMessage:
+          'This action executes a remote PowerShell command from debloat.raphi.re and can change system configuration. Continue only if you trust the source.',
+    ),
     PowerShellTerminalCommandTweak(
       id: 'tool_sysinternals_suite_winget',
       title: 'Install Sysinternals Suite',
