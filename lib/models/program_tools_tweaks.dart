@@ -42,6 +42,19 @@ List<SystemTweak> createProgramToolTweaks() {
       command: 'irm https://alexanderthedad.com/ping-fortnite.ps1 | iex',
       actionLabel: 'Run Tool',
       isAggressive: true,
+      warningMessage:
+          'This action executes a remote PowerShell command from '
+          'alexanderthedad.com. Continue only if you trust the source.',
+    ),
+    PowerShellTerminalCommandTweak(
+      id: 'tool_sysinternals_suite_winget',
+      title: 'Install Sysinternals Suite',
+      description:
+          'Installs Microsoft Sysinternals Suite with Winget. The PowerShell window stays open so you can read the final PATH/tool output.',
+      category: 'Drivers & Installers',
+      command: 'winget install -e --id Microsoft.Sysinternals.Suite',
+      actionLabel: 'Install',
+      isAggressive: true,
     ),
     PowerShellCommandTweak(
       id: 'tool_winsux_debloat',
@@ -53,6 +66,11 @@ List<SystemTweak> createProgramToolTweaks() {
           'iwr https://github.com/FR33THYFR33THY/WinSux/raw/refs/heads/main/WinSux.ps1 -useb | iex',
       actionLabel: 'Run WinSux',
       isAggressive: true,
+      warningMessage:
+          'This action executes a remote PowerShell command from '
+          'github.com/FR33THYFR33THY and applies invasive debloat changes. '
+          'There is no in-app revert for this action. Continue only if you '
+          'fully trust the source.',
     ),
 
     // Existing bundled tools

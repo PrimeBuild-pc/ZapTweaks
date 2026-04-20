@@ -6,7 +6,7 @@ class CategoryPresetService {
   static const String aggressivePreset = 'Aggressive';
 
   List<String> availablePresetsForCategory(String category) {
-    if (category == 'Home' || category == 'Tools') {
+    if (category == 'Home') {
       return const <String>[defaultPreset];
     }
 

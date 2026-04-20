@@ -118,128 +118,168 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
       title: AppMetadata.productName,
       theme: buildZapTweaksTheme(accentColor: _systemAccentColor),
       navigatorKey: _navigatorKey,
-      home: NavigationView(
-        titleBar: widget.useNativeTitleBar
-            ? WindowsTitleBar(
-                onAboutPressed: _showAboutDialog,
-                backgroundColor: const Color(0xFF1E1E1E),
-              )
-            : _buildFallbackTitleBar(),
-        pane: NavigationPane(
-          selected: widget.controller.categories.indexOf(
-            widget.controller.selectedCategory,
-          ),
-          onChanged: (index) {
-            if (index >= 0 && index < widget.controller.categories.length) {
-              widget.controller.selectCategory(
-                widget.controller.categories[index],
-              );
-            }
-          },
-          size: const NavigationPaneSize(openWidth: 240),
-          displayMode: PaneDisplayMode.auto,
-          items: widget.controller.categories
-              .map(
-                (category) => PaneItem(
-                  icon: Icon(_iconForCategory(category)),
-                  title: Text(category),
-                  body: _buildCategoryBody(category),
+      home: Stack(
+        children: <Widget>[
+          IgnorePointer(
+            ignoring: widget.controller.isInteractionLocked,
+            child: NavigationView(
+              titleBar: widget.useNativeTitleBar
+                  ? WindowsTitleBar(
+                      onAboutPressed: _showAboutDialog,
+                      backgroundColor: const Color(0xFF1E1E1E),
+                    )
+                  : _buildFallbackTitleBar(),
+              pane: NavigationPane(
+                selected: widget.controller.categories.indexOf(
+                  widget.controller.selectedCategory,
                 ),
-              )
-              .toList(),
-          footerItems: <NavigationPaneItem>[
-            PaneItemHeader(
-              header: Row(
-                children: <Widget>[
-                  const Icon(FluentIcons.shield, size: 14),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      widget.controller.isDryRunMode
-                          ? 'Execution: Dry-Run'
-                          : 'Execution: Production',
+                onChanged: (index) {
+                  if (index >= 0 &&
+                      index < widget.controller.categories.length) {
+                    widget.controller.selectCategory(
+                      widget.controller.categories[index],
+                    );
+                  }
+                },
+                size: const NavigationPaneSize(openWidth: 240),
+                displayMode: PaneDisplayMode.auto,
+                items: widget.controller.categories
+                    .map(
+                      (category) => PaneItem(
+                        icon: Icon(_iconForCategory(category)),
+                        title: Text(category),
+                        body: _buildCategoryBody(category),
+                      ),
+                    )
+                    .toList(),
+                footerItems: <NavigationPaneItem>[
+                  PaneItemHeader(
+                    header: Row(
+                      children: <Widget>[
+                        const Icon(FluentIcons.shield, size: 14),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            widget.controller.isDryRunMode
+                                ? 'Execution: Dry-Run'
+                                : 'Execution: Production',
+                          ),
+                        ),
+                        ToggleSwitch(
+                          checked: widget.controller.isDryRunMode,
+                          onChanged: (next) async {
+                            await widget.controller.setDryRunMode(next);
+                          },
+                        ),
+                      ],
                     ),
                   ),
-                  ToggleSwitch(
-                    checked: widget.controller.isDryRunMode,
-                    onChanged: (next) async {
-                      await widget.controller.setDryRunMode(next);
+                  PaneItemAction(
+                    icon: const Icon(FluentIcons.refresh),
+                    title: const Text('Check updates'),
+                    onTap: () async {
+                      final appContext = context;
+                      final checkingDialogContext =
+                          _navigatorKey.currentContext;
+                      if (checkingDialogContext != null) {
+                        showDialog<void>(
+                          context: checkingDialogContext,
+                          barrierDismissible: false,
+                          builder: (_) => const ContentDialog(
+                            title: Text('Checking for updates'),
+                            content: Text(
+                              'Contacting release server and validating version...',
+                            ),
+                          ),
+                        );
+                      }
+
+                      final result = await widget.controller.checkForUpdates();
+
+                      if (checkingDialogContext != null &&
+                          checkingDialogContext.mounted) {
+                        final rootNavigator = Navigator.of(
+                          checkingDialogContext,
+                          rootNavigator: true,
+                        );
+                        if (rootNavigator.canPop()) {
+                          rootNavigator.pop();
+                        }
+                      }
+
+                      if (!appContext.mounted) {
+                        return;
+                      }
+
+                      if (result.shouldExitApp && result.success) {
+                        displayInfoBar(
+                          appContext,
+                          builder: (_, close) => InfoBar(
+                            title: const Text('Updating'),
+                            content: Text(
+                              result.message ?? 'Launching installer...',
+                            ),
+                            action: IconButton(
+                              icon: const Icon(FluentIcons.clear),
+                              onPressed: close,
+                            ),
+                            severity: InfoBarSeverity.warning,
+                          ),
+                        );
+                        await Future<void>.delayed(
+                          const Duration(milliseconds: 600),
+                        );
+                        exit(0);
+                      }
+
+                      displayInfoBar(
+                        appContext,
+                        builder: (_, close) => InfoBar(
+                          title: Text(result.success ? 'Done' : 'Failed'),
+                          content: Text(result.message ?? ''),
+                          action: IconButton(
+                            icon: const Icon(FluentIcons.clear),
+                            onPressed: close,
+                          ),
+                          severity: result.success
+                              ? InfoBarSeverity.success
+                              : InfoBarSeverity.error,
+                        ),
+                      );
                     },
                   ),
                 ],
               ),
             ),
-            PaneItemAction(
-              icon: const Icon(FluentIcons.refresh),
-              title: const Text('Check updates'),
-              onTap: () async {
-                final appContext = context;
-                final checkingDialogContext = _navigatorKey.currentContext;
-                if (checkingDialogContext != null) {
-                  showDialog<void>(
-                    context: checkingDialogContext,
-                    barrierDismissible: false,
-                    builder: (_) => const ContentDialog(
-                      title: Text('Checking for updates'),
-                      content: Text(
-                        'Contacting release server and validating version...',
+          ),
+          if (widget.controller.isInteractionLocked)
+            Positioned.fill(
+              child: ColoredBox(
+                color: const Color(0xAA000000),
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 420),
+                    child: Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            const ProgressRing(),
+                            const SizedBox(height: 14),
+                            Text(
+                              widget.controller.interactionLockMessage,
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  );
-                }
-
-                final result = await widget.controller.checkForUpdates();
-
-                if (checkingDialogContext != null &&
-                    checkingDialogContext.mounted) {
-                  final rootNavigator = Navigator.of(
-                    checkingDialogContext,
-                    rootNavigator: true,
-                  );
-                  if (rootNavigator.canPop()) {
-                    rootNavigator.pop();
-                  }
-                }
-
-                if (!appContext.mounted) {
-                  return;
-                }
-
-                if (result.shouldExitApp && result.success) {
-                  displayInfoBar(
-                    appContext,
-                    builder: (_, close) => InfoBar(
-                      title: const Text('Updating'),
-                      content: Text(result.message ?? 'Launching installer...'),
-                      action: IconButton(
-                        icon: const Icon(FluentIcons.clear),
-                        onPressed: close,
-                      ),
-                      severity: InfoBarSeverity.warning,
-                    ),
-                  );
-                  await Future<void>.delayed(const Duration(milliseconds: 600));
-                  exit(0);
-                }
-
-                displayInfoBar(
-                  appContext,
-                  builder: (_, close) => InfoBar(
-                    title: Text(result.success ? 'Done' : 'Failed'),
-                    content: Text(result.message ?? ''),
-                    action: IconButton(
-                      icon: const Icon(FluentIcons.clear),
-                      onPressed: close,
-                    ),
-                    severity: result.success
-                        ? InfoBarSeverity.success
-                        : InfoBarSeverity.error,
                   ),
-                );
-              },
+                ),
+              ),
             ),
-          ],
-        ),
+        ],
       ),
     );
   }
@@ -351,7 +391,7 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
       case 'Graphics':
         return FluentIcons.picture;
       case 'Windows':
-        return FluentIcons.home;
+        return FluentIcons.shield;
       case 'System Checks':
         return FluentIcons.health;
       case 'Refresh & Recovery':
@@ -443,17 +483,15 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text('Current Version: v${widget.controller.appVersion}'),
+              Text('Version: v${widget.controller.appVersion}'),
               const SizedBox(height: 6),
               const Text('Author: PrimeBuild'),
               const SizedBox(height: 6),
-              Text(
-                'Date: ${DateTime.now().toIso8601String().split('T').first}',
-              ),
+              Text('Year: ${DateTime.now().year}'),
               const SizedBox(height: 6),
               Row(
                 children: <Widget>[
-                  const Text('License: '),
+                  const Text('GitHub: '),
                   HyperlinkButton(
                     onPressed: () {
                       launchUrl(
@@ -461,7 +499,7 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
                         mode: LaunchMode.externalApplication,
                       );
                     },
-                    child: const Text('Repository'),
+                    child: Text(AppMetadata.repositoryUrl),
                   ),
                 ],
               ),

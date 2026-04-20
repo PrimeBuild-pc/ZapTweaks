@@ -46,19 +46,37 @@ class TweakCatalogService {
     'explorer_optimizations',
     'notifications_minimal',
     'game_mode',
-    'windows_update',
+    'power_disable_dynamic_tick',
+    'power_tsc_sync_policy',
   };
 
+  /// Builds the complete tweak catalog sorted by category, tweak type, and title.
   List<TweakDescriptor> buildCatalog() {
     final descriptors = <TweakDescriptor>[
       ..._buildSystemToggleDescriptors(),
       ..._buildScriptDescriptors(),
     ];
 
-    descriptors.sort((left, right) => left.title.compareTo(right.title));
+    descriptors.sort((left, right) {
+      final leftCategoryIndex = navigationCategories.indexOf(left.category);
+      final rightCategoryIndex = navigationCategories.indexOf(right.category);
+      if (leftCategoryIndex != rightCategoryIndex) {
+        return leftCategoryIndex.compareTo(rightCategoryIndex);
+      }
+
+      final typeCompare = _tweakTypeSortWeight(
+        left,
+      ).compareTo(_tweakTypeSortWeight(right));
+      if (typeCompare != 0) {
+        return typeCompare;
+      }
+
+      return left.title.compareTo(right.title);
+    });
     return descriptors;
   }
 
+  /// Returns all catalog entries that belong to the selected navigation category.
   List<TweakDescriptor> buildCatalogForCategory(String category) {
     if (category == 'Home') {
       return const <TweakDescriptor>[];
@@ -67,6 +85,14 @@ class TweakCatalogService {
     return buildCatalog()
         .where((descriptor) => descriptor.category == category)
         .toList(growable: false);
+  }
+
+  int _tweakTypeSortWeight(TweakDescriptor descriptor) {
+    if (descriptor.isSystemToggle || descriptor.isScriptToggle) {
+      return 0;
+    }
+
+    return 1;
   }
 
   List<TweakDescriptor> _buildSystemToggleDescriptors() {
@@ -166,6 +192,33 @@ class TweakCatalogService {
           'network_optimizations': (
             title: 'Network Optimizations',
             description: 'Tune TCP profile and remove multimedia throttling.',
+            category: 'Networking',
+            aggressive: false,
+            cpuVendor: null,
+            gpuVendors: <String>{},
+          ),
+          'network_ecn_disabled': (
+            title: 'Disable ECN',
+            description:
+                'Disables Explicit Congestion Notification to favor predictable low-latency behavior.',
+            category: 'Networking',
+            aggressive: false,
+            cpuVendor: null,
+            gpuVendors: <String>{},
+          ),
+          'network_timestamps_disabled': (
+            title: 'Disable TCP Timestamps',
+            description:
+                'Disables TCP timestamps to reduce protocol overhead in latency-focused scenarios.',
+            category: 'Networking',
+            aggressive: false,
+            cpuVendor: null,
+            gpuVendors: <String>{},
+          ),
+          'network_rss_enabled': (
+            title: 'Enable RSS',
+            description:
+                'Enables Receive Side Scaling to distribute packet processing across CPU cores.',
             category: 'Networking',
             aggressive: false,
             cpuVendor: null,
@@ -304,6 +357,8 @@ class TweakCatalogService {
             description: tweak.description,
             category: _mapToNavigationCategory(tweak.category),
             isAggressive: tweak.isAggressive,
+            restartRequired: restartRequiredSystemTweaks.contains(tweak.id),
+            requiredCpuVendor: tweak.requiredCpuVendor,
             scriptTweak: tweak,
           ),
         )

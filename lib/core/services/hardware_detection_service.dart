@@ -7,6 +7,23 @@ class HardwareDetectionService {
 
   final ProcessRunner _processRunner;
 
+  String _detectCpuVendor(String cpuName) {
+    final normalized = cpuName.trim().toLowerCase();
+    if (normalized.contains('intel')) {
+      return 'intel';
+    }
+
+    if (normalized.contains('advanced micro devices') ||
+        normalized.contains('amd') ||
+        normalized.contains('ryzen') ||
+        normalized.contains('epyc') ||
+        normalized.contains('threadripper')) {
+      return 'amd';
+    }
+
+    return 'unknown';
+  }
+
   Future<HardwareProfile> detect() async {
     String cpuName = 'Unknown CPU';
     String cpuVendor = 'unknown';
@@ -26,12 +43,7 @@ class HardwareDetectionService {
       final detected = cpu.stdout.trim();
       if (detected.isNotEmpty) {
         cpuName = detected;
-        final lower = detected.toLowerCase();
-        if (lower.contains('intel')) {
-          cpuVendor = 'intel';
-        } else if (lower.contains('amd') || lower.contains('ryzen')) {
-          cpuVendor = 'amd';
-        }
+        cpuVendor = _detectCpuVendor(detected);
       }
     }
 

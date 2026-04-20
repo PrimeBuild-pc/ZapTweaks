@@ -12,6 +12,7 @@ class TweakApplyResult {
   final List<String> errors;
 }
 
+/// Applies low-level system tweaks and detects their current registry-backed state.
 class TweakManager {
   TweakManager({LoggingService? loggingService, ProcessRunner? processRunner})
     : _loggingService = loggingService ?? LoggingService.instance,
@@ -61,6 +62,65 @@ foreach ($dev in $devs) {
 }
 ''';
 
+  static const String _networkNagleDisableScript = r'''
+$registryPath = "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces"
+$interfaces = Get-ChildItem -Path $registryPath -ErrorAction Stop
+
+foreach ($interface in $interfaces) {
+  $path = $interface.PSPath
+  New-ItemProperty -Path $path -Name "TcpAckFrequency" -Value 1 -PropertyType DWord -Force | Out-Null
+  New-ItemProperty -Path $path -Name "TCPNoDelay" -Value 1 -PropertyType DWord -Force | Out-Null
+  New-ItemProperty -Path $path -Name "TcpDelAckTicks" -Value 0 -PropertyType DWord -Force | Out-Null
+}
+''';
+
+  static const String _networkNagleRevertScript = r'''
+$registryPath = "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces"
+$interfaces = Get-ChildItem -Path $registryPath -ErrorAction Stop
+
+foreach ($interface in $interfaces) {
+  $path = $interface.PSPath
+  Remove-ItemProperty -Path $path -Name "TcpAckFrequency" -ErrorAction SilentlyContinue
+  Remove-ItemProperty -Path $path -Name "TCPNoDelay" -ErrorAction SilentlyContinue
+  Remove-ItemProperty -Path $path -Name "TcpDelAckTicks" -ErrorAction SilentlyContinue
+}
+''';
+
+  static const String _networkNagleDetectionScript = r'''
+$registryPath = "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces"
+
+try {
+  $interfaces = Get-ChildItem -Path $registryPath -ErrorAction Stop
+  if (-not $interfaces -or $interfaces.Count -eq 0) {
+    Write-Output "false"
+    exit 0
+  }
+
+  $allConfigured = $true
+  foreach ($interface in $interfaces) {
+    $path = $interface.PSPath
+    $props = Get-ItemProperty -Path $path -ErrorAction SilentlyContinue
+    if ($null -eq $props) {
+      $allConfigured = $false
+      break
+    }
+
+    if ($props.TcpAckFrequency -ne 1 -or $props.TCPNoDelay -ne 1 -or $props.TcpDelAckTicks -ne 0) {
+      $allConfigured = $false
+      break
+    }
+  }
+
+  if ($allConfigured) {
+    Write-Output "true"
+  } else {
+    Write-Output "false"
+  }
+} catch {
+  Write-Output "false"
+}
+''';
+
   Future<TweakApplyResult> applyTweak(String key, bool enable) async {
     _resetCommandBatch();
 
@@ -93,6 +153,8 @@ foreach ($dev in $devs) {
 
   Future<Map<String, bool>> detectCurrentTweakStates() async {
     final states = <String, bool>{for (final key in _handlers.keys) key: false};
+    late final Future<Map<String, bool>> tcpGlobalFlagsFuture =
+        _readTcpGlobalFlags();
 
     Future<bool> dwordEquals(
       String keyPath,
@@ -121,113 +183,183 @@ foreach ($dev in $devs) {
     const multimediaProfilePath =
         r'HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile';
 
-    states['cpu_unparking'] = await dwordEquals(
-      r'HKLM\SYSTEM\CurrentControlSet\Control\Power',
-      'CoreParkingDisabled',
-      1,
-    );
-    states['cpu_power_management'] = await dwordEquals(
-      r'HKLM\SYSTEM\CurrentControlSet\Control\Power\PowerThrottling',
-      'PowerThrottlingOff',
-      1,
-    );
-    states['cpu_amd_optimizations'] = await dwordEquals(
-      r'HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management',
-      'FeatureSettings',
-      1,
-    );
+    final checks = <MapEntry<String, Future<bool>>>[
+      MapEntry(
+        'cpu_unparking',
+        dwordEquals(
+          r'HKLM\SYSTEM\CurrentControlSet\Control\Power',
+          'CoreParkingDisabled',
+          1,
+        ),
+      ),
+      MapEntry(
+        'cpu_power_management',
+        dwordEquals(
+          r'HKLM\SYSTEM\CurrentControlSet\Control\Power\PowerThrottling',
+          'PowerThrottlingOff',
+          1,
+        ),
+      ),
+      MapEntry(
+        'cpu_amd_optimizations',
+        dwordEquals(
+          r'HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management',
+          'FeatureSettings',
+          1,
+        ),
+      ),
+      MapEntry(
+        'gpu_nvidia_optimizations',
+        stringEquals(
+          r'HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games',
+          'Scheduling Category',
+          'High',
+        ),
+      ),
+      MapEntry(
+        'gpu_amd_optimizations',
+        dwordEquals(
+          r'HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000',
+          'PP_SclkDeepSleepDisable',
+          1,
+        ),
+      ),
+      MapEntry(
+        'gpu_intel_optimizations',
+        dwordEquals(
+          r'HKLM\SOFTWARE\Intel\Display\igfxcui\Media',
+          'EnableIntelHWAccel',
+          1,
+        ),
+      ),
+      MapEntry(
+        'ram_optimizations',
+        dwordEquals(
+          r'HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management',
+          'DisablePagingExecutive',
+          1,
+        ),
+      ),
+      MapEntry(
+        'storage_optimizations',
+        dwordEquals(
+          r'HKLM\SYSTEM\CurrentControlSet\Control\FileSystem',
+          'NtfsDisableLastAccessUpdate',
+          1,
+        ),
+      ),
+      MapEntry(
+        'network_optimizations',
+        (() async {
+          final networkThrottlingDisabled = await dwordEquals(
+            multimediaProfilePath,
+            'NetworkThrottlingIndex',
+            0xFFFFFFFF,
+          );
+          if (!networkThrottlingDisabled) {
+            return false;
+          }
 
-    states['gpu_nvidia_optimizations'] = await stringEquals(
-      r'HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games',
-      'Scheduling Category',
-      'High',
-    );
-    states['gpu_amd_optimizations'] = await dwordEquals(
-      r'HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000',
-      'PP_SclkDeepSleepDisable',
-      1,
-    );
-    states['gpu_intel_optimizations'] = await dwordEquals(
-      r'HKLM\SOFTWARE\Intel\Display\igfxcui\Media',
-      'EnableIntelHWAccel',
-      1,
-    );
+          return _isNagleDisabledOnAllInterfaces();
+        })(),
+      ),
+      MapEntry(
+        'network_ecn_disabled',
+        (() async => (await tcpGlobalFlagsFuture)['ecnDisabled'] ?? false)(),
+      ),
+      MapEntry(
+        'network_timestamps_disabled',
+        (() async =>
+            (await tcpGlobalFlagsFuture)['timestampsDisabled'] ?? false)(),
+      ),
+      MapEntry(
+        'network_rss_enabled',
+        (() async => (await tcpGlobalFlagsFuture)['rssEnabled'] ?? false)(),
+      ),
+      MapEntry(
+        'timer_latency',
+        dwordEquals(
+          r'HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\kernel',
+          'GlobalTimerResolutionRequests',
+          1,
+        ),
+      ),
+      MapEntry(
+        'visual_effects',
+        dwordEquals(
+          r'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects',
+          'VisualFXSetting',
+          2,
+        ),
+      ),
+      MapEntry(
+        'system_responsiveness',
+        dwordEquals(multimediaProfilePath, 'SystemResponsiveness', 10),
+      ),
+      MapEntry(
+        'telemetry_disable',
+        dwordEquals(
+          r'HKLM\SOFTWARE\Policies\Microsoft\Windows\DataCollection',
+          'AllowTelemetry',
+          0,
+        ),
+      ),
+      MapEntry(
+        'privacy_tracking',
+        dwordEquals(
+          r'HKCU\Software\Microsoft\Windows\CurrentVersion\AdvertisingInfo',
+          'Enabled',
+          0,
+        ),
+      ),
+      MapEntry(
+        'services_disable',
+        dwordEquals(r'HKLM\SYSTEM\CurrentControlSet\Services\DPS', 'Start', 4),
+      ),
+      // TODO: Check override with resources/interactive_scripts/6 Windows/14 Control Panel Settings.ps1
+      MapEntry(
+        'ui_optimizations',
+        dwordEquals(
+          r'HKCU\Software\Microsoft\Windows\CurrentVersion\Search',
+          'SearchboxTaskbarMode',
+          0,
+        ),
+      ),
+      MapEntry(
+        'explorer_optimizations',
+        dwordEquals(
+          r'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced',
+          'HideFileExt',
+          0,
+        ),
+      ),
+      MapEntry(
+        'notifications_minimal',
+        dwordEquals(
+          r'HKCU\Software\Microsoft\Windows\CurrentVersion\PushNotifications',
+          'ToastEnabled',
+          0,
+        ),
+      ),
+      MapEntry(
+        'game_mode',
+        dwordEquals(r'HKCU\System\GameConfigStore', 'GameDVR_Enabled', 0),
+      ),
+      MapEntry(
+        'windows_update',
+        dwordEquals(
+          r'HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU',
+          'NoAutoRebootWithLoggedOnUsers',
+          1,
+        ),
+      ),
+    ];
 
-    states['ram_optimizations'] = await dwordEquals(
-      r'HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management',
-      'DisablePagingExecutive',
-      1,
-    );
-    states['storage_optimizations'] = await dwordEquals(
-      r'HKLM\SYSTEM\CurrentControlSet\Control\FileSystem',
-      'NtfsDisableLastAccessUpdate',
-      1,
-    );
+    final values = await Future.wait<bool>(checks.map((entry) => entry.value));
 
-    states['network_optimizations'] = await dwordEquals(
-      multimediaProfilePath,
-      'NetworkThrottlingIndex',
-      0xFFFFFFFF,
-    );
-    states['timer_latency'] = await dwordEquals(
-      r'HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\kernel',
-      'GlobalTimerResolutionRequests',
-      1,
-    );
-    states['visual_effects'] = await dwordEquals(
-      r'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects',
-      'VisualFXSetting',
-      2,
-    );
-    states['system_responsiveness'] = await dwordEquals(
-      multimediaProfilePath,
-      'SystemResponsiveness',
-      0,
-    );
-
-    states['telemetry_disable'] = await dwordEquals(
-      r'HKLM\SOFTWARE\Policies\Microsoft\Windows\DataCollection',
-      'AllowTelemetry',
-      0,
-    );
-    states['privacy_tracking'] = await dwordEquals(
-      r'HKCU\Software\Microsoft\Windows\CurrentVersion\AdvertisingInfo',
-      'Enabled',
-      0,
-    );
-    states['services_disable'] = await dwordEquals(
-      r'HKLM\SYSTEM\CurrentControlSet\Services\DPS',
-      'Start',
-      4,
-    );
-
-    // TODO: Check override with resources/interactive_scripts/6 Windows/14 Control Panel Settings.ps1
-    states['ui_optimizations'] = await dwordEquals(
-      r'HKCU\Software\Microsoft\Windows\CurrentVersion\Search',
-      'SearchboxTaskbarMode',
-      0,
-    );
-    states['explorer_optimizations'] = await dwordEquals(
-      r'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced',
-      'HideFileExt',
-      0,
-    );
-    states['notifications_minimal'] = await dwordEquals(
-      r'HKCU\Software\Microsoft\Windows\CurrentVersion\PushNotifications',
-      'ToastEnabled',
-      0,
-    );
-
-    states['game_mode'] = await dwordEquals(
-      r'HKCU\System\GameConfigStore',
-      'GameDVR_Enabled',
-      0,
-    );
-    states['windows_update'] = await dwordEquals(
-      r'HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU',
-      'NoAutoRebootWithLoggedOnUsers',
-      1,
-    );
+    for (var i = 0; i < checks.length; i++) {
+      states[checks[i].key] = values[i];
+    }
 
     return states;
   }
@@ -420,6 +552,9 @@ foreach ($dev in $devs) {
       'ram_optimizations': _applyRamOptimizations,
       'storage_optimizations': _applyStorageOptimizations,
       'network_optimizations': _applyNetworkOptimizations,
+      'network_ecn_disabled': _applyNetworkEcnDisabled,
+      'network_timestamps_disabled': _applyNetworkTimestampsDisabled,
+      'network_rss_enabled': _applyNetworkRssEnabled,
       'timer_latency': _applyTimerLatency,
       'visual_effects': _applyVisualEffects,
       'system_responsiveness': _applySystemResponsiveness,
@@ -924,13 +1059,10 @@ foreach ($dev in $devs) {
         'NetworkThrottlingIndex',
         0xFFFFFFFF,
       );
-      await _writeRegistryDword(
-        multimediaProfilePath,
-        'SystemResponsiveness',
-        0,
+      await _runPowerShellScript(
+        _networkNagleDisableScript,
+        'network_nagle_disable',
       );
-      await _writeRegistryDword(tcpipParametersPath, 'TcpAckFrequency', 1);
-      await _writeRegistryDword(tcpipParametersPath, 'TCPNoDelay', 1);
       await _writeRegistryDword(tcpipParametersPath, 'Tcp1323Opts', 1);
       await _writeRegistryDword(tcpipParametersPath, 'TcpMaxDupAcks', 2);
       await _writeRegistryDword(
@@ -945,13 +1077,10 @@ foreach ($dev in $devs) {
         'NetworkThrottlingIndex',
         10,
       );
-      await _writeRegistryDword(
-        multimediaProfilePath,
-        'SystemResponsiveness',
-        20,
+      await _runPowerShellScript(
+        _networkNagleRevertScript,
+        'network_nagle_revert',
       );
-      await _deleteRegistryValue(tcpipParametersPath, 'TcpAckFrequency');
-      await _deleteRegistryValue(tcpipParametersPath, 'TCPNoDelay');
       await _deleteRegistryValue(tcpipParametersPath, 'Tcp1323Opts');
       await _deleteRegistryValue(tcpipParametersPath, 'TcpMaxDupAcks');
       await _deleteRegistryValue(
@@ -960,6 +1089,24 @@ foreach ($dev in $devs) {
       );
       await _deleteRegistryValue(kernelSessionManagerPath, 'DpcTimeout');
     }
+  }
+
+  Future<void> _applyNetworkEcnDisabled(bool enable) async {
+    await _runCommand(
+      'netsh int tcp set global ecncapability=${enable ? 'disabled' : 'default'}',
+    );
+  }
+
+  Future<void> _applyNetworkTimestampsDisabled(bool enable) async {
+    await _runCommand(
+      'netsh int tcp set global timestamps=${enable ? 'disabled' : 'default'}',
+    );
+  }
+
+  Future<void> _applyNetworkRssEnabled(bool enable) async {
+    await _runCommand(
+      'netsh int tcp set global rss=${enable ? 'enabled' : 'default'}',
+    );
   }
 
   Future<void> _applyTimerLatency(bool enable) async {
@@ -1137,7 +1284,7 @@ foreach ($dev in $devs) {
       await _writeRegistryDword(
         r'HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile',
         'SystemResponsiveness',
-        0,
+        10,
       );
       await _writeRegistryDword(
         r'HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile',
@@ -1887,6 +2034,113 @@ foreach ($dev in $devs) {
         reason: 'Exception while running PowerShell script',
         details: e.toString(),
       );
+    }
+  }
+
+  Future<Map<String, bool>> _readTcpGlobalFlags() async {
+    try {
+      final result = await _runProcessLogged('netsh', [
+        'int',
+        'tcp',
+        'show',
+        'global',
+      ], runInShell: true);
+
+      if (result.exitCode != 0) {
+        return const <String, bool>{
+          'ecnDisabled': false,
+          'timestampsDisabled': false,
+          'rssEnabled': false,
+        };
+      }
+
+      final lines = result.stdout
+          .toString()
+          .split(RegExp(r'\r?\n'))
+          .map((line) => line.trim().toLowerCase())
+          .where((line) => line.isNotEmpty)
+          .toList(growable: false);
+
+      String? findLine(bool Function(String line) predicate) {
+        for (final line in lines) {
+          if (predicate(line)) {
+            return line;
+          }
+        }
+        return null;
+      }
+
+      final ecnLine = findLine((line) => line.contains('ecn'));
+      final timestampsLine = findLine(
+        (line) =>
+            line.contains('timestamp') ||
+            line.contains('time stamp') ||
+            line.contains('rfc 1323'),
+      );
+      final rssLine = findLine(
+        (line) =>
+            line.contains('receive-side scaling') ||
+            RegExp(r'\brss\b').hasMatch(line),
+      );
+
+      return <String, bool>{
+        'ecnDisabled': _lineIndicatesDisabled(ecnLine),
+        'timestampsDisabled': _lineIndicatesDisabled(timestampsLine),
+        'rssEnabled': _lineIndicatesEnabled(rssLine),
+      };
+    } catch (_) {
+      return const <String, bool>{
+        'ecnDisabled': false,
+        'timestampsDisabled': false,
+        'rssEnabled': false,
+      };
+    }
+  }
+
+  bool _lineIndicatesDisabled(String? line) {
+    if (line == null) {
+      return false;
+    }
+
+    final normalized = line.toLowerCase();
+    return normalized.contains('disabled') ||
+        normalized.contains('disabilit') ||
+        normalized.contains(' off') ||
+        normalized.endsWith('off') ||
+        normalized.contains(': 0');
+  }
+
+  bool _lineIndicatesEnabled(String? line) {
+    if (line == null) {
+      return false;
+    }
+
+    final normalized = line.toLowerCase();
+    return normalized.contains('enabled') ||
+        normalized.contains('abilitat') ||
+        normalized.contains('attivat') ||
+        normalized.contains(' on') ||
+        normalized.endsWith('on') ||
+        normalized.contains(': 1');
+  }
+
+  Future<bool> _isNagleDisabledOnAllInterfaces() async {
+    try {
+      final result = await _runProcessLogged('powershell', [
+        '-NoProfile',
+        '-ExecutionPolicy',
+        'Bypass',
+        '-Command',
+        _networkNagleDetectionScript,
+      ], runInShell: true);
+
+      if (result.exitCode != 0) {
+        return false;
+      }
+
+      return result.stdout.toString().trim().toLowerCase().contains('true');
+    } catch (_) {
+      return false;
     }
   }
 

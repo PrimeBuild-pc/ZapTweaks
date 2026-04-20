@@ -22,23 +22,32 @@ import 'core/services/tweak_catalog_service.dart';
 import 'core/tweak_manager.dart';
 import 'features/tweaks/application/tweak_controller.dart';
 
+Future<void> _initWindowIfNeeded() async {
+  if (!Platform.isWindows) {
+    return;
+  }
+
+  await Window.initialize();
+  await Window.hideWindowControls();
+  WindowEffectCoordinator.instance.attach();
+  await WindowEffectCoordinator.instance.applyNow();
+}
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  if (Platform.isWindows) {
-    await Window.initialize();
-    await Window.hideWindowControls();
+  final bootstrapResults = await Future.wait<dynamic>(<Future<dynamic>>[
+    _initWindowIfNeeded(),
+    LoggingService.instance.initialize(),
+    SharedPreferences.getInstance(),
+  ]);
 
-    WindowEffectCoordinator.instance.attach();
-    await WindowEffectCoordinator.instance.applyNow();
-  }
+  final prefs = bootstrapResults[2] as SharedPreferences;
 
-  await LoggingService.instance.initialize();
   await LoggingService.instance.logInfo(
     'Application startup sequence started.',
   );
 
-  final prefs = await SharedPreferences.getInstance();
   final processRunner = ProcessRunner();
   ProcessRunner.configureShared(processRunner);
   final permissionService = PermissionService(processRunner: processRunner);

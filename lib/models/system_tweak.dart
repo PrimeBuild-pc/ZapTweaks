@@ -1,5 +1,7 @@
+/// UI rendering modes supported by tweak descriptors.
 enum TweakUiType { toggle, launcher, interactiveScript }
 
+/// Base contract for all tweak definitions used by the catalog.
 abstract class SystemTweak {
   SystemTweak({
     required this.id,
@@ -10,6 +12,8 @@ abstract class SystemTweak {
     this.type = TweakUiType.toggle,
     this.actionLabel = 'Run',
     this.isAggressive = false,
+    this.warningMessage,
+    this.requiredCpuVendor,
   });
 
   final String id;
@@ -19,6 +23,8 @@ abstract class SystemTweak {
   final TweakUiType type;
   final String actionLabel;
   final bool isAggressive;
+  final String? warningMessage;
+  final String? requiredCpuVendor;
   bool isApplied;
 
   bool get hasState => type == TweakUiType.toggle;
@@ -32,6 +38,7 @@ abstract class SystemTweak {
   Future<bool> checkState();
 }
 
+/// Base type for one-shot or launcher tweaks without persisted toggle state.
 abstract class ActionSystemTweak extends SystemTweak {
   ActionSystemTweak({
     required super.id,
@@ -41,6 +48,8 @@ abstract class ActionSystemTweak extends SystemTweak {
     required super.type,
     super.actionLabel,
     super.isAggressive,
+    super.warningMessage,
+    super.requiredCpuVendor,
   });
 
   @override

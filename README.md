@@ -1,221 +1,55 @@
-# ⚡ ZapTweaks
+# ZapTweaks
 
-[![Platform](https://img.shields.io/badge/platform-Windows%2011-blue.svg)](https://www.microsoft.com/windows)
-[![Flutter](https://img.shields.io/badge/Flutter-3.10+-02569B.svg?logo=flutter)](https://flutter.dev)
-[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![Release](https://img.shields.io/github/v/release/PrimeBuild-pc/ZapTweaks.svg)](https://github.com/PrimeBuild-pc/ZapTweaks/releases)
+Windows 11 optimization workstation focused on gaming performance, system responsiveness, and practical maintenance workflows.
 
-> **Simple & Fast Windows 11 Gaming System Optimizer by PrimeBuild**
+Current version: v1.4.0
 
-ZapTweaks is a simple desktop application designed to optimize Windows 11 systems for better gaming performance through basic system tweaks and optimizations.
+## Features
+- Fluent UI desktop app built with Flutter for Windows.
+- Toggle-based system tweaks with apply and revert support.
+- Action tools for scripts, launchers, diagnostics, and installers.
+- Category presets for fast baseline profiles.
+- Hardware-aware availability filtering (CPU and GPU vendors).
+- Built-in restart-required tracking and one-click restart flow.
+- Optional dry-run mode for safe command validation.
+- Expanded Power & CPU suite with advanced toggles, including boost mode, C-state/idle policies, processor min/max states, timer behavior, and BCD timer sync controls.
+- Hardware-aware CPU-vendor-gated tweaks (Intel HWP and AMD preferred cores).
 
-<img width="1650" height="1063" alt="image" src="https://github.com/user-attachments/assets/c3f57012-f038-4d6a-82c0-670d40c09952" />
+## Requirements
+- Windows 11 (22H2 or newer).
+- Administrator privileges.
+- Supported hardware: Intel or AMD CPU, NVIDIA or AMD or Intel GPU.
 
-## ⚠️ Security and Disclaimers
+## Installation
+Download the latest installer from Releases:
 
-> **Please read this section before using ZapTweaks.**
+https://github.com/PrimeBuild-pc/ZapTweaks/releases
 
-### Antivirus and False Positives
+## Tweaks Categories
+- Home: dashboard and quick access overview.
+- Gaming: low-latency and game-focused optimizations.
+- Networking: connection and adapter performance tuning.
+- Power & CPU: processor policy and power behavior controls.
+- Graphics: GPU-focused script and utility actions.
+- Windows: core OS behavior and update policy tweaks.
+- System Checks: health checks and diagnostics.
+- Refresh & Recovery: recovery scripts and maintenance actions.
+- Setup: installers and post-install setup automation.
+- Advanced: expert-only tweaks with stronger impact.
+- Privacy: telemetry and tracking reduction options.
+- Visuals: shell and UI responsiveness cleanup.
+- Tools: bundled external utilities and helper launchers.
 
-ZapTweaks includes system-level actions such as batch scripts, PowerShell commands, registry imports, and bundled low-level tweaking tools. Because of this behavior profile, some Antivirus engines and Microsoft Defender may flag the installer or executable as a **false positive** or **Potentially Unwanted Application (PUA)**.
+## Safety
+- Restore point creation gate for aggressive operations.
+- Dry-run mode to preview command execution.
+- Revert capability for all toggle-based tweaks.
 
-This is expected for software in this category. If your security suite blocks execution, you may need to create a manual exclusion for the ZapTweaks installation folder and related release files.
-
-### Third-Party Content Disclaimer
-
-ZapTweaks acts as an aggregator and launcher for tweaks, scripts, and utilities created by independent third-party tweakers and developers.
-
-### Liability and Use at Your Own Risk
-
-PrimeBuild and the ZapTweaks project do **not** guarantee the safety, stability, compatibility, or performance impact of third-party tweaks and tools included or linked by the application.
-
-By using ZapTweaks, you acknowledge that all actions are performed at your own risk. PrimeBuild and the ZapTweaks project are not responsible for any system instability, crashes, hardware damage, data loss, or other direct/indirect consequences resulting from use of the app or its integrated third-party components.
-
-## ✨ Features
-
-<details>
-<summary><strong>🚀 Performance Optimization</strong></summary>
-
-TweakHub provides advanced system-level optimizations focused on improving overall performance and responsiveness:
-
-- **CPU Tweaks**  
-  Optimize CPU behavior by adjusting core parking, C-States, and power throttling to reduce latency and improve consistency under load.
-
-- **GPU Optimization**  
-  Configure graphics-related settings such as Hardware Accelerated GPU Scheduling (HAGS), Multiplane Overlay (MPO), and apply vendor-specific optimizations for NVIDIA, AMD, and Intel GPUs.
-
-- **RAM Management**  
-  Improve memory usage by optimizing paging behavior and controlling services like SysMain to reduce unnecessary background activity.
-
-- **Storage Optimization**  
-  Apply SSD-specific tweaks including TRIM support, AHCI tuning, and NVMe performance optimizations for faster disk operations.
-
-</details>
-
-<details>
-<summary><strong>⚙️ System Configuration</strong></summary>
-
-Fine-tune core Windows system components to balance performance, stability, and efficiency:
-
-- **Boot & System**  
-  Control fast startup, hibernation behavior, and dynamic tick settings to reduce boot time and improve system responsiveness.
-
-- **Network Optimization**  
-  Improve network performance by adjusting Nagle’s algorithm, Receive Side Scaling (RSS), NetBIOS behavior, and removing network throttling limits.
-
-- **Timer Resolution**  
-  Configure HPET and system timers to achieve more precise timing, beneficial for real-time applications and gaming.
-
-- **Visual Effects**  
-  Reduce UI overhead by disabling unnecessary animations, transparency effects, and visual flourishes to prioritize performance.
-
-</details>
-
-<details>
-<summary><strong>🎮 Gaming Enhancements</strong></summary>
-
-Enhancements specifically designed to improve gaming performance and consistency:
-
-- **Game Mode Control**  
-  Enable or disable Windows Game Mode to ensure system resources are prioritized correctly during gameplay.
-
-- **Game DVR Management**  
-  Fully control Xbox Game Bar and Game DVR features to eliminate background recording overhead.
-
-- **Fullscreen Optimizations (FSO)**  
-  Enable or disable Fullscreen Optimizations to reduce input latency and avoid compatibility issues in certain games.
-
-- **Priority Tweaks**  
-  Optimize process scheduling and priorities to give games preference over background processes.
-
-</details>
-
-<details>
-<summary><strong>🔒 Privacy & Telemetry</strong></summary>
-
-Take back control over your data and reduce unnecessary background communication:
-
-- **Telemetry Blocking**  
-  Disable telemetry services such as DiagTrack and Connected User Experiences to minimize data collection.
-
-- **Privacy Controls**  
-  Manage activity tracking, advertising ID, feedback frequency, and other privacy-related Windows features.
-
-- **Services Management**  
-  Identify and disable unnecessary Windows services that impact performance or privacy.
-
-</details>
-
-<details>
-<summary><strong>🔧 Advanced Tools</strong></summary>
-
-Powerful tools for advanced users who want deeper control over their system:
-
-- **Power Plans**  
-  Import and manage custom high-performance power plans, including Atlas, Bitsum, and other community or custom profiles.
-
-- **Full Debloat Script**  
-  Execute a comprehensive debloating process to remove unnecessary Windows components, apps, and background tasks.
-
-- **Chris Titus Tech Utility**  
-  Direct access to the popular CTT Windows Utility for additional system tuning and configuration.
-
-</details>
-
-<details>
-<summary><strong>💡 Smart Features</strong></summary>
-
-Quality-of-life features designed to make system tweaking safe and user-friendly:
-
-- **Restart Detection**  
-  Automatically detects which tweaks require a system restart and notifies the user accordingly.
-
-- **One-Click Revert**  
-  Instantly enable or disable any tweak, allowing safe experimentation without permanent changes.
-
-- **Persistent Settings**  
-  All user preferences and applied tweaks are saved and restored between sessions.
-
-- **Admin Elevation**  
-  Automatically requests administrator privileges when required to apply system-level changes.
-
-</details>
-
-## 📥 Installation
-
-### Requirements
-- Windows 11 (64-bit)
-- Administrator privileges
-- ~15MB disk space
-
-### Download & Install
-
-1. Download the latest release from [Releases](https://github.com/PrimeBuild-pc/ZapTweaks/releases)
-2. Extract `ZapTweaks_v1.3.0_Windows.zip` (or the latest release archive) to your desired location
-3. Run `ZapTweaks.exe` as Administrator
-4. Apply your desired tweaks
-5. Restart when prompted
-
-## 🛠️ Building from Source
-
-### Prerequisites
+## Building from Source
 ```bash
-flutter --version  # Flutter 3.10+
-```
-
-### Build Instructions
-```bash
-# Clone the repository
-git clone https://github.com/yourusername/ZapTweaks.git
-cd ZapTweaks
-
-# Get dependencies
 flutter pub get
-
-# Build for Windows
 flutter build windows --release
-
-# Output: build/windows/x64/runner/Release/ZapTweaks.exe
 ```
 
-## ⚠️ Important Notes
-
-- **Always create a system restore point** before applying tweaks
-- **Requires Administrator privileges** to modify system settings
-- **Restart required** for most tweaks to take effect
-- Some tweaks may affect system stability - use at your own discretion
-- **Not recommended for production workstations** - optimized for gaming
-- **Power plans on modern CPUs**: on Intel P/E-core and recent AMD Ryzen systems, keep the Windows **Balanced** plan as default; use aggressive custom plans only for targeted troubleshooting.
-- **WinSux by Fr33hty** is an invasive remote debloat action with no in-app revert. Run it only if you fully trust the source and accept manual recovery responsibility.
-
-## 🔄 Reverting Changes
-
-Most tweaks can be reverted by toggling the switches back to their OFF position. The app maintains the exact registry/system state for restoration where supported.
-
-Exception: specific remote actions such as **WinSux by Fr33hty** do not provide in-app revert and may require manual rollback/reinstall steps.
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## 📜 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 💖 Support the project
-
-Do you like this tool? Buy me a coffee ☕:
-
-[![PayPal](https://img.shields.io/badge/Supporta%20su-PayPal-blue?logo=paypal)](https://paypal.me/PrimeBuildOfficial?country.x=IT&locale.x=it_IT)
-
-**Made with ❤️ by PrimeBuild⚡**
-
----
-
-**Disclaimer**: This tool modifies Windows system settings. While all changes are reversible, always backup your system before applying optimizations. Use at your own risk.
+## License
+This project is licensed under the MIT License. See LICENSE for details.

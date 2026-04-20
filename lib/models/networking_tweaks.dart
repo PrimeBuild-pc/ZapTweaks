@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import '../core/registry_manager.dart';
 import '../core/services/process_runner.dart';
+import 'action_tweaks.dart';
 import 'system_tweak.dart';
 
 List<SystemTweak> createNetworkingTweaks() {
@@ -11,7 +12,143 @@ List<SystemTweak> createNetworkingTweaks() {
     NetworkIpv4OnlyTweak(),
     NetworkThrottlingIndexTweak(),
     NetworkMmAgentTweak(),
+    NetworkLowLatencyBandwidthProfileTweak(),
+    PowerShellTerminalCommandTweak(
+      id: 'network_itr_interactive_config',
+      title: 'NIC ITR Interactive Config',
+      description:
+          'Opens an elevated interactive tool to configure NIC Interrupt Throttle Rate (ITR) for supported Realtek/Intel/Killer adapters.',
+      category: 'Networking',
+      command: r'''
+Add-Type -AssemblyName Microsoft.VisualBasic
+
+$root = "HKLM:\SYSTEM\CurrentControlSet\Control\Class\{4D36E972-E325-11CE-BFC1-08002bE10318}"
+$list = Get-ChildItem $root -ErrorAction SilentlyContinue | Where-Object { $_.PSChildName -match '^\d{4}$' } | ForEach-Object {
+  $prop = Get-ItemProperty $_.PSPath
+  if ($prop.DriverDesc -match "Realtek|Intel|Killer|Gaming") {
+    [PSCustomObject]@{ID=$_.PSChildName; Name=$prop.DriverDesc; Path=$_.PSPath}
+  }
+}
+
+if (!$list) { Write-Host "No adapter found."; Read-Host; exit }
+
+$target = $list[0]
+if ($list.Count -gt 1) {
+  Write-Host "Found:"
+  for ($i=0; $i -lt $list.Count; $i++) { Write-Host "$($i+1): $($list[$i].Name) ($($list[$i].ID))" }
+  $sel = Read-Host "Select #"
+  if ($sel -match '^\d+$' -and $sel -le $list.Count -and $sel -gt 0) { $target = $list[$sel-1] } else { exit }
+}
+
+Write-Host "Target: $($target.Name)"
+
+$menu = "1: Disabled (0)`n2: Minimal (200)`n3: Low (400)`n4: Medium (950)`n5: High (2000)`n6: Extreme (3600)`n7: Adaptive (65535)"
+$in = [Microsoft.VisualBasic.Interaction]::InputBox($menu, "ITR Config", "3")
+
+$val = switch ($in) {
+  '1' {0} '2' {200} '3' {400} '4' {950} '5' {2000} '6' {3600} '7' {65535} default {$null}
+}
+
+if ($val -ne $null) {
+  try {
+    Set-ItemProperty -Path $target.Path -Name "ITR" -Value $val -Force
+    Set-ItemProperty -Path $target.Path -Name "*ITR" -Value $val -Force -ErrorAction SilentlyContinue
+    Set-ItemProperty -Path $target.Path -Name "InterruptModerationRate" -Value $val -Force -ErrorAction SilentlyContinue
+    Write-Host "Set to $val. Restart required."
+  } catch {
+    Write-Host "Error: $_"
+  }
+}
+
+Read-Host "Done"
+''',
+      actionLabel: 'Configure ITR',
+      isAggressive: true,
+      warningMessage:
+          'This action changes advanced NIC interrupt moderation registry values. Restart is recommended after applying changes.',
+    ),
   ];
+}
+
+class NetworkLowLatencyBandwidthProfileTweak extends _NetworkingSystemTweak {
+  NetworkLowLatencyBandwidthProfileTweak()
+    : super(
+        id: 'network_low_latency_bandwidth_profile',
+        title: 'Low-Latency Network Profile',
+        description:
+            'Applies an aggressive low-latency networking profile that may reduce throughput and overall bandwidth efficiency.',
+        aggressive: true,
+      );
+
+  @override
+  Future<void> onApply() async {
+    await runSilentPowerShell(r'''
+Set-NetOffloadGlobalSetting -ReceiveSideScaling Enabled -ReceiveSegmentCoalescing Disabled -Chimney Disabled -TaskOffload Enabled -NetworkDirect Enabled -NetworkDirectAcrossIPSubnets Allowed -PacketCoalescingFilter Disabled -ErrorAction SilentlyContinue
+
+Set-NetTCPSetting -SettingName InternetCustom -MinRtoMs 300 -InitialCongestionWindowMss 10 -CongestionProvider CUBIC -CwndRestart True -DelayedAckTimeoutMs 0 -DelayedAckFrequency 1 -AutoTuningLevelLocal Disabled -EcnCapability Disabled -Timestamps Disabled -InitialRtoMs 2000 -ScalingHeuristics Disabled -MaxSynRetransmissions 2 -ErrorAction SilentlyContinue
+
+Set-NetIPInterface -InterfaceAlias "Ethernet" -AddressFamily IPv4 -AutomaticMetric Disabled -InterfaceMetric 1 -NeighborUnreachabilityDetection Disabled -Dhcp Enabled -EcnMarking Disabled -WeakHostReceive Enabled -WeakHostSend Enabled -ErrorAction SilentlyContinue
+Set-NetIPInterface -InterfaceAlias "Wi-Fi" -AddressFamily IPv4 -AutomaticMetric Disabled -InterfaceMetric 1 -NeighborUnreachabilityDetection Disabled -Dhcp Enabled -EcnMarking Disabled -WeakHostReceive Enabled -WeakHostSend Enabled -ErrorAction SilentlyContinue
+
+Enable-NetAdapterChecksumOffload -Name "*" -IncludeHidden -ErrorAction SilentlyContinue
+Disable-NetAdapterLso -Name "*" -IncludeHidden -ErrorAction SilentlyContinue
+Enable-NetAdapterRdma -Name "*" -IncludeHidden -ErrorAction SilentlyContinue
+Disable-NetAdapterRsc -Name "*" -IncludeHidden -ErrorAction SilentlyContinue
+Disable-NetAdapterPowerManagement -Name "*" -IncludeHidden -ErrorAction SilentlyContinue
+Restart-NetAdapter -Name "*" -IncludeHidden -ErrorAction SilentlyContinue
+''', elevated: true);
+
+    isApplied = await checkState();
+  }
+
+  @override
+  Future<void> onRevert() async {
+    await runSilentPowerShell(r'''
+Set-NetOffloadGlobalSetting -ReceiveSideScaling Enabled -ReceiveSegmentCoalescing Enabled -Chimney Disabled -TaskOffload Enabled -NetworkDirect Disabled -NetworkDirectAcrossIPSubnets Blocked -PacketCoalescingFilter Enabled -ErrorAction SilentlyContinue
+
+Set-NetTCPSetting -SettingName InternetCustom -MinRtoMs 300 -InitialCongestionWindowMss 10 -CongestionProvider CUBIC -CwndRestart True -DelayedAckTimeoutMs 40 -DelayedAckFrequency 2 -AutoTuningLevelLocal Normal -EcnCapability Default -Timestamps Enabled -InitialRtoMs 3000 -ScalingHeuristics Enabled -MaxSynRetransmissions 4 -ErrorAction SilentlyContinue
+
+Set-NetIPInterface -InterfaceAlias "Ethernet" -AddressFamily IPv4 -AutomaticMetric Enabled -InterfaceMetric 25 -NeighborUnreachabilityDetection Enabled -Dhcp Enabled -EcnMarking AppDecide -WeakHostReceive Disabled -WeakHostSend Disabled -ErrorAction SilentlyContinue
+Set-NetIPInterface -InterfaceAlias "Wi-Fi" -AddressFamily IPv4 -AutomaticMetric Enabled -InterfaceMetric 25 -NeighborUnreachabilityDetection Enabled -Dhcp Enabled -EcnMarking AppDecide -WeakHostReceive Disabled -WeakHostSend Disabled -ErrorAction SilentlyContinue
+
+Enable-NetAdapterChecksumOffload -Name "*" -IncludeHidden -ErrorAction SilentlyContinue
+Enable-NetAdapterLso -Name "*" -IncludeHidden -ErrorAction SilentlyContinue
+Disable-NetAdapterRdma -Name "*" -IncludeHidden -ErrorAction SilentlyContinue
+Enable-NetAdapterRsc -Name "*" -IncludeHidden -ErrorAction SilentlyContinue
+Enable-NetAdapterPowerManagement -Name "*" -IncludeHidden -ErrorAction SilentlyContinue
+Restart-NetAdapter -Name "*" -IncludeHidden -ErrorAction SilentlyContinue
+''', elevated: true);
+
+    isApplied = await checkState();
+  }
+
+  @override
+  Future<bool> checkState() async {
+    final result = (await runPowerShellForOutput(r'''
+$offload = Get-NetOffloadGlobalSetting -ErrorAction SilentlyContinue
+$tcp = Get-NetTCPSetting -SettingName InternetCustom -ErrorAction SilentlyContinue
+
+if ($null -eq $offload -or $null -eq $tcp) {
+  Write-Output 'false'
+  return
+}
+
+$rscDisabled = ("$($offload.ReceiveSegmentCoalescing)" -eq 'Disabled')
+$pcfDisabled = ("$($offload.PacketCoalescingFilter)" -eq 'Disabled')
+$delayedAckLow = ($tcp.DelayedAckFrequency -eq 1)
+$autoTuningDisabled = ("$($tcp.AutoTuningLevelLocal)" -eq 'Disabled')
+
+if ($rscDisabled -and $pcfDisabled -and $delayedAckLow -and $autoTuningDisabled) {
+  Write-Output 'true'
+} else {
+  Write-Output 'false'
+}
+''')).toLowerCase();
+
+    final applied = result.contains('true');
+    isApplied = applied;
+    return applied;
+  }
 }
 
 abstract class _NetworkingSystemTweak extends SystemTweak {
@@ -19,7 +156,8 @@ abstract class _NetworkingSystemTweak extends SystemTweak {
     required super.id,
     required super.title,
     required super.description,
-  }) : super(category: 'Networking');
+    bool aggressive = false,
+  }) : super(category: 'Networking', isAggressive: aggressive);
 
   Future<void> runSilentPowerShell(
     String script, {

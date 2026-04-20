@@ -181,6 +181,7 @@ class ExecutableLauncherTweak extends ActionSystemTweak {
     this.arguments = const <String>[],
     super.actionLabel = 'Open',
     super.isAggressive,
+    super.warningMessage,
   }) : super(type: TweakUiType.launcher);
 
   final List<String> executableSegments;
@@ -223,6 +224,7 @@ class DirectoryLauncherTweak extends ActionSystemTweak {
     this.launchExecutableRelativePath,
     super.actionLabel = 'Open',
     super.isAggressive,
+    super.warningMessage,
   }) : super(type: TweakUiType.launcher);
 
   final List<String> directorySegments;
@@ -303,6 +305,7 @@ class ScriptInteractiveTweak extends ActionSystemTweak {
     required this.scriptSegments,
     super.actionLabel = 'Run Script',
     super.isAggressive,
+    super.warningMessage,
   }) : super(type: TweakUiType.interactiveScript);
 
   final List<String> scriptSegments;
@@ -340,6 +343,7 @@ class PowerShellCommandTweak extends ActionSystemTweak {
     required this.command,
     super.actionLabel = 'Run',
     super.isAggressive,
+    super.warningMessage,
   }) : super(type: TweakUiType.interactiveScript);
 
   final String command;
@@ -360,6 +364,48 @@ class PowerShellCommandTweak extends ActionSystemTweak {
   }
 }
 
+class PowerShellTerminalCommandTweak extends ActionSystemTweak {
+  PowerShellTerminalCommandTweak({
+    required super.id,
+    required super.title,
+    required super.description,
+    required super.category,
+    required this.command,
+    this.elevated = true,
+    super.actionLabel = 'Run',
+    super.isAggressive,
+    super.warningMessage,
+  }) : super(type: TweakUiType.interactiveScript);
+
+  final String command;
+  final bool elevated;
+
+  @override
+  Future<void> onApply() async {
+    final escapedCommand = command.replaceAll("'", "''");
+    final elevateFlag = elevated ? '-Verb RunAs ' : '';
+    final startProcessCommand =
+        'Start-Process -FilePath powershell $elevateFlag-ArgumentList @('
+        "'-NoExit','-ExecutionPolicy','Bypass','-Command','"
+        '$escapedCommand'
+        "')";
+
+    final result = await ProcessRunner.shared.run('powershell', <String>[
+      '-NoProfile',
+      '-ExecutionPolicy',
+      'Bypass',
+      '-Command',
+      startProcessCommand,
+    ]);
+
+    if (!result.success) {
+      throw Exception(
+        'Failed to open PowerShell command window (${result.details}).',
+      );
+    }
+  }
+}
+
 class BatchScriptTweak extends ActionSystemTweak {
   BatchScriptTweak({
     required super.id,
@@ -370,6 +416,7 @@ class BatchScriptTweak extends ActionSystemTweak {
     this.arguments = const <String>[],
     super.actionLabel = 'Run Script',
     super.isAggressive,
+    super.warningMessage,
   }) : super(type: TweakUiType.launcher);
 
   final List<String> batchSegments;
@@ -411,6 +458,7 @@ class ExplorerSelectFileTweak extends ActionSystemTweak {
     required this.fileSegments,
     super.actionLabel = 'Show File',
     super.isAggressive,
+    super.warningMessage,
   }) : super(type: TweakUiType.launcher);
 
   final List<String> fileSegments;
@@ -443,6 +491,7 @@ class RegistryImportTweak extends ActionSystemTweak {
     required this.registrySegments,
     super.actionLabel = 'Import',
     super.isAggressive,
+    super.warningMessage,
   }) : super(type: TweakUiType.launcher);
 
   final List<String> registrySegments;

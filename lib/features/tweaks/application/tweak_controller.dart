@@ -63,6 +63,9 @@ class TweakController extends ChangeNotifier {
   static const String _executionModeKey = 'executionMode';
   static const String _lastSelectedPresetPrefix = 'preset:';
   static const int _maxMetricsPoints = 40;
+  static const Set<String> _interactionLockingTweaks = <String>{
+    'network_low_latency_bandwidth_profile',
+  };
 
   bool _isLoading = true;
   bool _isAdmin = false;
@@ -106,12 +109,36 @@ class TweakController extends ChangeNotifier {
   bool get isDryRunMode => _processRunner.isDryRun;
   String get loadingStatus => _loadingStatus;
   String get appVersion => _appVersion;
+  bool get isInteractionLocked =>
+      _busyTweaks.any(_interactionLockingTweaks.contains);
+  String get interactionLockMessage =>
+      'Applying network profile. Please wait until all changes complete...';
   ValueListenable<SystemMetricsSnapshot> get latestMetricsListenable =>
       _latestMetrics;
   ValueListenable<List<double>> get cpuHistoryListenable => _cpuHistory;
   ValueListenable<List<double>> get memoryHistoryListenable => _memoryHistory;
   ValueListenable<List<double>> get gpuHistoryListenable => _gpuHistory;
   ValueListenable<List<double>> get vramHistoryListenable => _vramHistory;
+
+  /// Returns true when a category includes at least one toggle-capable tweak.
+  bool categoryHasToggleableItems(String category, {bool systemOnly = false}) {
+    return categoryTweaks(category).any((descriptor) {
+      if (descriptor.isSystemToggle) {
+        return true;
+      }
+
+      if (systemOnly) {
+        return false;
+      }
+
+      return descriptor.scriptTweak?.hasState ?? false;
+    });
+  }
+
+  /// Returns true when an action script has been executed at least once.
+  bool wasScriptExecuted(String tweakId) {
+    return _preferences.getBool('executed:$tweakId') ?? false;
+  }
 
   List<String> presetsForCategory(String category) {
     return _categoryPresetService.availablePresetsForCategory(category);
@@ -179,14 +206,11 @@ class TweakController extends ChangeNotifier {
       _loadingStatus = 'Checking script states...';
       notifyListeners();
       await _initializeScriptStates();
-      _loadingStatus = 'Sampling system metrics...';
-      notifyListeners();
-      await _sampleMetrics();
-      _startMetricsTicker();
     } finally {
       _isLoading = false;
       _loadingStatus = 'Ready';
       notifyListeners();
+      Future<void>.delayed(Duration.zero, _startMetricsSampling);
     }
   }
 
@@ -259,6 +283,7 @@ class TweakController extends ChangeNotifier {
     return 'Unavailable for current hardware.';
   }
 
+  /// Applies or reverts a registry-backed system toggle.
   Future<OperationResult> toggleSystemTweak(
     TweakDescriptor descriptor,
     bool nextValue, {
@@ -320,6 +345,7 @@ class TweakController extends ChangeNotifier {
     }
   }
 
+  /// Executes a script tweak or toggles a stateful script tweak.
   Future<OperationResult> runScriptAction(
     TweakDescriptor descriptor, {
     required Future<bool> Function() confirmRestorePoint,
@@ -349,6 +375,7 @@ class TweakController extends ChangeNotifier {
 
     try {
       if (tweak.hasState) {
+        final previous = tweak.isApplied;
         final target = !tweak.isApplied;
         if (target) {
           await tweak.onApply();
@@ -356,8 +383,14 @@ class TweakController extends ChangeNotifier {
           await tweak.onRevert();
         }
         tweak.isApplied = await tweak.checkState();
+
+        if (descriptor.restartRequired && previous != tweak.isApplied) {
+          _needsRestart = true;
+          await _preferences.setBool(_needsRestartKey, true);
+        }
       } else {
         await tweak.runAction();
+        await _preferences.setBool('executed:${descriptor.id}', true);
       }
 
       return const OperationResult(success: true);
@@ -373,7 +406,7 @@ class TweakController extends ChangeNotifier {
     bool enabled, {
     required Future<bool> Function() confirmRestorePoint,
   }) async {
-    if (category == 'Tools') {
+    if (!categoryHasToggleableItems(category, systemOnly: true)) {
       return const OperationResult(
         success: false,
         message: 'Bulk toggle is available only for toggle-based categories.',
@@ -412,6 +445,7 @@ class TweakController extends ChangeNotifier {
     return const OperationResult(success: true);
   }
 
+  /// Applies a preset profile to all available toggles in a category.
   Future<OperationResult> applyPresetToCategory(
     String category,
     String preset,
@@ -427,7 +461,11 @@ class TweakController extends ChangeNotifier {
     }
 
     final descriptors = categoryTweaks(category)
-        .where((item) => item.isSystemToggle && isDescriptorAvailable(item))
+        .where(
+          (item) =>
+              (item.isSystemToggle || item.isScriptToggle) &&
+              isDescriptorAvailable(item),
+        )
         .toList(growable: false);
 
     for (final descriptor in descriptors) {
@@ -436,16 +474,29 @@ class TweakController extends ChangeNotifier {
         preset: preset,
         descriptor: descriptor,
       );
-      final current = _toggleStates[descriptor.id] ?? false;
+
+      final current = descriptor.isSystemToggle
+          ? (_toggleStates[descriptor.id] ?? false)
+          : (descriptor.scriptTweak?.isApplied ?? false);
+
       if (current == shouldEnable) {
         continue;
       }
 
-      final result = await toggleSystemTweak(
-        descriptor,
-        shouldEnable,
-        confirmRestorePoint: () async => true,
-      );
+      final OperationResult result;
+      if (descriptor.isSystemToggle) {
+        result = await toggleSystemTweak(
+          descriptor,
+          shouldEnable,
+          confirmRestorePoint: () async => true,
+        );
+      } else {
+        result = await runScriptAction(
+          descriptor,
+          confirmRestorePoint: () async => true,
+        );
+      }
+
       if (!result.success) {
         return result;
       }
@@ -542,6 +593,15 @@ class TweakController extends ChangeNotifier {
     } finally {
       _isSamplingMetrics = false;
     }
+  }
+
+  Future<void> _startMetricsSampling() async {
+    _loadingStatus = 'Sampling system metrics...';
+    notifyListeners();
+    await _sampleMetrics();
+    _startMetricsTicker();
+    _loadingStatus = 'Ready';
+    notifyListeners();
   }
 
   List<double> _pushMetricValue(List<double> source, double nextValue) {
