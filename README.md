@@ -2,6 +2,8 @@
 
 Windows 11 optimization workstation focused on gaming performance, system responsiveness, and practical maintenance workflows.
 
+<img width="1400" height="956" alt="image" src="https://github.com/user-attachments/assets/c4c6ca99-89f4-41d7-bce8-40a8f1512e2e" />
+
 Current version: v1.4.0
 
 ## Features
