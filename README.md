@@ -1,6 +1,12 @@
 # ZapTweaks
 
-[![Release](https://img.shields.io/github/v/release/PrimeBuild-pc/ZapTweaks?label=release)](https://github.com/PrimeBuild-pc/ZapTweaks/releases) [![License](https://img.shields.io/github/license/PrimeBuild-pc/ZapTweaks)](https://github.com/PrimeBuild-pc/ZapTweaks/blob/main/LICENSE.md) [![Stars](https://img.shields.io/github/stars/PrimeBuild-pc/ZapTweaks?style=social)](https://github.com/PrimeBuild-pc/ZapTweaks/stargazers) [![Issues](https://img.shields.io/github/issues/PrimeBuild-pc/ZapTweaks)](https://github.com/PrimeBuild-pc/ZapTweaks/issues) [![Last Commit](https://img.shields.io/github/last-commit/PrimeBuild-pc/ZapTweaks)](https://github.com/PrimeBuild-pc/ZapTweaks/commits/main)
+[![Release](https://img.shields.io/github/v/release/PrimeBuild-pc/ZapTweaks?label=release)](https://github.com/PrimeBuild-pc/ZapTweaks/releases/latest)
+[![Downloads](https://img.shields.io/github/downloads/PrimeBuild-pc/ZapTweaks/total?color=success)](https://github.com/PrimeBuild-pc/ZapTweaks/releases/latest)
+[![Codecov](https://codecov.io/gh/PrimeBuild-pc/ZapTweaks/branch/main/graph/badge.svg)](https://codecov.io/gh/PrimeBuild-pc/ZapTweaks)
+[![License](https://img.shields.io/github/license/PrimeBuild-pc/ZapTweaks)](https://github.com/PrimeBuild-pc/ZapTweaks/blob/main/LICENSE)
+[![Stars](https://img.shields.io/github/stars/PrimeBuild-pc/ZapTweaks?style=social)](https://github.com/PrimeBuild-pc/ZapTweaks/stargazers)
+[![Issues](https://img.shields.io/github/issues/PrimeBuild-pc/ZapTweaks)](https://github.com/PrimeBuild-pc/ZapTweaks/issues)
+[![Last Commit](https://img.shields.io/github/last-commit/PrimeBuild-pc/ZapTweaks)](https://github.com/PrimeBuild-pc/ZapTweaks/commits/main)
 
 Windows 11 optimization workstation focused on gaming performance, system responsiveness, and practical maintenance workflows.
 
