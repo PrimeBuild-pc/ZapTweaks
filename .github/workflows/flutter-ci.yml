@@ -28,12 +28,21 @@ jobs:
       - name: Analyze
         run: flutter analyze
 
-      - name: Run tests if present
+      - name: Run tests with coverage
         shell: pwsh
         run: |
           $hasTests = (Get-ChildItem -Path "test" -Recurse -File -ErrorAction SilentlyContinue | Measure-Object).Count -gt 0
           if ($hasTests) {
-            flutter test
+            flutter test --coverage
           } else {
             Write-Host "No tests detected in /test, skipping flutter test."
           }
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage/lcov.info
+          flags: flutter
+          name: flutter-coverage
+          fail_ci_if_error: false

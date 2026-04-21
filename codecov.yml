@@ -1,0 +1,21 @@
+coverage:
+  precision: 2
+  round: down
+  range:
+    - 70
+    - 100
+  status:
+    project: true
+    patch: true
+    changes: true
+
+ignore:
+  - "test"
+  - "build"
+  - ".dart_tool"
+  - "pubspec.lock"
+
+comment:
+  layout: "header, files"
+  behavior: default
+  require_changes: false
