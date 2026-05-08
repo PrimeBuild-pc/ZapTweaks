@@ -2,7 +2,7 @@
 
 [![Release](https://img.shields.io/github/v/release/PrimeBuild-pc/ZapTweaks?label=release)](https://github.com/PrimeBuild-pc/ZapTweaks/releases/latest)
 [![Downloads](https://img.shields.io/github/downloads/PrimeBuild-pc/ZapTweaks/total?color=success)](https://github.com/PrimeBuild-pc/ZapTweaks/releases/latest)
-[![Codecov](https://codecov.io/gh/PrimeBuild-pc/ZapTweaks/badge.svg)](https://codecov.io/gh/PrimeBuild-pc/ZapTweaks)
+[![Codecov](https://codecov.io/gh/PrimeBuild-pc/ZapTweaks/branch/main/graph/badge.svg)](https://codecov.io/gh/PrimeBuild-pc/ZapTweaks)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Stars](https://img.shields.io/github/stars/PrimeBuild-pc/ZapTweaks?style=social)](https://github.com/PrimeBuild-pc/ZapTweaks/stargazers)
 [![Issues](https://img.shields.io/github/issues/PrimeBuild-pc/ZapTweaks)](https://github.com/PrimeBuild-pc/ZapTweaks/issues)
