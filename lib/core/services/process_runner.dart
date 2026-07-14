@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:path/path.dart' as path;
 
@@ -115,6 +117,48 @@ class ProcessRunner {
 
   void setMode(ProcessExecutionMode nextMode) {
     _mode = nextMode;
+  }
+
+  Future<void> runPowerShellScript(
+    String script, {
+    bool elevated = false,
+  }) async {
+    final encodedScript = _encodePowerShellScript(script);
+    final arguments = elevated
+        ? <String>[
+            '-NoProfile',
+            '-ExecutionPolicy',
+            'Bypass',
+            '-WindowStyle',
+            'Hidden',
+            '-Command',
+            "Start-Process -FilePath 'powershell.exe' -Verb RunAs -WindowStyle Hidden -Wait -ArgumentList @('-NoProfile','-ExecutionPolicy','Bypass','-WindowStyle','Hidden','-EncodedCommand','$encodedScript')",
+          ]
+        : <String>[
+            '-NoProfile',
+            '-ExecutionPolicy',
+            'Bypass',
+            '-WindowStyle',
+            'Hidden',
+            '-EncodedCommand',
+            encodedScript,
+          ];
+
+    _throwIfFailed(await run('powershell', arguments));
+  }
+
+  Future<String> runPowerShellForOutput(String script) async {
+    final result = await run('powershell', <String>[
+      '-NoProfile',
+      '-ExecutionPolicy',
+      'Bypass',
+      '-WindowStyle',
+      'Hidden',
+      '-EncodedCommand',
+      _encodePowerShellScript(script),
+    ]);
+    _throwIfFailed(result);
+    return result.stdout.trim();
   }
 
   Future<CommandResult> launch(
@@ -422,6 +466,26 @@ class ProcessRunner {
               codePoint != 0x09 &&
               codePoint != 0x0A &&
               codePoint != 0x0D),
+    );
+  }
+
+  String _encodePowerShellScript(String script) {
+    final units = script.codeUnits;
+    final bytes = Uint8List(units.length * 2);
+    for (var i = 0; i < units.length; i++) {
+      bytes[i * 2] = units[i] & 0xFF;
+      bytes[i * 2 + 1] = (units[i] >> 8) & 0xFF;
+    }
+    return base64Encode(bytes);
+  }
+
+  void _throwIfFailed(CommandResult result) {
+    if (result.success) {
+      return;
+    }
+
+    throw Exception(
+      result.details.isNotEmpty ? result.details : 'Unknown PowerShell error',
     );
   }
 

@@ -1,6 +1,3 @@
-import 'dart:convert';
-import 'dart:typed_data';
-
 import '../core/registry_manager.dart';
 import '../core/services/process_runner.dart';
 import 'system_tweak.dart';
@@ -37,73 +34,11 @@ abstract class _PowerCpuSystemTweak extends SystemTweak {
     super.requiredCpuVendor,
   }) : super(category: 'Power & CPU');
 
-  Future<void> runSilentPowerShell(
-    String script, {
-    bool elevated = false,
-  }) async {
-    final encodedScript = _encodePowerShellScript(script);
-    final List<String> arguments;
+  Future<void> runSilentPowerShell(String script, {bool elevated = false}) =>
+      ProcessRunner.shared.runPowerShellScript(script, elevated: elevated);
 
-    if (elevated) {
-      final elevateCommand =
-          "Start-Process -FilePath 'powershell.exe' -Verb RunAs -WindowStyle Hidden -Wait -ArgumentList @('-NoProfile','-ExecutionPolicy','Bypass','-WindowStyle','Hidden','-EncodedCommand','${encodedScript.replaceAll("'", "''")}')";
-
-      arguments = <String>[
-        '-NoProfile',
-        '-ExecutionPolicy',
-        'Bypass',
-        '-WindowStyle',
-        'Hidden',
-        '-Command',
-        elevateCommand,
-      ];
-    } else {
-      arguments = <String>[
-        '-NoProfile',
-        '-ExecutionPolicy',
-        'Bypass',
-        '-WindowStyle',
-        'Hidden',
-        '-EncodedCommand',
-        encodedScript,
-      ];
-    }
-
-    final result = await ProcessRunner.shared.run('powershell', arguments);
-
-    if (result.exitCode != 0) {
-      final stderr = result.stderr.trim();
-      final stdout = result.stdout.trim();
-      final details = stderr.isNotEmpty
-          ? stderr
-          : (stdout.isNotEmpty ? stdout : 'Unknown PowerShell error');
-      throw Exception(details);
-    }
-  }
-
-  Future<String> runPowerShellForOutput(String script) async {
-    final encodedScript = _encodePowerShellScript(script);
-    final result = await ProcessRunner.shared.run('powershell', <String>[
-      '-NoProfile',
-      '-ExecutionPolicy',
-      'Bypass',
-      '-WindowStyle',
-      'Hidden',
-      '-EncodedCommand',
-      encodedScript,
-    ]);
-
-    if (result.exitCode != 0) {
-      final stderr = result.stderr.trim();
-      final stdout = result.stdout.trim();
-      final details = stderr.isNotEmpty
-          ? stderr
-          : (stdout.isNotEmpty ? stdout : 'Unknown PowerShell error');
-      throw Exception(details);
-    }
-
-    return result.stdout.trim();
-  }
+  Future<String> runPowerShellForOutput(String script) =>
+      ProcessRunner.shared.runPowerShellForOutput(script);
 
   Future<String> _getActiveScheme() async {
     final output = await runPowerShellForOutput(r'''
@@ -134,16 +69,6 @@ if ($line -match '([0-9a-fA-F-]{36})') { $matches[1] }
     return int.tryParse(match.group(1)!, radix: 16);
   }
 
-  String _encodePowerShellScript(String script) {
-    final units = script.codeUnits;
-    final bytes = Uint8List(units.length * 2);
-    for (var i = 0; i < units.length; i++) {
-      final unit = units[i];
-      bytes[i * 2] = unit & 0xFF;
-      bytes[i * 2 + 1] = (unit >> 8) & 0xFF;
-    }
-    return base64Encode(bytes);
-  }
 }
 
 class UltimatePerformancePlanTweak extends _PowerCpuSystemTweak {

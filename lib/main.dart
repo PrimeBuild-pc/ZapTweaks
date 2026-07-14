@@ -12,7 +12,6 @@ import 'app/window_effect_coordinator.dart';
 import 'core/services/hardware_detection_service.dart';
 import 'core/services/logging_service.dart';
 import 'core/services/metrics_sampling_service.dart';
-import 'core/services/category_preset_service.dart';
 import 'core/services/permission_service.dart';
 import 'core/services/process_runner.dart';
 import 'core/services/restore_point_service.dart';
@@ -70,7 +69,6 @@ Future<void> main() async {
       loggingService: LoggingService.instance,
     ),
     tweakCatalogService: TweakCatalogService(),
-    categoryPresetService: CategoryPresetService(),
     metricsSamplingService: MetricsSamplingService(
       processRunner: processRunner,
     ),

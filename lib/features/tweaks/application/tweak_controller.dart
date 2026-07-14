@@ -8,7 +8,6 @@ import '../../../core/models/operation_result.dart';
 import '../../../core/models/safety_gate_result.dart';
 import '../../../core/models/system_metrics_snapshot.dart';
 import '../../../core/models/tweak_descriptor.dart';
-import '../../../core/services/category_preset_service.dart';
 import '../../../core/services/hardware_detection_service.dart';
 import '../../../core/services/logging_service.dart';
 import '../../../core/services/metrics_sampling_service.dart';
@@ -27,7 +26,6 @@ class TweakController extends ChangeNotifier {
     required SafetyGateService safetyGateService,
     required SystemActionService systemActionService,
     required TweakCatalogService tweakCatalogService,
-    required CategoryPresetService categoryPresetService,
     required MetricsSamplingService metricsSamplingService,
     required SharedPreferences preferences,
     required ProcessRunner processRunner,
@@ -39,7 +37,6 @@ class TweakController extends ChangeNotifier {
        _safetyGateService = safetyGateService,
        _systemActionService = systemActionService,
        _tweakCatalogService = tweakCatalogService,
-       _categoryPresetService = categoryPresetService,
        _metricsSamplingService = metricsSamplingService,
        _preferences = preferences,
        _processRunner = processRunner,
@@ -52,12 +49,15 @@ class TweakController extends ChangeNotifier {
   final SafetyGateService _safetyGateService;
   final SystemActionService _systemActionService;
   final TweakCatalogService _tweakCatalogService;
-  final CategoryPresetService _categoryPresetService;
   final MetricsSamplingService _metricsSamplingService;
   final SharedPreferences _preferences;
   final ProcessRunner _processRunner;
   final String _appVersion;
   final LoggingService _loggingService;
+
+  static const String defaultPreset = 'Default';
+  static const String safePreset = 'Safe';
+  static const String aggressivePreset = 'Aggressive';
 
   static const String _needsRestartKey = 'needsRestart';
   static const String _executionModeKey = 'executionMode';
@@ -140,12 +140,20 @@ class TweakController extends ChangeNotifier {
     return _preferences.getBool('executed:$tweakId') ?? false;
   }
 
-  List<String> presetsForCategory(String category) {
-    return _categoryPresetService.availablePresetsForCategory(category);
-  }
+  static List<String> availablePresetsForCategory(String category) =>
+      category == 'Home'
+      ? const <String>[defaultPreset]
+      : const <String>[defaultPreset, safePreset, aggressivePreset];
+
+  static bool shouldEnablePreset(String preset, TweakDescriptor descriptor) =>
+      preset == aggressivePreset ||
+      (preset == safePreset && !descriptor.isAggressive);
+
+  List<String> presetsForCategory(String category) =>
+      availablePresetsForCategory(category);
 
   String selectedPresetForCategory(String category) {
-    return _selectedPresets[category] ?? CategoryPresetService.defaultPreset;
+    return _selectedPresets[category] ?? defaultPreset;
   }
 
   Duration busyDurationFor(String tweakId) {
@@ -450,9 +458,7 @@ class TweakController extends ChangeNotifier {
     String category,
     String preset,
   ) async {
-    final presets = _categoryPresetService.availablePresetsForCategory(
-      category,
-    );
+    final presets = availablePresetsForCategory(category);
     if (!presets.contains(preset)) {
       return const OperationResult(
         success: false,
@@ -469,11 +475,7 @@ class TweakController extends ChangeNotifier {
         .toList(growable: false);
 
     for (final descriptor in descriptors) {
-      final shouldEnable = _categoryPresetService.shouldEnable(
-        category: category,
-        preset: preset,
-        descriptor: descriptor,
-      );
+      final shouldEnable = shouldEnablePreset(preset, descriptor);
 
       final current = descriptor.isSystemToggle
           ? (_toggleStates[descriptor.id] ?? false)
@@ -549,11 +551,10 @@ class TweakController extends ChangeNotifier {
       final savedPreset = _preferences.getString(
         '$_lastSelectedPresetPrefix$category',
       );
-      final availablePresets = _categoryPresetService
-          .availablePresetsForCategory(category);
+      final availablePresets = availablePresetsForCategory(category);
       _selectedPresets[category] = availablePresets.contains(savedPreset)
           ? savedPreset!
-          : CategoryPresetService.defaultPreset;
+          : defaultPreset;
     }
   }
 

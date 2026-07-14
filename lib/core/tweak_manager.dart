@@ -28,40 +28,6 @@ class TweakManager {
     caseSensitive: false,
   );
 
-  static const String _msiEnableScript = r'''
-$devs = @()
-$devs += Get-PnpDevice -Class Net -PresentOnly | Where-Object { $_.Status -eq "OK" -and $_.Manufacturer -match "Realtek" }
-$devs += Get-PnpDevice -Class Display -PresentOnly | Where-Object { $_.Status -eq "OK" -and ($_.Manufacturer -match "NVIDIA|Advanced Micro Devices|AMD") }
-$devs += Get-PnpDevice -PresentOnly | Where-Object { $_.Status -eq "OK" -and ($_.FriendlyName -match "NVMe" -or $_.InstanceId -match "NVME") }
-$devs += Get-PnpDevice -PresentOnly | Where-Object { $_.Status -eq "OK" -and ($_.FriendlyName -match "xHCI|USB 3\.|USB3|USB eXtensible Host Controller") }
-$devs = $devs | Sort-Object InstanceId -Unique
-foreach ($dev in $devs) {
-  $base = "HKLM:\SYSTEM\CurrentControlSet\Enum\$($dev.InstanceId)\Device Parameters\Interrupt Management"
-  $msi = Join-Path $base "MessageSignaledInterruptProperties"
-  $aff = Join-Path $base "Affinity Policy"
-  if (-not (Test-Path $msi)) { New-Item -Path $msi -Force | Out-Null }
-  if (-not (Test-Path $aff)) { New-Item -Path $aff -Force | Out-Null }
-  New-ItemProperty -Path $msi -Name MSISupported -PropertyType DWord -Value 1 -Force | Out-Null
-  New-ItemProperty -Path $aff -Name DevicePolicy -PropertyType DWord -Value 5 -Force | Out-Null
-}
-''';
-
-  static const String _msiDisableScript = r'''
-$devs = @()
-$devs += Get-PnpDevice -Class Net -PresentOnly | Where-Object { $_.Status -eq "OK" -and $_.Manufacturer -match "Realtek" }
-$devs += Get-PnpDevice -Class Display -PresentOnly | Where-Object { $_.Status -eq "OK" -and ($_.Manufacturer -match "NVIDIA|Advanced Micro Devices|AMD") }
-$devs += Get-PnpDevice -PresentOnly | Where-Object { $_.Status -eq "OK" -and ($_.FriendlyName -match "NVMe" -or $_.InstanceId -match "NVME") }
-$devs += Get-PnpDevice -PresentOnly | Where-Object { $_.Status -eq "OK" -and ($_.FriendlyName -match "xHCI|USB 3\.|USB3|USB eXtensible Host Controller") }
-$devs = $devs | Sort-Object InstanceId -Unique
-foreach ($dev in $devs) {
-  $base = "HKLM:\SYSTEM\CurrentControlSet\Enum\$($dev.InstanceId)\Device Parameters\Interrupt Management"
-  $msi = Join-Path $base "MessageSignaledInterruptProperties"
-  $aff = Join-Path $base "Affinity Policy"
-  if (Test-Path $msi) { Remove-ItemProperty -Path $msi -Name MSISupported -ErrorAction SilentlyContinue }
-  if (Test-Path $aff) { Remove-ItemProperty -Path $aff -Name DevicePolicy -ErrorAction SilentlyContinue }
-}
-''';
-
   static const String _networkNagleDisableScript = r'''
 $registryPath = "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces"
 $interfaces = Get-ChildItem -Path $registryPath -ErrorAction Stop
@@ -2246,13 +2212,6 @@ try {
       arguments,
       runInShell: runInShell,
       timeout: const Duration(minutes: 2),
-    );
-  }
-
-  Future<void> applyMsiMode(bool enable) async {
-    await _runPowerShellScript(
-      enable ? _msiEnableScript : _msiDisableScript,
-      enable ? 'msi_enable' : 'msi_disable',
     );
   }
 }
