@@ -4,9 +4,10 @@
   <p>
     <a href="https://github.com/PrimeBuild-pc/ZapTweaks/releases/latest"><img alt="Latest release" src="https://img.shields.io/github/v/release/PrimeBuild-pc/ZapTweaks?label=release"></a>
     <a href="https://github.com/PrimeBuild-pc/ZapTweaks/releases/latest"><img alt="Latest release downloads" src="https://img.shields.io/github/downloads/PrimeBuild-pc/ZapTweaks/latest/total?label=downloads%40latest&color=success"></a>
+    <a href="https://github.com/PrimeBuild-pc/ZapTweaks/releases"><img alt="Total downloads" src="https://img.shields.io/github/downloads/PrimeBuild-pc/ZapTweaks/total?label=total%20downloads&color=success"></a>
     <a href="https://github.com/PrimeBuild-pc/ZapTweaks/actions/workflows/flutter-ci.yml"><img alt="Flutter CI" src="https://github.com/PrimeBuild-pc/ZapTweaks/actions/workflows/flutter-ci.yml/badge.svg"></a>
     <a href="https://codecov.io/gh/PrimeBuild-pc/ZapTweaks"><img alt="Codecov" src="https://img.shields.io/codecov/c/github/PrimeBuild-pc/ZapTweaks?label=coverage"></a>
-    <a href="LICENSE"><img alt="MIT License" src="https://img.shields.io/github/license/PrimeBuild-pc/ZapTweaks"></a>
+    <a href="LICENSE"><img alt="MIT License" src="https://img.shields.io/badge/license-MIT-blue.svg"></a>
   </p>
 </div>
 
@@ -48,6 +49,18 @@ It is not intended to replace common baseline tools such as [CTT WinUtil](https:
 - Windows 11 22H2 or newer.
 - Administrator privileges.
 - x64 system.
+
+## Dependencies
+
+- [Flutter](https://flutter.dev/) and [Dart](https://dart.dev/)
+- [`fluent_ui`](https://pub.dev/packages/fluent_ui) for the Windows 11 interface
+- [`flutter_acrylic`](https://pub.dev/packages/flutter_acrylic), [`bitsdojo_window`](https://pub.dev/packages/bitsdojo_window), and [`system_theme`](https://pub.dev/packages/system_theme) for native window integration
+- [`shared_preferences`](https://pub.dev/packages/shared_preferences) for local settings
+- [`http`](https://pub.dev/packages/http) for update checks
+- [`path`](https://pub.dev/packages/path) for filesystem paths
+- [`flutter_test`](https://api.flutter.dev/flutter/flutter_test/) and [`flutter_lints`](https://pub.dev/packages/flutter_lints) for testing and analysis
+
+Version constraints are maintained in [`pubspec.yaml`](pubspec.yaml).
 
 ## Installation
 
