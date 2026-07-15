@@ -8,6 +8,4 @@ class OperationResult {
   final bool success;
   final String? message;
   final bool shouldExitApp;
-
-  static const OperationResult ok = OperationResult(success: true);
 }

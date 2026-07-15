@@ -1,6 +1,3 @@
-import 'dart:convert';
-import 'dart:typed_data';
-
 import '../core/registry_manager.dart';
 import '../core/services/process_runner.dart';
 import 'system_tweak.dart';
@@ -12,7 +9,6 @@ List<SystemTweak> createPowerCpuTweaks() {
     PowerThrottlingTweak(),
     CpuCoreParkingTweak(),
     ProcessorPerformanceBoostModeTweak(),
-    MinProcessorStateTweak(),
     MaxProcessorStateTweak(),
     SystemResponsivenessRegistryTweak(),
     CpuIdlePromoteDemoteTweak(),
@@ -37,74 +33,6 @@ abstract class _PowerCpuSystemTweak extends SystemTweak {
     super.requiredCpuVendor,
   }) : super(category: 'Power & CPU');
 
-  Future<void> runSilentPowerShell(
-    String script, {
-    bool elevated = false,
-  }) async {
-    final encodedScript = _encodePowerShellScript(script);
-    final List<String> arguments;
-
-    if (elevated) {
-      final elevateCommand =
-          "Start-Process -FilePath 'powershell.exe' -Verb RunAs -WindowStyle Hidden -Wait -ArgumentList @('-NoProfile','-ExecutionPolicy','Bypass','-WindowStyle','Hidden','-EncodedCommand','${encodedScript.replaceAll("'", "''")}')";
-
-      arguments = <String>[
-        '-NoProfile',
-        '-ExecutionPolicy',
-        'Bypass',
-        '-WindowStyle',
-        'Hidden',
-        '-Command',
-        elevateCommand,
-      ];
-    } else {
-      arguments = <String>[
-        '-NoProfile',
-        '-ExecutionPolicy',
-        'Bypass',
-        '-WindowStyle',
-        'Hidden',
-        '-EncodedCommand',
-        encodedScript,
-      ];
-    }
-
-    final result = await ProcessRunner.shared.run('powershell', arguments);
-
-    if (result.exitCode != 0) {
-      final stderr = result.stderr.trim();
-      final stdout = result.stdout.trim();
-      final details = stderr.isNotEmpty
-          ? stderr
-          : (stdout.isNotEmpty ? stdout : 'Unknown PowerShell error');
-      throw Exception(details);
-    }
-  }
-
-  Future<String> runPowerShellForOutput(String script) async {
-    final encodedScript = _encodePowerShellScript(script);
-    final result = await ProcessRunner.shared.run('powershell', <String>[
-      '-NoProfile',
-      '-ExecutionPolicy',
-      'Bypass',
-      '-WindowStyle',
-      'Hidden',
-      '-EncodedCommand',
-      encodedScript,
-    ]);
-
-    if (result.exitCode != 0) {
-      final stderr = result.stderr.trim();
-      final stdout = result.stdout.trim();
-      final details = stderr.isNotEmpty
-          ? stderr
-          : (stdout.isNotEmpty ? stdout : 'Unknown PowerShell error');
-      throw Exception(details);
-    }
-
-    return result.stdout.trim();
-  }
-
   Future<String> _getActiveScheme() async {
     final output = await runPowerShellForOutput(r'''
 $line = powercfg /getactivescheme | Out-String
@@ -113,36 +41,32 @@ if ($line -match '([0-9a-fA-F-]{36})') { $matches[1] }
     return output.trim().toLowerCase();
   }
 
-  Future<int?> _readPowercfgAcValue(String alias) async {
+  Future<List<int>> _readPowercfgValues(String alias) async {
     final scheme = await _getActiveScheme();
     if (scheme.isEmpty) {
-      return null;
+      return const <int>[];
     }
 
     final output = await runPowerShellForOutput(
       'powercfg /query $scheme sub_processor $alias',
     );
-    final match = RegExp(
-      r'Current\s+AC\s+Power\s+Setting\s+Index:\s+0x([0-9a-fA-F]+)',
-      caseSensitive: false,
-    ).firstMatch(output);
+    final localizedValues = RegExp(r'0x([0-9a-fA-F]{1,8})')
+        .allMatches(output)
+        .map((match) {
+          return int.tryParse(match.group(1)!, radix: 16);
+        })
+        .whereType<int>()
+        .toList(growable: false);
 
-    if (match == null) {
-      return null;
+    if (localizedValues.length < 2) {
+      return const <int>[];
     }
-
-    return int.tryParse(match.group(1)!, radix: 16);
+    return localizedValues.sublist(localizedValues.length - 2);
   }
 
-  String _encodePowerShellScript(String script) {
-    final units = script.codeUnits;
-    final bytes = Uint8List(units.length * 2);
-    for (var i = 0; i < units.length; i++) {
-      final unit = units[i];
-      bytes[i * 2] = unit & 0xFF;
-      bytes[i * 2 + 1] = (unit >> 8) & 0xFF;
-    }
-    return base64Encode(bytes);
+  Future<int?> _readPowercfgAcValue(String alias) async {
+    final values = await _readPowercfgValues(alias);
+    return values.length == 2 ? values.first : null;
   }
 }
 
@@ -179,8 +103,6 @@ powercfg /setactive $ultimateGuid | Out-Null
             .replaceAll('__BASE_GUID__', _sourceUltimateGuid.toLowerCase());
 
     await runSilentPowerShell(script, elevated: true);
-
-    isApplied = await checkState();
   }
 
   @override
@@ -203,8 +125,6 @@ if ($schemes.Contains($ultimateGuid)) {
             .replaceAll('__BALANCED_GUID__', _balancedGuid.toLowerCase());
 
     await runSilentPowerShell(script, elevated: true);
-
-    isApplied = await checkState();
   }
 
   @override
@@ -217,7 +137,6 @@ if ($line -match '([0-9a-fA-F-]{36})') {
 ''')).toLowerCase();
 
     final applied = active == _customUltimateGuid;
-    isApplied = applied;
     return applied;
   }
 }
@@ -245,7 +164,6 @@ class FastStartupHibernateTweak extends _PowerCpuSystemTweak {
     await RegistryManager.writeDword(_powerKey, 'HibernateEnabled', 0);
     await RegistryManager.writeDword(_powerKey, 'HibernateEnabledDefault', 0);
     await RegistryManager.writeDword(_sessionPowerKey, 'HiberbootEnabled', 0);
-    isApplied = true;
   }
 
   @override
@@ -265,7 +183,6 @@ class FastStartupHibernateTweak extends _PowerCpuSystemTweak {
 
     await RegistryManager.writeDword(_powerKey, 'HibernateEnabledDefault', 1);
     await RegistryManager.writeDword(_sessionPowerKey, 'HiberbootEnabled', 1);
-    isApplied = false;
   }
 
   @override
@@ -280,7 +197,6 @@ class FastStartupHibernateTweak extends _PowerCpuSystemTweak {
     );
 
     final applied = hibernateDefault == 0 && fastStartup == 0;
-    isApplied = applied;
     return applied;
   }
 }
@@ -301,7 +217,6 @@ class PowerThrottlingTweak extends SystemTweak {
   @override
   Future<void> onApply() async {
     await RegistryManager.writeDword(_keyPath, 'PowerThrottlingOff', 1);
-    isApplied = true;
   }
 
   @override
@@ -313,7 +228,6 @@ class PowerThrottlingTweak extends SystemTweak {
     if (current != null) {
       await RegistryManager.deleteValue(_keyPath, 'PowerThrottlingOff');
     }
-    isApplied = false;
   }
 
   @override
@@ -323,7 +237,6 @@ class PowerThrottlingTweak extends SystemTweak {
       'PowerThrottlingOff',
     );
     final applied = current == 1;
-    isApplied = applied;
     return applied;
   }
 }
@@ -358,8 +271,6 @@ class CpuCoreParkingTweak extends _PowerCpuSystemTweak {
   powercfg /setactive $scheme | Out-Null
 }
 ''', elevated: true);
-
-    isApplied = await checkState();
   }
 
   @override
@@ -378,8 +289,6 @@ class CpuCoreParkingTweak extends _PowerCpuSystemTweak {
   powercfg /setactive $scheme | Out-Null
 }
 ''', elevated: true);
-
-    isApplied = await checkState();
   }
 
   @override
@@ -402,7 +311,6 @@ class CpuCoreParkingTweak extends _PowerCpuSystemTweak {
     final attributesUnhidden = minAttributes == 0 && maxAttributes == 0;
 
     final applied = hasFullMin && hasFullMax && attributesUnhidden;
-    isApplied = applied;
     return applied;
   }
 
@@ -432,7 +340,19 @@ if ($line -match '([0-9a-fA-F-]{36})') {
         values.add(parsed);
       }
     }
-    return values;
+
+    if (values.isNotEmpty) {
+      return values;
+    }
+
+    final localizedValues = RegExp(r'0x([0-9a-fA-F]{1,8})')
+        .allMatches(output)
+        .map((match) => int.tryParse(match.group(1)!, radix: 16))
+        .whereType<int>()
+        .toList(growable: false);
+    return localizedValues.length < 2
+        ? const <int>[]
+        : localizedValues.sublist(localizedValues.length - 2);
   }
 }
 
@@ -456,8 +376,6 @@ if ($line -match '([0-9a-fA-F-]{36})') {
   powercfg /setactive $scheme | Out-Null
 }
 ''', elevated: true);
-
-    isApplied = await checkState();
   }
 
   @override
@@ -471,63 +389,12 @@ if ($line -match '([0-9a-fA-F-]{36})') {
   powercfg /setactive $scheme | Out-Null
 }
 ''', elevated: true);
-
-    isApplied = await checkState();
   }
 
   @override
   Future<bool> checkState() async {
-    final acValue = await _readPowercfgAcValue('PERFBOOSTMODE');
-    final applied = acValue == 2;
-    isApplied = applied;
-    return applied;
-  }
-}
-
-class MinProcessorStateTweak extends _PowerCpuSystemTweak {
-  MinProcessorStateTweak()
-    : super(
-        id: 'power_min_processor_state',
-        title: 'Minimum Processor State (5%)',
-        description:
-            'Sets minimum CPU frequency to 5% to balance responsiveness and power. Combine with Core Parking for best effect.',
-      );
-
-  @override
-  Future<void> onApply() async {
-    await runSilentPowerShell(r'''
-$line = powercfg /getactivescheme | Out-String
-if ($line -match '([0-9a-fA-F-]{36})') {
-  $scheme = $matches[1]
-  powercfg /setacvalueindex $scheme sub_processor PROCTHROTTLEMIN 5 | Out-Null
-  powercfg /setdcvalueindex $scheme sub_processor PROCTHROTTLEMIN 5 | Out-Null
-  powercfg /setactive $scheme | Out-Null
-}
-''', elevated: true);
-
-    isApplied = await checkState();
-  }
-
-  @override
-  Future<void> onRevert() async {
-    await runSilentPowerShell(r'''
-$line = powercfg /getactivescheme | Out-String
-if ($line -match '([0-9a-fA-F-]{36})') {
-  $scheme = $matches[1]
-  powercfg /setacvalueindex $scheme sub_processor PROCTHROTTLEMIN 5 | Out-Null
-  powercfg /setdcvalueindex $scheme sub_processor PROCTHROTTLEMIN 5 | Out-Null
-  powercfg /setactive $scheme | Out-Null
-}
-''', elevated: true);
-
-    isApplied = await checkState();
-  }
-
-  @override
-  Future<bool> checkState() async {
-    final acValue = await _readPowercfgAcValue('PROCTHROTTLEMIN');
-    final applied = acValue == 5;
-    isApplied = applied;
+    final values = await _readPowercfgValues('PERFBOOSTMODE');
+    final applied = values.length == 2 && values.every((value) => value == 2);
     return applied;
   }
 }
@@ -552,8 +419,6 @@ if ($line -match '([0-9a-fA-F-]{36})') {
   powercfg /setactive $scheme | Out-Null
 }
 ''', elevated: true);
-
-    isApplied = await checkState();
   }
 
   @override
@@ -567,15 +432,12 @@ if ($line -match '([0-9a-fA-F-]{36})') {
   powercfg /setactive $scheme | Out-Null
 }
 ''', elevated: true);
-
-    isApplied = await checkState();
   }
 
   @override
   Future<bool> checkState() async {
-    final acValue = await _readPowercfgAcValue('PROCTHROTTLEMAX');
-    final applied = acValue == 100;
-    isApplied = applied;
+    final values = await _readPowercfgValues('PROCTHROTTLEMAX');
+    final applied = values.length == 2 && values.every((value) => value == 100);
     return applied;
   }
 }
@@ -596,20 +458,20 @@ class SystemResponsivenessRegistryTweak extends SystemTweak {
   @override
   Future<void> onApply() async {
     await RegistryManager.writeDword(_keyPath, 'SystemResponsiveness', 10);
-    isApplied = await checkState();
   }
 
   @override
   Future<void> onRevert() async {
     await RegistryManager.writeDword(_keyPath, 'SystemResponsiveness', 20);
-    isApplied = await checkState();
   }
 
   @override
   Future<bool> checkState() async {
-    final value = await RegistryManager.readDword(_keyPath, 'SystemResponsiveness');
+    final value = await RegistryManager.readDword(
+      _keyPath,
+      'SystemResponsiveness',
+    );
     final applied = value != null && value <= 14;
-    isApplied = applied;
     return applied;
   }
 }
@@ -621,9 +483,9 @@ class CpuIdlePromoteDemoteTweak extends _PowerCpuSystemTweak {
         title: 'Disable CPU Idle Demote/Promote',
         description:
             'Sets idle demote/promote thresholds to 100% to reduce time CPU spends entering/exiting idle states. Lower latency at higher power cost.',
-    isAggressive: true,
-    warningMessage:
-      'Increases CPU temperature. Recommended only for desktops with good cooling.',
+        isAggressive: true,
+        warningMessage:
+            'Increases CPU temperature. Recommended only for desktops with good cooling.',
       );
 
   @override
@@ -639,8 +501,6 @@ if ($line -match '([0-9a-fA-F-]{36})') {
   powercfg /setactive $scheme | Out-Null
 }
 ''', elevated: true);
-
-    isApplied = await checkState();
   }
 
   @override
@@ -656,16 +516,17 @@ if ($line -match '([0-9a-fA-F-]{36})') {
   powercfg /setactive $scheme | Out-Null
 }
 ''', elevated: true);
-
-    isApplied = await checkState();
   }
 
   @override
   Future<bool> checkState() async {
-    final demote = await _readPowercfgAcValue('IDLEDEMOTETHR');
-    final promote = await _readPowercfgAcValue('IDLEPROMOTETHR');
-    final applied = demote == 100 && promote == 100;
-    isApplied = applied;
+    final demote = await _readPowercfgValues('IDLEDEMOTETHR');
+    final promote = await _readPowercfgValues('IDLEPROMOTETHR');
+    final applied =
+        demote.length == 2 &&
+        promote.length == 2 &&
+        demote.every((value) => value == 100) &&
+        promote.every((value) => value == 100);
     return applied;
   }
 }
@@ -690,8 +551,6 @@ if ($line -match '([0-9a-fA-F-]{36})') {
   powercfg /setactive $scheme | Out-Null
 }
 ''', elevated: true);
-
-    isApplied = await checkState();
   }
 
   @override
@@ -705,15 +564,12 @@ if ($line -match '([0-9a-fA-F-]{36})') {
   powercfg /setactive $scheme | Out-Null
 }
 ''', elevated: true);
-
-    isApplied = await checkState();
   }
 
   @override
   Future<bool> checkState() async {
-    final acValue = await _readPowercfgAcValue('PERFCHECK');
-    final applied = acValue == 5;
-    isApplied = applied;
+    final values = await _readPowercfgValues('PERFCHECK');
+    final applied = values.length == 2 && values.every((value) => value == 5);
     return applied;
   }
 }
@@ -725,9 +581,9 @@ class DisableCStatesTweak extends _PowerCpuSystemTweak {
         title: 'Disable CPU C-States',
         description:
             'Limits CPU sleep states for maximum responsiveness and instant boost. Desktop only - significantly increases temperature and idle power draw.',
-    isAggressive: true,
-    warningMessage:
-      'HIGH RISK: CPU will run much hotter at idle. Only for desktops with premium cooling. Do NOT use on laptops.',
+        isAggressive: true,
+        warningMessage:
+            'HIGH RISK: CPU will run much hotter at idle. Only for desktops with premium cooling. Do NOT use on laptops.',
       );
 
   @override
@@ -741,8 +597,6 @@ if ($line -match '([0-9a-fA-F-]{36})') {
   powercfg /setactive $scheme | Out-Null
 }
 ''', elevated: true);
-
-    isApplied = await checkState();
   }
 
   @override
@@ -756,15 +610,12 @@ if ($line -match '([0-9a-fA-F-]{36})') {
   powercfg /setactive $scheme | Out-Null
 }
 ''', elevated: true);
-
-    isApplied = await checkState();
   }
 
   @override
   Future<bool> checkState() async {
-    final acValue = await _readPowercfgAcValue('IDLEDISABLE');
-    final applied = acValue == 1;
-    isApplied = applied;
+    final values = await _readPowercfgValues('IDLEDISABLE');
+    final applied = values.length == 2 && values.every((value) => value == 1);
     return applied;
   }
 }
@@ -785,20 +636,20 @@ class Win32PrioritySeparationTweak extends SystemTweak {
   @override
   Future<void> onApply() async {
     await RegistryManager.writeDword(_keyPath, 'Win32PrioritySeparation', 26);
-    isApplied = await checkState();
   }
 
   @override
   Future<void> onRevert() async {
     await RegistryManager.writeDword(_keyPath, 'Win32PrioritySeparation', 2);
-    isApplied = await checkState();
   }
 
   @override
   Future<bool> checkState() async {
-    final value = await RegistryManager.readDword(_keyPath, 'Win32PrioritySeparation');
+    final value = await RegistryManager.readDword(
+      _keyPath,
+      'Win32PrioritySeparation',
+    );
     final applied = value == 26;
-    isApplied = applied;
     return applied;
   }
 }
@@ -824,9 +675,12 @@ class DisableDynamicTickTweak extends SystemTweak {
       'yes',
     ]);
     if (!result.success) {
-      throw Exception(result.details.isEmpty ? 'Failed to set disabledynamictick.' : result.details);
+      throw Exception(
+        result.details.isEmpty
+            ? 'Failed to set disabledynamictick.'
+            : result.details,
+      );
     }
-    isApplied = await checkState();
   }
 
   @override
@@ -836,9 +690,12 @@ class DisableDynamicTickTweak extends SystemTweak {
       'disabledynamictick',
     ]);
     if (!result.success) {
-      throw Exception(result.details.isEmpty ? 'Failed to clear disabledynamictick.' : result.details);
+      throw Exception(
+        result.details.isEmpty
+            ? 'Failed to clear disabledynamictick.'
+            : result.details,
+      );
     }
-    isApplied = await checkState();
   }
 
   @override
@@ -849,8 +706,8 @@ class DisableDynamicTickTweak extends SystemTweak {
     ]);
 
     final output = '${result.stdout}\n${result.stderr}'.toLowerCase();
-    final applied = output.contains('disabledynamictick') && output.contains('yes');
-    isApplied = applied;
+    final applied =
+        output.contains('disabledynamictick') && output.contains('yes');
     return applied;
   }
 }
@@ -873,9 +730,12 @@ class TscSyncPolicyTweak extends SystemTweak {
       'Enhanced',
     ]);
     if (!result.success) {
-      throw Exception(result.details.isEmpty ? 'Failed to set tscsyncpolicy.' : result.details);
+      throw Exception(
+        result.details.isEmpty
+            ? 'Failed to set tscsyncpolicy.'
+            : result.details,
+      );
     }
-    isApplied = await checkState();
   }
 
   @override
@@ -885,9 +745,12 @@ class TscSyncPolicyTweak extends SystemTweak {
       'tscsyncpolicy',
     ]);
     if (!result.success) {
-      throw Exception(result.details.isEmpty ? 'Failed to clear tscsyncpolicy.' : result.details);
+      throw Exception(
+        result.details.isEmpty
+            ? 'Failed to clear tscsyncpolicy.'
+            : result.details,
+      );
     }
-    isApplied = await checkState();
   }
 
   @override
@@ -897,8 +760,8 @@ class TscSyncPolicyTweak extends SystemTweak {
       '{current}',
     ]);
     final output = '${result.stdout}\n${result.stderr}'.toLowerCase();
-    final applied = output.contains('tscsyncpolicy') && output.contains('enhanced');
-    isApplied = applied;
+    final applied =
+        output.contains('tscsyncpolicy') && output.contains('enhanced');
     return applied;
   }
 }
@@ -918,8 +781,11 @@ class GlobalTimerResolutionRequestsTweak extends SystemTweak {
 
   @override
   Future<void> onApply() async {
-    await RegistryManager.writeDword(_keyPath, 'GlobalTimerResolutionRequests', 1);
-    isApplied = await checkState();
+    await RegistryManager.writeDword(
+      _keyPath,
+      'GlobalTimerResolutionRequests',
+      1,
+    );
   }
 
   @override
@@ -930,10 +796,11 @@ class GlobalTimerResolutionRequestsTweak extends SystemTweak {
     );
 
     if (existing != null) {
-      await RegistryManager.deleteValue(_keyPath, 'GlobalTimerResolutionRequests');
+      await RegistryManager.deleteValue(
+        _keyPath,
+        'GlobalTimerResolutionRequests',
+      );
     }
-
-    isApplied = false;
   }
 
   @override
@@ -943,7 +810,6 @@ class GlobalTimerResolutionRequestsTweak extends SystemTweak {
       'GlobalTimerResolutionRequests',
     );
     final applied = value == 1;
-    isApplied = applied;
     return applied;
   }
 }
@@ -968,8 +834,6 @@ if ($line -match '([0-9a-fA-F-]{36})') {
   powercfg /setactive $scheme | Out-Null
 }
 ''', elevated: true);
-
-    isApplied = await checkState();
   }
 
   @override
@@ -982,15 +846,12 @@ if ($line -match '([0-9a-fA-F-]{36})') {
   powercfg /setactive $scheme | Out-Null
 }
 ''', elevated: true);
-
-    isApplied = await checkState();
   }
 
   @override
   Future<bool> checkState() async {
     final acValue = await _readPowercfgAcValue('PERFEPP');
     final applied = acValue == 0;
-    isApplied = applied;
     return applied;
   }
 }
@@ -1020,8 +881,6 @@ if ($line -match '([0-9a-fA-F-]{36})') {
   powercfg /setactive $scheme | Out-Null
 }
 ''', elevated: true);
-
-    isApplied = await checkState();
   }
 
   @override
@@ -1036,15 +895,16 @@ if ($line -match '([0-9a-fA-F-]{36})') {
 ''', elevated: true);
 
     await RegistryManager.writeDword(_attributesPath, 'Attributes', 1);
-    isApplied = await checkState();
   }
 
   @override
   Future<bool> checkState() async {
-    final attributes = await RegistryManager.readDword(_attributesPath, 'Attributes');
+    final attributes = await RegistryManager.readDword(
+      _attributesPath,
+      'Attributes',
+    );
     final acValue = await _readPowercfgAcValue('PERFAUTONOMOUS');
     final applied = attributes == 0 && acValue == 1;
-    isApplied = applied;
     return applied;
   }
 }

@@ -2,12 +2,16 @@ name: Flutter CI
 
 on:
   push:
-    branches: ["main"]
+    branches: [main]
   pull_request:
-    branches: ["main"]
+    branches: [main]
 
 permissions:
   contents: read
+
+concurrency:
+  group: flutter-ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   analyze-and-test:
@@ -16,41 +20,28 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          lfs: true
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: stable
+          cache: true
 
-      - name: Flutter pub get
+      - name: Install dependencies
         run: flutter pub get
 
       - name: Analyze
         run: flutter analyze
 
-      - name: Run tests with coverage
-        run: flutter test --coverage --no-test-assets
-        continue-on-error: true
-
-      - name: Verify coverage file exists
-        shell: pwsh
-        run: |
-          if (Test-Path "coverage/lcov.info") {
-            Write-Host "Coverage file found" 
-            $size = (Get-Item "coverage/lcov.info").Length
-            Write-Host "Coverage file size: $size bytes"
-          } else {
-            Write-Host "Coverage file not found, creating empty report..."
-            New-Item -Path "coverage" -ItemType Directory -Force | Out-Null
-            "TN:" | Out-File -FilePath "coverage/lcov.info"
-          }
+      - name: Test with coverage
+        run: flutter test --coverage
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./coverage/lcov.info
+          files: coverage/lcov.info
           flags: flutter
-          name: flutter-coverage
           fail_ci_if_error: false
-          verbose: true

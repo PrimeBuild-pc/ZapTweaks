@@ -3,9 +3,9 @@ import 'dart:io';
 
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as path;
-import 'package:url_launcher/url_launcher.dart';
 
 import '../models/operation_result.dart';
+import '../models/update_info.dart';
 import 'logging_service.dart';
 import 'process_runner.dart';
 
@@ -13,11 +13,14 @@ class SystemActionService {
   SystemActionService({
     required ProcessRunner processRunner,
     LoggingService? loggingService,
+    http.Client? httpClient,
   }) : _processRunner = processRunner,
-       _loggingService = loggingService ?? LoggingService.instance;
+       _loggingService = loggingService ?? LoggingService.instance,
+       _httpClient = httpClient ?? http.Client();
 
   final ProcessRunner _processRunner;
   final LoggingService _loggingService;
+  final http.Client _httpClient;
 
   Future<OperationResult> restartSystem() async {
     final result = await _processRunner.run('shutdown', <String>[
@@ -35,95 +38,28 @@ class SystemActionService {
     return const OperationResult(success: true);
   }
 
-  Future<OperationResult> restartToBios() async {
-    final result = await _processRunner.run('shutdown', <String>[
-      '/r',
-      '/fw',
-      '/t',
-      '5',
-      '/c',
-      'ZapTweaks: Rebooting directly to BIOS/UEFI setup.',
-    ]);
-
-    if (!result.success) {
-      return OperationResult(success: false, message: result.details);
-    }
-
-    return const OperationResult(success: true);
-  }
-
-  Future<OperationResult> restartToSafeMode() async {
-    final bcdResult = await _processRunner.run('cmd', <String>[
-      '/c',
-      'bcdedit /set {current} safeboot minimal',
-    ]);
-
-    if (!bcdResult.success) {
-      return OperationResult(success: false, message: bcdResult.details);
-    }
-
-    final shutdown = await _processRunner.run('shutdown', <String>[
-      '/r',
-      '/t',
-      '5',
-      '/c',
-      'ZapTweaks: Rebooting to Safe Mode.',
-    ]);
-
-    if (!shutdown.success) {
-      return OperationResult(success: false, message: shutdown.details);
-    }
-
-    return const OperationResult(success: true);
-  }
-
-  Future<OperationResult> openExternalScriptCommand({
-    required String title,
-    required String command,
-  }) async {
-    final result = await _processRunner.run('powershell', <String>[
-      '-NoProfile',
-      '-ExecutionPolicy',
-      'Bypass',
-      '-Command',
-      'Start-Process -FilePath powershell -Verb RunAs -ArgumentList @('
-          "'-NoExit','-ExecutionPolicy','Bypass','-Command','"
-          '${command.replaceAll("'", "''")}'
-          "')",
-    ]);
-
-    if (!result.success) {
-      return OperationResult(
-        success: false,
-        message: 'Failed to launch $title. ${result.details}',
-      );
-    }
-
-    return OperationResult(success: true, message: '$title launched.');
-  }
-
-  Future<OperationResult> checkForUpdates({
+  Future<UpdateCheckResult> checkUpdateAvailability({
     required String currentVersion,
     required String latestReleaseApiUrl,
     required String releasesPageUrl,
-    bool autoInstall = true,
   }) async {
     try {
       await _loggingService.logInfo(
         'Checking for updates against GitHub API.',
         source: 'SystemActionService',
       );
-
-      final response = await http.get(
-        Uri.parse(latestReleaseApiUrl),
-        headers: <String, String>{
-          'Accept': 'application/vnd.github+json',
-          'User-Agent': 'ZapTweaks/$currentVersion',
-        },
-      );
+      final response = await _httpClient
+          .get(
+            Uri.parse(latestReleaseApiUrl),
+            headers: <String, String>{
+              'Accept': 'application/vnd.github+json',
+              'User-Agent': 'ZapTweaks/$currentVersion',
+            },
+          )
+          .timeout(const Duration(seconds: 10));
 
       if (response.statusCode != 200) {
-        return OperationResult(
+        return UpdateCheckResult(
           success: false,
           message: 'GitHub API returned ${response.statusCode}.',
         );
@@ -131,118 +67,115 @@ class SystemActionService {
 
       final payload = jsonDecode(response.body);
       if (payload is! Map<String, dynamic>) {
-        return const OperationResult(
+        return const UpdateCheckResult(
           success: false,
           message: 'Invalid update response.',
         );
       }
 
-      final tagName = (payload['tag_name'] ?? '').toString().trim();
-      if (tagName.isEmpty) {
-        return const OperationResult(
+      final latestVersion = _normalizeVersion(
+        (payload['tag_name'] ?? '').toString(),
+      );
+      if (latestVersion.isEmpty) {
+        return const UpdateCheckResult(
           success: false,
           message: 'Latest release version not found.',
         );
       }
-
-      final latestVersion = _normalizeVersion(tagName);
-      final hasUpdate = _isRemoteVersionNewer(latestVersion, currentVersion);
-      if (!hasUpdate) {
-        await _loggingService.logInfo(
-          'No updates found. Current version: $currentVersion.',
-          source: 'SystemActionService',
-        );
-
-        return OperationResult(
+      if (!_isRemoteVersionNewer(latestVersion, currentVersion)) {
+        return UpdateCheckResult(
           success: true,
           message: 'You are running the latest version ($currentVersion).',
         );
       }
 
+      final releaseUrl = (payload['html_url'] ?? releasesPageUrl)
+          .toString()
+          .trim();
+      final update = UpdateInfo(
+        version: latestVersion,
+        releaseUrl: releaseUrl.isEmpty ? releasesPageUrl : releaseUrl,
+        installerUrl: _extractInstallerAssetUrl(payload),
+        releaseNotes: (payload['body'] ?? '').toString().trim(),
+      );
       await _loggingService.logInfo(
         'Update found. Latest version: $latestVersion.',
         source: 'SystemActionService',
       );
-
-      if (!autoInstall) {
-        final launched = await launchUrl(
-          Uri.parse(releasesPageUrl),
-          mode: LaunchMode.externalApplication,
-        );
-
-        if (!launched) {
-          return const OperationResult(
-            success: false,
-            message: 'Unable to open the releases page.',
-          );
-        }
-
-        return OperationResult(
-          success: true,
-          message: 'Update detected: $latestVersion. Releases page opened.',
-        );
-      }
-
-      final assetUrl = _extractInstallerAssetUrl(payload);
-      if (assetUrl == null) {
-        return OperationResult(
-          success: false,
-          message:
-              'Update detected ($latestVersion) but no installer asset was found.',
-        );
-      }
-
-      final downloadedInstaller = await _downloadInstaller(
-        assetUrl: assetUrl,
-        targetVersion: latestVersion,
-      );
-      if (downloadedInstaller == null) {
-        return const OperationResult(
-          success: false,
-          message: 'Failed to download update installer.',
-        );
-      }
-
-      final launchResult = await _processRunner.launch('cmd', <String>[
-        '/c',
-        'start',
-        '""',
-        downloadedInstaller,
-        '/SILENT',
-        '/VERYSILENT',
-      ]);
-
-      if (!launchResult.success) {
-        return OperationResult(
-          success: false,
-          message: 'Installer launch failed. ${launchResult.details}',
-        );
-      }
-
-      final terminateResult = await _processRunner.run('cmd', <String>[
-        '/c',
-        'timeout /t 2 >nul && taskkill /f /pid $pid',
-      ]);
-
-      if (!terminateResult.success && !terminateResult.wasDryRun) {
-        await _loggingService.logWarning(
-          'Installer launched but app self-termination command failed: ${terminateResult.details}',
-          source: 'SystemActionService',
-        );
-      }
-
-      return OperationResult(
+      return UpdateCheckResult(
         success: true,
-        message: 'Update $latestVersion downloaded and installer launched.',
-        shouldExitApp: true,
+        update: update,
+        message: 'Update $latestVersion is available.',
       );
     } catch (error) {
       await _loggingService.logError(
         'Update check failed: $error',
         source: 'SystemActionService',
       );
-      return OperationResult(success: false, message: error.toString());
+      return UpdateCheckResult(success: false, message: error.toString());
     }
+  }
+
+  Future<OperationResult> openRelease(UpdateInfo update) async {
+    final result = await _processRunner.launch('explorer', <String>[
+      update.releaseUrl,
+    ]);
+    return result.success
+        ? const OperationResult(success: true)
+        : OperationResult(success: false, message: result.details);
+  }
+
+  Future<OperationResult> installUpdate(UpdateInfo update) async {
+    final assetUrl = update.installerUrl;
+    if (assetUrl == null) {
+      return const OperationResult(
+        success: false,
+        message: 'No installer is attached to this release.',
+      );
+    }
+
+    final installer = await _downloadInstaller(
+      assetUrl: assetUrl,
+      targetVersion: update.version,
+    );
+    if (installer == null) {
+      return const OperationResult(
+        success: false,
+        message: 'Failed to download update installer.',
+      );
+    }
+
+    String quote(String value) => value.replaceAll("'", "''");
+    final appPath = Platform.resolvedExecutable;
+    final installDirectory = path.dirname(appPath);
+    final helperScript =
+        "Wait-Process -Id $pid -ErrorAction SilentlyContinue; "
+        "\$installer = Start-Process -FilePath '${quote(installer)}' "
+        "-ArgumentList @('/VERYSILENT','/SUPPRESSMSGBOXES','/NORESTART','/CLOSEAPPLICATIONS','/DIR=\"${quote(installDirectory)}\"') "
+        "-PassThru -Wait; "
+        "if (\$installer.ExitCode -eq 0 -and (Test-Path -LiteralPath '${quote(appPath)}')) { "
+        "Start-Process -FilePath '${quote(appPath)}' -Verb RunAs }";
+    final launchResult = await _processRunner.launch('powershell', <String>[
+      '-NoProfile',
+      '-ExecutionPolicy',
+      'Bypass',
+      '-WindowStyle',
+      'Hidden',
+      '-Command',
+      helperScript,
+    ]);
+    if (!launchResult.success) {
+      return OperationResult(
+        success: false,
+        message: 'Updater launch failed. ${launchResult.details}',
+      );
+    }
+
+    return OperationResult(
+      success: true,
+      message: 'Update ${update.version} downloaded. Installing now...',
+      shouldExitApp: true,
+    );
   }
 
   String? _extractInstallerAssetUrl(Map<String, dynamic> payload) {
@@ -251,6 +184,7 @@ class SystemActionService {
       return null;
     }
 
+    String? firstExecutable;
     for (final item in assets) {
       if (item is! Map<String, dynamic>) {
         continue;
@@ -260,18 +194,17 @@ class SystemActionService {
           .toString()
           .trim();
       final name = (item['name'] ?? '').toString().toLowerCase();
-      if (downloadUrl.isEmpty) {
+      if (downloadUrl.isEmpty || !name.endsWith('.exe')) {
         continue;
       }
 
-      if (name.endsWith('.exe') ||
-          name.endsWith('.msi') ||
-          name.contains('setup')) {
+      if (name.contains('setup')) {
         return downloadUrl;
       }
+      firstExecutable ??= downloadUrl;
     }
 
-    return null;
+    return firstExecutable;
   }
 
   Future<String?> _downloadInstaller({
@@ -279,12 +212,16 @@ class SystemActionService {
     required String targetVersion,
   }) async {
     try {
-      final response = await http.get(
-        Uri.parse(assetUrl),
-        headers: const <String, String>{'Accept': 'application/octet-stream'},
-      );
+      final response = await _httpClient
+          .get(
+            Uri.parse(assetUrl),
+            headers: const <String, String>{
+              'Accept': 'application/octet-stream',
+            },
+          )
+          .timeout(const Duration(minutes: 2));
 
-      if (response.statusCode != 200) {
+      if (response.statusCode != 200 || response.bodyBytes.isEmpty) {
         return null;
       }
 

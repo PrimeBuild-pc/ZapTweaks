@@ -9,7 +9,6 @@ class TweakSwitchTile extends StatelessWidget {
     required this.enabled,
     required this.isBusy,
     required this.onChanged,
-    this.busyDuration = Duration.zero,
     this.warning,
     this.unavailableReason,
   });
@@ -19,7 +18,6 @@ class TweakSwitchTile extends StatelessWidget {
   final bool value;
   final bool enabled;
   final bool isBusy;
-  final Duration busyDuration;
   final String? warning;
   final String? unavailableReason;
   final Future<void> Function(bool next) onChanged;
@@ -61,12 +59,6 @@ class TweakSwitchTile extends StatelessWidget {
                 ),
             ],
           ),
-          if (isBusy && busyDuration >= const Duration(seconds: 2)) ...<Widget>[
-            const SizedBox(height: 10),
-            const Text('In progress...'),
-            const SizedBox(height: 6),
-            const ProgressBar(),
-          ],
           if (warning != null) ...<Widget>[
             const SizedBox(height: 10),
             InfoBar(

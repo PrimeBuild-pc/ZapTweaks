@@ -1,8 +1,5 @@
-import 'dart:math' as math;
-
 import 'package:fluent_ui/fluent_ui.dart';
 
-import '../../../../core/models/tweak_descriptor.dart';
 import '../../application/tweak_controller.dart';
 import '../widgets/tweak_switch_tile.dart';
 
@@ -94,7 +91,9 @@ class _TweaksPageState extends State<TweaksPage> {
                         ? 'GPU: Unknown'
                         : 'GPU: ${widget.controller.hardwareProfile.gpuNames.join(' | ')}',
                   ),
-                  Text('RAM: ${widget.controller.hardwareProfile.ramInstalledLabel}'),
+                  Text(
+                    'RAM: ${widget.controller.hardwareProfile.ramInstalledLabel}',
+                  ),
                 ],
               ),
             ),
@@ -192,15 +191,13 @@ class _TweaksPageState extends State<TweaksPage> {
               isLong: true,
             ),
           ),
-        ..._orderedTweaks(tweaks).map((descriptor) {
+        ...tweaks.map((descriptor) {
           final available = widget.controller.isDescriptorAvailable(descriptor);
           final busy = widget.controller.busyTweaks.contains(descriptor.id);
 
           if (descriptor.isSystemToggle) {
-            final needsReconnectHint =
-                TweaksPage._networkReconnectHintToggleIds.contains(
-                  descriptor.id,
-                );
+            final needsReconnectHint = TweaksPage._networkReconnectHintToggleIds
+                .contains(descriptor.id);
             return Padding(
               padding: const EdgeInsets.only(bottom: 8),
               child: TweakSwitchTile(
@@ -209,12 +206,11 @@ class _TweaksPageState extends State<TweaksPage> {
                 value: widget.controller.toggleStates[descriptor.id] ?? false,
                 enabled: available,
                 isBusy: busy,
-                busyDuration: widget.controller.busyDurationFor(descriptor.id),
                 warning: descriptor.isAggressive
-                  ? 'Aggressive tweak. A restore point is mandatory.'
-                  : (needsReconnectHint
-                      ? 'Network adapter reconnect or system restart may be required.'
-                      : null),
+                    ? 'Aggressive tweak. A restore point is mandatory.'
+                    : (needsReconnectHint
+                          ? 'Network adapter reconnect or system restart may be required.'
+                          : null),
                 unavailableReason: available
                     ? null
                     : widget.controller.availabilityHint(descriptor),
@@ -257,7 +253,6 @@ class _TweaksPageState extends State<TweaksPage> {
                 value: scriptTweak.isApplied,
                 enabled: available,
                 isBusy: busy,
-                busyDuration: widget.controller.busyDurationFor(descriptor.id),
                 warning: descriptor.isAggressive
                     ? 'Aggressive tweak. A restore point is mandatory.'
                     : null,
@@ -356,13 +351,15 @@ class _TweaksPageState extends State<TweaksPage> {
                                   }
                                 }
 
-                                final result = await widget.controller.runScriptAction(
-                                  descriptor,
-                                  confirmRestorePoint: () => widget.onSafetyPrompt(
-                                    'Create restore point',
-                                    'This aggressive action requires a restore point before execution.',
-                                  ),
-                                );
+                                final result = await widget.controller
+                                    .runScriptAction(
+                                      descriptor,
+                                      confirmRestorePoint: () =>
+                                          widget.onSafetyPrompt(
+                                            'Create restore point',
+                                            'This aggressive action requires a restore point before execution.',
+                                          ),
+                                    );
 
                                 if (!result.success && context.mounted) {
                                   displayInfoBar(
@@ -423,54 +420,43 @@ class _TweaksPageState extends State<TweaksPage> {
                       ),
                     )
                     .toList(growable: false),
-                onChanged: (nextPreset) async {
-                  if (nextPreset == null || nextPreset == selectedPreset) {
-                    return;
-                  }
+                onChanged: widget.controller.isPresetBusy(widget.category)
+                    ? null
+                    : (nextPreset) async {
+                        if (nextPreset == null ||
+                            nextPreset == selectedPreset) {
+                          return;
+                        }
 
-                  final result = await widget.controller.applyPresetToCategory(
-                    widget.category,
-                    nextPreset,
-                  );
+                        final result = await widget.controller
+                            .applyPresetToCategory(
+                              widget.category,
+                              nextPreset,
+                              confirmRestorePoint: () => widget.onSafetyPrompt(
+                                'Create restore point',
+                                'This preset changes aggressive settings and requires a restore point.',
+                              ),
+                            );
 
-                  if (!result.success && context.mounted) {
-                    displayInfoBar(
-                      context,
-                      builder: (_, close) => InfoBar(
-                        title: const Text('Preset failed'),
-                        content: Text(result.message ?? 'Unknown error.'),
-                        action: IconButton(
-                          icon: const Icon(FluentIcons.clear),
-                          onPressed: close,
-                        ),
-                        severity: InfoBarSeverity.error,
-                      ),
-                    );
-                  }
-                },
+                        if (!result.success && context.mounted) {
+                          displayInfoBar(
+                            context,
+                            builder: (_, close) => InfoBar(
+                              title: const Text('Preset failed'),
+                              content: Text(result.message ?? 'Unknown error.'),
+                              action: IconButton(
+                                icon: const Icon(FluentIcons.clear),
+                                onPressed: close,
+                              ),
+                              severity: InfoBarSeverity.error,
+                            ),
+                          );
+                        }
+                      },
               ),
           ],
         ),
       ),
     );
-  }
-
-  List<TweakDescriptor> _orderedTweaks(List<TweakDescriptor> sourceTweaks) {
-    final tweaks = List<TweakDescriptor>.from(sourceTweaks);
-
-    const inspectorId = 'tool_nvidia_profile_inspector_folder';
-    const nipId = 'tool_nvidia_profile_inspector_nip_profile';
-
-    final inspectorIndex = tweaks.indexWhere((item) => item.id == inspectorId);
-    final nipIndex = tweaks.indexWhere((item) => item.id == nipId);
-
-    if (inspectorIndex == -1 || nipIndex == -1) {
-      return tweaks;
-    }
-
-    final nipDescriptor = tweaks.removeAt(nipIndex);
-    final insertAt = math.min(inspectorIndex + 1, tweaks.length);
-    tweaks.insert(insertAt, nipDescriptor);
-    return tweaks;
   }
 }

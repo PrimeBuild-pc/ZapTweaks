@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:path/path.dart' as path;
@@ -26,41 +27,30 @@ class LoggingService {
 
   static final LoggingService instance = LoggingService._();
 
-  final List<LogEntry> _sessionEntries = <LogEntry>[];
-
-  String? _logDirectoryPath;
-  String? _currentSessionLogPath;
   bool _initialized = false;
-  Future<void> _writeQueue = Future<void>.value();
-
-  List<LogEntry> get sessionEntries =>
-      List<LogEntry>.unmodifiable(_sessionEntries);
-
-  String? get logsDirectoryPath => _logDirectoryPath;
+  IOSink? _sink;
+  Timer? _flushTimer;
 
   Future<void> initialize() async {
     if (_initialized) {
       return;
     }
 
-    final appData = _resolveAppDataPath();
-    _logDirectoryPath = path.join(appData, 'ZapTweaks', 'logs');
-
-    final directory = Directory(_logDirectoryPath!);
-    await directory.create(recursive: true);
+    final logDirectoryPath = path.join(
+      _resolveAppDataPath(),
+      'ZapTweaks',
+      'logs',
+    );
+    await Directory(logDirectoryPath).create(recursive: true);
 
     final sessionStamp = _formatForFileName(DateTime.now());
-    _currentSessionLogPath = path.join(
-      _logDirectoryPath!,
-      'session_$sessionStamp.log',
-    );
-
     final header =
         '--- ZapTweaks session started at ${DateTime.now().toIso8601String()} ---';
     _initialized = true;
 
-    final file = File(_currentSessionLogPath!);
-    await file.writeAsString('$header\n', mode: FileMode.append, flush: true);
+    final file = File(path.join(logDirectoryPath, 'session_$sessionStamp.log'));
+    await file.writeAsString('$header\n', mode: FileMode.append);
+    _sink = file.openWrite(mode: FileMode.append);
   }
 
   Future<void> logInfo(String message, {String source = 'App'}) {
@@ -128,81 +118,18 @@ class LoggingService {
     }
   }
 
-  Future<String> readLastSessionLog() async {
-    await initialize();
-
-    final directory = Directory(_logDirectoryPath!);
-    if (!directory.existsSync()) {
-      return 'No logs directory found.';
-    }
-
-    final files =
-        directory
-            .listSync(followLinks: false)
-            .whereType<File>()
-            .where((file) => file.path.toLowerCase().endsWith('.log'))
-            .toList()
-          ..sort(
-            (left, right) =>
-                right.lastModifiedSync().compareTo(left.lastModifiedSync()),
-          );
-
-    if (files.isEmpty) {
-      return 'No log sessions found.';
-    }
-
-    File selected = files.first;
-    if (files.length > 1 && selected.path == _currentSessionLogPath) {
-      selected = files[1];
-    }
-
-    try {
-      return await selected.readAsString();
-    } on FileSystemException catch (error) {
-      return 'Unable to read logs: ${error.message}';
-    }
-  }
-
-  Future<String> readCurrentSessionLog() async {
-    await initialize();
-    final currentPath = _currentSessionLogPath;
-    if (currentPath == null) {
-      return 'Current session log is unavailable.';
-    }
-
-    final file = File(currentPath);
-    if (!file.existsSync()) {
-      return 'Current session log file not found.';
-    }
-
-    try {
-      return await file.readAsString();
-    } on FileSystemException catch (error) {
-      return 'Unable to read current session logs: ${error.message}';
-    }
-  }
-
-  Future<void> _log(LogEntry entry) async {
-    _sessionEntries.add(entry);
-    await _appendRawLine(entry.toLine());
-  }
+  Future<void> _log(LogEntry entry) => _appendRawLine(entry.toLine());
 
   Future<void> _appendRawLine(String line) async {
     if (!_initialized) {
       await initialize();
     }
 
-    final logPath = _currentSessionLogPath;
-    if (logPath == null) {
-      return;
-    }
-
-    _writeQueue = _writeQueue.then((_) async {
-      final file = File(logPath);
-      await file.writeAsString('$line\n', mode: FileMode.append, flush: true);
+    _sink?.writeln(line);
+    _flushTimer ??= Timer(const Duration(seconds: 1), () {
+      _flushTimer = null;
+      _sink?.flush();
     });
-
-    await _writeQueue;
   }
 
   String _resolveAppDataPath() {

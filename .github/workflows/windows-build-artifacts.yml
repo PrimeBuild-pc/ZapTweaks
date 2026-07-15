@@ -17,11 +17,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          lfs: true
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: stable
+          cache: true
 
       - name: Flutter pub get
         run: flutter pub get
@@ -47,6 +50,7 @@ jobs:
           name: ZapTweaks-Portable
           path: output/ZapTweaks_Portable.zip
           if-no-files-found: error
+          retention-days: 7
 
       - name: Upload setup artifact
         uses: actions/upload-artifact@v4
@@ -54,10 +58,4 @@ jobs:
           name: ZapTweaks-Setup
           path: output/ZapTweaks_Setup_v*.exe
           if-no-files-found: error
-
-      - name: Upload raw release folder artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: ZapTweaks-Runner-Release
-          path: build/windows/x64/runner/Release
-          if-no-files-found: error
+          retention-days: 7

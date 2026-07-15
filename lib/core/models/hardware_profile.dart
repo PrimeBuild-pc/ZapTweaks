@@ -50,7 +50,4 @@ class HardwareProfile {
     }
     return vendors.any(gpuVendors.contains);
   }
-
-  bool get hasNetworkAdapters => networkAdapters.isNotEmpty;
-  bool get hasAudioDevices => audioDevices.isNotEmpty;
 }

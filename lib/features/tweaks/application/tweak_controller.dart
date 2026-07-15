@@ -8,7 +8,7 @@ import '../../../core/models/operation_result.dart';
 import '../../../core/models/safety_gate_result.dart';
 import '../../../core/models/system_metrics_snapshot.dart';
 import '../../../core/models/tweak_descriptor.dart';
-import '../../../core/services/category_preset_service.dart';
+import '../../../core/models/update_info.dart';
 import '../../../core/services/hardware_detection_service.dart';
 import '../../../core/services/logging_service.dart';
 import '../../../core/services/metrics_sampling_service.dart';
@@ -18,6 +18,7 @@ import '../../../core/services/safety_gate_service.dart';
 import '../../../core/services/system_action_service.dart';
 import '../../../core/services/tweak_catalog_service.dart';
 import '../../../core/tweak_manager.dart';
+import '../../../models/system_tweak.dart';
 
 class TweakController extends ChangeNotifier {
   TweakController({
@@ -27,7 +28,6 @@ class TweakController extends ChangeNotifier {
     required SafetyGateService safetyGateService,
     required SystemActionService systemActionService,
     required TweakCatalogService tweakCatalogService,
-    required CategoryPresetService categoryPresetService,
     required MetricsSamplingService metricsSamplingService,
     required SharedPreferences preferences,
     required ProcessRunner processRunner,
@@ -39,7 +39,6 @@ class TweakController extends ChangeNotifier {
        _safetyGateService = safetyGateService,
        _systemActionService = systemActionService,
        _tweakCatalogService = tweakCatalogService,
-       _categoryPresetService = categoryPresetService,
        _metricsSamplingService = metricsSamplingService,
        _preferences = preferences,
        _processRunner = processRunner,
@@ -52,15 +51,20 @@ class TweakController extends ChangeNotifier {
   final SafetyGateService _safetyGateService;
   final SystemActionService _systemActionService;
   final TweakCatalogService _tweakCatalogService;
-  final CategoryPresetService _categoryPresetService;
   final MetricsSamplingService _metricsSamplingService;
   final SharedPreferences _preferences;
   final ProcessRunner _processRunner;
   final String _appVersion;
   final LoggingService _loggingService;
 
+  static const String defaultPreset = 'Default';
+  static const String safePreset = 'Safe';
+  static const String aggressivePreset = 'Aggressive';
+  static const String settingsCategory = 'Settings';
+
   static const String _needsRestartKey = 'needsRestart';
   static const String _executionModeKey = 'executionMode';
+  static const String _automaticUpdateChecksKey = 'automaticUpdateChecks';
   static const String _lastSelectedPresetPrefix = 'preset:';
   static const int _maxMetricsPoints = 40;
   static const Set<String> _interactionLockingTweaks = <String>{
@@ -75,25 +79,22 @@ class TweakController extends ChangeNotifier {
 
   final Map<String, bool> _toggleStates = <String, bool>{};
   final Set<String> _busyTweaks = <String>{};
-  final Map<String, DateTime> _busyStartedAt = <String, DateTime>{};
+  final Set<String> _busyPresetCategories = <String>{};
   List<TweakDescriptor> _catalog = <TweakDescriptor>[];
-  Timer? _busyTicker;
   Timer? _metricsTicker;
   bool _isSamplingMetrics = false;
+  bool _isSystemOperationActive = false;
+  bool _automaticUpdateChecksEnabled = true;
+  bool _isCheckingForUpdates = false;
+  UpdateInfo? _availableUpdate;
+  String? _updateStatusMessage;
+  bool _isDisposed = false;
 
-  final ValueNotifier<SystemMetricsSnapshot> _latestMetrics =
-      ValueNotifier<SystemMetricsSnapshot>(SystemMetricsSnapshot.empty);
-  final ValueNotifier<List<double>> _cpuHistory = ValueNotifier<List<double>>(
-    const <double>[],
-  );
-  final ValueNotifier<List<double>> _memoryHistory =
-      ValueNotifier<List<double>>(const <double>[]);
-  final ValueNotifier<List<double>> _gpuHistory = ValueNotifier<List<double>>(
-    const <double>[],
-  );
-  final ValueNotifier<List<double>> _vramHistory = ValueNotifier<List<double>>(
-    const <double>[],
-  );
+  SystemMetricsSnapshot _latestMetrics = SystemMetricsSnapshot.empty;
+  List<double> _cpuHistory = const <double>[];
+  List<double> _memoryHistory = const <double>[];
+  List<double> _gpuHistory = const <double>[];
+  List<double> _vramHistory = const <double>[];
 
   String _loadingStatus = 'Initializing...';
   final Map<String, String> _selectedPresets = <String, String>{};
@@ -105,20 +106,29 @@ class TweakController extends ChangeNotifier {
   String get selectedCategory => _selectedCategory;
   Map<String, bool> get toggleStates => _toggleStates;
   Set<String> get busyTweaks => _busyTweaks;
-  List<String> get categories => TweakCatalogService.navigationCategories;
+  List<String> get categories => const <String>[
+    ...TweakCatalogService.navigationCategories,
+    settingsCategory,
+  ];
   bool get isDryRunMode => _processRunner.isDryRun;
   String get loadingStatus => _loadingStatus;
   String get appVersion => _appVersion;
+  bool get automaticUpdateChecksEnabled => _automaticUpdateChecksEnabled;
+  bool get isCheckingForUpdates => _isCheckingForUpdates;
+  bool get isUpdateAvailable => _availableUpdate != null;
+  UpdateInfo? get availableUpdate => _availableUpdate;
+  String? get updateStatusMessage => _updateStatusMessage;
+  bool isPresetBusy(String category) =>
+      _busyPresetCategories.contains(category);
   bool get isInteractionLocked =>
       _busyTweaks.any(_interactionLockingTweaks.contains);
   String get interactionLockMessage =>
       'Applying network profile. Please wait until all changes complete...';
-  ValueListenable<SystemMetricsSnapshot> get latestMetricsListenable =>
-      _latestMetrics;
-  ValueListenable<List<double>> get cpuHistoryListenable => _cpuHistory;
-  ValueListenable<List<double>> get memoryHistoryListenable => _memoryHistory;
-  ValueListenable<List<double>> get gpuHistoryListenable => _gpuHistory;
-  ValueListenable<List<double>> get vramHistoryListenable => _vramHistory;
+  SystemMetricsSnapshot get latestMetrics => _latestMetrics;
+  List<double> get cpuHistory => _cpuHistory;
+  List<double> get memoryHistory => _memoryHistory;
+  List<double> get gpuHistory => _gpuHistory;
+  List<double> get vramHistory => _vramHistory;
 
   /// Returns true when a category includes at least one toggle-capable tweak.
   bool categoryHasToggleableItems(String category, {bool systemOnly = false}) {
@@ -140,24 +150,21 @@ class TweakController extends ChangeNotifier {
     return _preferences.getBool('executed:$tweakId') ?? false;
   }
 
-  List<String> presetsForCategory(String category) {
-    return _categoryPresetService.availablePresetsForCategory(category);
-  }
+  static List<String> availablePresetsForCategory(String category) =>
+      category == 'Home' || category == settingsCategory
+      ? const <String>[defaultPreset]
+      : const <String>[defaultPreset, safePreset, aggressivePreset];
+
+  static bool shouldEnablePreset(String preset, TweakDescriptor descriptor) =>
+      preset == aggressivePreset ||
+      (preset == safePreset && !descriptor.isAggressive);
+
+  List<String> presetsForCategory(String category) =>
+      availablePresetsForCategory(category);
 
   String selectedPresetForCategory(String category) {
-    return _selectedPresets[category] ?? CategoryPresetService.defaultPreset;
+    return _selectedPresets[category] ?? defaultPreset;
   }
-
-  Duration busyDurationFor(String tweakId) {
-    final startedAt = _busyStartedAt[tweakId];
-    if (startedAt == null) {
-      return Duration.zero;
-    }
-
-    return DateTime.now().difference(startedAt);
-  }
-
-  List<TweakDescriptor> get visibleTweaks => categoryTweaks(_selectedCategory);
 
   List<TweakDescriptor> categoryTweaks(String category) {
     return _catalog
@@ -175,22 +182,25 @@ class TweakController extends ChangeNotifier {
       notifyListeners();
       _restoreExecutionModeFromPreferences();
       _restorePresetSelections();
+      _automaticUpdateChecksEnabled =
+          _preferences.getBool(_automaticUpdateChecksKey) ?? true;
 
-      _loadingStatus = 'Detecting hardware...';
+      _loadingStatus = 'Loading tweaks catalog...';
+      notifyListeners();
+      _catalog = _tweakCatalogService.buildCatalog();
+
+      _loadingStatus = 'Detecting hardware and tweak states...';
       notifyListeners();
       final futures = await Future.wait<dynamic>(<Future<dynamic>>[
         _permissionService.isRunningElevated(),
         _hardwareDetectionService.detect(),
         _tweakManager.detectCurrentTweakStates(),
+        _initializeScriptStates(),
       ]);
 
       _isAdmin = futures[0] as bool;
       _hardwareProfile = futures[1] as HardwareProfile;
       final detectedStates = futures[2] as Map<String, bool>;
-
-      _loadingStatus = 'Loading tweaks catalog...';
-      notifyListeners();
-      _catalog = _tweakCatalogService.buildCatalog();
 
       for (final descriptor in _catalog) {
         if (descriptor.isSystemToggle) {
@@ -202,15 +212,14 @@ class TweakController extends ChangeNotifier {
       }
 
       _needsRestart = _preferences.getBool(_needsRestartKey) ?? false;
-
-      _loadingStatus = 'Checking script states...';
-      notifyListeners();
-      await _initializeScriptStates();
     } finally {
       _isLoading = false;
       _loadingStatus = 'Ready';
       notifyListeners();
       Future<void>.delayed(Duration.zero, _startMetricsSampling);
+      if (_automaticUpdateChecksEnabled) {
+        Future<void>.delayed(Duration.zero, _checkForUpdatesAfterStartup);
+      }
     }
   }
 
@@ -235,24 +244,30 @@ class TweakController extends ChangeNotifier {
   }
 
   Future<void> _initializeScriptStates() async {
-    for (final descriptor in _catalog.where(
-      (item) => item.scriptTweak != null,
-    )) {
-      final tweak = descriptor.scriptTweak!;
-      if (!tweak.hasState) {
-        continue;
-      }
+    final tweaks = _catalog
+        .map((descriptor) => descriptor.scriptTweak)
+        .whereType<SystemTweak>()
+        .where((tweak) => tweak.hasState)
+        .toList(growable: false);
+    var nextIndex = 0;
 
-      try {
-        tweak.isApplied = await tweak.checkState();
-      } catch (error) {
-        await _loggingService.logWarning(
-          'Unable to detect script tweak ${tweak.id}: $error',
-          source: 'TweakController',
-        );
-        tweak.isApplied = false;
+    Future<void> worker() async {
+      while (nextIndex < tweaks.length) {
+        final tweak = tweaks[nextIndex++];
+        try {
+          tweak.isApplied = await tweak.checkState();
+        } catch (error) {
+          await _loggingService.logWarning(
+            'Unable to detect script tweak ${tweak.id}: $error',
+            source: 'TweakController',
+          );
+          tweak.isApplied = false;
+        }
       }
     }
+
+    final workerCount = tweaks.length < 8 ? tweaks.length : 8;
+    await Future.wait<void>(List.generate(workerCount, (_) => worker()));
   }
 
   void selectCategory(String category) {
@@ -295,22 +310,35 @@ class TweakController extends ChangeNotifier {
         message: 'Invalid system tweak descriptor.',
       );
     }
-
-    if (_busyTweaks.contains(descriptor.id)) {
-      return const OperationResult(success: false, message: 'Tweak is busy.');
+    if (_busyPresetCategories.contains(descriptor.category)) {
+      return const OperationResult(
+        success: false,
+        message: 'A preset is being applied to this category.',
+      );
     }
 
     final gate = await _safetyGateService.ensureSafety(
       requireRestorePoint: descriptor.isAggressive,
       askUserToCreateRestorePoint: confirmRestorePoint,
     );
+    return gate.allowsExecution
+        ? _setSystemTweak(descriptor, nextValue)
+        : _mapGateFailure(gate);
+  }
 
-    if (!gate.allowsExecution) {
-      return _mapGateFailure(gate);
+  Future<OperationResult> _setSystemTweak(
+    TweakDescriptor descriptor,
+    bool nextValue,
+  ) async {
+    if (_busyTweaks.contains(descriptor.id) || _isSystemOperationActive) {
+      return const OperationResult(
+        success: false,
+        message: 'Another system tweak is being applied.',
+      );
     }
 
+    _isSystemOperationActive = true;
     final previous = _toggleStates[descriptor.id] ?? false;
-
     _markBusy(descriptor.id);
     _toggleStates[descriptor.id] = nextValue;
     notifyListeners();
@@ -320,7 +348,6 @@ class TweakController extends ChangeNotifier {
         descriptor.systemKey!,
         nextValue,
       );
-
       if (!result.success) {
         _toggleStates[descriptor.id] = previous;
         return OperationResult(
@@ -329,18 +356,27 @@ class TweakController extends ChangeNotifier {
         );
       }
 
-      await _preferences.setBool(descriptor.id, nextValue);
+      if (!_processRunner.isDryRun &&
+          await _tweakManager.detectTweakState(descriptor.systemKey!) !=
+              nextValue) {
+        _toggleStates[descriptor.id] = previous;
+        return OperationResult(
+          success: false,
+          message: 'State verification failed for ${descriptor.title}.',
+        );
+      }
 
+      await _preferences.setBool(descriptor.id, nextValue);
       if (descriptor.restartRequired && previous != nextValue) {
         _needsRestart = true;
         await _preferences.setBool(_needsRestartKey, true);
       }
-
       return const OperationResult(success: true);
     } catch (error) {
       _toggleStates[descriptor.id] = previous;
       return OperationResult(success: false, message: error.toString());
     } finally {
+      _isSystemOperationActive = false;
       _clearBusy(descriptor.id);
     }
   }
@@ -350,39 +386,55 @@ class TweakController extends ChangeNotifier {
     TweakDescriptor descriptor, {
     required Future<bool> Function() confirmRestorePoint,
   }) async {
-    final tweak = descriptor.scriptTweak;
-    if (tweak == null) {
+    if (descriptor.scriptTweak == null) {
       return const OperationResult(
         success: false,
         message: 'Invalid script tweak descriptor.',
       );
     }
-
-    if (_busyTweaks.contains(descriptor.id)) {
-      return const OperationResult(success: false, message: 'Tweak is busy.');
+    if (_busyPresetCategories.contains(descriptor.category)) {
+      return const OperationResult(
+        success: false,
+        message: 'A preset is being applied to this category.',
+      );
     }
 
     final gate = await _safetyGateService.ensureSafety(
       requireRestorePoint: descriptor.isAggressive,
       askUserToCreateRestorePoint: confirmRestorePoint,
     );
+    return gate.allowsExecution
+        ? _runScriptTweak(descriptor)
+        : _mapGateFailure(gate);
+  }
 
-    if (!gate.allowsExecution) {
-      return _mapGateFailure(gate);
+  Future<OperationResult> _runScriptTweak(
+    TweakDescriptor descriptor, {
+    bool? target,
+  }) async {
+    final tweak = descriptor.scriptTweak!;
+    if (_busyTweaks.contains(descriptor.id)) {
+      return const OperationResult(success: false, message: 'Tweak is busy.');
     }
 
     _markBusy(descriptor.id);
-
     try {
       if (tweak.hasState) {
         final previous = tweak.isApplied;
-        final target = !tweak.isApplied;
-        if (target) {
+        final desiredState = target ?? !previous;
+        if (desiredState) {
           await tweak.onApply();
         } else {
           await tweak.onRevert();
         }
+
         tweak.isApplied = await tweak.checkState();
+        if (tweak.isApplied != desiredState) {
+          return OperationResult(
+            success: false,
+            message: 'State verification failed for ${descriptor.title}.',
+          );
+        }
 
         if (descriptor.restartRequired && previous != tweak.isApplied) {
           _needsRestart = true;
@@ -392,7 +444,6 @@ class TweakController extends ChangeNotifier {
         await tweak.runAction();
         await _preferences.setBool('executed:${descriptor.id}', true);
       }
-
       return const OperationResult(success: true);
     } catch (error) {
       return OperationResult(success: false, message: error.toString());
@@ -412,100 +463,119 @@ class TweakController extends ChangeNotifier {
         message: 'Bulk toggle is available only for toggle-based categories.',
       );
     }
+    if (_busyPresetCategories.contains(category)) {
+      return const OperationResult(
+        success: false,
+        message: 'A preset is being applied to this category.',
+      );
+    }
 
     final toggles = categoryTweaks(category)
         .where((item) => item.isSystemToggle && isDescriptorAvailable(item))
         .toList();
-
     final gate = await _safetyGateService.ensureSafety(
       requireRestorePoint: true,
       askUserToCreateRestorePoint: confirmRestorePoint,
     );
-
     if (!gate.allowsExecution) {
       return _mapGateFailure(gate);
     }
 
     for (final descriptor in toggles) {
-      final current = _toggleStates[descriptor.id] ?? false;
-      if (current == enabled) {
+      if ((_toggleStates[descriptor.id] ?? false) == enabled) {
         continue;
       }
-
-      final result = await toggleSystemTweak(
-        descriptor,
-        enabled,
-        confirmRestorePoint: () async => true,
-      );
+      final result = await _setSystemTweak(descriptor, enabled);
       if (!result.success) {
         return result;
       }
     }
-
     return const OperationResult(success: true);
   }
 
   /// Applies a preset profile to all available toggles in a category.
   Future<OperationResult> applyPresetToCategory(
     String category,
-    String preset,
-  ) async {
-    final presets = _categoryPresetService.availablePresetsForCategory(
-      category,
-    );
-    if (!presets.contains(preset)) {
+    String preset, {
+    required Future<bool> Function() confirmRestorePoint,
+  }) async {
+    if (!availablePresetsForCategory(category).contains(preset)) {
       return const OperationResult(
         success: false,
         message: 'Unknown preset selected.',
       );
     }
+    if (_busyPresetCategories.contains(category)) {
+      return const OperationResult(
+        success: false,
+        message: 'A preset is already being applied.',
+      );
+    }
 
-    final descriptors = categoryTweaks(category)
+    final categoryDescriptors = categoryTweaks(category);
+    if (categoryDescriptors.any((item) => _busyTweaks.contains(item.id))) {
+      return const OperationResult(
+        success: false,
+        message: 'Wait for the current category operation to finish.',
+      );
+    }
+
+    final descriptors = categoryDescriptors
         .where(
           (item) =>
               (item.isSystemToggle || item.isScriptToggle) &&
               isDescriptorAvailable(item),
         )
+        .where((item) {
+          final current = item.isSystemToggle
+              ? (_toggleStates[item.id] ?? false)
+              : item.scriptTweak!.isApplied;
+          return current != shouldEnablePreset(preset, item);
+        })
         .toList(growable: false);
 
-    for (final descriptor in descriptors) {
-      final shouldEnable = _categoryPresetService.shouldEnable(
-        category: category,
-        preset: preset,
-        descriptor: descriptor,
-      );
-
-      final current = descriptor.isSystemToggle
-          ? (_toggleStates[descriptor.id] ?? false)
-          : (descriptor.scriptTweak?.isApplied ?? false);
-
-      if (current == shouldEnable) {
-        continue;
-      }
-
-      final OperationResult result;
-      if (descriptor.isSystemToggle) {
-        result = await toggleSystemTweak(
-          descriptor,
-          shouldEnable,
-          confirmRestorePoint: () async => true,
-        );
-      } else {
-        result = await runScriptAction(
-          descriptor,
-          confirmRestorePoint: () async => true,
-        );
-      }
-
-      if (!result.success) {
-        return result;
-      }
-    }
-
-    _selectedPresets[category] = preset;
-    await _preferences.setString('$_lastSelectedPresetPrefix$category', preset);
+    _busyPresetCategories.add(category);
     notifyListeners();
-    return const OperationResult(success: true);
+    try {
+      if (descriptors.isNotEmpty) {
+        final gate = await _safetyGateService.ensureSafety(
+          requireRestorePoint: descriptors.any((item) => item.isAggressive),
+          askUserToCreateRestorePoint: confirmRestorePoint,
+        );
+        if (!gate.allowsExecution) {
+          return _mapGateFailure(gate);
+        }
+      }
+
+      final applied = <String>[];
+      for (final descriptor in descriptors) {
+        final target = shouldEnablePreset(preset, descriptor);
+        final result = descriptor.isSystemToggle
+            ? await _setSystemTweak(descriptor, target)
+            : await _runScriptTweak(descriptor, target: target);
+        if (!result.success) {
+          final completed = applied.isEmpty ? 'none' : applied.join(', ');
+          return OperationResult(
+            success: false,
+            message:
+                'Preset partially applied (${applied.length}/${descriptors.length}). '
+                'Completed: $completed. Failed: ${descriptor.title}. '
+                '${result.message ?? ''}',
+          );
+        }
+        applied.add(descriptor.title);
+      }
+
+      _selectedPresets[category] = preset;
+      await _preferences.setString(
+        '$_lastSelectedPresetPrefix$category',
+        preset,
+      );
+      return const OperationResult(success: true);
+    } finally {
+      _busyPresetCategories.remove(category);
+      notifyListeners();
+    }
   }
 
   Future<OperationResult> restartSystem() async {
@@ -518,22 +588,77 @@ class TweakController extends ChangeNotifier {
     return result;
   }
 
-  Future<OperationResult> restartToBios() {
-    return _systemActionService.restartToBios();
+  Future<void> setAutomaticUpdateChecksEnabled(bool enabled) async {
+    if (_automaticUpdateChecksEnabled == enabled) {
+      return;
+    }
+    _automaticUpdateChecksEnabled = enabled;
+    await _preferences.setBool(_automaticUpdateChecksKey, enabled);
+    notifyListeners();
+    if (enabled) {
+      await checkForUpdates();
+    }
   }
 
-  Future<OperationResult> restartToSafeMode() {
-    return _systemActionService.restartToSafeMode();
+  Future<UpdateCheckResult> checkForUpdates() async {
+    if (_isCheckingForUpdates) {
+      return const UpdateCheckResult(
+        success: false,
+        message: 'An update check is already running.',
+      );
+    }
+
+    _isCheckingForUpdates = true;
+    _updateStatusMessage = 'Checking for updates...';
+    notifyListeners();
+    try {
+      final result = await _systemActionService.checkUpdateAvailability(
+        currentVersion: _appVersion,
+        latestReleaseApiUrl:
+            'https://api.github.com/repos/PrimeBuild-pc/ZapTweaks/releases/latest',
+        releasesPageUrl: 'https://github.com/PrimeBuild-pc/ZapTweaks/releases',
+      );
+      if (result.success) {
+        _availableUpdate = result.update;
+      }
+      _updateStatusMessage = result.message;
+      return result;
+    } finally {
+      _isCheckingForUpdates = false;
+      if (!_isDisposed) {
+        notifyListeners();
+      }
+    }
   }
 
-  Future<OperationResult> checkForUpdates() {
-    return _systemActionService.checkForUpdates(
-      currentVersion: _appVersion,
-      latestReleaseApiUrl:
-          'https://api.github.com/repos/PrimeBuild-pc/ZapTweaks/releases/latest',
-      releasesPageUrl: 'https://github.com/PrimeBuild-pc/ZapTweaks/releases',
-      autoInstall: true,
-    );
+  Future<OperationResult> installAvailableUpdate() {
+    final update = _availableUpdate;
+    return update == null
+        ? Future<OperationResult>.value(
+            const OperationResult(
+              success: false,
+              message: 'No update is currently available.',
+            ),
+          )
+        : _systemActionService.installUpdate(update);
+  }
+
+  Future<OperationResult> openAvailableRelease() {
+    final update = _availableUpdate;
+    return update == null
+        ? Future<OperationResult>.value(
+            const OperationResult(
+              success: false,
+              message: 'No update is currently available.',
+            ),
+          )
+        : _systemActionService.openRelease(update);
+  }
+
+  Future<void> _checkForUpdatesAfterStartup() async {
+    if (!_isDisposed) {
+      await checkForUpdates();
+    }
   }
 
   void _restoreExecutionModeFromPreferences() {
@@ -549,11 +674,10 @@ class TweakController extends ChangeNotifier {
       final savedPreset = _preferences.getString(
         '$_lastSelectedPresetPrefix$category',
       );
-      final availablePresets = _categoryPresetService
-          .availablePresetsForCategory(category);
+      final availablePresets = availablePresetsForCategory(category);
       _selectedPresets[category] = availablePresets.contains(savedPreset)
           ? savedPreset!
-          : CategoryPresetService.defaultPreset;
+          : defaultPreset;
     }
   }
 
@@ -573,32 +697,33 @@ class TweakController extends ChangeNotifier {
 
     try {
       final snapshot = await _metricsSamplingService.sample();
-      _latestMetrics.value = snapshot;
-      _cpuHistory.value = _pushMetricValue(
-        _cpuHistory.value,
-        snapshot.cpuUsagePercent,
-      );
-      _memoryHistory.value = _pushMetricValue(
-        _memoryHistory.value,
+      if (_isDisposed) {
+        return;
+      }
+      _latestMetrics = snapshot;
+      _cpuHistory = _pushMetricValue(_cpuHistory, snapshot.cpuUsagePercent);
+      _memoryHistory = _pushMetricValue(
+        _memoryHistory,
         snapshot.memoryUsagePercent,
       );
-      _gpuHistory.value = _pushMetricValue(
-        _gpuHistory.value,
-        snapshot.gpuUsagePercent,
-      );
-      _vramHistory.value = _pushMetricValue(
-        _vramHistory.value,
-        snapshot.vramUsagePercent,
-      );
+      _gpuHistory = _pushMetricValue(_gpuHistory, snapshot.gpuUsagePercent);
+      _vramHistory = _pushMetricValue(_vramHistory, snapshot.vramUsagePercent);
+      notifyListeners();
     } finally {
       _isSamplingMetrics = false;
     }
   }
 
   Future<void> _startMetricsSampling() async {
+    if (_isDisposed) {
+      return;
+    }
     _loadingStatus = 'Sampling system metrics...';
     notifyListeners();
     await _sampleMetrics();
+    if (_isDisposed) {
+      return;
+    }
     _startMetricsTicker();
     _loadingStatus = 'Ready';
     notifyListeners();
@@ -638,51 +763,18 @@ class TweakController extends ChangeNotifier {
 
   void _markBusy(String tweakId) {
     _busyTweaks.add(tweakId);
-    _busyStartedAt[tweakId] = DateTime.now();
-    _startBusyTickerIfNeeded();
     notifyListeners();
   }
 
   void _clearBusy(String tweakId) {
     _busyTweaks.remove(tweakId);
-    _busyStartedAt.remove(tweakId);
-
-    if (_busyTweaks.isEmpty) {
-      _stopBusyTicker();
-    }
-
     notifyListeners();
-  }
-
-  void _startBusyTickerIfNeeded() {
-    if (_busyTicker != null) {
-      return;
-    }
-
-    _busyTicker = Timer.periodic(const Duration(milliseconds: 250), (_) {
-      if (_busyTweaks.isEmpty) {
-        _stopBusyTicker();
-        return;
-      }
-
-      notifyListeners();
-    });
-  }
-
-  void _stopBusyTicker() {
-    _busyTicker?.cancel();
-    _busyTicker = null;
   }
 
   @override
   void dispose() {
-    _stopBusyTicker();
+    _isDisposed = true;
     _metricsTicker?.cancel();
-    _latestMetrics.dispose();
-    _cpuHistory.dispose();
-    _memoryHistory.dispose();
-    _gpuHistory.dispose();
-    _vramHistory.dispose();
     super.dispose();
   }
 }

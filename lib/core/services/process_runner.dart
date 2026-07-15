@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:path/path.dart' as path;
 
@@ -56,7 +58,7 @@ class ProcessRunner {
   }) : _loggingService = loggingService ?? LoggingService.instance,
        _mode = mode,
        _dryRunDelay = dryRunDelay,
-       _processRunDelegate = processRunDelegate ?? Process.run,
+       _processRunDelegate = processRunDelegate,
        _processStartDelegate = processStartDelegate ?? Process.start,
        _trustedPathRoots = _normalizeRoots(
          trustedPathRoots ?? _defaultTrustedRoots(),
@@ -77,7 +79,7 @@ class ProcessRunner {
 
   final LoggingService _loggingService;
   final Duration _dryRunDelay;
-  final ProcessRunDelegate _processRunDelegate;
+  final ProcessRunDelegate? _processRunDelegate;
   final ProcessStartDelegate _processStartDelegate;
   final List<String> _trustedPathRoots;
   final Set<String> _allowedSystemExecutables;
@@ -95,6 +97,8 @@ class ProcessRunner {
     'reg.exe',
     'net',
     'net.exe',
+    'netsh',
+    'netsh.exe',
     'shutdown',
     'shutdown.exe',
     'powercfg',
@@ -115,6 +119,49 @@ class ProcessRunner {
 
   void setMode(ProcessExecutionMode nextMode) {
     _mode = nextMode;
+  }
+
+  Future<void> runPowerShellScript(
+    String script, {
+    bool elevated = false,
+  }) async {
+    final strictScript = "\$ErrorActionPreference = 'Stop'\n$script";
+    final encodedScript = _encodePowerShellScript(strictScript);
+    final arguments = elevated
+        ? <String>[
+            '-NoProfile',
+            '-ExecutionPolicy',
+            'Bypass',
+            '-WindowStyle',
+            'Hidden',
+            '-Command',
+            "\$ErrorActionPreference = 'Stop'; \$process = Start-Process -FilePath 'powershell.exe' -Verb RunAs -WindowStyle Hidden -PassThru -Wait -ArgumentList @('-NoProfile','-ExecutionPolicy','Bypass','-WindowStyle','Hidden','-EncodedCommand','$encodedScript'); exit \$process.ExitCode",
+          ]
+        : <String>[
+            '-NoProfile',
+            '-ExecutionPolicy',
+            'Bypass',
+            '-WindowStyle',
+            'Hidden',
+            '-EncodedCommand',
+            encodedScript,
+          ];
+
+    _throwIfFailed(await run('powershell', arguments));
+  }
+
+  Future<String> runPowerShellForOutput(String script) async {
+    final result = await run('powershell', <String>[
+      '-NoProfile',
+      '-ExecutionPolicy',
+      'Bypass',
+      '-WindowStyle',
+      'Hidden',
+      '-EncodedCommand',
+      _encodePowerShellScript(script),
+    ]);
+    _throwIfFailed(result);
+    return result.stdout.trim();
   }
 
   Future<CommandResult> launch(
@@ -257,19 +304,23 @@ class ProcessRunner {
     }
 
     try {
-      final result = await _processRunDelegate(
-        executable,
-        arguments,
-        runInShell: runInShell,
-      ).timeout(timeout);
-
+      final response = _processRunDelegate != null
+          ? await _runWithDelegate(
+              executable,
+              arguments,
+              runInShell: runInShell,
+              timeout: timeout,
+            )
+          : await _runCancellable(
+              executable,
+              arguments,
+              runInShell: runInShell,
+              timeout: timeout,
+            );
       final elapsed = DateTime.now().difference(startedAt);
-
-      final response = CommandResult(
-        exitCode: result.exitCode,
-        stdout: result.stdout.toString(),
-        stderr: result.stderr.toString(),
-      );
+      final timedOut =
+          response.exitCode == -1 &&
+          response.stderr.startsWith('Command timed out and was terminated.');
 
       await _loggingService.logCommandExecution(
         executable: executable,
@@ -278,18 +329,16 @@ class ProcessRunner {
         stdout: response.stdout,
         stderr: response.stderr,
         duration: elapsed,
-        timedOut: false,
+        timedOut: timedOut,
       );
-
       return response;
     } on TimeoutException {
       final elapsed = DateTime.now().difference(startedAt);
-      final timeoutResult = const CommandResult(
+      const timeoutResult = CommandResult(
         exitCode: -1,
         stdout: '',
-        stderr: 'Command timed out.',
+        stderr: 'Command timed out; injected delegates cannot be terminated.',
       );
-
       await _loggingService.logCommandExecution(
         executable: executable,
         arguments: arguments,
@@ -299,7 +348,6 @@ class ProcessRunner {
         duration: elapsed,
         timedOut: true,
       );
-
       return timeoutResult;
     } on ProcessException catch (error) {
       final elapsed = DateTime.now().difference(startedAt);
@@ -340,6 +388,86 @@ class ProcessRunner {
 
       return unexpectedResult;
     }
+  }
+
+  Future<CommandResult> _runWithDelegate(
+    String executable,
+    List<String> arguments, {
+    required bool runInShell,
+    required Duration timeout,
+  }) async {
+    final result = await _processRunDelegate!(
+      executable,
+      arguments,
+      runInShell: runInShell,
+    ).timeout(timeout);
+    return CommandResult(
+      exitCode: result.exitCode,
+      stdout: result.stdout.toString(),
+      stderr: result.stderr.toString(),
+    );
+  }
+
+  Future<CommandResult> _runCancellable(
+    String executable,
+    List<String> arguments, {
+    required bool runInShell,
+    required Duration timeout,
+  }) async {
+    final process = await _processStartDelegate(
+      executable,
+      arguments,
+      runInShell: runInShell,
+    ).timeout(timeout);
+    final stdoutFuture = _collectOutput(process.stdout);
+    final stderrFuture = _collectOutput(process.stderr);
+
+    try {
+      final exitCode = await process.exitCode.timeout(timeout);
+      return CommandResult(
+        exitCode: exitCode,
+        stdout: await stdoutFuture,
+        stderr: await stderrFuture,
+      );
+    } on TimeoutException {
+      await _terminateProcessTree(process);
+      final stderr = await stderrFuture;
+      return CommandResult(
+        exitCode: -1,
+        stdout: await stdoutFuture,
+        stderr: stderr.trim().isEmpty
+            ? 'Command timed out and was terminated.'
+            : 'Command timed out and was terminated.\n$stderr',
+      );
+    }
+  }
+
+  Future<String> _collectOutput(Stream<List<int>> stream) async {
+    final bytes = BytesBuilder(copy: false);
+    await for (final chunk in stream) {
+      bytes.add(chunk);
+    }
+    return systemEncoding.decode(bytes.takeBytes());
+  }
+
+  Future<void> _terminateProcessTree(Process process) async {
+    if (Platform.isWindows) {
+      try {
+        await Process.run('taskkill', <String>[
+          '/PID',
+          process.pid.toString(),
+          '/T',
+          '/F',
+        ], runInShell: true).timeout(const Duration(seconds: 10));
+        await process.exitCode.timeout(const Duration(seconds: 5));
+        return;
+      } catch (_) {}
+    }
+
+    process.kill(ProcessSignal.sigkill);
+    try {
+      await process.exitCode.timeout(const Duration(seconds: 5));
+    } catch (_) {}
   }
 
   String? _validateExecutionRequest(String executable, List<String> arguments) {
@@ -422,6 +550,26 @@ class ProcessRunner {
               codePoint != 0x09 &&
               codePoint != 0x0A &&
               codePoint != 0x0D),
+    );
+  }
+
+  String _encodePowerShellScript(String script) {
+    final units = script.codeUnits;
+    final bytes = Uint8List(units.length * 2);
+    for (var i = 0; i < units.length; i++) {
+      bytes[i * 2] = units[i] & 0xFF;
+      bytes[i * 2 + 1] = (units[i] >> 8) & 0xFF;
+    }
+    return base64Encode(bytes);
+  }
+
+  void _throwIfFailed(CommandResult result) {
+    if (result.success) {
+      return;
+    }
+
+    throw Exception(
+      result.details.isNotEmpty ? result.details : 'Unknown PowerShell error',
     );
   }
 

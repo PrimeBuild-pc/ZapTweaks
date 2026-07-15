@@ -1,8 +1,4 @@
-import 'dart:convert';
-import 'dart:typed_data';
-
 import '../core/registry_manager.dart';
-import '../core/services/process_runner.dart';
 import 'action_tweaks.dart';
 import 'system_tweak.dart';
 
@@ -97,8 +93,6 @@ Disable-NetAdapterRsc -Name "*" -IncludeHidden -ErrorAction SilentlyContinue
 Disable-NetAdapterPowerManagement -Name "*" -IncludeHidden -ErrorAction SilentlyContinue
 Restart-NetAdapter -Name "*" -IncludeHidden -ErrorAction SilentlyContinue
 ''', elevated: true);
-
-    isApplied = await checkState();
   }
 
   @override
@@ -118,8 +112,6 @@ Enable-NetAdapterRsc -Name "*" -IncludeHidden -ErrorAction SilentlyContinue
 Enable-NetAdapterPowerManagement -Name "*" -IncludeHidden -ErrorAction SilentlyContinue
 Restart-NetAdapter -Name "*" -IncludeHidden -ErrorAction SilentlyContinue
 ''', elevated: true);
-
-    isApplied = await checkState();
   }
 
   @override
@@ -133,12 +125,29 @@ if ($null -eq $offload -or $null -eq $tcp) {
   return
 }
 
-$rscDisabled = ("$($offload.ReceiveSegmentCoalescing)" -eq 'Disabled')
-$pcfDisabled = ("$($offload.PacketCoalescingFilter)" -eq 'Disabled')
-$delayedAckLow = ($tcp.DelayedAckFrequency -eq 1)
-$autoTuningDisabled = ("$($tcp.AutoTuningLevelLocal)" -eq 'Disabled')
+$offloadApplied =
+  ("$($offload.ReceiveSideScaling)" -eq 'Enabled') -and
+  ("$($offload.ReceiveSegmentCoalescing)" -eq 'Disabled') -and
+  ("$($offload.Chimney)" -eq 'Disabled') -and
+  ("$($offload.TaskOffload)" -eq 'Enabled') -and
+  ("$($offload.NetworkDirect)" -eq 'Enabled') -and
+  ("$($offload.NetworkDirectAcrossIPSubnets)" -eq 'Allowed') -and
+  ("$($offload.PacketCoalescingFilter)" -eq 'Disabled')
+$tcpApplied =
+  ($tcp.MinRtoMs -eq 300) -and
+  ($tcp.InitialCongestionWindowMss -eq 10) -and
+  ("$($tcp.CongestionProvider)" -eq 'CUBIC') -and
+  ($tcp.CwndRestart -eq $true) -and
+  ($tcp.DelayedAckTimeoutMs -eq 0) -and
+  ($tcp.DelayedAckFrequency -eq 1) -and
+  ("$($tcp.AutoTuningLevelLocal)" -eq 'Disabled') -and
+  ("$($tcp.EcnCapability)" -eq 'Disabled') -and
+  ("$($tcp.Timestamps)" -eq 'Disabled') -and
+  ($tcp.InitialRtoMs -eq 2000) -and
+  ("$($tcp.ScalingHeuristics)" -eq 'Disabled') -and
+  ($tcp.MaxSynRetransmissions -eq 2)
 
-if ($rscDisabled -and $pcfDisabled -and $delayedAckLow -and $autoTuningDisabled) {
+if ($offloadApplied -and $tcpApplied) {
   Write-Output 'true'
 } else {
   Write-Output 'false'
@@ -146,7 +155,6 @@ if ($rscDisabled -and $pcfDisabled -and $delayedAckLow -and $autoTuningDisabled)
 ''')).toLowerCase();
 
     final applied = result.contains('true');
-    isApplied = applied;
     return applied;
   }
 }
@@ -158,85 +166,6 @@ abstract class _NetworkingSystemTweak extends SystemTweak {
     required super.description,
     bool aggressive = false,
   }) : super(category: 'Networking', isAggressive: aggressive);
-
-  Future<void> runSilentPowerShell(
-    String script, {
-    bool elevated = false,
-  }) async {
-    final encodedScript = _encodePowerShellScript(script);
-    final List<String> arguments;
-
-    if (elevated) {
-      final elevateCommand =
-          "Start-Process -FilePath 'powershell.exe' -Verb RunAs -WindowStyle Hidden -Wait -ArgumentList @('-NoProfile','-ExecutionPolicy','Bypass','-WindowStyle','Hidden','-EncodedCommand','${encodedScript.replaceAll("'", "''")}')";
-
-      arguments = <String>[
-        '-NoProfile',
-        '-ExecutionPolicy',
-        'Bypass',
-        '-WindowStyle',
-        'Hidden',
-        '-Command',
-        elevateCommand,
-      ];
-    } else {
-      arguments = <String>[
-        '-NoProfile',
-        '-ExecutionPolicy',
-        'Bypass',
-        '-WindowStyle',
-        'Hidden',
-        '-EncodedCommand',
-        encodedScript,
-      ];
-    }
-
-    final result = await ProcessRunner.shared.run('powershell', arguments);
-
-    if (result.exitCode != 0) {
-      final stderr = result.stderr.trim();
-      final stdout = result.stdout.trim();
-      final details = stderr.isNotEmpty
-          ? stderr
-          : (stdout.isNotEmpty ? stdout : 'Unknown PowerShell error');
-      throw Exception(details);
-    }
-  }
-
-  Future<String> runPowerShellForOutput(String script) async {
-    final encodedScript = _encodePowerShellScript(script);
-    final result = await ProcessRunner.shared.run('powershell', <String>[
-      '-NoProfile',
-      '-ExecutionPolicy',
-      'Bypass',
-      '-WindowStyle',
-      'Hidden',
-      '-EncodedCommand',
-      encodedScript,
-    ]);
-
-    if (result.exitCode != 0) {
-      final stderr = result.stderr.trim();
-      final stdout = result.stdout.trim();
-      final details = stderr.isNotEmpty
-          ? stderr
-          : (stdout.isNotEmpty ? stdout : 'Unknown PowerShell error');
-      throw Exception(details);
-    }
-
-    return result.stdout.trim();
-  }
-
-  String _encodePowerShellScript(String script) {
-    final units = script.codeUnits;
-    final bytes = Uint8List(units.length * 2);
-    for (var i = 0; i < units.length; i++) {
-      final unit = units[i];
-      bytes[i * 2] = unit & 0xFF;
-      bytes[i * 2 + 1] = (unit >> 8) & 0xFF;
-    }
-    return base64Encode(bytes);
-  }
 }
 
 class NetworkAdapterPowerSavingsTweak extends _NetworkingSystemTweak {
@@ -276,8 +205,6 @@ foreach ($key in $adapterKeys) {
   }
 }
 ''', elevated: true);
-
-    isApplied = await checkState();
   }
 
   @override
@@ -299,8 +226,6 @@ foreach ($key in $adapterKeys) {
   }
 }
 ''', elevated: true);
-
-    isApplied = await checkState();
   }
 
   @override
@@ -321,9 +246,27 @@ foreach ($key in $adapterKeys) {
     return
   }
 
-  if ($item.PnPCapabilities -ne 24) {
-    Write-Output 'false'
-    return
+  $expected = @{
+    PnPCapabilities = 24
+    AdvancedEEE = '0'
+    '*EEE' = '0'
+    EEELinkAdvertisement = '0'
+    SipsEnabled = '0'
+    ULPMode = '0'
+    GigaLite = '0'
+    EnableGreenEthernet = '0'
+    PowerSavingMode = '0'
+    S5WakeOnLan = '0'
+    '*WakeOnMagicPacket' = '0'
+    '*ModernStandbyWoLMagicPacket' = '0'
+    '*WakeOnPattern' = '0'
+    WakeOnLink = '0'
+  }
+  foreach ($entry in $expected.GetEnumerator()) {
+    if ("$($item.($entry.Key))" -ne "$($entry.Value)") {
+      Write-Output 'false'
+      return
+    }
   }
 }
 
@@ -331,7 +274,6 @@ Write-Output 'true'
 ''')).toLowerCase();
 
     final applied = result.contains('true');
-    isApplied = applied;
     return applied;
   }
 }
@@ -343,6 +285,7 @@ class NetworkIpv4OnlyTweak extends _NetworkingSystemTweak {
         title: 'IPv4 Only Bindings',
         description:
             'Disables non-essential adapter bindings and keeps IPv4 enabled on all adapters.',
+        aggressive: true,
       );
 
   static const List<String> _disableBindings = <String>[
@@ -383,8 +326,6 @@ Enable-NetAdapterBinding -Name '*' -ComponentID 'ms_tcpip' -ErrorAction Silently
             .replaceAll('__DISABLE_LIST__', disableList);
 
     await runSilentPowerShell(script, elevated: true);
-
-    isApplied = await checkState();
   }
 
   @override
@@ -400,8 +341,6 @@ foreach ($binding in $bindingsToEnable) {
             .replaceAll('__ENABLE_LIST__', enableList);
 
     await runSilentPowerShell(script, elevated: true);
-
-    isApplied = await checkState();
   }
 
   @override
@@ -438,7 +377,6 @@ Write-Output 'true'
     final result = (await runPowerShellForOutput(script)).toLowerCase();
 
     final applied = result.contains('true');
-    isApplied = applied;
     return applied;
   }
 }
@@ -463,7 +401,6 @@ class NetworkThrottlingIndexTweak extends SystemTweak {
       'NetworkThrottlingIndex',
       0xFFFFFFFF,
     );
-    isApplied = true;
   }
 
   @override
@@ -475,7 +412,6 @@ class NetworkThrottlingIndexTweak extends SystemTweak {
     if (current != null) {
       await RegistryManager.deleteValue(_keyPath, 'NetworkThrottlingIndex');
     }
-    isApplied = false;
   }
 
   @override
@@ -485,7 +421,6 @@ class NetworkThrottlingIndexTweak extends SystemTweak {
       'NetworkThrottlingIndex',
     );
     final applied = current != null && current.toUnsigned(32) == 0xFFFFFFFF;
-    isApplied = applied;
     return applied;
   }
 }
@@ -514,8 +449,6 @@ Disable-MMAgent -MemoryCompression -ErrorAction SilentlyContinue | Out-Null
 Disable-MMAgent -OperationAPI -ErrorAction SilentlyContinue | Out-Null
 Disable-MMAgent -PageCombining -ErrorAction SilentlyContinue | Out-Null
 ''', elevated: true);
-
-    isApplied = await checkState();
   }
 
   @override
@@ -530,8 +463,6 @@ Disable-MMAgent -MemoryCompression -ErrorAction SilentlyContinue | Out-Null
 Enable-MMAgent -OperationAPI -ErrorAction SilentlyContinue | Out-Null
 Enable-MMAgent -PageCombining -ErrorAction SilentlyContinue | Out-Null
 ''', elevated: true);
-
-    isApplied = await checkState();
   }
 
   @override
@@ -548,7 +479,7 @@ if ($null -eq $m) {
   return
 }
 
-if (-not $m.ApplicationLaunchPrefetching -and -not $m.ApplicationPreLaunch -and -not $m.OperationAPI -and -not $m.PageCombining) {
+if (-not $m.ApplicationLaunchPrefetching -and -not $m.ApplicationPreLaunch -and -not $m.MemoryCompression -and -not $m.OperationAPI -and -not $m.PageCombining -and $m.MaxOperationAPIFiles -eq 1) {
   Write-Output 'true'
 } else {
   Write-Output 'false'
@@ -556,7 +487,6 @@ if (-not $m.ApplicationLaunchPrefetching -and -not $m.ApplicationPreLaunch -and 
 ''')).toLowerCase();
 
     final applied = prefetch == 0 && mmAgentState.contains('true');
-    isApplied = applied;
     return applied;
   }
 }

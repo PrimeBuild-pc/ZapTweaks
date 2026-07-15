@@ -76,17 +76,6 @@ class TweakCatalogService {
     return descriptors;
   }
 
-  /// Returns all catalog entries that belong to the selected navigation category.
-  List<TweakDescriptor> buildCatalogForCategory(String category) {
-    if (category == 'Home') {
-      return const <TweakDescriptor>[];
-    }
-
-    return buildCatalog()
-        .where((descriptor) => descriptor.category == category)
-        .toList(growable: false);
-  }
-
   int _tweakTypeSortWeight(TweakDescriptor descriptor) {
     if (descriptor.isSystemToggle || descriptor.isScriptToggle) {
       return 0;

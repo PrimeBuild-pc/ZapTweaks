@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'services/logging_service.dart';
 import 'services/process_runner.dart';
 
@@ -23,44 +21,7 @@ class TweakManager {
 
   bool _commandBatchHasFailure = false;
   final List<String> _commandBatchErrors = <String>[];
-  static final RegExp _powerSchemeGuidRegex = RegExp(
-    r'[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',
-    caseSensitive: false,
-  );
-
-  static const String _msiEnableScript = r'''
-$devs = @()
-$devs += Get-PnpDevice -Class Net -PresentOnly | Where-Object { $_.Status -eq "OK" -and $_.Manufacturer -match "Realtek" }
-$devs += Get-PnpDevice -Class Display -PresentOnly | Where-Object { $_.Status -eq "OK" -and ($_.Manufacturer -match "NVIDIA|Advanced Micro Devices|AMD") }
-$devs += Get-PnpDevice -PresentOnly | Where-Object { $_.Status -eq "OK" -and ($_.FriendlyName -match "NVMe" -or $_.InstanceId -match "NVME") }
-$devs += Get-PnpDevice -PresentOnly | Where-Object { $_.Status -eq "OK" -and ($_.FriendlyName -match "xHCI|USB 3\.|USB3|USB eXtensible Host Controller") }
-$devs = $devs | Sort-Object InstanceId -Unique
-foreach ($dev in $devs) {
-  $base = "HKLM:\SYSTEM\CurrentControlSet\Enum\$($dev.InstanceId)\Device Parameters\Interrupt Management"
-  $msi = Join-Path $base "MessageSignaledInterruptProperties"
-  $aff = Join-Path $base "Affinity Policy"
-  if (-not (Test-Path $msi)) { New-Item -Path $msi -Force | Out-Null }
-  if (-not (Test-Path $aff)) { New-Item -Path $aff -Force | Out-Null }
-  New-ItemProperty -Path $msi -Name MSISupported -PropertyType DWord -Value 1 -Force | Out-Null
-  New-ItemProperty -Path $aff -Name DevicePolicy -PropertyType DWord -Value 5 -Force | Out-Null
-}
-''';
-
-  static const String _msiDisableScript = r'''
-$devs = @()
-$devs += Get-PnpDevice -Class Net -PresentOnly | Where-Object { $_.Status -eq "OK" -and $_.Manufacturer -match "Realtek" }
-$devs += Get-PnpDevice -Class Display -PresentOnly | Where-Object { $_.Status -eq "OK" -and ($_.Manufacturer -match "NVIDIA|Advanced Micro Devices|AMD") }
-$devs += Get-PnpDevice -PresentOnly | Where-Object { $_.Status -eq "OK" -and ($_.FriendlyName -match "NVMe" -or $_.InstanceId -match "NVME") }
-$devs += Get-PnpDevice -PresentOnly | Where-Object { $_.Status -eq "OK" -and ($_.FriendlyName -match "xHCI|USB 3\.|USB3|USB eXtensible Host Controller") }
-$devs = $devs | Sort-Object InstanceId -Unique
-foreach ($dev in $devs) {
-  $base = "HKLM:\SYSTEM\CurrentControlSet\Enum\$($dev.InstanceId)\Device Parameters\Interrupt Management"
-  $msi = Join-Path $base "MessageSignaledInterruptProperties"
-  $aff = Join-Path $base "Affinity Policy"
-  if (Test-Path $msi) { Remove-ItemProperty -Path $msi -Name MSISupported -ErrorAction SilentlyContinue }
-  if (Test-Path $aff) { Remove-ItemProperty -Path $aff -Name DevicePolicy -ErrorAction SilentlyContinue }
-}
-''';
+  Future<void> _applyQueue = Future<void>.value();
 
   static const String _networkNagleDisableScript = r'''
 $registryPath = "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces"
@@ -121,7 +82,13 @@ try {
 }
 ''';
 
-  Future<TweakApplyResult> applyTweak(String key, bool enable) async {
+  Future<TweakApplyResult> applyTweak(String key, bool enable) {
+    final operation = _applyQueue.then((_) => _applyTweakNow(key, enable));
+    _applyQueue = operation.then<void>((_) {}, onError: (_, _) {});
+    return operation;
+  }
+
+  Future<TweakApplyResult> _applyTweakNow(String key, bool enable) async {
     _resetCommandBatch();
 
     final handlers = _handlers;
@@ -149,6 +116,11 @@ try {
       success: !_commandBatchHasFailure,
       errors: List<String>.unmodifiable(_commandBatchErrors),
     );
+  }
+
+  Future<bool> detectTweakState(String key) async {
+    final states = await detectCurrentTweakStates();
+    return states[key] ?? false;
   }
 
   Future<Map<String, bool>> detectCurrentTweakStates() async {
@@ -180,10 +152,59 @@ try {
       return currentValue.trim().toLowerCase() == expected.toLowerCase();
     }
 
+    Future<bool> bcdOptimizationsApplied() async {
+      final result = await _processRunner.run('bcdedit', <String>[
+        '/enum',
+        '{current}',
+      ]);
+      if (!result.success) {
+        return false;
+      }
+
+      final output = result.stdout;
+      bool hasValue(String name, String value) => RegExp(
+        '^\\s*${RegExp.escape(name)}\\s+${RegExp.escape(value)}\\s*\$',
+        caseSensitive: false,
+        multiLine: true,
+      ).hasMatch(output);
+
+      return !RegExp(
+            r'^\s*useplatformclock\s+',
+            caseSensitive: false,
+            multiLine: true,
+          ).hasMatch(output) &&
+          hasValue('useplatformtick', 'Yes') &&
+          hasValue('tscsyncpolicy', 'Enhanced') &&
+          hasValue('configaccesspolicy', 'Default') &&
+          hasValue('MSI', 'Default') &&
+          hasValue('bootux', 'Disabled') &&
+          hasValue('quietboot', 'Yes');
+    }
+
+    Future<bool> powerSettingAcEquals(String alias, int expected) async {
+      final result = await _processRunner.run('powercfg', <String>[
+        '/query',
+        'scheme_current',
+        'sub_processor',
+        alias,
+      ]);
+      if (!result.success) {
+        return false;
+      }
+
+      final values = RegExp(r'0x([0-9a-fA-F]{1,8})')
+          .allMatches(result.stdout)
+          .map((match) => int.tryParse(match.group(1)!, radix: 16))
+          .whereType<int>()
+          .toList(growable: false);
+      return values.length >= 2 && values[values.length - 2] == expected;
+    }
+
     const multimediaProfilePath =
         r'HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile';
 
     final checks = <MapEntry<String, Future<bool>>>[
+      MapEntry('bcd_optimizations', bcdOptimizationsApplied()),
       MapEntry(
         'cpu_unparking',
         dwordEquals(
@@ -199,6 +220,10 @@ try {
           'PowerThrottlingOff',
           1,
         ),
+      ),
+      MapEntry(
+        'cpu_intel_optimizations',
+        powerSettingAcEquals('HETEROPOLICY', 4),
       ),
       MapEntry(
         'cpu_amd_optimizations',
@@ -362,181 +387,6 @@ try {
     }
 
     return states;
-  }
-
-  Future<Set<String>> detectAggressiveBundledPowerPlans(
-    String powerPlansDirectory,
-  ) async {
-    final directory = Directory(powerPlansDirectory);
-    if (!await directory.exists()) {
-      return <String>{};
-    }
-
-    final powFiles = await directory
-        .list(followLinks: false)
-        .where(
-          (entity) =>
-              entity is File && entity.path.toLowerCase().endsWith('.pow'),
-        )
-        .cast<File>()
-        .toList();
-
-    powFiles.sort(
-      (a, b) => a.path.toLowerCase().compareTo(b.path.toLowerCase()),
-    );
-
-    final aggressivePlans = <String>{};
-
-    for (final powFile in powFiles) {
-      final importedGuid = await _importPowerPlanAndGetGuid(powFile.path);
-      if (importedGuid == null) {
-        continue;
-      }
-
-      try {
-        final isAggressive = await _isPowerSchemeAggressive(importedGuid);
-        if (isAggressive) {
-          aggressivePlans.add(
-            _extractPowerPlanBasename(powFile.path).toLowerCase(),
-          );
-        }
-      } finally {
-        await _deletePowerScheme(importedGuid);
-      }
-    }
-
-    return aggressivePlans;
-  }
-
-  Future<String?> _importPowerPlanAndGetGuid(String powerPlanPath) async {
-    final beforeImport = await _listPowerSchemeGuids();
-    final importResult = await _runProcessLogged('powercfg', [
-      '/import',
-      powerPlanPath,
-    ], runInShell: true);
-
-    if (importResult.exitCode != 0) {
-      await _loggingService.logWarning(
-        'Failed to import power plan for detection: $powerPlanPath',
-        source: 'TweakManager',
-      );
-      return null;
-    }
-
-    final afterImport = await _listPowerSchemeGuids();
-    for (final guid in afterImport) {
-      if (!beforeImport.contains(guid)) {
-        return guid;
-      }
-    }
-
-    return null;
-  }
-
-  Future<Set<String>> _listPowerSchemeGuids() async {
-    final result = await _runProcessLogged('powercfg', [
-      '/list',
-    ], runInShell: true);
-    if (result.exitCode != 0) {
-      return <String>{};
-    }
-
-    return _powerSchemeGuidRegex
-        .allMatches(result.stdout.toString())
-        .map((match) => match.group(0)!.toLowerCase())
-        .toSet();
-  }
-
-  Future<bool> _isPowerSchemeAggressive(String schemeGuid) async {
-    final procMinimumValues = await _queryPowerSettingCurrentValues(
-      schemeGuid,
-      'PROCTHROTTLEMIN',
-    );
-    final coreParkingValues = await _queryPowerSettingCurrentValues(
-      schemeGuid,
-      'CPMINCORES',
-    );
-
-    return procMinimumValues.any((value) => value == 100) ||
-        coreParkingValues.any((value) => value == 100);
-  }
-
-  Future<List<int>> _queryPowerSettingCurrentValues(
-    String schemeGuid,
-    String settingAlias,
-  ) async {
-    final result = await _runProcessLogged('powercfg', [
-      '/query',
-      schemeGuid,
-      'sub_processor',
-      settingAlias,
-    ], runInShell: true);
-
-    if (result.exitCode != 0) {
-      return <int>[];
-    }
-
-    final output = result.stdout.toString();
-    final lines = output.split(RegExp(r'\r?\n'));
-    final values = <int>[];
-
-    for (final line in lines) {
-      final lowerLine = line.toLowerCase();
-      if (!lowerLine.contains('0x')) {
-        continue;
-      }
-
-      if (!(lowerLine.contains('current') || lowerLine.contains('corrente'))) {
-        continue;
-      }
-
-      final match = RegExp(r'0x([0-9a-fA-F]+)').firstMatch(line);
-      if (match == null) {
-        continue;
-      }
-
-      final parsedValue = int.tryParse(match.group(1)!, radix: 16);
-      if (parsedValue != null) {
-        values.add(parsedValue);
-      }
-    }
-
-    if (values.isNotEmpty) {
-      return values;
-    }
-
-    final fallbackMatches = RegExp(
-      r'0x([0-9a-fA-F]{1,8})',
-    ).allMatches(output).toList();
-    if (fallbackMatches.length >= 2) {
-      for (final match in fallbackMatches.sublist(fallbackMatches.length - 2)) {
-        final parsedValue = int.tryParse(match.group(1)!, radix: 16);
-        if (parsedValue != null) {
-          values.add(parsedValue);
-        }
-      }
-    }
-
-    return values;
-  }
-
-  Future<void> _deletePowerScheme(String schemeGuid) async {
-    await _runProcessLogged('powercfg', [
-      '/delete',
-      schemeGuid,
-    ], runInShell: true);
-  }
-
-  String _extractPowerPlanBasename(String filePath) {
-    final normalizedPath = filePath.replaceAll('\\', '/');
-    final fileName = normalizedPath.split('/').last;
-    final dotIndex = fileName.lastIndexOf('.');
-
-    if (dotIndex <= 0) {
-      return fileName;
-    }
-
-    return fileName.substring(0, dotIndex);
   }
 
   Map<String, Future<void> Function(bool)> get _handlers {
@@ -2246,13 +2096,6 @@ try {
       arguments,
       runInShell: runInShell,
       timeout: const Duration(minutes: 2),
-    );
-  }
-
-  Future<void> applyMsiMode(bool enable) async {
-    await _runPowerShellScript(
-      enable ? _msiEnableScript : _msiDisableScript,
-      enable ? 'msi_enable' : 'msi_disable',
     );
   }
 }
