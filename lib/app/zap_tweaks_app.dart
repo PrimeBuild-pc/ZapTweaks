@@ -3,13 +3,15 @@ import 'dart:io';
 
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:system_theme/system_theme.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import 'app_metadata.dart';
+import '../core/models/operation_result.dart';
+import '../core/services/process_runner.dart';
 import '../features/home/presentation/pages/home_stats_page.dart';
 import '../features/tweaks/application/tweak_controller.dart';
 import '../features/tweaks/presentation/pages/tweaks_page.dart';
 import 'app_theme.dart';
+import 'settings_page.dart';
 import 'widgets/windows_title_bar.dart';
 
 class ZapTweaksApp extends StatefulWidget {
@@ -113,6 +115,12 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
 
   @override
   Widget build(BuildContext context) {
+    final categories = widget.controller.categories;
+    final settingsPaneIndex = categories.length - 1;
+    final selectedCategoryIndex = categories.indexOf(
+      widget.controller.selectedCategory,
+    );
+
     return FluentApp(
       debugShowCheckedModeBanner: false,
       title: AppMetadata.productName,
@@ -130,123 +138,51 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
                     )
                   : _buildFallbackTitleBar(),
               pane: NavigationPane(
-                selected: widget.controller.categories.indexOf(
-                  widget.controller.selectedCategory,
-                ),
+                selected:
+                    widget.controller.selectedCategory ==
+                        TweakController.settingsCategory
+                    ? settingsPaneIndex
+                    : selectedCategoryIndex,
                 onChanged: (index) {
-                  if (index >= 0 &&
-                      index < widget.controller.categories.length) {
+                  if (index == settingsPaneIndex) {
                     widget.controller.selectCategory(
-                      widget.controller.categories[index],
+                      TweakController.settingsCategory,
                     );
+                  } else if (index >= 0 && index < categories.length - 1) {
+                    widget.controller.selectCategory(categories[index]);
                   }
                 },
                 size: const NavigationPaneSize(openWidth: 240),
                 displayMode: PaneDisplayMode.auto,
-                items: widget.controller.categories
-                    .map(
-                      (category) => PaneItem(
-                        icon: Icon(_iconForCategory(category)),
-                        title: Text(category),
-                        body: _buildCategoryBody(category),
+                items: <NavigationPaneItem>[
+                  ...categories
+                      .where(
+                        (category) =>
+                            category != TweakController.settingsCategory,
+                      )
+                      .map(
+                        (category) => PaneItem(
+                          icon: Icon(_iconForCategory(category)),
+                          title: Text(category),
+                          body: _buildCategoryBody(category),
+                        ),
                       ),
-                    )
-                    .toList(),
-                footerItems: <NavigationPaneItem>[
-                  PaneItemHeader(
-                    header: Row(
-                      children: <Widget>[
-                        const Icon(FluentIcons.shield, size: 14),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Text(
-                            widget.controller.isDryRunMode
-                                ? 'Execution: Dry-Run'
-                                : 'Execution: Production',
-                          ),
-                        ),
-                        ToggleSwitch(
-                          checked: widget.controller.isDryRunMode,
-                          onChanged: (next) async {
-                            await widget.controller.setDryRunMode(next);
-                          },
-                        ),
-                      ],
-                    ),
+                  PaneItemSeparator(),
+                  PaneItem(
+                    icon: const Icon(FluentIcons.settings),
+                    title: const Text('Settings'),
+                    body: _buildCategoryBody(TweakController.settingsCategory),
                   ),
+                ],
+                footerItems: <NavigationPaneItem>[
                   PaneItemAction(
-                    icon: const Icon(FluentIcons.refresh),
-                    title: const Text('Check updates'),
-                    onTap: () async {
-                      final appContext = context;
-                      final checkingDialogContext =
-                          _navigatorKey.currentContext;
-                      if (checkingDialogContext != null) {
-                        showDialog<void>(
-                          context: checkingDialogContext,
-                          barrierDismissible: false,
-                          builder: (_) => const ContentDialog(
-                            title: Text('Checking for updates'),
-                            content: Text(
-                              'Contacting release server and validating version...',
-                            ),
-                          ),
-                        );
-                      }
-
-                      final result = await widget.controller.checkForUpdates();
-
-                      if (checkingDialogContext != null &&
-                          checkingDialogContext.mounted) {
-                        final rootNavigator = Navigator.of(
-                          checkingDialogContext,
-                          rootNavigator: true,
-                        );
-                        if (rootNavigator.canPop()) {
-                          rootNavigator.pop();
-                        }
-                      }
-
-                      if (!appContext.mounted) {
-                        return;
-                      }
-
-                      if (result.shouldExitApp && result.success) {
-                        displayInfoBar(
-                          appContext,
-                          builder: (_, close) => InfoBar(
-                            title: const Text('Updating'),
-                            content: Text(
-                              result.message ?? 'Launching installer...',
-                            ),
-                            action: IconButton(
-                              icon: const Icon(FluentIcons.clear),
-                              onPressed: close,
-                            ),
-                            severity: InfoBarSeverity.warning,
-                          ),
-                        );
-                        await Future<void>.delayed(
-                          const Duration(milliseconds: 600),
-                        );
-                        exit(0);
-                      }
-
-                      displayInfoBar(
-                        appContext,
-                        builder: (_, close) => InfoBar(
-                          title: Text(result.success ? 'Done' : 'Failed'),
-                          content: Text(result.message ?? ''),
-                          action: IconButton(
-                            icon: const Icon(FluentIcons.clear),
-                            onPressed: close,
-                          ),
-                          severity: result.success
-                              ? InfoBarSeverity.success
-                              : InfoBarSeverity.error,
-                        ),
-                      );
-                    },
+                    icon: _buildUpdatesIcon(),
+                    title: Text(
+                      widget.controller.isUpdateAvailable
+                          ? 'Update available'
+                          : 'Updates',
+                    ),
+                    onTap: _handleUpdatesPressed,
                   ),
                 ],
               ),
@@ -284,6 +220,201 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
     );
   }
 
+  Widget _buildUpdatesIcon() {
+    return SizedBox(
+      width: 22,
+      height: 22,
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: <Widget>[
+          const Positioned.fill(child: Icon(FluentIcons.refresh)),
+          if (widget.controller.isUpdateAvailable)
+            Positioned(
+              right: -1,
+              top: -2,
+              child: Container(
+                width: 8,
+                height: 8,
+                decoration: BoxDecoration(
+                  color: Colors.red,
+                  shape: BoxShape.circle,
+                  border: Border.all(color: const Color(0xFF1E1E1E)),
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _handleUpdatesPressed() async {
+    if (widget.controller.isCheckingForUpdates) {
+      return;
+    }
+    if (widget.controller.isUpdateAvailable) {
+      await _showAvailableUpdateDialog();
+      return;
+    }
+    await _checkForUpdates();
+  }
+
+  Future<void> _checkForUpdates({bool showUpdateDialog = true}) async {
+    final dialogContext = _navigatorKey.currentContext;
+    if (dialogContext == null) {
+      return;
+    }
+
+    showDialog<void>(
+      context: dialogContext,
+      barrierDismissible: false,
+      builder: (_) => const ContentDialog(
+        title: Text('Checking for updates'),
+        content: Row(
+          children: <Widget>[
+            ProgressRing(),
+            SizedBox(width: 12),
+            Expanded(child: Text('Contacting the release server...')),
+          ],
+        ),
+      ),
+    );
+    final result = await widget.controller.checkForUpdates();
+    if (dialogContext.mounted) {
+      Navigator.of(dialogContext, rootNavigator: true).pop();
+    }
+    if (!mounted) {
+      return;
+    }
+
+    if (result.hasUpdate && showUpdateDialog) {
+      await _showAvailableUpdateDialog();
+      return;
+    }
+    if (!result.hasUpdate || !result.success) {
+      _showOperationResult(
+        OperationResult(success: result.success, message: result.message),
+      );
+    }
+  }
+
+  Future<void> _showAvailableUpdateDialog() async {
+    final dialogContext = _navigatorKey.currentContext;
+    final update = widget.controller.availableUpdate;
+    if (dialogContext == null || update == null) {
+      return;
+    }
+
+    final action = await showDialog<String>(
+      context: dialogContext,
+      builder: (context) => ContentDialog(
+        title: Text('ZapTweaks ${update.version} is available'),
+        content: SizedBox(
+          width: 560,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text('Installed version: ${widget.controller.appVersion}'),
+              const SizedBox(height: 12),
+              Text(
+                update.releaseNotes.isEmpty
+                    ? 'Release notes are available on GitHub.'
+                    : update.releaseNotes,
+                maxLines: 14,
+                overflow: TextOverflow.fade,
+              ),
+            ],
+          ),
+        ),
+        actions: <Widget>[
+          Button(
+            onPressed: () => Navigator.of(context).pop('later'),
+            child: const Text('Later'),
+          ),
+          Button(
+            onPressed: () => Navigator.of(context).pop('release'),
+            child: const Text('View release'),
+          ),
+          FilledButton(
+            onPressed: update.installerUrl == null
+                ? null
+                : () => Navigator.of(context).pop('install'),
+            child: const Text('Update now'),
+          ),
+        ],
+      ),
+    );
+
+    if (action == 'release') {
+      await _viewAvailableRelease();
+    } else if (action == 'install') {
+      await _installAvailableUpdate();
+    }
+  }
+
+  Future<void> _viewAvailableRelease() async {
+    final result = await widget.controller.openAvailableRelease();
+    if (!result.success && mounted) {
+      _showOperationResult(result);
+    }
+  }
+
+  Future<void> _installAvailableUpdate() async {
+    final dialogContext = _navigatorKey.currentContext;
+    if (dialogContext == null) {
+      return;
+    }
+
+    showDialog<void>(
+      context: dialogContext,
+      barrierDismissible: false,
+      builder: (_) => const ContentDialog(
+        title: Text('Downloading update'),
+        content: Row(
+          children: <Widget>[
+            ProgressRing(),
+            SizedBox(width: 12),
+            Expanded(child: Text('Downloading and preparing the installer...')),
+          ],
+        ),
+      ),
+    );
+    final result = await widget.controller.installAvailableUpdate();
+    if (dialogContext.mounted) {
+      Navigator.of(dialogContext, rootNavigator: true).pop();
+    }
+    if (!mounted) {
+      return;
+    }
+
+    _showOperationResult(result);
+    if (result.success && result.shouldExitApp) {
+      await Future<void>.delayed(const Duration(milliseconds: 700));
+      exit(0);
+    }
+  }
+
+  void _showOperationResult(OperationResult result) {
+    final currentContext = _navigatorKey.currentContext;
+    if (currentContext == null) {
+      return;
+    }
+    displayInfoBar(
+      currentContext,
+      builder: (_, close) => InfoBar(
+        title: Text(result.success ? 'Done' : 'Failed'),
+        content: Text(result.message ?? ''),
+        action: IconButton(
+          icon: const Icon(FluentIcons.clear),
+          onPressed: close,
+        ),
+        severity: result.success
+            ? InfoBarSeverity.success
+            : InfoBarSeverity.error,
+      ),
+    );
+  }
+
   Widget _buildCategoryBody(String category) {
     if (widget.controller.isLoading) {
       return Center(
@@ -302,6 +433,15 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
       return _buildHomeStatsPage();
     }
 
+    if (category == TweakController.settingsCategory) {
+      return SettingsPage(
+        controller: widget.controller,
+        onCheckForUpdates: () => _checkForUpdates(showUpdateDialog: false),
+        onInstallUpdate: _installAvailableUpdate,
+        onViewRelease: _viewAvailableRelease,
+      );
+    }
+
     if (!widget.controller.isAdmin) {
       return _buildAdminRequiredView();
     }
@@ -314,24 +454,13 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
   }
 
   Widget _buildHomeStatsPage() {
-    return AnimatedBuilder(
-      animation: Listenable.merge(<Listenable>[
-        widget.controller.latestMetricsListenable,
-        widget.controller.cpuHistoryListenable,
-        widget.controller.memoryHistoryListenable,
-        widget.controller.gpuHistoryListenable,
-        widget.controller.vramHistoryListenable,
-      ]),
-      builder: (_, child) {
-        return HomeStatsPage(
-          hardwareProfile: widget.controller.hardwareProfile,
-          latestMetrics: widget.controller.latestMetricsListenable.value,
-          cpuHistory: widget.controller.cpuHistoryListenable.value,
-          memoryHistory: widget.controller.memoryHistoryListenable.value,
-          gpuHistory: widget.controller.gpuHistoryListenable.value,
-          vramHistory: widget.controller.vramHistoryListenable.value,
-        );
-      },
+    return HomeStatsPage(
+      hardwareProfile: widget.controller.hardwareProfile,
+      latestMetrics: widget.controller.latestMetrics,
+      cpuHistory: widget.controller.cpuHistory,
+      memoryHistory: widget.controller.memoryHistory,
+      gpuHistory: widget.controller.gpuHistory,
+      vramHistory: widget.controller.vramHistory,
     );
   }
 
@@ -345,9 +474,10 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
           const SizedBox(width: 8),
           const Text('ZapTweaks'),
           const SizedBox(width: 6),
-          Text(
+          const Text(
             'by PrimeBuild',
-            style: FluentTheme.of(context).typography.caption?.copyWith(
+            style: TextStyle(
+              fontSize: 12,
               fontStyle: FontStyle.italic,
               fontWeight: FontWeight.w100,
             ),
@@ -405,6 +535,8 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
       case 'Visuals':
         return FluentIcons.view;
       case 'Tools':
+        return FluentIcons.toolbox;
+      case TweakController.settingsCategory:
         return FluentIcons.settings;
       case 'Home':
         return FluentIcons.home;
@@ -487,18 +619,20 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
               const SizedBox(height: 6),
               const Text('Author: PrimeBuild'),
               const SizedBox(height: 6),
+              const Text(
+                'Advanced optimization companion for deeper Windows gaming, hardware, and diagnostics workflows.',
+              ),
+              const SizedBox(height: 6),
               Text('Year: ${DateTime.now().year}'),
               const SizedBox(height: 6),
               Row(
                 children: <Widget>[
                   const Text('GitHub: '),
                   HyperlinkButton(
-                    onPressed: () {
-                      launchUrl(
-                        Uri.parse(AppMetadata.repositoryUrl),
-                        mode: LaunchMode.externalApplication,
-                      );
-                    },
+                    onPressed: () => ProcessRunner.shared.launch(
+                      'explorer',
+                      const <String>[AppMetadata.repositoryUrl],
+                    ),
                     child: Text(AppMetadata.repositoryUrl),
                   ),
                 ],

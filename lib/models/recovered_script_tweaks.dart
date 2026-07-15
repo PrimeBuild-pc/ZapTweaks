@@ -14,7 +14,7 @@ const List<String> _scriptDefinitions = <String>[
   '!refresh_reinstall|Reinstall|Refresh & Recovery|interactive_scripts/2 Refresh/3 Reinstall.ps1',
   '!refresh_autounattend|Autounattend|Refresh & Recovery|interactive_scripts/2 Refresh/4 Autounattend.ps1',
   '!refresh_updates_drivers_block|Updates Drivers Block|Refresh & Recovery|interactive_scripts/2 Refresh/5 Updates Drivers Block.ps1',
-  '!refresh_network_driver|Network Driver|Refresh & Recovery|interactive_scripts/2 Refresh/6 Network Driver.ps1',
+  '!refresh_network_driver|Network Driver|Refresh & Recovery|interactive_scripts/1 Check/4 Bios Update.ps1',
   '!refresh_to_bios|To BIOS|Refresh & Recovery|interactive_scripts/2 Refresh/7 To Bios.ps1',
   '!setup_bitlocker|BitLocker|Setup Scripts|interactive_scripts/3 Setup/1 BitLocker.ps1',
   '!setup_convert_home_to_pro|Convert Home To Pro|Setup Scripts|interactive_scripts/3 Setup/3 Convert Home To Pro.ps1',

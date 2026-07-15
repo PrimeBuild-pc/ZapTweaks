@@ -1,3 +1,5 @@
+import '../core/services/process_runner.dart';
+
 /// UI rendering modes supported by tweak descriptors.
 enum TweakUiType { toggle, launcher, interactiveScript }
 
@@ -29,9 +31,13 @@ abstract class SystemTweak {
 
   bool get hasState => type == TweakUiType.toggle;
 
-  Future<void> runAction() async {
-    await onApply();
-  }
+  Future<void> runAction() => onApply();
+
+  Future<void> runSilentPowerShell(String script, {bool elevated = false}) =>
+      ProcessRunner.shared.runPowerShellScript(script, elevated: elevated);
+
+  Future<String> runPowerShellForOutput(String script) =>
+      ProcessRunner.shared.runPowerShellForOutput(script);
 
   Future<void> onApply();
   Future<void> onRevert();

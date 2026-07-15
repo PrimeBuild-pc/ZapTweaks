@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:path/path.dart' as path;
-import 'package:url_launcher/url_launcher.dart';
 
 import '../core/services/process_runner.dart';
 import 'system_tweak.dart';
@@ -30,13 +29,6 @@ String? resolveResourceFilePath(List<String> relativeSegments) {
 
   final executableDirectory = path.dirname(Platform.resolvedExecutable);
   final candidates = <String>[
-    path.joinAll([
-      executableDirectory,
-      'data',
-      'flutter_assets',
-      'resources',
-      ...relativeSegments,
-    ]),
     path.joinAll([executableDirectory, 'resources', ...relativeSegments]),
     path.joinAll([Directory.current.path, 'resources', ...relativeSegments]),
   ];
@@ -59,13 +51,6 @@ String? resolveResourceDirectoryPath(List<String> relativeSegments) {
 
   final executableDirectory = path.dirname(Platform.resolvedExecutable);
   final candidates = <String>[
-    path.joinAll([
-      executableDirectory,
-      'data',
-      'flutter_assets',
-      'resources',
-      ...relativeSegments,
-    ]),
     path.joinAll([executableDirectory, 'resources', ...relativeSegments]),
     path.joinAll([Directory.current.path, 'resources', ...relativeSegments]),
   ];
@@ -356,9 +341,11 @@ class ExternalUrlLauncherTweak extends ActionSystemTweak {
       throw Exception('Invalid URL: $url');
     }
 
-    final launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
-    if (!launched) {
-      throw Exception('Unable to open URL: $url');
+    final result = await ProcessRunner.shared.launch('explorer', <String>[
+      uri.toString(),
+    ]);
+    if (!result.success) {
+      throw Exception('Unable to open URL: $url (${result.details})');
     }
   }
 }
@@ -462,18 +449,26 @@ class BatchScriptTweak extends ActionSystemTweak {
       );
     }
 
-    final batchPath = ProcessRunner.shared.isDryRun
-        ? sourceBatchPath
-        : await _deployResourceFileToTools(batchSegments);
+    late final String batchPath;
+    if (ProcessRunner.shared.isDryRun || batchSegments.length == 1) {
+      batchPath = ProcessRunner.shared.isDryRun
+          ? sourceBatchPath
+          : await _deployResourceFileToTools(batchSegments);
+    } else {
+      final directoryPath = await _deployResourceDirectoryToTools(
+        batchSegments.sublist(0, batchSegments.length - 1),
+      );
+      batchPath = path.join(directoryPath, batchSegments.last);
+    }
 
-    final result = await ProcessRunner.shared.run('cmd', <String>[
+    final result = await ProcessRunner.shared.launch('cmd', <String>[
       '/c',
       batchPath,
       ...arguments,
-    ], timeout: const Duration(minutes: 5));
+    ]);
 
     if (!result.success) {
-      throw Exception('Batch execution failed (${result.details}).');
+      throw Exception('Batch launch failed (${result.details}).');
     }
   }
 }
@@ -485,12 +480,14 @@ class ExplorerSelectFileTweak extends ActionSystemTweak {
     required super.description,
     required super.category,
     required this.fileSegments,
+    this.openWithDefaultApp = false,
     super.actionLabel = 'Show File',
     super.isAggressive,
     super.warningMessage,
   }) : super(type: TweakUiType.launcher);
 
   final List<String> fileSegments;
+  final bool openWithDefaultApp;
 
   @override
   Future<void> onApply() async {
@@ -501,12 +498,19 @@ class ExplorerSelectFileTweak extends ActionSystemTweak {
       throw Exception('Missing file: ${_resourceRelativePath(fileSegments)}');
     }
 
-    final result = await ProcessRunner.shared.launch('explorer', <String>[
-      '/select,$filePath',
-    ]);
+    final result = openWithDefaultApp
+        ? await ProcessRunner.shared.launch('cmd', <String>[
+            '/c',
+            'start',
+            '""',
+            filePath,
+          ], runInShell: true)
+        : await ProcessRunner.shared.launch('explorer', <String>[
+            '/select,$filePath',
+          ]);
 
     if (!result.success) {
-      throw Exception('Unable to open file in Explorer (${result.details}).');
+      throw Exception('Unable to open file (${result.details}).');
     }
   }
 }

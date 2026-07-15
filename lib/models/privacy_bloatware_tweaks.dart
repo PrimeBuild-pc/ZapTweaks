@@ -1,5 +1,4 @@
 import '../core/registry_manager.dart';
-import '../core/services/process_runner.dart';
 import 'system_tweak.dart';
 
 List<SystemTweak> createPrivacyBloatwareTweaks() {
@@ -17,13 +16,10 @@ abstract class _PrivacyBloatwareSystemTweak extends SystemTweak {
     required super.id,
     required super.title,
     required super.description,
+    super.isAggressive,
+    super.type,
+    super.actionLabel,
   }) : super(category: 'Privacy & Bloatware');
-
-  Future<void> runSilentPowerShell(String script, {bool elevated = false}) =>
-      ProcessRunner.shared.runPowerShellScript(script, elevated: elevated);
-
-  Future<String> runPowerShellForOutput(String script) =>
-      ProcessRunner.shared.runPowerShellForOutput(script);
 }
 
 class ConsumerContentPrivacyTweak extends SystemTweak {
@@ -58,7 +54,6 @@ class ConsumerContentPrivacyTweak extends SystemTweak {
       'PreInstalledAppsEnabled',
       0,
     );
-    isApplied = true;
   }
 
   @override
@@ -78,7 +73,6 @@ class ConsumerContentPrivacyTweak extends SystemTweak {
       'PreInstalledAppsEnabled',
       1,
     );
-    isApplied = false;
   }
 
   @override
@@ -98,7 +92,6 @@ class ConsumerContentPrivacyTweak extends SystemTweak {
 
     final applied =
         disableConsumer == 1 && silentInstall == 0 && preInstalled == 0;
-    isApplied = applied;
     return applied;
   }
 }
@@ -125,8 +118,6 @@ class WidgetsTweak extends _PrivacyBloatwareSystemTweak {
 Get-Process -Name Widgets -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
 Get-Process -Name WidgetService -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
 ''');
-
-    isApplied = true;
   }
 
   @override
@@ -140,8 +131,6 @@ Get-Process -Name WidgetService -ErrorAction SilentlyContinue | Stop-Process -Fo
     if (current != null) {
       await RegistryManager.deleteValue(_dshKey, 'AllowNewsAndInterests');
     }
-
-    isApplied = false;
   }
 
   @override
@@ -156,7 +145,6 @@ Get-Process -Name WidgetService -ErrorAction SilentlyContinue | Stop-Process -Fo
     );
 
     final applied = policyManagerValue == 0 && dshValue == 0;
-    isApplied = applied;
     return applied;
   }
 }
@@ -194,8 +182,6 @@ $stop | ForEach-Object { Stop-Process -Name $_ -Force -ErrorAction SilentlyConti
 Get-Process | Where-Object { $_.ProcessName -like '*edge*' } | Stop-Process -Force -ErrorAction SilentlyContinue
 Get-AppxPackage -AllUsers | Where-Object { $_.Name -like '*Copilot*' } | Remove-AppxPackage -ErrorAction SilentlyContinue
 ''', elevated: true);
-
-    isApplied = true;
   }
 
   @override
@@ -229,8 +215,6 @@ Get-AppxPackage -AllUsers | Where-Object { $_.Name -like '*Copilot*' } | ForEach
   }
 }
 ''', elevated: true);
-
-    isApplied = false;
   }
 
   @override
@@ -245,7 +229,6 @@ Get-AppxPackage -AllUsers | Where-Object { $_.Name -like '*Copilot*' } | ForEach
     );
 
     final applied = userValue == 1 && machineValue == 1;
-    isApplied = applied;
     return applied;
   }
 }
@@ -285,8 +268,6 @@ class GameBarTweak extends _PrivacyBloatwareSystemTweak {
     await runSilentPowerShell(r'''
 Get-Process -Name GameBar -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
 ''');
-
-    isApplied = true;
   }
 
   @override
@@ -324,8 +305,6 @@ Get-Process -Name GameBar -ErrorAction SilentlyContinue | Stop-Process -Force -E
     }
 
     await RegistryManager.writeDword(_presenceWriter, 'ActivationType', 1);
-
-    isApplied = false;
   }
 
   @override
@@ -357,7 +336,6 @@ Get-Process -Name GameBar -ErrorAction SilentlyContinue | Stop-Process -Force -E
         useNexus == 0 &&
         gamepadChord == 0 &&
         activationType == 0;
-    isApplied = applied;
     return applied;
   }
 }
@@ -369,6 +347,9 @@ class SafeDebloatPresetTweak extends _PrivacyBloatwareSystemTweak {
         title: 'Safe Debloat Preset',
         description:
             'Removes only selected UWP bloat apps while preserving Store and Xbox base components.',
+        isAggressive: true,
+        type: TweakUiType.launcher,
+        actionLabel: 'Run debloat',
       );
 
   static const List<String> _targets = <String>[
@@ -430,7 +411,9 @@ foreach ($target in $targets) {
             .replaceAll('__TARGETS__', targetList);
 
     await runSilentPowerShell(script, elevated: true);
-    isApplied = await checkState();
+    if (!isApplied) {
+      throw Exception('Safe Debloat state verification failed.');
+    }
   }
 
   @override
@@ -442,8 +425,6 @@ Get-AppxPackage -AllUsers | ForEach-Object {
   }
 }
 ''', elevated: true);
-
-    isApplied = false;
   }
 
   @override
@@ -462,9 +443,8 @@ Write-Output $remaining
             .replaceAll('__TARGETS__', targetList);
 
     final output = await runPowerShellForOutput(script);
-    final remaining = int.tryParse(output.trim()) ?? 0;
-    final applied = remaining == 0;
-    isApplied = applied;
+    final remaining = int.tryParse(output.trim());
+    final applied = remaining != null && remaining == 0;
     return applied;
   }
 }

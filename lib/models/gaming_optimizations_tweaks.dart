@@ -1,5 +1,4 @@
 import '../core/registry_manager.dart';
-import '../core/services/process_runner.dart';
 import 'system_tweak.dart';
 
 List<SystemTweak> createGamingOptimizationsTweaks() {
@@ -18,12 +17,6 @@ abstract class _GamingOptimizationTweak extends SystemTweak {
     required super.title,
     required super.description,
   }) : super(category: 'Gaming Optimizations');
-
-  Future<void> runSilentPowerShell(String script, {bool elevated = false}) =>
-      ProcessRunner.shared.runPowerShellScript(script, elevated: elevated);
-
-  Future<String> runPowerShellForOutput(String script) =>
-      ProcessRunner.shared.runPowerShellForOutput(script);
 }
 
 class MpoWindowedOptimizationsOffTweak extends SystemTweak {
@@ -48,7 +41,6 @@ class MpoWindowedOptimizationsOffTweak extends SystemTweak {
       'DirectXUserGlobalSettings',
       'VRROptimizeEnable=0;SwapEffectUpgradeEnable=0;',
     );
-    isApplied = true;
   }
 
   @override
@@ -63,7 +55,6 @@ class MpoWindowedOptimizationsOffTweak extends SystemTweak {
       'DirectXUserGlobalSettings',
       'VRROptimizeEnable=0;SwapEffectUpgradeEnable=1;',
     );
-    isApplied = false;
   }
 
   @override
@@ -77,7 +68,6 @@ class MpoWindowedOptimizationsOffTweak extends SystemTweak {
     final applied =
         overlay == 5 &&
         (globalSettings?.contains('SwapEffectUpgradeEnable=0;') ?? false);
-    isApplied = applied;
     return applied;
   }
 }
@@ -116,7 +106,6 @@ class LegacyFlipFseTweak extends SystemTweak {
       'GameDVR_HonorUserFSEBehaviorMode',
       1,
     );
-    isApplied = true;
   }
 
   @override
@@ -148,7 +137,6 @@ class LegacyFlipFseTweak extends SystemTweak {
       'GameDVR_HonorUserFSEBehaviorMode',
       0,
     );
-    isApplied = false;
   }
 
   @override
@@ -167,7 +155,6 @@ class LegacyFlipFseTweak extends SystemTweak {
     );
 
     final applied = compatible == 1 && mode == 2 && honorMode == 1;
-    isApplied = applied;
     return applied;
   }
 }
@@ -192,7 +179,6 @@ class ComposedFlipImmediateModeTweak extends SystemTweak {
       'ForceFlipTrueImmediateMode',
       1,
     );
-    isApplied = true;
   }
 
   @override
@@ -207,7 +193,6 @@ class ComposedFlipImmediateModeTweak extends SystemTweak {
         'ForceFlipTrueImmediateMode',
       );
     }
-    isApplied = false;
   }
 
   @override
@@ -217,7 +202,6 @@ class ComposedFlipImmediateModeTweak extends SystemTweak {
       'ForceFlipTrueImmediateMode',
     );
     final applied = current == 1;
-    isApplied = applied;
     return applied;
   }
 }
@@ -241,8 +225,6 @@ foreach ($key in $subkeys) {
   }
 }
 ''', elevated: true);
-
-    isApplied = await checkState();
   }
 
   @override
@@ -258,8 +240,6 @@ foreach ($key in $subkeys) {
   }
 }
 ''', elevated: true);
-
-    isApplied = await checkState();
   }
 
   @override
@@ -291,7 +271,6 @@ if ($found) {
 ''')).toLowerCase();
 
     final applied = output.contains('true');
-    isApplied = applied;
     return applied;
   }
 }
@@ -316,7 +295,6 @@ class TimerResolutionRequestsTweak extends SystemTweak {
       'GlobalTimerResolutionRequests',
       1,
     );
-    isApplied = true;
   }
 
   @override
@@ -331,7 +309,6 @@ class TimerResolutionRequestsTweak extends SystemTweak {
         'GlobalTimerResolutionRequests',
       );
     }
-    isApplied = false;
   }
 
   @override
@@ -341,7 +318,6 @@ class TimerResolutionRequestsTweak extends SystemTweak {
       'GlobalTimerResolutionRequests',
     );
     final applied = current == 1;
-    isApplied = applied;
     return applied;
   }
 }

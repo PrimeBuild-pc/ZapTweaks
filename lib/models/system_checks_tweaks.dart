@@ -1,5 +1,4 @@
 import '../core/registry_manager.dart';
-import '../core/services/process_runner.dart';
 import 'system_tweak.dart';
 
 List<SystemTweak> createSystemChecksTweaks() {
@@ -18,13 +17,8 @@ abstract class _SystemChecksTweak extends SystemTweak {
     required super.id,
     required super.title,
     required super.description,
+    super.isAggressive,
   }) : super(category: 'System Checks');
-
-  Future<void> runSilentPowerShell(String script, {bool elevated = false}) =>
-      ProcessRunner.shared.runPowerShellScript(script, elevated: elevated);
-
-  Future<String> runPowerShellForOutput(String script) =>
-      ProcessRunner.shared.runPowerShellForOutput(script);
 }
 
 class MemoryCompressionOffTweak extends _SystemChecksTweak {
@@ -42,7 +36,6 @@ class MemoryCompressionOffTweak extends _SystemChecksTweak {
       r'Disable-MMAgent -MemoryCompression -ErrorAction SilentlyContinue | Out-Null',
       elevated: true,
     );
-    isApplied = await checkState();
   }
 
   @override
@@ -51,7 +44,6 @@ class MemoryCompressionOffTweak extends _SystemChecksTweak {
       r'Enable-MMAgent -MemoryCompression -ErrorAction SilentlyContinue | Out-Null',
       elevated: true,
     );
-    isApplied = await checkState();
   }
 
   @override
@@ -68,7 +60,6 @@ if ($null -eq $m) {
 ''')).toLowerCase();
 
     final applied = output.contains('true');
-    isApplied = applied;
     return applied;
   }
 }
@@ -81,6 +72,7 @@ class UacOffTweak extends SystemTweak {
         description:
             'Sets User Account Control to disabled. A reboot is required for full effect.',
         category: 'System Checks',
+        isAggressive: true,
       );
 
   static const String _keyPath =
@@ -90,21 +82,18 @@ class UacOffTweak extends SystemTweak {
   Future<void> onApply() async {
     await RegistryManager.writeDword(_keyPath, 'EnableLUA', 0);
     await RegistryManager.writeDword(_keyPath, 'ConsentPromptBehaviorAdmin', 0);
-    isApplied = true;
   }
 
   @override
   Future<void> onRevert() async {
     await RegistryManager.writeDword(_keyPath, 'EnableLUA', 1);
     await RegistryManager.writeDword(_keyPath, 'ConsentPromptBehaviorAdmin', 5);
-    isApplied = false;
   }
 
   @override
   Future<bool> checkState() async {
     final enabledLUA = await RegistryManager.readDword(_keyPath, 'EnableLUA');
     final applied = enabledLUA == 0;
-    isApplied = applied;
     return applied;
   }
 }
@@ -117,6 +106,7 @@ class FirewallOffTweak extends SystemTweak {
         description:
             'Disables Public and Standard firewall profiles. Revert restores default enabled state.',
         category: 'System Checks',
+        isAggressive: true,
       );
 
   static const String _publicKey =
@@ -128,14 +118,12 @@ class FirewallOffTweak extends SystemTweak {
   Future<void> onApply() async {
     await RegistryManager.writeDword(_publicKey, 'EnableFirewall', 0);
     await RegistryManager.writeDword(_standardKey, 'EnableFirewall', 0);
-    isApplied = true;
   }
 
   @override
   Future<void> onRevert() async {
     await RegistryManager.writeDword(_publicKey, 'EnableFirewall', 1);
     await RegistryManager.writeDword(_standardKey, 'EnableFirewall', 1);
-    isApplied = false;
   }
 
   @override
@@ -149,7 +137,6 @@ class FirewallOffTweak extends SystemTweak {
       'EnableFirewall',
     );
     final applied = publicFirewall == 0 && standardFirewall == 0;
-    isApplied = applied;
     return applied;
   }
 }
@@ -162,6 +149,7 @@ class SpectreMeltdownOffTweak extends SystemTweak {
         description:
             'Sets FeatureSettingsOverride and FeatureSettingsOverrideMask to 3.',
         category: 'System Checks',
+        isAggressive: true,
       );
 
   static const String _keyPath =
@@ -175,7 +163,6 @@ class SpectreMeltdownOffTweak extends SystemTweak {
       3,
     );
     await RegistryManager.writeDword(_keyPath, 'FeatureSettingsOverride', 3);
-    isApplied = true;
   }
 
   @override
@@ -198,8 +185,6 @@ class SpectreMeltdownOffTweak extends SystemTweak {
     if (value != null) {
       await RegistryManager.deleteValue(_keyPath, 'FeatureSettingsOverride');
     }
-
-    isApplied = false;
   }
 
   @override
@@ -213,7 +198,6 @@ class SpectreMeltdownOffTweak extends SystemTweak {
       'FeatureSettingsOverride',
     );
     final applied = mask == 3 && value == 3;
-    isApplied = applied;
     return applied;
   }
 }
@@ -225,6 +209,7 @@ class DataExecutionPreventionOffTweak extends _SystemChecksTweak {
         title: 'Data Execution Prevention Off',
         description:
             'Sets bcdedit nx to AlwaysOff. Revert deletes nx override (Windows default).',
+        isAggressive: true,
       );
 
   @override
@@ -233,7 +218,6 @@ class DataExecutionPreventionOffTweak extends _SystemChecksTweak {
       r'cmd /c "bcdedit /set nx AlwaysOff >nul 2>&1"',
       elevated: true,
     );
-    isApplied = await checkState();
   }
 
   @override
@@ -242,7 +226,6 @@ class DataExecutionPreventionOffTweak extends _SystemChecksTweak {
       r'cmd /c "bcdedit /deletevalue nx >nul 2>&1"',
       elevated: true,
     );
-    isApplied = await checkState();
   }
 
   @override
@@ -257,7 +240,6 @@ if ($current -match '(?im)^\s*nx\s+AlwaysOff\s*$') {
 ''')).toLowerCase();
 
     final applied = output.contains('true');
-    isApplied = applied;
     return applied;
   }
 }
@@ -270,6 +252,7 @@ class CoreIsolationOffTweak extends SystemTweak {
         description:
             'Disables HVCI memory integrity via DeviceGuard registry scenario.',
         category: 'System Checks',
+        isAggressive: true,
       );
 
   static const String _keyPath =
@@ -278,20 +261,17 @@ class CoreIsolationOffTweak extends SystemTweak {
   @override
   Future<void> onApply() async {
     await RegistryManager.writeDword(_keyPath, 'Enabled', 0);
-    isApplied = true;
   }
 
   @override
   Future<void> onRevert() async {
     await RegistryManager.writeDword(_keyPath, 'Enabled', 1);
-    isApplied = false;
   }
 
   @override
   Future<bool> checkState() async {
     final enabled = await RegistryManager.readDword(_keyPath, 'Enabled');
     final applied = enabled == 0;
-    isApplied = applied;
     return applied;
   }
 }

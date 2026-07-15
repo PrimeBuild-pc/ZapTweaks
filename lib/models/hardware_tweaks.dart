@@ -74,7 +74,6 @@ class BackgroundPollingRateCapTweak extends SystemTweak {
   @override
   Future<void> onApply() async {
     await RegistryManager.writeDword(_keyPath, _valueName, 0);
-    isApplied = true;
   }
 
   @override
@@ -83,14 +82,12 @@ class BackgroundPollingRateCapTweak extends SystemTweak {
     if (current != null) {
       await RegistryManager.deleteValue(_keyPath, _valueName);
     }
-    isApplied = false;
   }
 
   @override
   Future<bool> checkState() async {
     final current = await RegistryManager.readDword(_keyPath, _valueName);
     final applied = current == 0;
-    isApplied = applied;
     return applied;
   }
 }

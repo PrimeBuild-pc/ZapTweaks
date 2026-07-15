@@ -10,7 +10,6 @@ List<SystemTweak> createProgramToolTweaks() {
       description: 'Runs bundled WinScript maintenance batch actions.',
       category: 'Drivers & Installers',
       batchSegments: <String>['winscript.bat'],
-      actionLabel: 'Run Script',
       isAggressive: true,
     ),
     RegistryImportTweak(
@@ -20,7 +19,6 @@ List<SystemTweak> createProgramToolTweaks() {
           'Imports minimal service startup policy from bundled .reg file by Sapphire.',
       category: 'Drivers & Installers',
       registrySegments: <String>['minimal_services.reg'],
-      actionLabel: 'Import',
       isAggressive: true,
     ),
     RegistryImportTweak(
@@ -30,7 +28,6 @@ List<SystemTweak> createProgramToolTweaks() {
           'Imports advanced services hard-disable profile from bundled .reg file by Sapphire.',
       category: 'Drivers & Installers',
       registrySegments: <String>['disable_advanced_services.reg'],
-      actionLabel: 'Import',
       isAggressive: true,
     ),
     PowerShellCommandTweak(
@@ -79,6 +76,29 @@ List<SystemTweak> createProgramToolTweaks() {
           'This action executes a remote PowerShell command from debloat.raphi.re and can change system configuration. Continue only if you trust the source.',
     ),
     PowerShellTerminalCommandTweak(
+      id: 'tool_ctt_winutil',
+      title: 'Run CTT WinUtil',
+      description:
+          'Opens Chris Titus Tech WinUtil for common Windows setup, repair, and baseline optimization tasks.',
+      category: 'Drivers & Installers',
+      command: 'irm https://christitus.com/win | iex',
+      actionLabel: 'Run WinUtil',
+      isAggressive: true,
+      warningMessage:
+          'This action runs the official remote WinUtil script from christitus.com. Review its choices before applying changes.',
+    ),
+    PowerShellTerminalCommandTweak(
+      id: 'tool_install_winhance',
+      title: 'Install Winhance',
+      description:
+          'Installs Winhance with Winget for common Windows customization and baseline optimization.',
+      category: 'Drivers & Installers',
+      command:
+          'winget install --exact --id memstechtips.Winhance --accept-package-agreements --accept-source-agreements',
+      actionLabel: 'Install',
+      isAggressive: true,
+    ),
+    PowerShellTerminalCommandTweak(
       id: 'tool_sysinternals_suite_winget',
       title: 'Install Sysinternals Suite',
       description:
@@ -112,7 +132,6 @@ List<SystemTweak> createProgramToolTweaks() {
       description: 'CPU core unparking utility.',
       category: 'Drivers & Installers',
       executableSegments: <String>['programmi', 'UnparkCpu.exe'],
-      actionLabel: 'Open',
     ),
     ExecutableLauncherTweak(
       id: 'tool_mouse_flat_curve',
@@ -120,7 +139,6 @@ List<SystemTweak> createProgramToolTweaks() {
       description: 'Applies flat mouse acceleration curve settings.',
       category: 'Drivers & Installers',
       executableSegments: <String>['programmi', 'MouseFlatCurve.exe'],
-      actionLabel: 'Open',
     ),
     ExecutableLauncherTweak(
       id: 'tool_mouse_movement_recorder',
@@ -128,7 +146,6 @@ List<SystemTweak> createProgramToolTweaks() {
       description: 'Checks effective mouse polling behavior.',
       category: 'Drivers & Installers',
       executableSegments: <String>['programmi', 'mousemovementrecorder.exe'],
-      actionLabel: 'Open',
     ),
     ExecutableLauncherTweak(
       id: 'tool_controller_polling',
@@ -136,7 +153,6 @@ List<SystemTweak> createProgramToolTweaks() {
       description: 'Controller polling rate measurement tool.',
       category: 'Drivers & Installers',
       executableSegments: <String>['programmi', 'polling.exe'],
-      actionLabel: 'Open',
     ),
     ExecutableLauncherTweak(
       id: 'tool_queue_size_tuner',
@@ -144,7 +160,6 @@ List<SystemTweak> createProgramToolTweaks() {
       description: 'Storage queue tuning utility.',
       category: 'Drivers & Installers',
       executableSegments: <String>['programmi', 'QueueSize_Tuner.exe'],
-      actionLabel: 'Open',
       isAggressive: true,
     ),
     ExecutableLauncherTweak(
@@ -157,7 +172,6 @@ List<SystemTweak> createProgramToolTweaks() {
         'PowerSettingsExplorer',
         'PowerSettingsExplorer.exe',
       ],
-      actionLabel: 'Open',
       isAggressive: true,
     ),
     ExecutableLauncherTweak(
@@ -170,7 +184,6 @@ List<SystemTweak> createProgramToolTweaks() {
         'Interrupt_Affinity_Policy_Tool',
         'intPolicy_x64.exe',
       ],
-      actionLabel: 'Open',
       isAggressive: true,
     ),
     ExecutableLauncherTweak(
@@ -183,7 +196,6 @@ List<SystemTweak> createProgramToolTweaks() {
         'Interrupt_Affinity_Policy_Tool',
         'intPolicy_x86.exe',
       ],
-      actionLabel: 'Open',
       isAggressive: true,
     ),
     ExecutableLauncherTweak(
@@ -196,7 +208,6 @@ List<SystemTweak> createProgramToolTweaks() {
         'Interrupt_Affinity_Policy_Tool',
         'intPolicy_ia64.exe',
       ],
-      actionLabel: 'Open',
       isAggressive: true,
     ),
     ExecutableLauncherTweak(
@@ -205,7 +216,6 @@ List<SystemTweak> createProgramToolTweaks() {
       description: 'Detailed GPU diagnostics and sensors.',
       category: 'Drivers & Installers',
       executableSegments: <String>['programmi', 'GPU-Z.2.69.0.exe'],
-      actionLabel: 'Open',
     ),
     ExecutableLauncherTweak(
       id: 'tool_furmark_setup',
@@ -225,7 +235,6 @@ List<SystemTweak> createProgramToolTweaks() {
       description: 'AMD clock/voltage control utility.',
       category: 'Drivers & Installers',
       executableSegments: <String>['programmi', 'MoreClockTool.exe'],
-      actionLabel: 'Open',
       isAggressive: true,
     ),
     ExecutableLauncherTweak(
@@ -256,7 +265,6 @@ List<SystemTweak> createProgramToolTweaks() {
       category: 'Drivers & Installers',
       directorySegments: <String>['programmi', 'Autoruns'],
       launchExecutableRelativePath: 'Autoruns64.exe',
-      actionLabel: 'Open',
       isAggressive: true,
     ),
     DirectoryLauncherTweak(
@@ -266,7 +274,6 @@ List<SystemTweak> createProgramToolTweaks() {
       category: 'Drivers & Installers',
       directorySegments: <String>['programmi', 'cpu-z_2.19-en'],
       launchExecutableRelativePath: 'cpuz_x64.exe',
-      actionLabel: 'Open',
     ),
     DirectoryLauncherTweak(
       id: 'tool_cru_folder',
@@ -275,7 +282,6 @@ List<SystemTweak> createProgramToolTweaks() {
       category: 'Drivers & Installers',
       directorySegments: <String>['programmi', 'cru-1.5.3'],
       launchExecutableRelativePath: 'CRU.exe',
-      actionLabel: 'Open',
       isAggressive: true,
     ),
     DirectoryLauncherTweak(
@@ -285,7 +291,6 @@ List<SystemTweak> createProgramToolTweaks() {
       category: 'Drivers & Installers',
       directorySegments: <String>['programmi', 'hidusbf (BB11.5.25)'],
       launchExecutableRelativePath: 'DRIVER/Setup.exe',
-      actionLabel: 'Open',
       isAggressive: true,
     ),
     DirectoryLauncherTweak(
@@ -295,7 +300,6 @@ List<SystemTweak> createProgramToolTweaks() {
       category: 'Drivers & Installers',
       directorySegments: <String>['programmi', 'hwi_834'],
       launchExecutableRelativePath: 'HWiNFO64.EXE',
-      actionLabel: 'Open',
     ),
     DirectoryLauncherTweak(
       id: 'tool_nvidia_profile_inspector_folder',
@@ -304,7 +308,6 @@ List<SystemTweak> createProgramToolTweaks() {
       category: 'Drivers & Installers',
       directorySegments: <String>['programmi', 'nvidiaProfileInspector'],
       launchExecutableRelativePath: 'nvidiaProfileInspector.exe',
-      actionLabel: 'Open',
       isAggressive: true,
     ),
     ExplorerSelectFileTweak(
@@ -324,7 +327,6 @@ List<SystemTweak> createProgramToolTweaks() {
       category: 'Drivers & Installers',
       directorySegments: <String>['programmi', 'p95v3019b20.win64'],
       launchExecutableRelativePath: 'prime95.exe',
-      actionLabel: 'Open',
       isAggressive: true,
     ),
     DirectoryLauncherTweak(
@@ -334,7 +336,6 @@ List<SystemTweak> createProgramToolTweaks() {
       category: 'Drivers & Installers',
       directorySegments: <String>['programmi', 'TestMem5'],
       launchExecutableRelativePath: 'TM5.exe',
-      actionLabel: 'Open',
       isAggressive: true,
     ),
 
@@ -346,7 +347,6 @@ List<SystemTweak> createProgramToolTweaks() {
       category: 'Drivers & Installers',
       directorySegments: <String>['programmi', 'RAMMap'],
       launchExecutableRelativePath: 'RAMMap64.exe',
-      actionLabel: 'Open',
       isAggressive: true,
     ),
     DirectoryLauncherTweak(
@@ -356,7 +356,6 @@ List<SystemTweak> createProgramToolTweaks() {
       category: 'Drivers & Installers',
       directorySegments: <String>['programmi', 'DeviceCleanup'],
       launchExecutableRelativePath: 'DeviceCleanup.exe',
-      actionLabel: 'Open',
       isAggressive: true,
     ),
     DirectoryLauncherTweak(
@@ -366,7 +365,6 @@ List<SystemTweak> createProgramToolTweaks() {
       category: 'Drivers & Installers',
       directorySegments: <String>['programmi', 'DriverStoreExplorer-v1.0.26'],
       launchExecutableRelativePath: 'Rapr.exe',
-      actionLabel: 'Open',
       isAggressive: true,
     ),
     DirectoryLauncherTweak(
@@ -376,7 +374,6 @@ List<SystemTweak> createProgramToolTweaks() {
       category: 'Drivers & Installers',
       directorySegments: <String>['programmi', 'Dism++10.1.1002.1B'],
       launchExecutableRelativePath: 'Dism++x64.exe',
-      actionLabel: 'Open',
       isAggressive: true,
     ),
     DirectoryLauncherTweak(
@@ -387,7 +384,6 @@ List<SystemTweak> createProgramToolTweaks() {
       category: 'Drivers & Installers',
       directorySegments: <String>['programmi', 'cleanmgrplus'],
       launchExecutableRelativePath: 'Cleanmgr+.exe',
-      actionLabel: 'Open',
     ),
     ExecutableLauncherTweak(
       id: 'tool_gpu_dword_manager',
@@ -395,7 +391,6 @@ List<SystemTweak> createProgramToolTweaks() {
       description: 'GPU registry DWORD tuning utility.',
       category: 'Drivers & Installers',
       executableSegments: <String>['programmi', 'GPU_Dword_Manager.exe'],
-      actionLabel: 'Open',
       isAggressive: true,
     ),
     DirectoryLauncherTweak(
@@ -405,7 +400,6 @@ List<SystemTweak> createProgramToolTweaks() {
       category: 'Drivers & Installers',
       directorySegments: <String>['programmi', 'MSI_util_v3'],
       launchExecutableRelativePath: 'MSI_util_v3.exe',
-      actionLabel: 'Open',
       isAggressive: true,
     ),
     ExecutableLauncherTweak(
@@ -417,7 +411,6 @@ List<SystemTweak> createProgramToolTweaks() {
         'programmi',
         'PollingRateTesterApp_v1.00.01.exe',
       ],
-      actionLabel: 'Open',
     ),
     DirectoryLauncherTweak(
       id: 'tool_radeon_tuner_folder',
@@ -426,7 +419,6 @@ List<SystemTweak> createProgramToolTweaks() {
       category: 'Drivers & Installers',
       directorySegments: <String>['programmi', 'RadeonTuner'],
       launchExecutableRelativePath: 'RadeonTuner.exe',
-      actionLabel: 'Open',
       isAggressive: true,
     ),
     DirectoryLauncherTweak(
@@ -436,7 +428,6 @@ List<SystemTweak> createProgramToolTweaks() {
       category: 'Drivers & Installers',
       directorySegments: <String>['programmi', 'TCPOptimizer'],
       launchExecutableRelativePath: 'TCPOptimizer.exe',
-      actionLabel: 'Open',
       isAggressive: true,
     ),
     DirectoryLauncherTweak(
@@ -446,7 +437,6 @@ List<SystemTweak> createProgramToolTweaks() {
       category: 'Drivers & Installers',
       directorySegments: <String>['programmi', 'ViVeTool-v0.3.4-IntelAmd'],
       launchExecutableRelativePath: 'ViVeTool.exe',
-      actionLabel: 'Open',
       isAggressive: true,
     ),
     DirectoryLauncherTweak(
@@ -456,7 +446,20 @@ List<SystemTweak> createProgramToolTweaks() {
       category: 'Drivers & Installers',
       directorySegments: <String>['programmi', 'Star Ethernet Analyzer'],
       launchExecutableRelativePath: '2. StarTrinity.Installer.exe',
-      actionLabel: 'Open',
+    ),
+    ExplorerSelectFileTweak(
+      id: 'tool_star_ethernet_analyzer_video',
+      title: 'Star Ethernet Analyzer Video Guide',
+      description:
+          'Opens the bundled video guide with the default Windows app.',
+      category: 'Drivers & Installers',
+      fileSegments: <String>[
+        'programmi',
+        'Star Ethernet Analyzer',
+        '0. How_to_use.mp4',
+      ],
+      openWithDefaultApp: true,
+      actionLabel: 'Play Video',
     ),
     ScriptInteractiveTweak(
       id: 'tool_star_ethernet_analyzer_script',
@@ -468,7 +471,6 @@ List<SystemTweak> createProgramToolTweaks() {
         'Star Ethernet Analyzer',
         'StarAnalyzer_bam.ps1',
       ],
-      actionLabel: 'Run Script',
       isAggressive: true,
     ),
     BatchScriptTweak(
@@ -482,49 +484,6 @@ List<SystemTweak> createProgramToolTweaks() {
         'Star Ethernet Analyzer',
         '3. Start Analyzer here.bat',
       ],
-      actionLabel: 'Run Script',
-    ),
-
-    // User-provided external tools (graceful if absent)
-    DirectoryLauncherTweak(
-      id: 'tool_process_explorer_folder',
-      title: 'Process Explorer',
-      description: 'Microsoft Sysinternals advanced process inspector.',
-      category: 'Drivers & Installers',
-      directorySegments: <String>['programmi', 'ProcessExplorer'],
-      launchExecutableRelativePath: 'procexp64.exe',
-      actionLabel: 'Open',
-      isAggressive: true,
-    ),
-    DirectoryLauncherTweak(
-      id: 'tool_process_monitor_folder',
-      title: 'Process Monitor',
-      description: 'Microsoft Sysinternals realtime system activity monitor.',
-      category: 'Drivers & Installers',
-      directorySegments: <String>['programmi', 'ProcessMonitor'],
-      launchExecutableRelativePath: 'procmon64.exe',
-      actionLabel: 'Open',
-      isAggressive: true,
-    ),
-    DirectoryLauncherTweak(
-      id: 'tool_tcpview_folder',
-      title: 'TCPView',
-      description: 'Microsoft Sysinternals TCP/UDP endpoint monitor.',
-      category: 'Drivers & Installers',
-      directorySegments: <String>['programmi', 'TCPView'],
-      launchExecutableRelativePath: 'tcpview64.exe',
-      actionLabel: 'Open',
-      isAggressive: true,
-    ),
-    DirectoryLauncherTweak(
-      id: 'tool_latencymon_folder',
-      title: 'LatencyMon',
-      description: 'Realtime DPC/ISR latency analysis utility.',
-      category: 'Drivers & Installers',
-      directorySegments: <String>['programmi', 'LatencyMon'],
-      launchExecutableRelativePath: 'latencymon.exe',
-      actionLabel: 'Open',
-      isAggressive: true,
     ),
 
     // Newly added scripts and programs
@@ -534,7 +493,6 @@ List<SystemTweak> createProgramToolTweaks() {
       description: 'Realtek utility and diagnostics tool.',
       category: 'Drivers & Installers',
       executableSegments: <String>['programmi', 'RTL_Utility_1_0_12_x64.exe'],
-      actionLabel: 'Open',
       isAggressive: true,
     ),
     BatchScriptTweak(
@@ -543,7 +501,6 @@ List<SystemTweak> createProgramToolTweaks() {
       description: 'Runs the Fix Tools batch launcher menu.',
       category: 'Drivers & Installers',
       batchSegments: <String>['interactive_scripts', 'Fix Tools', 'run.bat'],
-      actionLabel: 'Run Script',
       isAggressive: true,
     ),
     ScriptInteractiveTweak(
@@ -556,7 +513,6 @@ List<SystemTweak> createProgramToolTweaks() {
         'Fix Tools',
         'BatteryReport.ps1',
       ],
-      actionLabel: 'Run Script',
     ),
     ScriptInteractiveTweak(
       id: 'tool_fix_tools_change_name',
@@ -568,7 +524,6 @@ List<SystemTweak> createProgramToolTweaks() {
         'Fix Tools',
         'Change Name.ps1',
       ],
-      actionLabel: 'Run Script',
     ),
     ScriptInteractiveTweak(
       id: 'tool_fix_tools_fastclean',
@@ -580,7 +535,6 @@ List<SystemTweak> createProgramToolTweaks() {
         'Fix Tools',
         'FastClean.ps1',
       ],
-      actionLabel: 'Run Script',
       isAggressive: true,
     ),
     ScriptInteractiveTweak(
@@ -593,7 +547,6 @@ List<SystemTweak> createProgramToolTweaks() {
         'Fix Tools',
         'Permessi.ps1',
       ],
-      actionLabel: 'Run Script',
       isAggressive: true,
     ),
     ScriptInteractiveTweak(
@@ -606,7 +559,6 @@ List<SystemTweak> createProgramToolTweaks() {
         'Fix Tools',
         'ResetNetwork.ps1',
       ],
-      actionLabel: 'Run Script',
       isAggressive: true,
     ),
     ScriptInteractiveTweak(
@@ -619,7 +571,6 @@ List<SystemTweak> createProgramToolTweaks() {
         'Fix Tools',
         'RipristinaAntemprime.ps1',
       ],
-      actionLabel: 'Run Script',
       isAggressive: true,
     ),
     ScriptInteractiveTweak(
@@ -632,7 +583,6 @@ List<SystemTweak> createProgramToolTweaks() {
         'Fix Tools',
         'SFC & DISM.ps1',
       ],
-      actionLabel: 'Run Script',
       isAggressive: true,
     ),
     ScriptInteractiveTweak(
@@ -644,7 +594,6 @@ List<SystemTweak> createProgramToolTweaks() {
         'interactive_scripts',
         'gaming_net_diagnostic.ps1',
       ],
-      actionLabel: 'Run Script',
       isAggressive: true,
     ),
   ];

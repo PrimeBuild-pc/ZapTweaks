@@ -1,5 +1,4 @@
 import '../core/registry_manager.dart';
-import '../core/services/process_runner.dart';
 import 'system_tweak.dart';
 
 List<SystemTweak> createUiVisualsTweaks() {
@@ -18,12 +17,6 @@ abstract class _UiVisualsTweak extends SystemTweak {
     required super.title,
     required super.description,
   }) : super(category: 'UI & Visuals');
-
-  Future<void> runSilentPowerShell(String script, {bool elevated = false}) =>
-      ProcessRunner.shared.runPowerShellScript(script, elevated: elevated);
-
-  Future<String> runPowerShellForOutput(String script) =>
-      ProcessRunner.shared.runPowerShellForOutput(script);
 }
 
 class StartMenuTaskbarCleanTweak extends _UiVisualsTweak {
@@ -56,7 +49,6 @@ class StartMenuTaskbarCleanTweak extends _UiVisualsTweak {
     await RegistryManager.writeDword(_searchKey, 'SearchboxTaskbarMode', 0);
     await RegistryManager.writeDword(_policiesExplorerKey, 'HideSCAMeetNow', 1);
     await RegistryManager.writeDword(_startKey, 'AllAppsViewMode', 2);
-    isApplied = true;
   }
 
   @override
@@ -71,26 +63,30 @@ cmd /c "reg delete \"HKCU\Software\Microsoft\Windows\CurrentVersion\Search\" /v 
 cmd /c "reg delete \"HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer\" /v \"HideSCAMeetNow\" /f >nul 2>&1"
 cmd /c "reg delete \"HKCU\Software\Microsoft\Windows\CurrentVersion\Start\" /v \"AllAppsViewMode\" /f >nul 2>&1"
 ''', elevated: true);
-    isApplied = false;
   }
 
   @override
   Future<bool> checkState() async {
-    final searchBox = await RegistryManager.readDword(
-      _searchKey,
-      'SearchboxTaskbarMode',
-    );
-    final taskbarMn = await RegistryManager.readDword(
-      _advancedKey,
-      'TaskbarMn',
-    );
-    final showTaskView = await RegistryManager.readDword(
-      _advancedKey,
-      'ShowTaskViewButton',
-    );
-
-    final applied = searchBox == 0 && taskbarMn == 0 && showTaskView == 0;
-    isApplied = applied;
+    final values = await Future.wait<int?>(<Future<int?>>[
+      RegistryManager.readDword(_windowsFeedsPolicyKey, 'EnableFeeds'),
+      RegistryManager.readDword(_advancedKey, 'TaskbarAl'),
+      RegistryManager.readDword(_advancedKey, 'ShowTaskViewButton'),
+      RegistryManager.readDword(_advancedKey, 'TaskbarMn'),
+      RegistryManager.readDword(_advancedKey, 'ShowCopilotButton'),
+      RegistryManager.readDword(_searchKey, 'SearchboxTaskbarMode'),
+      RegistryManager.readDword(_policiesExplorerKey, 'HideSCAMeetNow'),
+      RegistryManager.readDword(_startKey, 'AllAppsViewMode'),
+    ]);
+    final applied =
+        values.length == 8 &&
+        values[0] == 0 &&
+        values[1] == 0 &&
+        values[2] == 0 &&
+        values[3] == 0 &&
+        values[4] == 0 &&
+        values[5] == 0 &&
+        values[6] == 1 &&
+        values[7] == 2;
     return applied;
   }
 }
@@ -114,8 +110,6 @@ cmd /c "reg delete \"HKCR\*\shell\pintohomefile\" /f >nul 2>&1"
 cmd /c "reg add \"HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked\" /v \"{9F156763-7844-4DC4-B2B1-901F640F5155}\" /t REG_SZ /d \"\" /f >nul 2>&1"
 cmd /c "reg add \"HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked\" /v \"{09A47860-11B0-4DA5-AFA5-26D86198A780}\" /t REG_SZ /d \"\" /f >nul 2>&1"
 ''', elevated: true);
-
-    isApplied = await checkState();
   }
 
   @override
@@ -126,18 +120,22 @@ cmd /c "reg delete \"HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Exp
 cmd /c "reg delete \"HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked\" /v \"{9F156763-7844-4DC4-B2B1-901F640F5155}\" /f >nul 2>&1"
 cmd /c "reg delete \"HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked\" /v \"{09A47860-11B0-4DA5-AFA5-26D86198A780}\" /f >nul 2>&1"
 ''', elevated: true);
-
-    isApplied = await checkState();
   }
 
   @override
   Future<bool> checkState() async {
-    final output = (await runPowerShellForOutput(
-      r"if (Test-Path 'Registry::HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32') { 'true' } else { 'false' }",
-    )).toLowerCase();
+    final output = (await runPowerShellForOutput(r'''
+$classic = Test-Path -LiteralPath 'Registry::HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32'
+$policy = (Get-ItemProperty -LiteralPath 'Registry::HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer' -ErrorAction SilentlyContinue).NoCustomizeThisFolder -eq 1
+$pinFolderRemoved = -not (Test-Path -LiteralPath 'Registry::HKEY_CLASSES_ROOT\Folder\shell\pintohome')
+$pinFileRemoved = -not (Test-Path -LiteralPath 'Registry::HKEY_CLASSES_ROOT\*\shell\pintohomefile')
+$blocked = Get-ItemProperty 'Registry::HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked' -ErrorAction SilentlyContinue
+$blockedOne = $null -ne $blocked.'{9F156763-7844-4DC4-B2B1-901F640F5155}'
+$blockedTwo = $null -ne $blocked.'{09A47860-11B0-4DA5-AFA5-26D86198A780}'
+$classic -and $policy -and $pinFolderRemoved -and $pinFileRemoved -and $blockedOne -and $blockedTwo
+''')).toLowerCase();
 
-    final applied = output.contains('true');
-    isApplied = applied;
+    final applied = output.trim() == 'true';
     return applied;
   }
 }
@@ -179,7 +177,6 @@ class DarkThemeTweak extends SystemTweak {
       'AppsUseLightTheme',
       0,
     );
-    isApplied = true;
   }
 
   @override
@@ -210,8 +207,6 @@ class DarkThemeTweak extends SystemTweak {
         'AppsUseLightTheme',
       );
     }
-
-    isApplied = false;
   }
 
   @override
@@ -231,7 +226,6 @@ class DarkThemeTweak extends SystemTweak {
 
     final applied =
         appsLightTheme == 0 && systemLightTheme == 0 && transparency == 0;
-    isApplied = applied;
     return applied;
   }
 }
@@ -253,7 +247,6 @@ class PointerPrecisionOffTweak extends SystemTweak {
     await RegistryManager.writeString(_mouseKey, 'MouseSpeed', '0');
     await RegistryManager.writeString(_mouseKey, 'MouseThreshold1', '0');
     await RegistryManager.writeString(_mouseKey, 'MouseThreshold2', '0');
-    isApplied = true;
   }
 
   @override
@@ -261,7 +254,6 @@ class PointerPrecisionOffTweak extends SystemTweak {
     await RegistryManager.writeString(_mouseKey, 'MouseSpeed', '1');
     await RegistryManager.writeString(_mouseKey, 'MouseThreshold1', '6');
     await RegistryManager.writeString(_mouseKey, 'MouseThreshold2', '10');
-    isApplied = false;
   }
 
   @override
@@ -280,7 +272,6 @@ class PointerPrecisionOffTweak extends SystemTweak {
     );
 
     final applied = mouseSpeed == '0' && threshold1 == '0' && threshold2 == '0';
-    isApplied = applied;
     return applied;
   }
 }
@@ -301,7 +292,6 @@ class BackgroundAppsOffTweak extends SystemTweak {
   @override
   Future<void> onApply() async {
     await RegistryManager.writeDword(_policyKey, 'LetAppsRunInBackground', 2);
-    isApplied = true;
   }
 
   @override
@@ -313,7 +303,6 @@ class BackgroundAppsOffTweak extends SystemTweak {
     if (current != null) {
       await RegistryManager.deleteValue(_policyKey, 'LetAppsRunInBackground');
     }
-    isApplied = false;
   }
 
   @override
@@ -323,7 +312,6 @@ class BackgroundAppsOffTweak extends SystemTweak {
       'LetAppsRunInBackground',
     );
     final applied = current == 2;
-    isApplied = applied;
     return applied;
   }
 }

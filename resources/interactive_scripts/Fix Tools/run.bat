@@ -81,14 +81,14 @@ echo %choices% | findstr /C:"5" >nul
 if %errorlevel%==0 (
     echo.
     echo [*] Esecuzione: SFC e DISM...
-    powershell -NoProfile -ExecutionPolicy Bypass -File "SFC___DISM.ps1"
+    powershell -NoProfile -ExecutionPolicy Bypass -File "SFC & DISM.ps1"
 )
 
 echo %choices% | findstr /C:"6" >nul
 if %errorlevel%==0 (
     echo.
     echo [*] Esecuzione: Cambia Nome...
-    powershell -NoProfile -ExecutionPolicy Bypass -File "Change_Name.ps1"
+    powershell -NoProfile -ExecutionPolicy Bypass -File "Change Name.ps1"
 )
 
 echo %choices% | findstr /C:"7" >nul

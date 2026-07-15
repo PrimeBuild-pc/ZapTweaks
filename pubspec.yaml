@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.4.1
+version: 1.5.0
 
 environment:
   sdk: ^3.10.4
@@ -39,7 +39,6 @@ dependencies:
   bitsdojo_window: ^0.1.6
   shared_preferences: ^2.2.2
   http: ^1.2.2
-  url_launcher: ^6.3.1
   system_theme: ^3.2.0
 
 dev_dependencies:
@@ -59,28 +58,8 @@ dev_dependencies:
 # The following section is specific to Flutter packages.
 flutter:
 
-  # The following line ensures that the Material Icons font is
-  # included with your application, so that you can use the icons in
-  # the material Icons class.
+  # Required by fluent_ui for its icon font dependencies.
   uses-material-design: true
-
-  # To add assets to your application, add an assets section, like this:
-  assets:
-    - resources/interactive_scripts/
-    - resources/Powerplans/
-    - resources/winscript.bat
-    - resources/minimal_services.reg
-    - resources/disable_advanced_services.reg
-    - resources/nvidia-performance-settings.nip
-    - resources/programmi/
-    # Production icon placeholder (replace with final brand asset)
-    - windows/runner/resources/app_icon.ico
-
-  # An image asset can refer to one or more resolution-specific "variants", see
-  # https://flutter.dev/to/resolution-aware-images
-
-  # For details regarding adding assets from package dependencies, see
-  # https://flutter.dev/to/asset-from-package
 
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
