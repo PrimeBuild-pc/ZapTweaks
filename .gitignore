@@ -1,5 +1,5 @@
 # Miscellaneous
-.AGENTS.md
+/AGENTS.md
 *.class
 *.log
 *.pyc
@@ -53,14 +53,6 @@ app.*.map.json
 
 # Windows Build Output
 /windows/flutter/ephemeral/
-
-# Installer Output
-/installer_output/*.zip
-/installer_output/*.exe
-
-# Build scripts output
-*.ps1.log
-*.py.log
 
 # Local configuration
 *.local

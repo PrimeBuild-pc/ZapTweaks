@@ -1,18 +1,18 @@
-# ZapTweaks
-
-[![Release](https://img.shields.io/github/v/release/PrimeBuild-pc/ZapTweaks?label=release)](https://github.com/PrimeBuild-pc/ZapTweaks/releases/latest)
-[![CI](https://github.com/PrimeBuild-pc/ZapTweaks/actions/workflows/flutter-ci.yml/badge.svg)](https://github.com/PrimeBuild-pc/ZapTweaks/actions/workflows/flutter-ci.yml)
-[![Downloads](https://img.shields.io/github/downloads/PrimeBuild-pc/ZapTweaks/total?color=success)](https://github.com/PrimeBuild-pc/ZapTweaks/releases/latest)
-[![Codecov](https://codecov.io/gh/PrimeBuild-pc/ZapTweaks/branch/main/graph/badge.svg)](https://codecov.io/gh/PrimeBuild-pc/ZapTweaks)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-
-**ZapTweaks is an advanced Windows 11 optimization and diagnostics companion.**
+<div align="center">
+  <h1>⚡ ZapTweaks</h1>
+  <p><strong>Advanced Windows 11 optimization and diagnostics companion.</strong></p>
+  <p>
+    <a href="https://github.com/PrimeBuild-pc/ZapTweaks/releases/latest"><img alt="Latest release" src="https://img.shields.io/github/v/release/PrimeBuild-pc/ZapTweaks?label=release"></a>
+    <a href="https://github.com/PrimeBuild-pc/ZapTweaks/releases/latest"><img alt="Latest release downloads" src="https://img.shields.io/github/downloads/PrimeBuild-pc/ZapTweaks/latest/total?label=downloads%40latest&color=success"></a>
+    <a href="https://github.com/PrimeBuild-pc/ZapTweaks/actions/workflows/flutter-ci.yml"><img alt="Flutter CI" src="https://github.com/PrimeBuild-pc/ZapTweaks/actions/workflows/flutter-ci.yml/badge.svg"></a>
+    <a href="https://codecov.io/gh/PrimeBuild-pc/ZapTweaks"><img alt="Codecov" src="https://img.shields.io/codecov/c/github/PrimeBuild-pc/ZapTweaks?label=coverage"></a>
+    <a href="LICENSE"><img alt="MIT License" src="https://img.shields.io/github/license/PrimeBuild-pc/ZapTweaks"></a>
+  </p>
+</div>
 
 It is not intended to replace common baseline tools such as [CTT WinUtil](https://github.com/ChrisTitusTech/winutil) or [Winhance](https://github.com/memstechtips/Winhance). Use those for broad setup and debloating, then use ZapTweaks for deeper gaming, latency, hardware, networking, graphics, power, diagnostics, and recovery workflows. Both companion tools can be launched or installed from ZapTweaks itself.
 
 <img width="1400" height="956" alt="ZapTweaks" src="https://github.com/user-attachments/assets/c4c6ca99-89f4-41d7-bce8-40a8f1512e2e" />
-
-Current version: **v1.5.0**
 
 ## Highlights
 
