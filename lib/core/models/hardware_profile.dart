@@ -7,6 +7,7 @@ class HardwareProfile {
     required this.ramInstalledBytes,
     required this.networkAdapters,
     required this.audioDevices,
+    this.windowsBuild = 0,
   });
 
   final String cpuName;
@@ -16,6 +17,7 @@ class HardwareProfile {
   final int ramInstalledBytes;
   final List<String> networkAdapters;
   final List<String> audioDevices;
+  final int windowsBuild;
 
   static const HardwareProfile unknown = HardwareProfile(
     cpuName: 'Unknown CPU',
@@ -25,6 +27,7 @@ class HardwareProfile {
     ramInstalledBytes: 0,
     networkAdapters: <String>[],
     audioDevices: <String>[],
+    windowsBuild: 0,
   );
 
   double get ramInstalledGb => ramInstalledBytes / (1024 * 1024 * 1024);

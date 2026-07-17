@@ -6,6 +6,7 @@ List<SystemTweak> createNetworkingTweaks() {
   return <SystemTweak>[
     NetworkAdapterPowerSavingsTweak(),
     NetworkIpv4OnlyTweak(),
+    PreferIpv4Tweak(),
     NetworkThrottlingIndexTweak(),
     NetworkMmAgentTweak(),
     NetworkLowLatencyBandwidthProfileTweak(),
@@ -165,6 +166,7 @@ abstract class _NetworkingSystemTweak extends SystemTweak {
     required super.title,
     required super.description,
     bool aggressive = false,
+    super.conflictingTweakIds,
   }) : super(category: 'Networking', isAggressive: aggressive);
 }
 
@@ -286,6 +288,7 @@ class NetworkIpv4OnlyTweak extends _NetworkingSystemTweak {
         description:
             'Disables non-essential adapter bindings and keeps IPv4 enabled on all adapters.',
         aggressive: true,
+        conflictingTweakIds: const <String>{'network_prefer_ipv4'},
       );
 
   static const List<String> _disableBindings = <String>[
@@ -378,6 +381,70 @@ Write-Output 'true'
 
     final applied = result.contains('true');
     return applied;
+  }
+}
+
+class PreferIpv4Tweak extends _NetworkingSystemTweak {
+  PreferIpv4Tweak()
+    : super(
+        id: 'network_prefer_ipv4',
+        title: 'Prefer IPv4 over IPv6',
+        description:
+            'Keeps IPv6 enabled but gives IPv4 precedence. Cannot be combined with IPv4 Only Bindings.',
+        conflictingTweakIds: const <String>{'network_ipv4_only'},
+      );
+
+  static const String _tcpip6Parameters =
+      r'HKLM\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters';
+  static const int _preferIpv4Mask = 0x20;
+
+  @override
+  Future<void> onApply() async {
+    final current =
+        await RegistryManager.readDword(
+          _tcpip6Parameters,
+          'DisabledComponents',
+        ) ??
+        0;
+    await RegistryManager.writeDword(
+      _tcpip6Parameters,
+      'DisabledComponents',
+      current | _preferIpv4Mask,
+    );
+  }
+
+  @override
+  Future<void> onRevert() async {
+    final current = await RegistryManager.readDword(
+      _tcpip6Parameters,
+      'DisabledComponents',
+    );
+    if (current == null) {
+      return;
+    }
+
+    final restored = current & ~_preferIpv4Mask;
+    if (restored == 0) {
+      await RegistryManager.deleteValue(
+        _tcpip6Parameters,
+        'DisabledComponents',
+      );
+    } else {
+      await RegistryManager.writeDword(
+        _tcpip6Parameters,
+        'DisabledComponents',
+        restored,
+      );
+    }
+  }
+
+  @override
+  Future<bool> checkState() async {
+    final current = await RegistryManager.readDword(
+      _tcpip6Parameters,
+      'DisabledComponents',
+    );
+    return current != null && (current & _preferIpv4Mask) != 0;
   }
 }
 

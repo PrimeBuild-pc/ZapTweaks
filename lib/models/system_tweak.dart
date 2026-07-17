@@ -16,6 +16,8 @@ abstract class SystemTweak {
     this.isAggressive = false,
     this.warningMessage,
     this.requiredCpuVendor,
+    this.minimumWindowsBuild,
+    this.conflictingTweakIds = const <String>{},
   });
 
   final String id;
@@ -27,6 +29,8 @@ abstract class SystemTweak {
   final bool isAggressive;
   final String? warningMessage;
   final String? requiredCpuVendor;
+  final int? minimumWindowsBuild;
+  final Set<String> conflictingTweakIds;
   bool isApplied;
 
   bool get hasState => type == TweakUiType.toggle;
@@ -56,6 +60,8 @@ abstract class ActionSystemTweak extends SystemTweak {
     super.isAggressive,
     super.warningMessage,
     super.requiredCpuVendor,
+    super.minimumWindowsBuild,
+    super.conflictingTweakIds,
   });
 
   @override

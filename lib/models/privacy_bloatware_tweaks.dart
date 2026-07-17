@@ -4,6 +4,8 @@ import 'system_tweak.dart';
 List<SystemTweak> createPrivacyBloatwareTweaks() {
   return <SystemTweak>[
     ConsumerContentPrivacyTweak(),
+    OnlineSearchSuggestionsTweak(),
+    PowerShellTelemetryTweak(),
     WidgetsTweak(),
     CopilotTweak(),
     GameBarTweak(),
@@ -28,7 +30,7 @@ class ConsumerContentPrivacyTweak extends SystemTweak {
         id: 'privacy_consumer_content',
         title: 'Consumer Content and Auto-App Suggestions',
         description:
-            'Disables Windows consumer content suggestions and silent preinstalled app pushes.',
+            'Disables Start recommendations, consumer content suggestions, and silent preinstalled app pushes.',
         category: 'Privacy & Bloatware',
       );
 
@@ -36,6 +38,8 @@ class ConsumerContentPrivacyTweak extends SystemTweak {
       r'HKLM\SOFTWARE\Policies\Microsoft\Windows\CloudContent';
   static const String _contentDeliveryKey =
       r'HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager';
+  static const String _explorerAdvancedKey =
+      r'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced';
 
   @override
   Future<void> onApply() async {
@@ -52,6 +56,11 @@ class ConsumerContentPrivacyTweak extends SystemTweak {
     await RegistryManager.writeDword(
       _contentDeliveryKey,
       'PreInstalledAppsEnabled',
+      0,
+    );
+    await RegistryManager.writeDword(
+      _explorerAdvancedKey,
+      'Start_IrisRecommendations',
       0,
     );
   }
@@ -73,6 +82,11 @@ class ConsumerContentPrivacyTweak extends SystemTweak {
       'PreInstalledAppsEnabled',
       1,
     );
+    await RegistryManager.writeDword(
+      _explorerAdvancedKey,
+      'Start_IrisRecommendations',
+      1,
+    );
   }
 
   @override
@@ -89,11 +103,83 @@ class ConsumerContentPrivacyTweak extends SystemTweak {
       _contentDeliveryKey,
       'PreInstalledAppsEnabled',
     );
+    final startRecommendations = await RegistryManager.readDword(
+      _explorerAdvancedKey,
+      'Start_IrisRecommendations',
+    );
 
-    final applied =
-        disableConsumer == 1 && silentInstall == 0 && preInstalled == 0;
-    return applied;
+    return disableConsumer == 1 &&
+        silentInstall == 0 &&
+        preInstalled == 0 &&
+        startRecommendations == 0;
   }
+}
+
+class OnlineSearchSuggestionsTweak extends _PrivacyBloatwareSystemTweak {
+  OnlineSearchSuggestionsTweak()
+    : super(
+        id: 'privacy_online_search_suggestions',
+        title: 'Online Search Suggestions Off',
+        description:
+            'Disables web-powered suggestions in Windows search without disabling local search.',
+      );
+
+  static const String _explorerPolicyKey =
+      r'HKCU\Software\Policies\Microsoft\Windows\Explorer';
+
+  @override
+  Future<void> onApply() => RegistryManager.writeDword(
+    _explorerPolicyKey,
+    'DisableSearchBoxSuggestions',
+    1,
+  );
+
+  @override
+  Future<void> onRevert() => RegistryManager.deleteValue(
+    _explorerPolicyKey,
+    'DisableSearchBoxSuggestions',
+  );
+
+  @override
+  Future<bool> checkState() async =>
+      await RegistryManager.readDword(
+        _explorerPolicyKey,
+        'DisableSearchBoxSuggestions',
+      ) ==
+      1;
+}
+
+class PowerShellTelemetryTweak extends _PrivacyBloatwareSystemTweak {
+  PowerShellTelemetryTweak()
+    : super(
+        id: 'privacy_powershell_telemetry',
+        title: 'PowerShell 7 Telemetry Off',
+        description:
+            'Opts new PowerShell 7 processes out of application telemetry. A restart is required.',
+      );
+
+  static const String _environmentKey = r'HKCU\Environment';
+
+  @override
+  Future<void> onApply() => RegistryManager.writeString(
+    _environmentKey,
+    'POWERSHELL_TELEMETRY_OPTOUT',
+    '1',
+  );
+
+  @override
+  Future<void> onRevert() => RegistryManager.deleteValue(
+    _environmentKey,
+    'POWERSHELL_TELEMETRY_OPTOUT',
+  );
+
+  @override
+  Future<bool> checkState() async =>
+      await RegistryManager.readString(
+        _environmentKey,
+        'POWERSHELL_TELEMETRY_OPTOUT',
+      ) ==
+      '1';
 }
 
 class WidgetsTweak extends _PrivacyBloatwareSystemTweak {

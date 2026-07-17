@@ -4,6 +4,9 @@ import 'system_tweak.dart';
 List<SystemTweak> createUiVisualsTweaks() {
   return <SystemTweak>[
     StartMenuTaskbarCleanTweak(),
+    FolderDiscoveryOffTweak(),
+    TaskbarEndTaskTweak(),
+    HideExplorerGalleryTweak(),
     ContextMenuCleanTweak(),
     DarkThemeTweak(),
     PointerPrecisionOffTweak(),
@@ -89,6 +92,98 @@ cmd /c "reg delete \"HKCU\Software\Microsoft\Windows\CurrentVersion\Start\" /v \
         values[7] == 2;
     return applied;
   }
+}
+
+class FolderDiscoveryOffTweak extends _UiVisualsTweak {
+  FolderDiscoveryOffTweak()
+    : super(
+        id: 'ui_folder_discovery_off',
+        title: 'Folder Type Discovery Off',
+        description:
+            'Prevents Explorer from auto-detecting folder templates, which can speed up large media folders.',
+      );
+
+  static const String _shellBagsKey =
+      r'HKCU\Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\Bags\AllFolders\Shell';
+
+  @override
+  Future<void> onApply() =>
+      RegistryManager.writeString(_shellBagsKey, 'FolderType', 'NotSpecified');
+
+  @override
+  Future<void> onRevert() =>
+      RegistryManager.deleteValue(_shellBagsKey, 'FolderType');
+
+  @override
+  Future<bool> checkState() async =>
+      await RegistryManager.readString(_shellBagsKey, 'FolderType') ==
+      'NotSpecified';
+}
+
+class TaskbarEndTaskTweak extends SystemTweak {
+  TaskbarEndTaskTweak()
+    : super(
+        id: 'ui_taskbar_end_task',
+        title: 'Taskbar End Task',
+        description:
+            'Adds End task to taskbar app context menus on supported Windows 11 builds.',
+        category: 'UI & Visuals',
+        minimumWindowsBuild: 22631,
+      );
+
+  static const String _developerSettingsKey =
+      r'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings';
+
+  @override
+  Future<void> onApply() =>
+      RegistryManager.writeDword(_developerSettingsKey, 'TaskbarEndTask', 1);
+
+  @override
+  Future<void> onRevert() =>
+      RegistryManager.deleteValue(_developerSettingsKey, 'TaskbarEndTask');
+
+  @override
+  Future<bool> checkState() async =>
+      await RegistryManager.readDword(
+        _developerSettingsKey,
+        'TaskbarEndTask',
+      ) ==
+      1;
+}
+
+class HideExplorerGalleryTweak extends SystemTweak {
+  HideExplorerGalleryTweak()
+    : super(
+        id: 'ui_hide_explorer_gallery',
+        title: 'Hide File Explorer Gallery',
+        description: 'Hides the Gallery navigation item from File Explorer.',
+        category: 'UI & Visuals',
+        minimumWindowsBuild: 22631,
+      );
+
+  static const String _galleryKey =
+      r'HKCU\Software\Classes\CLSID\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}';
+
+  @override
+  Future<void> onApply() => RegistryManager.writeDword(
+    _galleryKey,
+    'System.IsPinnedToNameSpaceTree',
+    0,
+  );
+
+  @override
+  Future<void> onRevert() => RegistryManager.deleteValue(
+    _galleryKey,
+    'System.IsPinnedToNameSpaceTree',
+  );
+
+  @override
+  Future<bool> checkState() async =>
+      await RegistryManager.readDword(
+        _galleryKey,
+        'System.IsPinnedToNameSpaceTree',
+      ) ==
+      0;
 }
 
 class ContextMenuCleanTweak extends _UiVisualsTweak {

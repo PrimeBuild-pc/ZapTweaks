@@ -16,6 +16,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 $cpu = Get-CimInstance Win32_Processor | Select-Object -First 1
 $gpus = @(Get-CimInstance Win32_VideoController | ForEach-Object { $_.Name })
 $computer = Get-CimInstance Win32_ComputerSystem | Select-Object -First 1
+$os = Get-CimInstance Win32_OperatingSystem | Select-Object -First 1
 $audio = @(Get-CimInstance Win32_SoundDevice | ForEach-Object { $_.Name })
 
 $network = @(Get-NetAdapter | Where-Object { $_.Status -eq 'Up' } | ForEach-Object {
@@ -63,6 +64,7 @@ if ($network.Count -eq 0) {
   ramInstalledBytes = if ($computer.TotalPhysicalMemory) { [uint64]$computer.TotalPhysicalMemory } else { 0 }
   networkAdapters = $network
   audioDevices = $audio
+  windowsBuild = if ($os.BuildNumber) { [int]$os.BuildNumber } else { 0 }
 } | ConvertTo-Json -Compress -Depth 3
 ''';
 
@@ -118,6 +120,7 @@ if ($network.Count -eq 0) {
         ramInstalledBytes: (decoded['ramInstalledBytes'] as num?)?.toInt() ?? 0,
         networkAdapters: _strings(decoded['networkAdapters']),
         audioDevices: _strings(decoded['audioDevices']),
+        windowsBuild: (decoded['windowsBuild'] as num?)?.toInt() ?? 0,
       );
     } catch (_) {
       return HardwareProfile.unknown;

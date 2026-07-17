@@ -45,6 +45,35 @@ void main() {
     expect(byId, isNot(contains('power_min_processor_state')));
   });
 
+  test('new privacy, shell, and network toggles are catalogued safely', () {
+    final byId = {
+      for (final descriptor in TweakCatalogService().buildCatalog())
+        descriptor.id: descriptor,
+    };
+
+    for (final id in <String>[
+      'privacy_online_search_suggestions',
+      'privacy_powershell_telemetry',
+      'network_prefer_ipv4',
+      'ui_folder_discovery_off',
+      'ui_taskbar_end_task',
+      'ui_hide_explorer_gallery',
+    ]) {
+      expect(byId, contains(id), reason: id);
+    }
+
+    expect(
+      byId['network_prefer_ipv4']!.conflictingTweakIds,
+      contains('network_ipv4_only'),
+    );
+    expect(
+      byId['network_ipv4_only']!.conflictingTweakIds,
+      contains('network_prefer_ipv4'),
+    );
+    expect(byId['ui_taskbar_end_task']!.minimumWindowsBuild, 22631);
+    expect(byId['ui_hide_explorer_gallery']!.minimumWindowsBuild, 22631);
+  });
+
   test('compact recovered script table preserves every action', () {
     final tweaks = createRecoveredScriptTweaks();
 

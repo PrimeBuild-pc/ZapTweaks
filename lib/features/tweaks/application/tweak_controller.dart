@@ -280,8 +280,39 @@ class TweakController extends ChangeNotifier {
   }
 
   bool isDescriptorAvailable(TweakDescriptor descriptor) {
-    return _hardwareProfile.supportsCpu(descriptor.requiredCpuVendor) &&
-        _hardwareProfile.supportsAnyGpu(descriptor.requiredGpuVendors);
+    if (_isDescriptorEnabled(descriptor)) {
+      return true;
+    }
+
+    final minimumBuild = descriptor.minimumWindowsBuild;
+    final supported =
+        _hardwareProfile.supportsCpu(descriptor.requiredCpuVendor) &&
+        _hardwareProfile.supportsAnyGpu(descriptor.requiredGpuVendors) &&
+        (minimumBuild == null || _hardwareProfile.windowsBuild >= minimumBuild);
+    if (!supported) {
+      return false;
+    }
+
+    return _activeConflicts(descriptor).isEmpty;
+  }
+
+  bool _isDescriptorEnabled(TweakDescriptor descriptor) =>
+      descriptor.isSystemToggle
+      ? (_toggleStates[descriptor.id] ?? false)
+      : (descriptor.scriptTweak?.isApplied ?? false);
+
+  List<TweakDescriptor> _activeConflicts(TweakDescriptor descriptor) {
+    if (descriptor.conflictingTweakIds.isEmpty) {
+      return const <TweakDescriptor>[];
+    }
+
+    return _catalog
+        .where(
+          (candidate) =>
+              descriptor.conflictingTweakIds.contains(candidate.id) &&
+              _isDescriptorEnabled(candidate),
+        )
+        .toList(growable: false);
   }
 
   String availabilityHint(TweakDescriptor descriptor) {
@@ -293,6 +324,16 @@ class TweakController extends ChangeNotifier {
     if (descriptor.requiredGpuVendors.isNotEmpty &&
         !_hardwareProfile.supportsAnyGpu(descriptor.requiredGpuVendors)) {
       return 'No compatible GPU detected for this tweak.';
+    }
+
+    final minimumBuild = descriptor.minimumWindowsBuild;
+    if (minimumBuild != null && _hardwareProfile.windowsBuild < minimumBuild) {
+      return 'Requires Windows build $minimumBuild or newer.';
+    }
+
+    final conflicts = _activeConflicts(descriptor);
+    if (conflicts.isNotEmpty) {
+      return 'Disable ${conflicts.map((item) => item.title).join(', ')} first.';
     }
 
     return 'Unavailable for current hardware.';
@@ -330,6 +371,12 @@ class TweakController extends ChangeNotifier {
     TweakDescriptor descriptor,
     bool nextValue,
   ) async {
+    if (nextValue && !isDescriptorAvailable(descriptor)) {
+      return OperationResult(
+        success: false,
+        message: availabilityHint(descriptor),
+      );
+    }
     if (_busyTweaks.contains(descriptor.id) || _isSystemOperationActive) {
       return const OperationResult(
         success: false,
@@ -413,6 +460,13 @@ class TweakController extends ChangeNotifier {
     bool? target,
   }) async {
     final tweak = descriptor.scriptTweak!;
+    final desiredState = tweak.hasState ? target ?? !tweak.isApplied : null;
+    if (desiredState == true && !isDescriptorAvailable(descriptor)) {
+      return OperationResult(
+        success: false,
+        message: availabilityHint(descriptor),
+      );
+    }
     if (_busyTweaks.contains(descriptor.id)) {
       return const OperationResult(success: false, message: 'Tweak is busy.');
     }
@@ -421,8 +475,7 @@ class TweakController extends ChangeNotifier {
     try {
       if (tweak.hasState) {
         final previous = tweak.isApplied;
-        final desiredState = target ?? !previous;
-        if (desiredState) {
+        if (desiredState!) {
           await tweak.onApply();
         } else {
           await tweak.onRevert();
@@ -550,6 +603,9 @@ class TweakController extends ChangeNotifier {
       final applied = <String>[];
       for (final descriptor in descriptors) {
         final target = shouldEnablePreset(preset, descriptor);
+        if (target && !isDescriptorAvailable(descriptor)) {
+          continue;
+        }
         final result = descriptor.isSystemToggle
             ? await _setSystemTweak(descriptor, target)
             : await _runScriptTweak(descriptor, target: target);

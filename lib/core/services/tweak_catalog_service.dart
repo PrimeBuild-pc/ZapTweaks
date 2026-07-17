@@ -48,6 +48,12 @@ class TweakCatalogService {
     'game_mode',
     'power_disable_dynamic_tick',
     'power_tsc_sync_policy',
+    'network_prefer_ipv4',
+    'privacy_online_search_suggestions',
+    'privacy_powershell_telemetry',
+    'ui_folder_discovery_off',
+    'ui_taskbar_end_task',
+    'ui_hide_explorer_gallery',
   };
 
   /// Builds the complete tweak catalog sorted by category, tweak type, and title.
@@ -348,6 +354,8 @@ class TweakCatalogService {
             isAggressive: tweak.isAggressive,
             restartRequired: restartRequiredSystemTweaks.contains(tweak.id),
             requiredCpuVendor: tweak.requiredCpuVendor,
+            minimumWindowsBuild: tweak.minimumWindowsBuild,
+            conflictingTweakIds: tweak.conflictingTweakIds,
             scriptTweak: tweak,
           ),
         )

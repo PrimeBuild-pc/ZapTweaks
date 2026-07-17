@@ -10,6 +10,8 @@ class TweakDescriptor {
     this.restartRequired = false,
     this.requiredCpuVendor,
     this.requiredGpuVendors = const <String>{},
+    this.minimumWindowsBuild,
+    this.conflictingTweakIds = const <String>{},
     this.systemKey,
     this.scriptTweak,
   });
@@ -22,6 +24,8 @@ class TweakDescriptor {
   final bool restartRequired;
   final String? requiredCpuVendor;
   final Set<String> requiredGpuVendors;
+  final int? minimumWindowsBuild;
+  final Set<String> conflictingTweakIds;
   final String? systemKey;
   final SystemTweak? scriptTweak;
 
