@@ -40,18 +40,20 @@ void main() {
 
       expect(catalog.map((item) => item.id).toSet(), hasLength(catalog.length));
       expect(categoryTotals, <String, int>{
-        'Gaming': 18,
-        'Networking': 12,
+        'Shortcuts': 29,
+        'Gaming': 20,
+        'Networking': 15,
         'Power & CPU': 16,
         'Graphics': 13,
-        'Windows': 39,
-        'System Checks': 15,
-        'Refresh & Recovery': 7,
+        'Windows': 45,
+        'System Checks': 18,
+        'Services': 31,
+        'Refresh & Recovery': 24,
         'Setup': 12,
         'Advanced': 23,
-        'Privacy': 10,
-        'Visuals': 12,
-        'Tools': 69,
+        'Privacy': 12,
+        'Visuals': 14,
+        'Tools': 70,
       });
     },
   );

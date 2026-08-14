@@ -7,6 +7,7 @@ import '../../models/power_cpu_tweaks.dart';
 import '../../models/privacy_bloatware_tweaks.dart';
 import '../../models/program_tools_tweaks.dart';
 import '../../models/recovered_script_tweaks.dart';
+import '../../models/reference_tweaks.dart';
 import '../../models/system_checks_tweaks.dart';
 import '../../models/system_tweak.dart';
 import '../../models/ui_visuals_tweaks.dart';
@@ -14,12 +15,14 @@ import '../../models/ui_visuals_tweaks.dart';
 class TweakCatalogService {
   static const List<String> navigationCategories = <String>[
     'Home',
+    'Shortcuts',
     'Gaming',
     'Networking',
     'Power & CPU',
     'Graphics',
     'Windows',
     'System Checks',
+    'Services',
     'Refresh & Recovery',
     'Setup',
     'Advanced',
@@ -55,6 +58,12 @@ class TweakCatalogService {
     'ui_folder_discovery_off',
     'ui_taskbar_end_task',
     'ui_hide_explorer_gallery',
+    'gaming_extended_gpu_timeout',
+    'checks_vbs_off',
+    'checks_vulnerable_driver_blocklist_off',
+    'network_llmnr_off',
+    'network_fast_udp_datagram_send',
+    'toggle_automatic_driver_updates_off',
   };
 
   /// Builds the complete tweak catalog sorted by category, tweak type, and title.
@@ -336,6 +345,7 @@ class TweakCatalogService {
     final tweaks = <SystemTweak>[
       ...createCheckTweaks(),
       ...createRecoveredScriptTweaks(),
+      ...createReferenceTweaks(),
       ...createSystemChecksTweaks(),
       ...createPowerCpuTweaks(),
       ...createPrivacyBloatwareTweaks(),
@@ -367,20 +377,29 @@ class TweakCatalogService {
 
   String _mapToNavigationCategory(String sourceCategory) {
     switch (sourceCategory) {
-      case 'Networking':
-        return 'Networking';
-      case 'Privacy & Bloatware':
-        return 'Privacy';
-      case 'UI & Visuals':
-        return 'Visuals';
+      case 'Shortcuts':
+        return 'Shortcuts';
+      case 'Gaming':
       case 'Gaming Optimizations':
         return 'Gaming';
+      case 'Networking':
+        return 'Networking';
+      case 'Privacy':
+      case 'Privacy & Bloatware':
+        return 'Privacy';
+      case 'Visuals':
+      case 'UI & Visuals':
+        return 'Visuals';
       case 'Graphics Scripts':
         return 'Graphics';
       case 'Power & CPU':
         return 'Power & CPU';
       case 'System Checks':
         return 'System Checks';
+      case 'Windows':
+        return 'Windows';
+      case 'Services':
+        return 'Services';
       case 'Refresh & Recovery':
         return 'Refresh & Recovery';
       case 'Setup Scripts':

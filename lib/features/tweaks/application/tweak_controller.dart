@@ -1,6 +1,9 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/foundation.dart';
+import 'package:path/path.dart' as path;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../core/models/hardware_profile.dart';
@@ -77,6 +80,7 @@ class TweakController extends ChangeNotifier {
   static const String _automaticUpdateChecksKey = 'automaticUpdateChecks';
   static const String _lastSelectedPresetPrefix = 'preset:';
   static const String _localeCodeKey = AppLocaleService.preferenceKey;
+  static const String _startWithWindowsKey = 'startWithWindows';
   static const int _maxMetricsPoints = 40;
   static const Set<String> _interactionLockingTweaks = <String>{
     'network_low_latency_bandwidth_profile',
@@ -96,6 +100,7 @@ class TweakController extends ChangeNotifier {
   bool _isSamplingMetrics = false;
   bool _isSystemOperationActive = false;
   bool _automaticUpdateChecksEnabled = true;
+  bool _startWithWindows = false;
   String _localeCode = AppLocaleService.systemCode();
   bool _isCheckingForUpdates = false;
   UpdateInfo? _availableUpdate;
@@ -126,6 +131,7 @@ class TweakController extends ChangeNotifier {
   String get loadingStatus => _loadingStatus;
   String get appVersion => _appVersion;
   bool get automaticUpdateChecksEnabled => _automaticUpdateChecksEnabled;
+  bool get startWithWindows => _startWithWindows;
   String get localeCode => _localeCode;
   bool get isCheckingForUpdates => _isCheckingForUpdates;
   bool get isUpdateAvailable => _availableUpdate != null;
@@ -218,6 +224,7 @@ class TweakController extends ChangeNotifier {
       _restorePresetSelections();
       _automaticUpdateChecksEnabled =
           _preferences.getBool(_automaticUpdateChecksKey) ?? true;
+      _startWithWindows = _preferences.getBool(_startWithWindowsKey) ?? false;
       _localeCode = AppLocaleService.normalize(
         _preferences.getString(_localeCodeKey) ?? AppLocaleService.systemCode(),
       );
@@ -690,6 +697,155 @@ class TweakController extends ChangeNotifier {
       notifyListeners();
     }
     return result;
+  }
+
+  Future<OperationResult> setStartWithWindows(bool enabled) async {
+    final executable = Platform.resolvedExecutable;
+    final result = enabled
+        ? await _processRunner.run('reg', <String>[
+            'add',
+            r'HKCU\Software\Microsoft\Windows\CurrentVersion\Run',
+            '/v',
+            'ZapTweaks',
+            '/t',
+            'REG_SZ',
+            '/d',
+            executable,
+            '/f',
+          ])
+        : await _processRunner.run('powershell', <String>[
+            '-NoProfile',
+            '-Command',
+            "Remove-ItemProperty -Path 'HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Run' -Name ZapTweaks -ErrorAction SilentlyContinue",
+          ]);
+    if (!result.success) {
+      return OperationResult(success: false, message: result.details);
+    }
+    _startWithWindows = enabled;
+    await _preferences.setBool(_startWithWindowsKey, enabled);
+    notifyListeners();
+    return const OperationResult(success: true);
+  }
+
+  Future<OperationResult> openLogFolder() async {
+    final result = await _processRunner.launch('explorer', <String>[
+      _loggingService.logDirectoryPath,
+    ]);
+    return result.success
+        ? const OperationResult(success: true)
+        : OperationResult(success: false, message: result.details);
+  }
+
+  Future<OperationResult> redetectSystemState() async {
+    try {
+      _hardwareProfile = await _hardwareDetectionService.detect();
+      final states = await _tweakManager.detectCurrentTweakStates();
+      for (final descriptor in _catalog.where((item) => item.isSystemToggle)) {
+        _toggleStates[descriptor.id] = states[descriptor.systemKey] ?? false;
+      }
+      await _initializeScriptStates();
+      notifyListeners();
+      return const OperationResult(success: true);
+    } catch (error) {
+      return OperationResult(success: false, message: error.toString());
+    }
+  }
+
+  Future<OperationResult> resetAppSettings() async {
+    try {
+      await setStartWithWindows(false);
+      await _preferences.clear();
+      _processRunner.setMode(ProcessExecutionMode.production);
+      _automaticUpdateChecksEnabled = true;
+      _startWithWindows = false;
+      _localeCode = AppLocaleService.systemCode();
+      _needsRestart = false;
+      _selectedPresets.clear();
+      _restorePresetSelections();
+      notifyListeners();
+      return const OperationResult(success: true);
+    } catch (error) {
+      return OperationResult(success: false, message: error.toString());
+    }
+  }
+
+  Future<OperationResult> exportProfile() async {
+    try {
+      final values = <String, Object?>{};
+      for (final key in _preferences.getKeys()) {
+        final value = _preferences.get(key);
+        if (value is bool ||
+            value is int ||
+            value is double ||
+            value is String ||
+            value is List<String>) {
+          values[key] = value;
+        }
+      }
+      final directory = Directory(
+        path.join(
+          Platform.environment['APPDATA'] ?? Directory.current.path,
+          'ZapTweaks',
+          'profiles',
+        ),
+      );
+      await directory.create(recursive: true);
+      final profile = File(path.join(directory.path, 'ZapTweaks-profile.json'));
+      await profile.writeAsString(
+        jsonEncode(<String, Object?>{'version': 1, 'preferences': values}),
+      );
+      return OperationResult(success: true, message: profile.path);
+    } catch (error) {
+      return OperationResult(success: false, message: error.toString());
+    }
+  }
+
+  Future<OperationResult> importProfile() async {
+    try {
+      final profile = File(
+        path.join(
+          Platform.environment['APPDATA'] ?? Directory.current.path,
+          'ZapTweaks',
+          'profiles',
+          'ZapTweaks-profile.json',
+        ),
+      );
+      final payload = jsonDecode(await profile.readAsString());
+      final values = payload is Map<String, dynamic>
+          ? payload['preferences']
+          : null;
+      if (values is! Map<String, dynamic>) {
+        return const OperationResult(
+          success: false,
+          message: 'Invalid profile file.',
+        );
+      }
+      for (final entry in values.entries) {
+        final value = entry.value;
+        if (value is bool) await _preferences.setBool(entry.key, value);
+        if (value is int) await _preferences.setInt(entry.key, value);
+        if (value is double) await _preferences.setDouble(entry.key, value);
+        if (value is String) await _preferences.setString(entry.key, value);
+        if (value is List<dynamic> && value.every((item) => item is String)) {
+          await _preferences.setStringList(entry.key, value.cast<String>());
+        }
+      }
+      _restoreExecutionModeFromPreferences();
+      _restorePresetSelections();
+      _automaticUpdateChecksEnabled =
+          _preferences.getBool(_automaticUpdateChecksKey) ?? true;
+      _localeCode = AppLocaleService.normalize(
+        _preferences.getString(_localeCodeKey),
+      );
+      final startWithWindows =
+          _preferences.getBool(_startWithWindowsKey) ?? false;
+      final startResult = await setStartWithWindows(startWithWindows);
+      if (!startResult.success) return startResult;
+      notifyListeners();
+      return const OperationResult(success: true);
+    } catch (error) {
+      return OperationResult(success: false, message: error.toString());
+    }
   }
 
   Future<void> setAutomaticUpdateChecksEnabled(bool enabled) async {

@@ -67,6 +67,68 @@ class SettingsPage extends StatelessWidget {
         Card(
           child: Padding(
             padding: const EdgeInsets.all(16),
+            child: Row(
+              children: <Widget>[
+                const Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text('Start with Windows'),
+                      SizedBox(height: 3),
+                      Text('Launch ZapTweaks after you sign in to Windows.'),
+                    ],
+                  ),
+                ),
+                ToggleSwitch(
+                  checked: controller.startWithWindows,
+                  onChanged: (enabled) =>
+                      controller.setStartWithWindows(enabled),
+                ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: 12),
+        Card(
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: <Widget>[
+                Button(
+                  onPressed: () =>
+                      _runOperation(context, controller.openLogFolder),
+                  child: const Text('Open log folder'),
+                ),
+                Button(
+                  onPressed: () =>
+                      _runOperation(context, controller.redetectSystemState),
+                  child: const Text('Re-detect system state'),
+                ),
+                Button(
+                  onPressed: () =>
+                      _runOperation(context, controller.exportProfile),
+                  child: const Text('Export profile'),
+                ),
+                Button(
+                  onPressed: () =>
+                      _runOperation(context, controller.importProfile),
+                  child: const Text('Import profile'),
+                ),
+                Button(
+                  onPressed: () =>
+                      _runOperation(context, controller.resetAppSettings),
+                  child: const Text('Reset app settings'),
+                ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: 12),
+        Card(
+          child: Padding(
+            padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -196,6 +258,28 @@ class SettingsPage extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+
+  Future<void> _runOperation(
+    BuildContext context,
+    Future<dynamic> Function() action,
+  ) async {
+    final result = await action();
+    if (!context.mounted) return;
+    displayInfoBar(
+      context,
+      builder: (_, close) => InfoBar(
+        title: Text(result.success ? 'Done' : 'Operation failed'),
+        content: Text(result.message ?? ''),
+        severity: result.success
+            ? InfoBarSeverity.success
+            : InfoBarSeverity.error,
+        action: IconButton(
+          icon: const Icon(FluentIcons.clear),
+          onPressed: close,
+        ),
+      ),
     );
   }
 }

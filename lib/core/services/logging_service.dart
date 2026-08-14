@@ -29,6 +29,9 @@ class LoggingService {
 
   bool _initialized = false;
   IOSink? _sink;
+
+  String get logDirectoryPath =>
+      path.join(_resolveAppDataPath(), 'ZapTweaks', 'logs');
   Timer? _flushTimer;
 
   Future<void> initialize() async {
@@ -36,11 +39,7 @@ class LoggingService {
       return;
     }
 
-    final logDirectoryPath = path.join(
-      _resolveAppDataPath(),
-      'ZapTweaks',
-      'logs',
-    );
+    final logDirectoryPath = this.logDirectoryPath;
     await Directory(logDirectoryPath).create(recursive: true);
 
     final sessionStamp = _formatForFileName(DateTime.now());

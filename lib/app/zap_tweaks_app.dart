@@ -527,6 +527,8 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
 
   IconData _iconForCategory(String category) {
     switch (category) {
+      case 'Shortcuts':
+        return FluentIcons.open_file;
       case 'Gaming':
         return FluentIcons.game;
       case 'Networking':
@@ -539,6 +541,8 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
         return FluentIcons.shield;
       case 'System Checks':
         return FluentIcons.health;
+      case 'Services':
+        return FluentIcons.settings;
       case 'Refresh & Recovery':
         return FluentIcons.history;
       case 'Setup':
