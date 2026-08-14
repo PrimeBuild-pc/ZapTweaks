@@ -641,6 +641,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Ran'**
   String get ran;
+
+  /// No description provided for @gpuDrivers.
+  ///
+  /// In en, this message translates to:
+  /// **'GPU Drivers'**
+  String get gpuDrivers;
+
+  /// No description provided for @noGpuDrivers.
+  ///
+  /// In en, this message translates to:
+  /// **'No GPU drivers detected'**
+  String get noGpuDrivers;
+
+  /// No description provided for @chipsetDrivers.
+  ///
+  /// In en, this message translates to:
+  /// **'Chipset Drivers'**
+  String get chipsetDrivers;
+
+  /// No description provided for @noChipsetDrivers.
+  ///
+  /// In en, this message translates to:
+  /// **'No chipset drivers detected'**
+  String get noChipsetDrivers;
+
+  /// No description provided for @monitors.
+  ///
+  /// In en, this message translates to:
+  /// **'Monitors'**
+  String get monitors;
+
+  /// No description provided for @noMonitors.
+  ///
+  /// In en, this message translates to:
+  /// **'No monitors detected'**
+  String get noMonitors;
+
+  /// No description provided for @mice.
+  ///
+  /// In en, this message translates to:
+  /// **'Mice'**
+  String get mice;
+
+  /// No description provided for @noMice.
+  ///
+  /// In en, this message translates to:
+  /// **'No mice detected'**
+  String get noMice;
+
+  /// No description provided for @keyboards.
+  ///
+  /// In en, this message translates to:
+  /// **'Keyboards'**
+  String get keyboards;
+
+  /// No description provided for @noKeyboards.
+  ///
+  /// In en, this message translates to:
+  /// **'No keyboards detected'**
+  String get noKeyboards;
 }
 
 class _AppLocalizationsDelegate

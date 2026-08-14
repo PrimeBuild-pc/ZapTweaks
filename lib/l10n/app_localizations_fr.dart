@@ -308,4 +308,34 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get ran => 'Couru';
+
+  @override
+  String get gpuDrivers => 'Pilotes GPU';
+
+  @override
+  String get noGpuDrivers => 'Aucun pilote GPU détecté';
+
+  @override
+  String get chipsetDrivers => 'Pilotes de chipset';
+
+  @override
+  String get noChipsetDrivers => 'Aucun pilote de chipset détecté';
+
+  @override
+  String get monitors => 'Moniteurs';
+
+  @override
+  String get noMonitors => 'Aucun moniteur détecté';
+
+  @override
+  String get mice => 'Souris';
+
+  @override
+  String get noMice => 'Aucune souris détectée';
+
+  @override
+  String get keyboards => 'Claviers';
+
+  @override
+  String get noKeyboards => 'Aucun clavier détecté';
 }

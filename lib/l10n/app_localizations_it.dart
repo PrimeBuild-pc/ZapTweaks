@@ -306,4 +306,34 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get ran => 'Eseguito';
+
+  @override
+  String get gpuDrivers => 'Driver GPU';
+
+  @override
+  String get noGpuDrivers => 'Nessun driver GPU rilevato';
+
+  @override
+  String get chipsetDrivers => 'Driver chipset';
+
+  @override
+  String get noChipsetDrivers => 'Nessun driver chipset rilevato';
+
+  @override
+  String get monitors => 'Monitor';
+
+  @override
+  String get noMonitors => 'Nessun monitor rilevato';
+
+  @override
+  String get mice => 'Mouse';
+
+  @override
+  String get noMice => 'Nessun mouse rilevato';
+
+  @override
+  String get keyboards => 'Tastiere';
+
+  @override
+  String get noKeyboards => 'Nessuna tastiera rilevata';
 }

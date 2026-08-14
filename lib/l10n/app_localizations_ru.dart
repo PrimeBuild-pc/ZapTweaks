@@ -305,4 +305,34 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get ran => 'Ран';
+
+  @override
+  String get gpuDrivers => 'Драйверы графического процессора';
+
+  @override
+  String get noGpuDrivers => 'Драйверы графического процессора не обнаружены';
+
+  @override
+  String get chipsetDrivers => 'Драйверы чипсета';
+
+  @override
+  String get noChipsetDrivers => 'Драйверы чипсета не обнаружены';
+
+  @override
+  String get monitors => 'Мониторы';
+
+  @override
+  String get noMonitors => 'Мониторы не обнаружены';
+
+  @override
+  String get mice => 'Мыши';
+
+  @override
+  String get noMice => 'Мышей не обнаружено';
+
+  @override
+  String get keyboards => 'Клавиатуры';
+
+  @override
+  String get noKeyboards => 'Клавиатуры не обнаружены';
 }

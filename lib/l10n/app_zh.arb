@@ -88,5 +88,15 @@
   "working": "工作...",
   "importAndActivate": "导入并激活",
   "restorePreviousPlan": "恢复之前的计划",
-  "ran": "然"
+  "ran": "然",
+  "gpuDrivers": "显卡驱动程序",
+  "noGpuDrivers": "未检测到 GPU 驱动程序",
+  "chipsetDrivers": "芯片组驱动程序",
+  "noChipsetDrivers": "未检测到芯片组驱动程序",
+  "monitors": "显示器",
+  "noMonitors": "未检测到监视器",
+  "mice": "小鼠",
+  "noMice": "未检测到老鼠",
+  "keyboards": "键盘",
+  "noKeyboards": "未检测到键盘"
 }

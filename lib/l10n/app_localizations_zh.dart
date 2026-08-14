@@ -291,4 +291,34 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get ran => '然';
+
+  @override
+  String get gpuDrivers => '显卡驱动程序';
+
+  @override
+  String get noGpuDrivers => '未检测到 GPU 驱动程序';
+
+  @override
+  String get chipsetDrivers => '芯片组驱动程序';
+
+  @override
+  String get noChipsetDrivers => '未检测到芯片组驱动程序';
+
+  @override
+  String get monitors => '显示器';
+
+  @override
+  String get noMonitors => '未检测到监视器';
+
+  @override
+  String get mice => '小鼠';
+
+  @override
+  String get noMice => '未检测到老鼠';
+
+  @override
+  String get keyboards => '键盘';
+
+  @override
+  String get noKeyboards => '未检测到键盘';
 }

@@ -7,6 +7,11 @@ class HardwareProfile {
     required this.ramInstalledBytes,
     required this.networkAdapters,
     required this.audioDevices,
+    this.gpuDrivers = const <String>[],
+    this.chipsetDrivers = const <String>[],
+    this.monitors = const <String>[],
+    this.mice = const <String>[],
+    this.keyboards = const <String>[],
     this.windowsBuild = 0,
   });
 
@@ -17,6 +22,11 @@ class HardwareProfile {
   final int ramInstalledBytes;
   final List<String> networkAdapters;
   final List<String> audioDevices;
+  final List<String> gpuDrivers;
+  final List<String> chipsetDrivers;
+  final List<String> monitors;
+  final List<String> mice;
+  final List<String> keyboards;
   final int windowsBuild;
 
   static const HardwareProfile unknown = HardwareProfile(

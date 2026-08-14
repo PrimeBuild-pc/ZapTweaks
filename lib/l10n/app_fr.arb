@@ -88,5 +88,15 @@
   "working": "Travailler...",
   "importAndActivate": "Importer et activer",
   "restorePreviousPlan": "Restaurer le plan précédent",
-  "ran": "Couru"
+  "ran": "Couru",
+  "gpuDrivers": "Pilotes GPU",
+  "noGpuDrivers": "Aucun pilote GPU détecté",
+  "chipsetDrivers": "Pilotes de chipset",
+  "noChipsetDrivers": "Aucun pilote de chipset détecté",
+  "monitors": "Moniteurs",
+  "noMonitors": "Aucun moniteur détecté",
+  "mice": "Souris",
+  "noMice": "Aucune souris détectée",
+  "keyboards": "Claviers",
+  "noKeyboards": "Aucun clavier détecté"
 }

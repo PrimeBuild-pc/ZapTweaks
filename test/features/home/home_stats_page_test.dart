@@ -18,7 +18,12 @@ void main() {
       gpuVendors: <String>{'nvidia'},
       ramInstalledBytes: 34 * 1024 * 1024 * 1024,
       networkAdapters: <String>['Intel Ethernet Connection [NDIS 6.95]'],
-      audioDevices: <String>['Realtek(R) Audio'],
+      audioDevices: <String>['Realtek(R) Audio [Realtek v6.0.1]'],
+      gpuDrivers: <String>['NVIDIA GeForce RTX 4080 [NVIDIA v32.0.1]'],
+      chipsetDrivers: <String>['AMD SMBus [AMD v6.0.1]'],
+      monitors: <String>['LG ULTRAGEAR'],
+      mice: <String>['Logitech G Pro'],
+      keyboards: <String>['Keychron K2'],
     );
 
     const metrics = SystemMetricsSnapshot(
@@ -35,6 +40,7 @@ void main() {
 
     await tester.pumpWidget(
       FluentApp(
+        locale: const Locale('en'),
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         home: HomeStatsPage(
@@ -49,11 +55,6 @@ void main() {
     );
 
     expect(find.text('Home & Stats'), findsOneWidget);
-    expect(find.text('CPU'), findsOneWidget);
-    expect(find.text('GPU'), findsOneWidget);
-    expect(find.text('Installed RAM'), findsOneWidget);
-    expect(find.text('Network Adapters'), findsOneWidget);
-    expect(find.text('Audio Devices'), findsOneWidget);
     expect(find.text('CPU Usage'), findsOneWidget);
     expect(find.text('GPU Usage'), findsOneWidget);
     expect(find.text('VRAM Usage'), findsOneWidget);
@@ -62,5 +63,19 @@ void main() {
     expect(find.text('66.7%'), findsOneWidget);
     expect(find.text('42.5%'), findsOneWidget);
     expect(find.text('58.4%'), findsOneWidget);
+
+    await tester.fling(find.byType(ListView), const Offset(0, -1200), 1000);
+    await tester.pumpAndSettle();
+
+    expect(find.text('CPU'), findsOneWidget);
+    expect(find.text('GPU'), findsOneWidget);
+    expect(find.text('Installed RAM'), findsOneWidget);
+    expect(find.text('Network Adapters'), findsOneWidget);
+    expect(find.text('Audio Devices'), findsOneWidget);
+    expect(find.text('GPU Drivers'), findsOneWidget);
+    expect(find.text('Chipset Drivers'), findsOneWidget);
+    expect(find.text('Monitors'), findsOneWidget);
+    expect(find.text('Mice'), findsOneWidget);
+    expect(find.text('Keyboards'), findsOneWidget);
   });
 }

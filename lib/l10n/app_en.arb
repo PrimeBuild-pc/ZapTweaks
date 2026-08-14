@@ -123,5 +123,15 @@
   "working": "Working...",
   "importAndActivate": "Import and activate",
   "restorePreviousPlan": "Restore previous plan",
-  "ran": "Ran"
+  "ran": "Ran",
+  "gpuDrivers": "GPU Drivers",
+  "noGpuDrivers": "No GPU drivers detected",
+  "chipsetDrivers": "Chipset Drivers",
+  "noChipsetDrivers": "No chipset drivers detected",
+  "monitors": "Monitors",
+  "noMonitors": "No monitors detected",
+  "mice": "Mice",
+  "noMice": "No mice detected",
+  "keyboards": "Keyboards",
+  "noKeyboards": "No keyboards detected"
 }

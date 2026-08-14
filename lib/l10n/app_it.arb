@@ -88,5 +88,15 @@
   "working": "Operazione in corso...",
   "importAndActivate": "Importa e attiva",
   "restorePreviousPlan": "Ripristina il piano precedente",
-  "ran": "Eseguito"
+  "ran": "Eseguito",
+  "gpuDrivers": "Driver GPU",
+  "noGpuDrivers": "Nessun driver GPU rilevato",
+  "chipsetDrivers": "Driver chipset",
+  "noChipsetDrivers": "Nessun driver chipset rilevato",
+  "monitors": "Monitor",
+  "noMonitors": "Nessun monitor rilevato",
+  "mice": "Mouse",
+  "noMice": "Nessun mouse rilevato",
+  "keyboards": "Tastiere",
+  "noKeyboards": "Nessuna tastiera rilevata"
 }

@@ -88,5 +88,15 @@
   "working": "Arbeiten...",
   "importAndActivate": "Importieren und aktivieren",
   "restorePreviousPlan": "Vorherigen Plan wiederherstellen",
-  "ran": "Ran"
+  "ran": "Ran",
+  "gpuDrivers": "GPU-Treiber",
+  "noGpuDrivers": "Keine GPU-Treiber erkannt",
+  "chipsetDrivers": "Chipsatztreiber",
+  "noChipsetDrivers": "Keine Chipsatztreiber erkannt",
+  "monitors": "Monitore",
+  "noMonitors": "Keine Monitore erkannt",
+  "mice": "Mäuse",
+  "noMice": "Keine Mäuse entdeckt",
+  "keyboards": "Tastaturen",
+  "noKeyboards": "Keine Tastaturen erkannt"
 }

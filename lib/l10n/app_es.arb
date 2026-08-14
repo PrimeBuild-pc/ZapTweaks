@@ -88,5 +88,15 @@
   "working": "Trabajando...",
   "importAndActivate": "Importar y activar",
   "restorePreviousPlan": "Restaurar plan anterior",
-  "ran": "corrió"
+  "ran": "corrió",
+  "gpuDrivers": "Controladores de GPU",
+  "noGpuDrivers": "No se detectaron controladores de GPU",
+  "chipsetDrivers": "Controladores de conjuntos de chips",
+  "noChipsetDrivers": "No se detectaron controladores de chipset",
+  "monitors": "Monitores",
+  "noMonitors": "No se detectaron monitores",
+  "mice": "ratones",
+  "noMice": "No se detectaron ratones",
+  "keyboards": "Teclados",
+  "noKeyboards": "No se detectaron teclados"
 }

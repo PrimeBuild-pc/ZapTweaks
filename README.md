@@ -7,6 +7,9 @@
     <a href="https://github.com/PrimeBuild-pc/ZapTweaks/releases"><img alt="Total downloads" src="https://img.shields.io/github/downloads/PrimeBuild-pc/ZapTweaks/total?label=total%20downloads&color=success"></a>
     <a href="https://github.com/PrimeBuild-pc/ZapTweaks/actions/workflows/flutter-ci.yml"><img alt="Flutter CI" src="https://github.com/PrimeBuild-pc/ZapTweaks/actions/workflows/flutter-ci.yml/badge.svg"></a>
     <a href="https://codecov.io/gh/PrimeBuild-pc/ZapTweaks"><img alt="Codecov" src="https://img.shields.io/codecov/c/github/PrimeBuild-pc/ZapTweaks?label=coverage"></a>
+    <a href="#languages"><img alt="7 interface languages" src="https://img.shields.io/badge/interface%20languages-7-6f42c1?logo=googletranslate&logoColor=white"></a>
+    <a href="#requirements"><img alt="Windows 11" src="https://img.shields.io/badge/platform-Windows%2011-0078D4?logo=windows&logoColor=white"></a>
+    <a href="https://flutter.dev/"><img alt="Built with Flutter" src="https://img.shields.io/badge/built%20with-Flutter-02569B?logo=flutter&logoColor=white"></a>
     <a href="LICENSE"><img alt="MIT License" src="https://img.shields.io/badge/license-MIT-blue.svg"></a>
   </p>
 </div>
@@ -29,6 +32,10 @@ It is not intended to replace common baseline tools such as [CTT WinUtil](https:
 - UI language selection for English, Italian, German, Spanish, French, Russian, and Simplified Chinese.
 - 91 bundled power plans with import, activation, and previous-plan restore.
 - Direct access to CTT WinUtil and Winhance for complementary baseline work.
+
+## Languages
+
+The interface is available in **English, Italian, German, Spanish, French, Russian, and Simplified Chinese**. Select a language from **Settings**; the choice is saved locally.
 
 ## Categories
 
