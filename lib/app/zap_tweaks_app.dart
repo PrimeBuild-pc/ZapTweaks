@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:system_theme/system_theme.dart';
 
 import 'app_metadata.dart';
@@ -131,106 +132,113 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
       supportedLocales: AppLocalizations.supportedLocales,
       theme: buildZapTweaksTheme(accentColor: _systemAccentColor),
       navigatorKey: _navigatorKey,
-      home: Stack(
-        children: <Widget>[
-          IgnorePointer(
-            ignoring: widget.controller.isInteractionLocked,
-            child: NavigationView(
-              titleBar: widget.useNativeTitleBar
-                  ? WindowsTitleBar(
-                      onAboutPressed: _showAboutDialog,
-                      backgroundColor: const Color(0xFF1E1E1E),
-                    )
-                  : _buildFallbackTitleBar(),
-              pane: NavigationPane(
-                selected:
-                    widget.controller.selectedCategory ==
-                        TweakController.settingsCategory
-                    ? settingsPaneIndex
-                    : selectedCategoryIndex,
-                onChanged: (index) {
-                  if (index == settingsPaneIndex) {
-                    widget.controller.selectCategory(
-                      TweakController.settingsCategory,
-                    );
-                  } else if (index >= 0 && index < categories.length - 1) {
-                    widget.controller.selectCategory(categories[index]);
-                  }
-                },
-                size: const NavigationPaneSize(openWidth: 240),
-                displayMode: PaneDisplayMode.auto,
-                items: <NavigationPaneItem>[
-                  ...categories
-                      .where(
-                        (category) =>
-                            category != TweakController.settingsCategory,
-                      )
-                      .map(
-                        (category) => PaneItem(
-                          icon: Icon(_iconForCategory(category)),
-                          title: Text(
-                            AppLocaleService.category(
-                              widget.controller.localeCode,
-                              category,
+      home: Builder(
+        builder: (context) {
+          final strings = AppLocalizations.of(context);
+          return Stack(
+            children: <Widget>[
+              IgnorePointer(
+                ignoring: widget.controller.isInteractionLocked,
+                child: NavigationView(
+                  titleBar: widget.useNativeTitleBar
+                      ? WindowsTitleBar(
+                          onAboutPressed: _showAboutDialog,
+                          backgroundColor: const Color(0xFF1E1E1E),
+                        )
+                      : _buildFallbackTitleBar(),
+                  pane: NavigationPane(
+                    selected:
+                        widget.controller.selectedCategory ==
+                            TweakController.settingsCategory
+                        ? settingsPaneIndex
+                        : selectedCategoryIndex,
+                    onChanged: (index) {
+                      if (index == settingsPaneIndex) {
+                        widget.controller.selectCategory(
+                          TweakController.settingsCategory,
+                        );
+                      } else if (index >= 0 && index < categories.length - 1) {
+                        widget.controller.selectCategory(categories[index]);
+                      }
+                    },
+                    size: const NavigationPaneSize(openWidth: 240),
+                    displayMode: PaneDisplayMode.auto,
+                    items: <NavigationPaneItem>[
+                      ...categories
+                          .where(
+                            (category) =>
+                                category != TweakController.settingsCategory,
+                          )
+                          .map(
+                            (category) => PaneItem(
+                              icon: Icon(_iconForCategory(category)),
+                              title: Text(
+                                AppLocaleService.category(
+                                  widget.controller.localeCode,
+                                  category,
+                                ),
+                              ),
+                              body: _buildCategoryBody(category),
                             ),
                           ),
-                          body: _buildCategoryBody(category),
+                      PaneItemSeparator(),
+                      PaneItem(
+                        icon: const Icon(FluentIcons.settings),
+                        title: Text(
+                          AppLocaleService.category(
+                            widget.controller.localeCode,
+                            TweakController.settingsCategory,
+                          ),
+                        ),
+                        body: _buildCategoryBody(
+                          TweakController.settingsCategory,
                         ),
                       ),
-                  PaneItemSeparator(),
-                  PaneItem(
-                    icon: const Icon(FluentIcons.settings),
-                    title: Text(
-                      AppLocaleService.category(
-                        widget.controller.localeCode,
-                        TweakController.settingsCategory,
+                    ],
+                    footerItems: <NavigationPaneItem>[
+                      PaneItemAction(
+                        icon: _buildUpdatesIcon(),
+                        title: Text(
+                          widget.controller.isUpdateAvailable
+                              ? strings.updateAvailableShort
+                              : strings.updates,
+                        ),
+                        onTap: _handleUpdatesPressed,
                       ),
-                    ),
-                    body: _buildCategoryBody(TweakController.settingsCategory),
+                    ],
                   ),
-                ],
-                footerItems: <NavigationPaneItem>[
-                  PaneItemAction(
-                    icon: _buildUpdatesIcon(),
-                    title: Text(
-                      widget.controller.isUpdateAvailable
-                          ? 'Update available'
-                          : 'Updates',
-                    ),
-                    onTap: _handleUpdatesPressed,
-                  ),
-                ],
+                ),
               ),
-            ),
-          ),
-          if (widget.controller.isInteractionLocked)
-            Positioned.fill(
-              child: ColoredBox(
-                color: const Color(0xAA000000),
-                child: Center(
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 420),
-                    child: Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(20),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            const ProgressRing(),
-                            const SizedBox(height: 14),
-                            Text(
-                              widget.controller.interactionLockMessage,
-                              textAlign: TextAlign.center,
+              if (widget.controller.isInteractionLocked)
+                Positioned.fill(
+                  child: ColoredBox(
+                    color: const Color(0xAA000000),
+                    child: Center(
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 420),
+                        child: Card(
+                          child: Padding(
+                            padding: const EdgeInsets.all(20),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                const ProgressRing(),
+                                const SizedBox(height: 14),
+                                Text(
+                                  widget.controller.interactionLockMessage,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
                             ),
-                          ],
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ),
-        ],
+            ],
+          );
+        },
       ),
     );
   }
@@ -282,16 +290,19 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
     showDialog<void>(
       context: dialogContext,
       barrierDismissible: false,
-      builder: (_) => const ContentDialog(
-        title: Text('Checking for updates'),
-        content: Row(
-          children: <Widget>[
-            ProgressRing(),
-            SizedBox(width: 12),
-            Expanded(child: Text('Contacting the release server...')),
-          ],
-        ),
-      ),
+      builder: (context) {
+        final strings = AppLocalizations.of(context);
+        return ContentDialog(
+          title: Text(strings.checkingForUpdates),
+          content: Row(
+            children: <Widget>[
+              const ProgressRing(),
+              const SizedBox(width: 12),
+              Expanded(child: Text(strings.contactingReleaseServer)),
+            ],
+          ),
+        );
+      },
     );
     final result = await widget.controller.checkForUpdates();
     if (dialogContext.mounted) {
@@ -321,43 +332,46 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
 
     final action = await showDialog<String>(
       context: dialogContext,
-      builder: (context) => ContentDialog(
-        title: Text('ZapTweaks ${update.version} is available'),
-        content: SizedBox(
-          width: 560,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text('Installed version: ${widget.controller.appVersion}'),
-              const SizedBox(height: 12),
-              Text(
-                update.releaseNotes.isEmpty
-                    ? 'Release notes are available on GitHub.'
-                    : update.releaseNotes,
-                maxLines: 14,
-                overflow: TextOverflow.fade,
-              ),
-            ],
+      builder: (context) {
+        final strings = AppLocalizations.of(context);
+        return ContentDialog(
+          title: Text(strings.updateDialogTitle(update.version)),
+          content: SizedBox(
+            width: 560,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(strings.installedVersion(widget.controller.appVersion)),
+                const SizedBox(height: 12),
+                Text(
+                  update.releaseNotes.isEmpty
+                      ? strings.releaseNotesOnGitHub
+                      : update.releaseNotes,
+                  maxLines: 14,
+                  overflow: TextOverflow.fade,
+                ),
+              ],
+            ),
           ),
-        ),
-        actions: <Widget>[
-          Button(
-            onPressed: () => Navigator.of(context).pop('later'),
-            child: const Text('Later'),
-          ),
-          Button(
-            onPressed: () => Navigator.of(context).pop('release'),
-            child: const Text('View release'),
-          ),
-          FilledButton(
-            onPressed: update.installerUrl == null
-                ? null
-                : () => Navigator.of(context).pop('install'),
-            child: const Text('Update now'),
-          ),
-        ],
-      ),
+          actions: <Widget>[
+            Button(
+              onPressed: () => Navigator.of(context).pop('later'),
+              child: Text(strings.later),
+            ),
+            Button(
+              onPressed: () => Navigator.of(context).pop('release'),
+              child: Text(strings.viewRelease),
+            ),
+            FilledButton(
+              onPressed: update.installerUrl == null
+                  ? null
+                  : () => Navigator.of(context).pop('install'),
+              child: Text(strings.updateNow),
+            ),
+          ],
+        );
+      },
     );
 
     if (action == 'release') {
@@ -383,16 +397,19 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
     showDialog<void>(
       context: dialogContext,
       barrierDismissible: false,
-      builder: (_) => const ContentDialog(
-        title: Text('Downloading update'),
-        content: Row(
-          children: <Widget>[
-            ProgressRing(),
-            SizedBox(width: 12),
-            Expanded(child: Text('Downloading and preparing the installer...')),
-          ],
-        ),
-      ),
+      builder: (context) {
+        final strings = AppLocalizations.of(context);
+        return ContentDialog(
+          title: Text(strings.downloadingUpdate),
+          content: Row(
+            children: <Widget>[
+              const ProgressRing(),
+              const SizedBox(width: 12),
+              Expanded(child: Text(strings.downloadingUpdateDescription)),
+            ],
+          ),
+        );
+      },
     );
     final result = await widget.controller.installAvailableUpdate();
     if (dialogContext.mounted) {
@@ -414,10 +431,11 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
     if (currentContext == null) {
       return;
     }
+    final strings = AppLocalizations.of(currentContext);
     displayInfoBar(
       currentContext,
       builder: (_, close) => InfoBar(
-        title: Text(result.success ? 'Done' : 'Failed'),
+        title: Text(result.success ? strings.done : strings.failed),
         content: Text(result.message ?? ''),
         action: IconButton(
           icon: const Icon(FluentIcons.clear),
@@ -518,11 +536,8 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
       child: SizedBox(
         width: 540,
         child: InfoBar(
-          title: const Text('Administrator privileges are required'),
-          content: const Text(
-            'Close the app and launch ZapTweaks with "Run as administrator". '
-            'Without elevation, system tweaks cannot be applied safely.',
-          ),
+          title: Text(AppLocalizations.of(context).adminPrivilegesRequired),
+          content: Text(AppLocalizations.of(context).adminRequiredBanner),
           severity: InfoBarSeverity.error,
           isLong: true,
         ),
@@ -584,11 +599,13 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
           actions: <Widget>[
             Button(
               onPressed: () => Navigator.of(dialogContext).pop(false),
-              child: const Text('Cancel'),
+              child: Text(AppLocalizations.of(dialogContext).cancel),
             ),
             FilledButton(
               onPressed: () => Navigator.of(dialogContext).pop(true),
-              child: const Text('Create restore point'),
+              child: Text(
+                AppLocalizations.of(dialogContext).createRestorePoint,
+              ),
             ),
           ],
         );
@@ -607,16 +624,14 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
     showDialog<void>(
       context: dialogContext,
       builder: (dialogContext) {
+        final strings = AppLocalizations.of(dialogContext);
         return ContentDialog(
-          title: const Text('Administrator privileges required'),
-          content: const Text(
-            'ZapTweaks needs administrator permissions to apply system settings.\n\n'
-            'Close the app, right-click the executable, and select "Run as administrator".',
-          ),
+          title: Text(strings.adminPrivilegesRequired),
+          content: Text(strings.adminRequiredDialog),
           actions: <Widget>[
             FilledButton(
               onPressed: () => Navigator.of(dialogContext).pop(),
-              child: const Text('Understood'),
+              child: Text(strings.understood),
             ),
           ],
         );
@@ -633,31 +648,50 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
     showDialog<void>(
       context: dialogContext,
       builder: (dialogContext) {
+        final strings = AppLocalizations.of(dialogContext);
         return ContentDialog(
           title: const Text('ZapTweaks'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text('Version: v${widget.controller.appVersion}'),
+              Text(strings.aboutVersion(widget.controller.appVersion)),
               const SizedBox(height: 6),
-              const Text('Author: PrimeBuild'),
+              Text(strings.author),
               const SizedBox(height: 6),
-              const Text(
-                'Advanced optimization companion for deeper Windows gaming, hardware, and diagnostics workflows.',
-              ),
+              Text(strings.aboutDescription),
               const SizedBox(height: 6),
-              Text('Year: ${DateTime.now().year}'),
-              const SizedBox(height: 6),
+              Text(strings.year(DateTime.now().year)),
+              const SizedBox(height: 10),
               Row(
                 children: <Widget>[
-                  const Text('GitHub: '),
                   HyperlinkButton(
-                    onPressed: () => ProcessRunner.shared.launch(
-                      'explorer',
-                      const <String>[AppMetadata.repositoryUrl],
+                    onPressed: () =>
+                        _openExternalUrl(AppMetadata.repositoryUrl),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        SvgPicture.asset(
+                          'assets/icons/github.svg',
+                          width: 18,
+                          height: 18,
+                        ),
+                        const SizedBox(width: 6),
+                        Text(strings.github),
+                      ],
                     ),
-                    child: Text(AppMetadata.repositoryUrl),
+                  ),
+                  const SizedBox(width: 8),
+                  Tooltip(
+                    message: strings.discord,
+                    child: IconButton(
+                      icon: SvgPicture.asset(
+                        'assets/icons/discord.svg',
+                        width: 20,
+                        height: 20,
+                      ),
+                      onPressed: () => _openExternalUrl(AppMetadata.discordUrl),
+                    ),
                   ),
                 ],
               ),
@@ -666,11 +700,15 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
           actions: <Widget>[
             FilledButton(
               onPressed: () => Navigator.of(dialogContext).pop(),
-              child: const Text('Close'),
+              child: Text(strings.close),
             ),
           ],
         );
       },
     );
+  }
+
+  void _openExternalUrl(String url) {
+    ProcessRunner.shared.launch('explorer', <String>[url]);
   }
 }

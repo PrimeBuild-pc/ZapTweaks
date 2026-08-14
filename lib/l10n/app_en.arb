@@ -24,5 +24,104 @@
   "done": "Done",
   "operationFailed": "Operation failed",
   "updateAvailable": "An update is available",
-  "updateAvailableDescription": "You can review the release notes or install it directly."
+  "updateAvailableDescription": "You can review the release notes or install it directly.",
+  "updateAvailableShort": "Update available",
+  "checkingForUpdates": "Checking for updates",
+  "contactingReleaseServer": "Contacting the release server...",
+  "updateDialogTitle": "ZapTweaks {version} is available",
+  "@updateDialogTitle": {
+    "placeholders": {
+      "version": {}
+    }
+  },
+  "installedVersion": "Installed version: {version}",
+  "@installedVersion": {
+    "placeholders": {
+      "version": {}
+    }
+  },
+  "releaseNotesOnGitHub": "Release notes are available on GitHub.",
+  "later": "Later",
+  "failed": "Failed",
+  "downloadingUpdate": "Downloading update",
+  "downloadingUpdateDescription": "Downloading and preparing the installer...",
+  "adminPrivilegesRequired": "Administrator privileges are required",
+  "adminRequiredBanner": "Close the app and launch ZapTweaks with \"Run as administrator\". Without elevation, system tweaks cannot be applied safely.",
+  "cancel": "Cancel",
+  "createRestorePoint": "Create restore point",
+  "adminRequiredDialog": "ZapTweaks needs administrator permissions to apply system settings.\n\nClose the app, right-click the executable, and select \"Run as administrator\".",
+  "understood": "Understood",
+  "aboutVersion": "Version: v{version}",
+  "@aboutVersion": {
+    "placeholders": {
+      "version": {}
+    }
+  },
+  "author": "Author: PrimeBuild",
+  "aboutDescription": "Advanced optimization companion for deeper Windows gaming, hardware, and diagnostics workflows.",
+  "year": "Year: {year}",
+  "@year": {
+    "placeholders": {
+      "year": {}
+    }
+  },
+  "close": "Close",
+  "github": "GitHub",
+  "discord": "Discord",
+  "homeAndStats": "Home & Stats",
+  "cpuUsage": "CPU Usage",
+  "cpuUsageDescription": "Realtime utilization from Windows counters",
+  "gpuUsage": "GPU Usage",
+  "gpuUsageDescription": "Realtime engine utilization",
+  "vramUsage": "VRAM Usage",
+  "memoryUsage": "Memory Usage",
+  "unknown": "Unknown",
+  "installedRam": "Installed RAM",
+  "networkAdapters": "Network Adapters",
+  "noConnectedAdapters": "No connected adapters detected",
+  "audioDevices": "Audio Devices",
+  "noAudioDevices": "No audio devices detected",
+  "noTweaksAvailable": "No tweaks are available for your hardware configuration.",
+  "detectedHardware": "Detected hardware",
+  "gpuUnknown": "GPU: Unknown",
+  "cpuValue": "CPU: {value}",
+  "@cpuValue": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "gpuValue": "GPU: {value}",
+  "@gpuValue": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "ramValue": "RAM: {value}",
+  "@ramValue": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "enableAllVisible": "Enable all visible",
+  "disableAllVisible": "Disable all visible",
+  "restartNow": "Restart now",
+  "restartRequired": "Restart required",
+  "restartRequiredDescription": "A system restart is required to fully apply one or more changes.",
+  "advancedActionsIncluded": "Advanced actions included",
+  "advancedActionsDescription": "External tools, launcher actions, and script-driven utilities are grouped here for quick diagnostics and maintenance workflows.",
+  "aggressiveTweakWarning": "Aggressive tweak. A restore point is mandatory.",
+  "networkReconnectWarning": "Network adapter reconnect or system restart may be required.",
+  "actionWarning": "Action warning",
+  "unknownError": "Unknown error.",
+  "presets": "Presets",
+  "presetFailed": "Preset failed",
+  "safetyWarning": "Safety warning",
+  "unavailable": "Unavailable",
+  "powerPlans": "Bundled Power Plans",
+  "powerPlansDescription": "Import and activate a bundled plan. ZapTweaks remembers the previous active plan for restore.",
+  "noPowerPlans": "No bundled power plans were found.",
+  "working": "Working...",
+  "importAndActivate": "Import and activate",
+  "restorePreviousPlan": "Restore previous plan",
+  "ran": "Ran"
 }

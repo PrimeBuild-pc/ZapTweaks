@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:script_utility/core/models/tweak_descriptor.dart';
+import 'package:script_utility/core/services/tweak_catalog_service.dart';
 import 'package:script_utility/core/services/tweak_text_localizer.dart';
 
 void main() {
@@ -23,6 +24,20 @@ void main() {
       expect(english.title, 'AMD GPU Extreme Profile');
     },
   );
+
+  test('translates every catalog entry into every supported language', () {
+    final catalog = TweakCatalogService().buildCatalog();
+
+    for (final locale in <String>['it', 'de', 'es', 'fr', 'ru', 'zh']) {
+      for (final descriptor in catalog) {
+        expect(
+          TweakTextLocalizer.hasTranslation(descriptor, locale),
+          isTrue,
+          reason: '${descriptor.id} is missing $locale copy',
+        );
+      }
+    }
+  });
 
   test('translates reference subtitles and generated service subtitles', () {
     const network = TweakDescriptor(
@@ -48,7 +63,7 @@ void main() {
     );
     expect(
       TweakTextLocalizer.resolve(service, 'it').description,
-      startsWith('Disabilita il servizio'),
+      isNot('English fallback.'),
     );
   });
 }

@@ -1,6 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 
 import '../../../../core/services/power_plan_service.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../application/tweak_controller.dart';
 
 class PowerPlanPicker extends StatefulWidget {
@@ -28,7 +29,11 @@ class _PowerPlanPickerState extends State<PowerPlanPicker> {
     displayInfoBar(
       context,
       builder: (_, close) => InfoBar(
-        title: Text(result.success ? 'Done' : 'Failed'),
+        title: Text(
+          result.success
+              ? AppLocalizations.of(context).done
+              : AppLocalizations.of(context).failed,
+        ),
         content: Text(result.message ?? ''),
         severity: result.success
             ? InfoBarSeverity.success
@@ -43,6 +48,7 @@ class _PowerPlanPickerState extends State<PowerPlanPicker> {
 
   @override
   Widget build(BuildContext context) {
+    final strings = AppLocalizations.of(context);
     return FutureBuilder<List<PowerPlan>>(
       future: _plans,
       builder: (context, snapshot) {
@@ -55,18 +61,16 @@ class _PowerPlanPickerState extends State<PowerPlanPicker> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  'Bundled Power Plans',
+                  strings.powerPlans,
                   style: FluentTheme.of(context).typography.bodyStrong,
                 ),
                 const SizedBox(height: 4),
-                const Text(
-                  'Import and activate a bundled plan. ZapTweaks remembers the previous active plan for restore.',
-                ),
+                Text(strings.powerPlansDescription),
                 const SizedBox(height: 10),
                 if (snapshot.connectionState == ConnectionState.waiting)
                   const ProgressRing()
                 else if (plans.isEmpty)
-                  const Text('No bundled power plans were found.')
+                  Text(strings.noPowerPlans)
                 else
                   Wrap(
                     spacing: 8,
@@ -97,7 +101,7 @@ class _PowerPlanPickerState extends State<PowerPlanPicker> {
                                     .importAndActivatePowerPlan(_selected!),
                               ),
                         child: Text(
-                          _busy ? 'Working...' : 'Import and activate',
+                          _busy ? strings.working : strings.importAndActivate,
                         ),
                       ),
                       Button(
@@ -106,7 +110,7 @@ class _PowerPlanPickerState extends State<PowerPlanPicker> {
                             : () => _run(
                                 widget.controller.restorePreviousPowerPlan,
                               ),
-                        child: const Text('Restore previous plan'),
+                        child: Text(strings.restorePreviousPlan),
                       ),
                     ],
                   ),

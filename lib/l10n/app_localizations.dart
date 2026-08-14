@@ -257,6 +257,390 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'You can review the release notes or install it directly.'**
   String get updateAvailableDescription;
+
+  /// No description provided for @updateAvailableShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Update available'**
+  String get updateAvailableShort;
+
+  /// No description provided for @checkingForUpdates.
+  ///
+  /// In en, this message translates to:
+  /// **'Checking for updates'**
+  String get checkingForUpdates;
+
+  /// No description provided for @contactingReleaseServer.
+  ///
+  /// In en, this message translates to:
+  /// **'Contacting the release server...'**
+  String get contactingReleaseServer;
+
+  /// No description provided for @updateDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'ZapTweaks {version} is available'**
+  String updateDialogTitle(Object version);
+
+  /// No description provided for @installedVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'Installed version: {version}'**
+  String installedVersion(Object version);
+
+  /// No description provided for @releaseNotesOnGitHub.
+  ///
+  /// In en, this message translates to:
+  /// **'Release notes are available on GitHub.'**
+  String get releaseNotesOnGitHub;
+
+  /// No description provided for @later.
+  ///
+  /// In en, this message translates to:
+  /// **'Later'**
+  String get later;
+
+  /// No description provided for @failed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed'**
+  String get failed;
+
+  /// No description provided for @downloadingUpdate.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloading update'**
+  String get downloadingUpdate;
+
+  /// No description provided for @downloadingUpdateDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloading and preparing the installer...'**
+  String get downloadingUpdateDescription;
+
+  /// No description provided for @adminPrivilegesRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Administrator privileges are required'**
+  String get adminPrivilegesRequired;
+
+  /// No description provided for @adminRequiredBanner.
+  ///
+  /// In en, this message translates to:
+  /// **'Close the app and launch ZapTweaks with \"Run as administrator\". Without elevation, system tweaks cannot be applied safely.'**
+  String get adminRequiredBanner;
+
+  /// No description provided for @cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
+  /// No description provided for @createRestorePoint.
+  ///
+  /// In en, this message translates to:
+  /// **'Create restore point'**
+  String get createRestorePoint;
+
+  /// No description provided for @adminRequiredDialog.
+  ///
+  /// In en, this message translates to:
+  /// **'ZapTweaks needs administrator permissions to apply system settings.\n\nClose the app, right-click the executable, and select \"Run as administrator\".'**
+  String get adminRequiredDialog;
+
+  /// No description provided for @understood.
+  ///
+  /// In en, this message translates to:
+  /// **'Understood'**
+  String get understood;
+
+  /// No description provided for @aboutVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'Version: v{version}'**
+  String aboutVersion(Object version);
+
+  /// No description provided for @author.
+  ///
+  /// In en, this message translates to:
+  /// **'Author: PrimeBuild'**
+  String get author;
+
+  /// No description provided for @aboutDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Advanced optimization companion for deeper Windows gaming, hardware, and diagnostics workflows.'**
+  String get aboutDescription;
+
+  /// No description provided for @year.
+  ///
+  /// In en, this message translates to:
+  /// **'Year: {year}'**
+  String year(Object year);
+
+  /// No description provided for @close.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get close;
+
+  /// No description provided for @github.
+  ///
+  /// In en, this message translates to:
+  /// **'GitHub'**
+  String get github;
+
+  /// No description provided for @discord.
+  ///
+  /// In en, this message translates to:
+  /// **'Discord'**
+  String get discord;
+
+  /// No description provided for @homeAndStats.
+  ///
+  /// In en, this message translates to:
+  /// **'Home & Stats'**
+  String get homeAndStats;
+
+  /// No description provided for @cpuUsage.
+  ///
+  /// In en, this message translates to:
+  /// **'CPU Usage'**
+  String get cpuUsage;
+
+  /// No description provided for @cpuUsageDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Realtime utilization from Windows counters'**
+  String get cpuUsageDescription;
+
+  /// No description provided for @gpuUsage.
+  ///
+  /// In en, this message translates to:
+  /// **'GPU Usage'**
+  String get gpuUsage;
+
+  /// No description provided for @gpuUsageDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Realtime engine utilization'**
+  String get gpuUsageDescription;
+
+  /// No description provided for @vramUsage.
+  ///
+  /// In en, this message translates to:
+  /// **'VRAM Usage'**
+  String get vramUsage;
+
+  /// No description provided for @memoryUsage.
+  ///
+  /// In en, this message translates to:
+  /// **'Memory Usage'**
+  String get memoryUsage;
+
+  /// No description provided for @unknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown'**
+  String get unknown;
+
+  /// No description provided for @installedRam.
+  ///
+  /// In en, this message translates to:
+  /// **'Installed RAM'**
+  String get installedRam;
+
+  /// No description provided for @networkAdapters.
+  ///
+  /// In en, this message translates to:
+  /// **'Network Adapters'**
+  String get networkAdapters;
+
+  /// No description provided for @noConnectedAdapters.
+  ///
+  /// In en, this message translates to:
+  /// **'No connected adapters detected'**
+  String get noConnectedAdapters;
+
+  /// No description provided for @audioDevices.
+  ///
+  /// In en, this message translates to:
+  /// **'Audio Devices'**
+  String get audioDevices;
+
+  /// No description provided for @noAudioDevices.
+  ///
+  /// In en, this message translates to:
+  /// **'No audio devices detected'**
+  String get noAudioDevices;
+
+  /// No description provided for @noTweaksAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No tweaks are available for your hardware configuration.'**
+  String get noTweaksAvailable;
+
+  /// No description provided for @detectedHardware.
+  ///
+  /// In en, this message translates to:
+  /// **'Detected hardware'**
+  String get detectedHardware;
+
+  /// No description provided for @gpuUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'GPU: Unknown'**
+  String get gpuUnknown;
+
+  /// No description provided for @cpuValue.
+  ///
+  /// In en, this message translates to:
+  /// **'CPU: {value}'**
+  String cpuValue(Object value);
+
+  /// No description provided for @gpuValue.
+  ///
+  /// In en, this message translates to:
+  /// **'GPU: {value}'**
+  String gpuValue(Object value);
+
+  /// No description provided for @ramValue.
+  ///
+  /// In en, this message translates to:
+  /// **'RAM: {value}'**
+  String ramValue(Object value);
+
+  /// No description provided for @enableAllVisible.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable all visible'**
+  String get enableAllVisible;
+
+  /// No description provided for @disableAllVisible.
+  ///
+  /// In en, this message translates to:
+  /// **'Disable all visible'**
+  String get disableAllVisible;
+
+  /// No description provided for @restartNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Restart now'**
+  String get restartNow;
+
+  /// No description provided for @restartRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Restart required'**
+  String get restartRequired;
+
+  /// No description provided for @restartRequiredDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'A system restart is required to fully apply one or more changes.'**
+  String get restartRequiredDescription;
+
+  /// No description provided for @advancedActionsIncluded.
+  ///
+  /// In en, this message translates to:
+  /// **'Advanced actions included'**
+  String get advancedActionsIncluded;
+
+  /// No description provided for @advancedActionsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'External tools, launcher actions, and script-driven utilities are grouped here for quick diagnostics and maintenance workflows.'**
+  String get advancedActionsDescription;
+
+  /// No description provided for @aggressiveTweakWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Aggressive tweak. A restore point is mandatory.'**
+  String get aggressiveTweakWarning;
+
+  /// No description provided for @networkReconnectWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Network adapter reconnect or system restart may be required.'**
+  String get networkReconnectWarning;
+
+  /// No description provided for @actionWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Action warning'**
+  String get actionWarning;
+
+  /// No description provided for @unknownError.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown error.'**
+  String get unknownError;
+
+  /// No description provided for @presets.
+  ///
+  /// In en, this message translates to:
+  /// **'Presets'**
+  String get presets;
+
+  /// No description provided for @presetFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Preset failed'**
+  String get presetFailed;
+
+  /// No description provided for @safetyWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Safety warning'**
+  String get safetyWarning;
+
+  /// No description provided for @unavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Unavailable'**
+  String get unavailable;
+
+  /// No description provided for @powerPlans.
+  ///
+  /// In en, this message translates to:
+  /// **'Bundled Power Plans'**
+  String get powerPlans;
+
+  /// No description provided for @powerPlansDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Import and activate a bundled plan. ZapTweaks remembers the previous active plan for restore.'**
+  String get powerPlansDescription;
+
+  /// No description provided for @noPowerPlans.
+  ///
+  /// In en, this message translates to:
+  /// **'No bundled power plans were found.'**
+  String get noPowerPlans;
+
+  /// No description provided for @working.
+  ///
+  /// In en, this message translates to:
+  /// **'Working...'**
+  String get working;
+
+  /// No description provided for @importAndActivate.
+  ///
+  /// In en, this message translates to:
+  /// **'Import and activate'**
+  String get importAndActivate;
+
+  /// No description provided for @restorePreviousPlan.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore previous plan'**
+  String get restorePreviousPlan;
+
+  /// No description provided for @ran.
+  ///
+  /// In en, this message translates to:
+  /// **'Ran'**
+  String get ran;
 }
 
 class _AppLocalizationsDelegate

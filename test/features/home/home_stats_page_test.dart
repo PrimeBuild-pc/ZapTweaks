@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:script_utility/core/models/hardware_profile.dart';
 import 'package:script_utility/core/models/system_metrics_snapshot.dart';
 import 'package:script_utility/features/home/presentation/pages/home_stats_page.dart';
+import 'package:script_utility/l10n/app_localizations.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -34,6 +35,8 @@ void main() {
 
     await tester.pumpWidget(
       FluentApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: HomeStatsPage(
           hardwareProfile: profile,
           latestMetrics: metrics,

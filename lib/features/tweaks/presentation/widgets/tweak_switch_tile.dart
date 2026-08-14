@@ -1,5 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 
+import '../../../../l10n/app_localizations.dart';
+
 class TweakSwitchTile extends StatelessWidget {
   const TweakSwitchTile({
     super.key,
@@ -26,6 +28,7 @@ class TweakSwitchTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final strings = AppLocalizations.of(context);
     return Card(
       padding: const EdgeInsets.all(14),
       child: Column(
@@ -59,7 +62,7 @@ class TweakSwitchTile extends StatelessWidget {
                       actions: <Widget>[
                         Button(
                           onPressed: () => Navigator.of(context).pop(),
-                          child: const Text('Close'),
+                          child: Text(strings.close),
                         ),
                       ],
                     ),
@@ -81,7 +84,7 @@ class TweakSwitchTile extends StatelessWidget {
           if (warning != null) ...<Widget>[
             const SizedBox(height: 10),
             InfoBar(
-              title: const Text('Safety warning'),
+              title: Text(strings.safetyWarning),
               content: Text(warning!),
               severity: InfoBarSeverity.warning,
               isLong: true,
@@ -90,7 +93,7 @@ class TweakSwitchTile extends StatelessWidget {
           if (!enabled && unavailableReason != null) ...<Widget>[
             const SizedBox(height: 10),
             InfoBar(
-              title: const Text('Unavailable'),
+              title: Text(strings.unavailable),
               content: Text(unavailableReason!),
               severity: InfoBarSeverity.info,
               isLong: true,

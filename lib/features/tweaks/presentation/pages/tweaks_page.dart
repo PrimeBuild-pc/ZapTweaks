@@ -1,6 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 
 import '../../../../core/services/tweak_text_localizer.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../application/tweak_controller.dart';
 import '../widgets/power_plan_picker.dart';
 import '../widgets/tweak_switch_tile.dart';
@@ -44,11 +45,12 @@ class _TweaksPageState extends State<TweaksPage> {
         .toList(growable: false);
 
     if (availableTweaks.isEmpty) {
-      return const Center(
-        child: Text('No tweaks available for your hardware configuration'),
+      return Center(
+        child: Text(AppLocalizations.of(context).noTweaksAvailable),
       );
     }
 
+    final strings = AppLocalizations.of(context);
     final showPresets =
         widget.controller.categoryHasToggleableItems(widget.category) &&
         !_presetHiddenCategories.contains(widget.category);
@@ -87,18 +89,26 @@ class _TweaksPageState extends State<TweaksPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    'Detected hardware',
+                    strings.detectedHardware,
                     style: FluentTheme.of(context).typography.bodyStrong,
                   ),
                   const SizedBox(height: 8),
-                  Text('CPU: ${widget.controller.hardwareProfile.cpuName}'),
                   Text(
-                    widget.controller.hardwareProfile.gpuNames.isEmpty
-                        ? 'GPU: Unknown'
-                        : 'GPU: ${widget.controller.hardwareProfile.gpuNames.join(' | ')}',
+                    strings.cpuValue(widget.controller.hardwareProfile.cpuName),
                   ),
                   Text(
-                    'RAM: ${widget.controller.hardwareProfile.ramInstalledLabel}',
+                    widget.controller.hardwareProfile.gpuNames.isEmpty
+                        ? strings.gpuUnknown
+                        : strings.gpuValue(
+                            widget.controller.hardwareProfile.gpuNames.join(
+                              ' | ',
+                            ),
+                          ),
+                  ),
+                  Text(
+                    strings.ramValue(
+                      widget.controller.hardwareProfile.ramInstalledLabel,
+                    ),
                   ),
                 ],
               ),
@@ -112,34 +122,34 @@ class _TweaksPageState extends State<TweaksPage> {
             runSpacing: 8,
             children: <Widget>[
               FilledButton(
-                child: const Text('Enable all visible'),
+                child: Text(strings.enableAllVisible),
                 onPressed: () async {
                   await widget.controller.setAllInCategory(
                     widget.category,
                     true,
                     confirmRestorePoint: () => widget.onSafetyPrompt(
-                      'Create restore point',
-                      'This batch operation requires a restore point before execution.',
+                      strings.createRestorePoint,
+                      strings.aggressiveTweakWarning,
                     ),
                   );
                 },
               ),
               Button(
-                child: const Text('Disable all visible'),
+                child: Text(strings.disableAllVisible),
                 onPressed: () async {
                   await widget.controller.setAllInCategory(
                     widget.category,
                     false,
                     confirmRestorePoint: () => widget.onSafetyPrompt(
-                      'Create restore point',
-                      'This batch operation requires a restore point before execution.',
+                      strings.createRestorePoint,
+                      strings.aggressiveTweakWarning,
                     ),
                   );
                 },
               ),
               if (widget.controller.needsRestart)
                 FilledButton(
-                  child: const Text('Restart now'),
+                  child: Text(strings.restartNow),
                   onPressed: () async {
                     await widget.controller.restartSystem();
                     if (mounted) {
@@ -153,17 +163,15 @@ class _TweaksPageState extends State<TweaksPage> {
         ],
         if (widget.controller.needsRestart && !_bannerDismissed)
           InfoBar(
-            title: const Text('Restart required'),
-            content: const Text(
-              'A system restart is required to fully apply one or more changes.',
-            ),
+            title: Text(strings.restartRequired),
+            content: Text(strings.restartRequiredDescription),
             severity: InfoBarSeverity.warning,
             isLong: true,
             action: Row(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Button(
-                  child: const Text('Restart Now'),
+                  child: Text(strings.restartNow),
                   onPressed: () async {
                     await widget.controller.restartSystem();
                     if (!mounted) {
@@ -175,7 +183,7 @@ class _TweaksPageState extends State<TweaksPage> {
                 ),
                 const SizedBox(width: 8),
                 Button(
-                  child: const Text('Later'),
+                  child: Text(strings.later),
                   onPressed: () {
                     setState(() => _bannerDismissed = true);
                   },
@@ -185,14 +193,11 @@ class _TweaksPageState extends State<TweaksPage> {
           ),
         const SizedBox(height: 8),
         if (widget.category == 'Tools')
-          const Padding(
-            padding: EdgeInsets.only(bottom: 8),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
             child: InfoBar(
-              title: Text('Advanced actions included'),
-              content: Text(
-                'External tools, launcher actions, and script-driven utilities '
-                'are grouped here for quick diagnostics and maintenance workflows.',
-              ),
+              title: Text(strings.advancedActionsIncluded),
+              content: Text(strings.advancedActionsDescription),
               severity: InfoBarSeverity.info,
               isLong: true,
             ),
@@ -218,9 +223,9 @@ class _TweaksPageState extends State<TweaksPage> {
                 enabled: available,
                 isBusy: busy,
                 warning: descriptor.isAggressive
-                    ? 'Aggressive tweak. A restore point is mandatory.'
+                    ? strings.aggressiveTweakWarning
                     : (needsReconnectHint
-                          ? 'Network adapter reconnect or system restart may be required.'
+                          ? strings.networkReconnectWarning
                           : null),
                 unavailableReason: available
                     ? null
@@ -230,8 +235,8 @@ class _TweaksPageState extends State<TweaksPage> {
                     descriptor,
                     next,
                     confirmRestorePoint: () => widget.onSafetyPrompt(
-                      'Create restore point',
-                      'This aggressive tweak requires a restore point before execution.',
+                      strings.createRestorePoint,
+                      strings.aggressiveTweakWarning,
                     ),
                   );
 
@@ -239,8 +244,8 @@ class _TweaksPageState extends State<TweaksPage> {
                     displayInfoBar(
                       context,
                       builder: (_, close) => InfoBar(
-                        title: const Text('Operation failed'),
-                        content: Text(result.message ?? 'Unknown error.'),
+                        title: Text(strings.operationFailed),
+                        content: Text(result.message ?? strings.unknownError),
                         action: IconButton(
                           icon: const Icon(FluentIcons.clear),
                           onPressed: close,
@@ -266,7 +271,7 @@ class _TweaksPageState extends State<TweaksPage> {
                 enabled: available,
                 isBusy: busy,
                 warning: descriptor.isAggressive
-                    ? 'Aggressive tweak. A restore point is mandatory.'
+                    ? strings.aggressiveTweakWarning
                     : null,
                 unavailableReason: available
                     ? null
@@ -275,8 +280,8 @@ class _TweaksPageState extends State<TweaksPage> {
                   final result = await widget.controller.runScriptAction(
                     descriptor,
                     confirmRestorePoint: () => widget.onSafetyPrompt(
-                      'Create restore point',
-                      'This aggressive tweak requires a restore point before execution.',
+                      strings.createRestorePoint,
+                      strings.aggressiveTweakWarning,
                     ),
                   );
 
@@ -284,8 +289,8 @@ class _TweaksPageState extends State<TweaksPage> {
                     displayInfoBar(
                       context,
                       builder: (_, close) => InfoBar(
-                        title: const Text('Operation failed'),
-                        content: Text(result.message ?? 'Unknown error.'),
+                        title: Text(strings.operationFailed),
+                        content: Text(result.message ?? strings.unknownError),
                         action: IconButton(
                           icon: const Icon(FluentIcons.clear),
                           onPressed: close,
@@ -323,7 +328,7 @@ class _TweaksPageState extends State<TweaksPage> {
                                 color: Colors.green,
                               ),
                               const SizedBox(width: 6),
-                              const Text('Ran'),
+                              Text(strings.ran),
                             ],
                           ),
                         const SizedBox(height: 4),
@@ -352,14 +357,13 @@ class _TweaksPageState extends State<TweaksPage> {
                         onPressed: busy || !available
                             ? null
                             : () async {
-                                final warningMessage = scriptTweak
-                                    .warningMessage
+                                final warningMessage = text.warningMessage
                                     ?.trim();
 
                                 if (warningMessage != null &&
                                     warningMessage.isNotEmpty) {
                                   final accepted = await widget.onSafetyPrompt(
-                                    'Action warning',
+                                    strings.actionWarning,
                                     warningMessage,
                                   );
                                   if (!accepted) {
@@ -372,8 +376,8 @@ class _TweaksPageState extends State<TweaksPage> {
                                       descriptor,
                                       confirmRestorePoint: () =>
                                           widget.onSafetyPrompt(
-                                            'Create restore point',
-                                            'This aggressive action requires a restore point before execution.',
+                                            strings.createRestorePoint,
+                                            strings.aggressiveTweakWarning,
                                           ),
                                     );
 
@@ -381,9 +385,9 @@ class _TweaksPageState extends State<TweaksPage> {
                                   displayInfoBar(
                                     context,
                                     builder: (_, close) => InfoBar(
-                                      title: const Text('Operation failed'),
+                                      title: Text(strings.operationFailed),
                                       content: Text(
-                                        result.message ?? 'Unknown error.',
+                                        result.message ?? strings.unknownError,
                                       ),
                                       action: IconButton(
                                         icon: const Icon(FluentIcons.clear),
@@ -394,7 +398,7 @@ class _TweaksPageState extends State<TweaksPage> {
                                   );
                                 }
                               },
-                        child: Text(scriptTweak.actionLabel),
+                        child: Text(text.actionLabel),
                       ),
                     ],
                   ),
@@ -416,7 +420,7 @@ class _TweaksPageState extends State<TweaksPage> {
         actions: <Widget>[
           Button(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Close'),
+            child: Text(AppLocalizations.of(context).close),
           ),
         ],
       ),
@@ -435,7 +439,7 @@ class _TweaksPageState extends State<TweaksPage> {
         child: Row(
           children: <Widget>[
             Text(
-              'Presets',
+              AppLocalizations.of(context).presets,
               style: FluentTheme.of(context).typography.bodyStrong,
             ),
             const SizedBox(width: 12),
@@ -465,8 +469,10 @@ class _TweaksPageState extends State<TweaksPage> {
                               widget.category,
                               nextPreset,
                               confirmRestorePoint: () => widget.onSafetyPrompt(
-                                'Create restore point',
-                                'This preset changes aggressive settings and requires a restore point.',
+                                AppLocalizations.of(context).createRestorePoint,
+                                AppLocalizations.of(
+                                  context,
+                                ).aggressiveTweakWarning,
                               ),
                             );
 
@@ -474,8 +480,13 @@ class _TweaksPageState extends State<TweaksPage> {
                           displayInfoBar(
                             context,
                             builder: (_, close) => InfoBar(
-                              title: const Text('Preset failed'),
-                              content: Text(result.message ?? 'Unknown error.'),
+                              title: Text(
+                                AppLocalizations.of(context).presetFailed,
+                              ),
+                              content: Text(
+                                result.message ??
+                                    AppLocalizations.of(context).unknownError,
+                              ),
                               action: IconButton(
                                 icon: const Icon(FluentIcons.clear),
                                 onPressed: close,

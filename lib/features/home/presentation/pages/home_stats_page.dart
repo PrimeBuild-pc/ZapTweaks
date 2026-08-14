@@ -2,6 +2,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 
 import '../../../../core/models/hardware_profile.dart';
 import '../../../../core/models/system_metrics_snapshot.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../widgets/metric_card.dart';
 
 class HomeStatsPage extends StatelessWidget {
@@ -24,10 +25,14 @@ class HomeStatsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final strings = AppLocalizations.of(context);
     return ListView(
       padding: const EdgeInsets.all(16),
       children: <Widget>[
-        Text('Home & Stats', style: FluentTheme.of(context).typography.title),
+        Text(
+          strings.homeAndStats,
+          style: FluentTheme.of(context).typography.title,
+        ),
         const SizedBox(height: 12),
         _buildHardwareGrid(context),
         const SizedBox(height: 12),
@@ -38,9 +43,9 @@ class HomeStatsPage extends StatelessWidget {
             SizedBox(
               width: 380,
               child: MetricCard(
-                title: 'CPU Usage',
+                title: strings.cpuUsage,
                 value: latestMetrics.cpuLabel,
-                subtitle: 'Realtime utilization from Windows counters',
+                subtitle: strings.cpuUsageDescription,
                 color: const Color(0xFF4CAF50),
                 history: cpuHistory,
               ),
@@ -48,9 +53,9 @@ class HomeStatsPage extends StatelessWidget {
             SizedBox(
               width: 380,
               child: MetricCard(
-                title: 'GPU Usage',
+                title: strings.gpuUsage,
                 value: latestMetrics.gpuLabel,
-                subtitle: 'Realtime engine utilization',
+                subtitle: strings.gpuUsageDescription,
                 color: const Color(0xFFFF9800),
                 history: gpuHistory,
               ),
@@ -58,7 +63,7 @@ class HomeStatsPage extends StatelessWidget {
             SizedBox(
               width: 380,
               child: MetricCard(
-                title: 'VRAM Usage',
+                title: strings.vramUsage,
                 value: latestMetrics.vramPercentLabel,
                 subtitle: latestMetrics.vramDetailLabel,
                 color: const Color(0xFFE91E63),
@@ -68,7 +73,7 @@ class HomeStatsPage extends StatelessWidget {
             SizedBox(
               width: 380,
               child: MetricCard(
-                title: 'Memory Usage',
+                title: strings.memoryUsage,
                 value: latestMetrics.memoryPercentLabel,
                 subtitle: latestMetrics.memoryDetailLabel,
                 color: const Color(0xFF03A9F4),
@@ -91,22 +96,26 @@ class HomeStatsPage extends StatelessWidget {
           context,
           'GPU',
           hardwareProfile.gpuNames.isEmpty
-              ? 'Unknown'
+              ? AppLocalizations.of(context).unknown
               : hardwareProfile.gpuNames.join(' | '),
         ),
-        _infoCard(context, 'Installed RAM', hardwareProfile.ramInstalledLabel),
         _infoCard(
           context,
-          'Network Adapters',
+          AppLocalizations.of(context).installedRam,
+          hardwareProfile.ramInstalledLabel,
+        ),
+        _infoCard(
+          context,
+          AppLocalizations.of(context).networkAdapters,
           hardwareProfile.networkAdapters.isEmpty
-              ? 'No connected adapters detected'
+              ? AppLocalizations.of(context).noConnectedAdapters
               : hardwareProfile.networkAdapters.join('\n'),
         ),
         _infoCard(
           context,
-          'Audio Devices',
+          AppLocalizations.of(context).audioDevices,
           hardwareProfile.audioDevices.isEmpty
-              ? 'No audio devices detected'
+              ? AppLocalizations.of(context).noAudioDevices
               : hardwareProfile.audioDevices.join('\n'),
         ),
       ],
