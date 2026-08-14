@@ -245,8 +245,8 @@ try {
         'gpu_amd_optimizations',
         dwordEquals(
           r'HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000',
-          'PP_SclkDeepSleepDisable',
-          1,
+          'EnableUlps',
+          0,
         ),
       ),
       MapEntry(
@@ -368,7 +368,11 @@ try {
       ),
       MapEntry(
         'game_mode',
-        dwordEquals(r'HKCU\System\GameConfigStore', 'GameDVR_Enabled', 0),
+        dwordEquals(
+          r'HKCU\Software\Microsoft\GameBar',
+          'AutoGameModeEnabled',
+          1,
+        ),
       ),
       MapEntry(
         'windows_update',
@@ -557,11 +561,6 @@ try {
       );
       await _writeRegistryDword(
         r'HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers',
-        'HwSchMode',
-        2,
-      );
-      await _writeRegistryDword(
-        r'HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers',
         'TdrDelay',
         60,
       );
@@ -571,11 +570,6 @@ try {
         60,
       );
     } else {
-      await _writeRegistryDword(
-        r'HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers',
-        'HwSchMode',
-        1,
-      );
       await _deleteRegistryValue(
         r'HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers',
         'TdrDelay',
@@ -596,11 +590,6 @@ try {
       );
       await _writeRegistryDword(
         r'HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers',
-        'HwSchMode',
-        1,
-      );
-      await _writeRegistryDword(
-        r'HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers',
         'TdrDelay',
         60,
       );
@@ -618,26 +607,6 @@ try {
         r'HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0001',
         'EnableUlps',
         0,
-      );
-      await _writeRegistryDword(
-        r'HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000',
-        'PP_SclkDeepSleepDisable',
-        1,
-      );
-      await _writeRegistryDword(
-        r'HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000',
-        'PP_ThermalAutoThrottlingEnable',
-        0,
-      );
-      await _writeRegistryDword(
-        r'HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000',
-        'DisableDRR',
-        1,
-      );
-      await _writeRegistryDword(
-        r'HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000',
-        'PP_MemClockDeepSleepDisable',
-        1,
       );
     } else {
       await _writeRegistryDword(
@@ -659,11 +628,6 @@ try {
         r'HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games',
         'GPU Priority',
         8,
-      );
-      await _writeRegistryDword(
-        r'HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers',
-        'HwSchMode',
-        2,
       );
       await _writeRegistryDword(
         r'HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers',
@@ -729,11 +693,6 @@ try {
       await _writeRegistryDword(
         r'HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000',
         'EnableUlps',
-        1,
-      );
-      await _writeRegistryDword(
-        r'HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers',
-        'HwSchMode',
         1,
       );
     }
@@ -1686,49 +1645,15 @@ try {
   }
 
   Future<void> _applyGameMode(bool enable) async {
+    const gameBarKey = r'HKCU\Software\Microsoft\GameBar';
     if (enable) {
-      await _writeRegistryDword(
-        r'HKCU\Software\Microsoft\GameBar',
-        'AutoGameModeEnabled',
-        0,
-      );
-      await _writeRegistryDword(
-        r'HKCU\Software\Microsoft\GameBar',
-        'AllowAutoGameMode',
-        0,
-      );
-      await _writeRegistryDword(
-        r'HKCU\Software\Microsoft\GameBar',
-        'UseNexusForGameBarEnabled',
-        0,
-      );
-      await _writeRegistryDword(
-        r'HKCU\System\GameConfigStore',
-        'GameDVR_Enabled',
-        0,
-      );
-      await _writeRegistryDword(
-        r'HKLM\SOFTWARE\Policies\Microsoft\Windows\GameDVR',
-        'AllowGameDVR',
-        0,
-      );
-    } else {
-      await _writeRegistryDword(
-        r'HKCU\Software\Microsoft\GameBar',
-        'AutoGameModeEnabled',
-        1,
-      );
-      await _writeRegistryDword(
-        r'HKCU\System\GameConfigStore',
-        'GameDVR_Enabled',
-        1,
-      );
-      await _writeRegistryDword(
-        r'HKLM\SOFTWARE\Policies\Microsoft\Windows\GameDVR',
-        'AllowGameDVR',
-        1,
-      );
+      await _writeRegistryDword(gameBarKey, 'AutoGameModeEnabled', 1);
+      await _writeRegistryDword(gameBarKey, 'AllowAutoGameMode', 1);
+      return;
     }
+
+    await _deleteRegistryValue(gameBarKey, 'AutoGameModeEnabled');
+    await _deleteRegistryValue(gameBarKey, 'AllowAutoGameMode');
   }
 
   Future<void> _applyWindowsUpdate(bool enable) async {

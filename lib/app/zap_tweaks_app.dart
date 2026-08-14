@@ -6,7 +6,9 @@ import 'package:system_theme/system_theme.dart';
 
 import 'app_metadata.dart';
 import '../core/models/operation_result.dart';
+import '../core/services/app_locale_service.dart';
 import '../core/services/process_runner.dart';
+import '../l10n/app_localizations.dart';
 import '../features/home/presentation/pages/home_stats_page.dart';
 import '../features/tweaks/application/tweak_controller.dart';
 import '../features/tweaks/presentation/pages/tweaks_page.dart';
@@ -124,6 +126,9 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
     return FluentApp(
       debugShowCheckedModeBanner: false,
       title: AppMetadata.productName,
+      locale: AppLocaleService.localeFor(widget.controller.localeCode),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       theme: buildZapTweaksTheme(accentColor: _systemAccentColor),
       navigatorKey: _navigatorKey,
       home: Stack(
@@ -163,14 +168,24 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
                       .map(
                         (category) => PaneItem(
                           icon: Icon(_iconForCategory(category)),
-                          title: Text(category),
+                          title: Text(
+                            AppLocaleService.category(
+                              widget.controller.localeCode,
+                              category,
+                            ),
+                          ),
                           body: _buildCategoryBody(category),
                         ),
                       ),
                   PaneItemSeparator(),
                   PaneItem(
                     icon: const Icon(FluentIcons.settings),
-                    title: const Text('Settings'),
+                    title: Text(
+                      AppLocaleService.category(
+                        widget.controller.localeCode,
+                        TweakController.settingsCategory,
+                      ),
+                    ),
                     body: _buildCategoryBody(TweakController.settingsCategory),
                   ),
                 ],

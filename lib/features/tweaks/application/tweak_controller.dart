@@ -9,10 +9,12 @@ import '../../../core/models/safety_gate_result.dart';
 import '../../../core/models/system_metrics_snapshot.dart';
 import '../../../core/models/tweak_descriptor.dart';
 import '../../../core/models/update_info.dart';
+import '../../../core/services/app_locale_service.dart';
 import '../../../core/services/hardware_detection_service.dart';
 import '../../../core/services/logging_service.dart';
 import '../../../core/services/metrics_sampling_service.dart';
 import '../../../core/services/permission_service.dart';
+import '../../../core/services/power_plan_service.dart';
 import '../../../core/services/process_runner.dart';
 import '../../../core/services/safety_gate_service.dart';
 import '../../../core/services/system_action_service.dart';
@@ -33,6 +35,7 @@ class TweakController extends ChangeNotifier {
     required ProcessRunner processRunner,
     required String appVersion,
     LoggingService? loggingService,
+    PowerPlanService? powerPlanService,
   }) : _tweakManager = tweakManager,
        _permissionService = permissionService,
        _hardwareDetectionService = hardwareDetectionService,
@@ -42,6 +45,12 @@ class TweakController extends ChangeNotifier {
        _metricsSamplingService = metricsSamplingService,
        _preferences = preferences,
        _processRunner = processRunner,
+       _powerPlanService =
+           powerPlanService ??
+           PowerPlanService(
+             preferences: preferences,
+             processRunner: processRunner,
+           ),
        _appVersion = appVersion,
        _loggingService = loggingService ?? LoggingService.instance;
 
@@ -54,6 +63,7 @@ class TweakController extends ChangeNotifier {
   final MetricsSamplingService _metricsSamplingService;
   final SharedPreferences _preferences;
   final ProcessRunner _processRunner;
+  final PowerPlanService _powerPlanService;
   final String _appVersion;
   final LoggingService _loggingService;
 
@@ -66,6 +76,7 @@ class TweakController extends ChangeNotifier {
   static const String _executionModeKey = 'executionMode';
   static const String _automaticUpdateChecksKey = 'automaticUpdateChecks';
   static const String _lastSelectedPresetPrefix = 'preset:';
+  static const String _localeCodeKey = AppLocaleService.preferenceKey;
   static const int _maxMetricsPoints = 40;
   static const Set<String> _interactionLockingTweaks = <String>{
     'network_low_latency_bandwidth_profile',
@@ -85,6 +96,7 @@ class TweakController extends ChangeNotifier {
   bool _isSamplingMetrics = false;
   bool _isSystemOperationActive = false;
   bool _automaticUpdateChecksEnabled = true;
+  String _localeCode = AppLocaleService.systemCode();
   bool _isCheckingForUpdates = false;
   UpdateInfo? _availableUpdate;
   String? _updateStatusMessage;
@@ -114,6 +126,7 @@ class TweakController extends ChangeNotifier {
   String get loadingStatus => _loadingStatus;
   String get appVersion => _appVersion;
   bool get automaticUpdateChecksEnabled => _automaticUpdateChecksEnabled;
+  String get localeCode => _localeCode;
   bool get isCheckingForUpdates => _isCheckingForUpdates;
   bool get isUpdateAvailable => _availableUpdate != null;
   UpdateInfo? get availableUpdate => _availableUpdate;
@@ -129,6 +142,27 @@ class TweakController extends ChangeNotifier {
   List<double> get memoryHistory => _memoryHistory;
   List<double> get gpuHistory => _gpuHistory;
   List<double> get vramHistory => _vramHistory;
+
+  Future<List<PowerPlan>> availablePowerPlans() =>
+      _powerPlanService.availablePlans();
+
+  Future<OperationResult> importAndActivatePowerPlan(PowerPlan plan) async {
+    try {
+      await _powerPlanService.importAndActivate(plan);
+      return const OperationResult(success: true);
+    } catch (error) {
+      return OperationResult(success: false, message: error.toString());
+    }
+  }
+
+  Future<OperationResult> restorePreviousPowerPlan() async {
+    try {
+      await _powerPlanService.restorePreviousPlan();
+      return const OperationResult(success: true);
+    } catch (error) {
+      return OperationResult(success: false, message: error.toString());
+    }
+  }
 
   /// Returns true when a category includes at least one toggle-capable tweak.
   bool categoryHasToggleableItems(String category, {bool systemOnly = false}) {
@@ -184,6 +218,9 @@ class TweakController extends ChangeNotifier {
       _restorePresetSelections();
       _automaticUpdateChecksEnabled =
           _preferences.getBool(_automaticUpdateChecksKey) ?? true;
+      _localeCode = AppLocaleService.normalize(
+        _preferences.getString(_localeCodeKey) ?? AppLocaleService.systemCode(),
+      );
 
       _loadingStatus = 'Loading tweaks catalog...';
       notifyListeners();
@@ -221,6 +258,17 @@ class TweakController extends ChangeNotifier {
         Future<void>.delayed(Duration.zero, _checkForUpdatesAfterStartup);
       }
     }
+  }
+
+  Future<void> setLocaleCode(String code) async {
+    final nextCode = AppLocaleService.normalize(code);
+    if (_localeCode == nextCode) {
+      return;
+    }
+
+    _localeCode = nextCode;
+    await _preferences.setString(_localeCodeKey, nextCode);
+    notifyListeners();
   }
 
   Future<void> setDryRunMode(bool enabled) async {

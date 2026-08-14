@@ -337,8 +337,8 @@ class ExternalUrlLauncherTweak extends ActionSystemTweak {
   @override
   Future<void> onApply() async {
     final uri = Uri.tryParse(url);
-    if (uri == null) {
-      throw Exception('Invalid URL: $url');
+    if (uri == null || uri.scheme != 'https' || uri.host.isEmpty) {
+      throw Exception('Invalid HTTPS URL: $url');
     }
 
     final result = await ProcessRunner.shared.launch('explorer', <String>[

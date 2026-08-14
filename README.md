@@ -26,6 +26,8 @@ It is not intended to replace common baseline tools such as [CTT WinUtil](https:
 - Live CPU, GPU, RAM, and VRAM dashboard.
 - Bundled diagnostics, installers, scripts, power plans, and recovery tools.
 - Built-in update checks and installer flow.
+- UI language selection for English, Italian, German, Spanish, French, Russian, and Simplified Chinese.
+- 91 bundled power plans with import, activation, and previous-plan restore.
 - Direct access to CTT WinUtil and Winhance for complementary baseline work.
 
 ## Categories
@@ -74,7 +76,9 @@ irm https://raw.githubusercontent.com/PrimeBuild-pc/ZapTweaks/main/scripts/insta
 
 ## Safety
 
-ZapTweaks exposes advanced settings that can affect stability, security, power use, and network behavior. Read each description, create restore points when requested, and avoid applying changes you do not understand. Remote-script actions display a warning before execution.
+ZapTweaks exposes advanced settings that can affect stability, security, power use, and network behavior. Read each description, create restore points when requested, and avoid applying changes you do not understand. NIC and device power-saving toggles create a local backup before changing state. Remote-script actions display a warning before execution.
+
+VBIOS and NVRAM tools are launcher-only: ZapTweaks does not bundle them, choose firmware images, or run flash commands. See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 ## Build from source
 

@@ -16,6 +16,7 @@ abstract class SystemTweak {
     this.isAggressive = false,
     this.warningMessage,
     this.requiredCpuVendor,
+    this.requiredGpuVendors = const <String>{},
     this.minimumWindowsBuild,
     this.conflictingTweakIds = const <String>{},
   });
@@ -29,6 +30,7 @@ abstract class SystemTweak {
   final bool isAggressive;
   final String? warningMessage;
   final String? requiredCpuVendor;
+  final Set<String> requiredGpuVendors;
   final int? minimumWindowsBuild;
   final Set<String> conflictingTweakIds;
   bool isApplied;
@@ -60,6 +62,7 @@ abstract class ActionSystemTweak extends SystemTweak {
     super.isAggressive,
     super.warningMessage,
     super.requiredCpuVendor,
+    super.requiredGpuVendors,
     super.minimumWindowsBuild,
     super.conflictingTweakIds,
   });

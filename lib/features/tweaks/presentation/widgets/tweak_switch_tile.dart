@@ -9,6 +9,7 @@ class TweakSwitchTile extends StatelessWidget {
     required this.enabled,
     required this.isBusy,
     required this.onChanged,
+    this.details,
     this.warning,
     this.unavailableReason,
   });
@@ -18,6 +19,7 @@ class TweakSwitchTile extends StatelessWidget {
   final bool value;
   final bool enabled;
   final bool isBusy;
+  final String? details;
   final String? warning;
   final String? unavailableReason;
   final Future<void> Function(bool next) onChanged;
@@ -46,6 +48,23 @@ class TweakSwitchTile extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 16),
+              if (details != null)
+                IconButton(
+                  icon: const Icon(FluentIcons.info),
+                  onPressed: () => showDialog<void>(
+                    context: context,
+                    builder: (context) => ContentDialog(
+                      title: Text(title),
+                      content: Text(details!),
+                      actions: <Widget>[
+                        Button(
+                          onPressed: () => Navigator.of(context).pop(),
+                          child: const Text('Close'),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               if (isBusy)
                 const SizedBox(
                   width: 22,

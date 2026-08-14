@@ -8,6 +8,33 @@ import 'package:script_utility/models/action_tweaks.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
+  test(
+    'bundled power-plan library is complete and excludes registry overrides',
+    () {
+      final powerPlans =
+          Directory(
+                path.join(Directory.current.path, 'resources', 'Powerplans'),
+              )
+              .listSync()
+              .whereType<File>()
+              .where((file) => file.path.toLowerCase().endsWith('.pow'))
+              .toList();
+
+      expect(powerPlans, hasLength(91));
+      expect(
+        File(
+          path.join(
+            Directory.current.path,
+            'resources',
+            'Powerplans',
+            'FixPowerPlans.reg',
+          ),
+        ).existsSync(),
+        isFalse,
+      );
+    },
+  );
+
   test('all bundled scripts and executables are mapped by the catalog', () {
     final repoRoot = Directory.current.path;
     final resourcesRoot = Directory(path.join(repoRoot, 'resources'));

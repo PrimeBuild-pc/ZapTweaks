@@ -1,6 +1,8 @@
 import 'package:fluent_ui/fluent_ui.dart';
 
+import '../../../../core/services/tweak_text_localizer.dart';
 import '../../application/tweak_controller.dart';
+import '../widgets/power_plan_picker.dart';
 import '../widgets/tweak_switch_tile.dart';
 
 class TweaksPage extends StatefulWidget {
@@ -69,6 +71,10 @@ class _TweaksPageState extends State<TweaksPage> {
     return ListView(
       padding: const EdgeInsets.all(16),
       children: <Widget>[
+        if (widget.category == 'Power & CPU') ...<Widget>[
+          PowerPlanPicker(controller: widget.controller),
+          const SizedBox(height: 12),
+        ],
         if (showPresets) ...<Widget>[
           _buildPresetsCard(context),
           const SizedBox(height: 12),
@@ -194,6 +200,10 @@ class _TweaksPageState extends State<TweaksPage> {
         ...tweaks.map((descriptor) {
           final available = widget.controller.isDescriptorAvailable(descriptor);
           final busy = widget.controller.busyTweaks.contains(descriptor.id);
+          final text = TweakTextLocalizer.resolve(
+            descriptor,
+            widget.controller.localeCode,
+          );
 
           if (descriptor.isSystemToggle) {
             final needsReconnectHint = TweaksPage._networkReconnectHintToggleIds
@@ -201,8 +211,9 @@ class _TweaksPageState extends State<TweaksPage> {
             return Padding(
               padding: const EdgeInsets.only(bottom: 8),
               child: TweakSwitchTile(
-                title: descriptor.title,
-                description: descriptor.description,
+                title: text.title,
+                description: text.description,
+                details: text.details,
                 value: widget.controller.toggleStates[descriptor.id] ?? false,
                 enabled: available,
                 isBusy: busy,
@@ -248,8 +259,9 @@ class _TweaksPageState extends State<TweaksPage> {
             return Padding(
               padding: const EdgeInsets.only(bottom: 8),
               child: TweakSwitchTile(
-                title: descriptor.title,
-                description: descriptor.description,
+                title: text.title,
+                description: text.description,
+                details: text.details,
                 value: scriptTweak.isApplied,
                 enabled: available,
                 isBusy: busy,
@@ -298,7 +310,7 @@ class _TweaksPageState extends State<TweaksPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          descriptor.title,
+                          text.title,
                           style: FluentTheme.of(context).typography.bodyStrong,
                         ),
                         const SizedBox(height: 2),
@@ -315,7 +327,7 @@ class _TweaksPageState extends State<TweaksPage> {
                             ],
                           ),
                         const SizedBox(height: 4),
-                        Text(descriptor.description),
+                        Text(text.description),
                       ],
                     ),
                   ),
@@ -323,6 +335,10 @@ class _TweaksPageState extends State<TweaksPage> {
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
+                      IconButton(
+                        icon: const Icon(FluentIcons.info),
+                        onPressed: () => _showTweakInfo(context, text),
+                      ),
                       if (busy)
                         const Padding(
                           padding: EdgeInsets.only(right: 8),
@@ -388,6 +404,22 @@ class _TweaksPageState extends State<TweaksPage> {
           );
         }),
       ],
+    );
+  }
+
+  void _showTweakInfo(BuildContext context, LocalizedTweakText text) {
+    showDialog<void>(
+      context: context,
+      builder: (context) => ContentDialog(
+        title: Text(text.title),
+        content: Text(text.details),
+        actions: <Widget>[
+          Button(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Close'),
+          ),
+        ],
+      ),
     );
   }
 

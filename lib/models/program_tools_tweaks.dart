@@ -30,6 +30,54 @@ List<SystemTweak> createProgramToolTweaks() {
       registrySegments: <String>['disable_advanced_services.reg'],
       isAggressive: true,
     ),
+    ExternalUrlLauncherTweak(
+      id: 'tool_beyond_performance_device_tweaker_discord',
+      title: 'Beyond Performance Device Tweaker',
+      description:
+          'Opens the public Beyond Performance Discord channel that distributes Device Tweaker.',
+      category: 'Drivers & Installers',
+      url: 'https://discord.gg/eGmDd28m4k',
+      actionLabel: 'Open Discord',
+      isAggressive: true,
+      warningMessage:
+          'This opens the author-provided public Discord source. Review the shared file, version, and instructions before running any device tweak.',
+    ),
+    ExternalUrlLauncherTweak(
+      id: 'tool_scewin_gui_releases',
+      title: 'SCEWIN-GUI Releases',
+      description:
+          'Opens the MIT-licensed SCEWIN-GUI releases. It edits SCEWIN/AMISCE NVRAM files; it does not include SCEWIN itself.',
+      category: 'Advanced Scripts',
+      url: 'https://github.com/eskezje/SCEWIN-GUI/releases',
+      actionLabel: 'Open Releases',
+      isAggressive: true,
+      warningMessage:
+          'Firmware/NVRAM changes can make a system unbootable. Back up the original file and use only on supported hardware.',
+    ),
+    ExternalUrlLauncherTweak(
+      id: 'tool_nvidia_nvflash_download',
+      title: 'NVIDIA NVFlash Download',
+      description:
+          'Opens TechPowerUp NVFlash downloads. ZapTweaks never selects a ROM or runs flash commands.',
+      category: 'Advanced Scripts',
+      url: 'https://www.techpowerup.com/download/nvidia-nvflash/',
+      actionLabel: 'Open Download',
+      isAggressive: true,
+      warningMessage:
+          'VBIOS flashing can permanently brick a GPU. Back up the ROM, verify the exact board, and do not use patched protection-bypass builds.',
+    ),
+    ExternalUrlLauncherTweak(
+      id: 'tool_amdvbflash_download',
+      title: 'AMDVBFlash Download',
+      description:
+          'Opens TechPowerUp AMDVBFlash downloads. ZapTweaks never selects a ROM or runs flash commands.',
+      category: 'Advanced Scripts',
+      url: 'https://www.techpowerup.com/download/amdvbflash/',
+      actionLabel: 'Open Download',
+      isAggressive: true,
+      warningMessage:
+          'VBIOS flashing can permanently brick a GPU. Back up the ROM, verify the exact board, and remove any temporary driver after use.',
+    ),
     PowerShellCommandTweak(
       id: 'tool_fortnite_diagnostic_ping',
       title: 'Fortnite Diagnostic Ping Tool by Alexanderthedad',

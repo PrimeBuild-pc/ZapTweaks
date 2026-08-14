@@ -1,6 +1,6 @@
 ; ZapTweaks Inno Setup script
 #define AppName "ZapTweaks"
-#define AppVersion "1.5.1"
+#define AppVersion "1.6.0"
 #define AppPublisher "PrimeBuild"
 #define AppExeName "ZapTweaks.exe"
 #define SourceDir "build\\windows\\x64\\runner\\Release"
@@ -23,6 +23,11 @@ SetupIconFile=windows\runner\resources\app_icon.ico
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
+Name: "italian"; MessagesFile: "compiler:Languages\Italian.isl"
+Name: "german"; MessagesFile: "compiler:Languages\German.isl"
+Name: "spanish"; MessagesFile: "compiler:Languages\Spanish.isl"
+Name: "french"; MessagesFile: "compiler:Languages\French.isl"
+Name: "russian"; MessagesFile: "compiler:Languages\Russian.isl"
 
 [Tasks]
 Name: "desktopicon"; Description: "Create a desktop icon"; GroupDescription: "Additional icons:"; Flags: unchecked

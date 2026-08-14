@@ -24,6 +24,38 @@ void main() {
     }
   });
 
+  test(
+    'catalog baseline has unique stable ids and explicit category totals',
+    () {
+      final catalog = TweakCatalogService().buildCatalog();
+      final categoryTotals = <String, int>{};
+
+      for (final descriptor in catalog) {
+        categoryTotals.update(
+          descriptor.category,
+          (count) => count + 1,
+          ifAbsent: () => 1,
+        );
+      }
+
+      expect(catalog.map((item) => item.id).toSet(), hasLength(catalog.length));
+      expect(categoryTotals, <String, int>{
+        'Gaming': 18,
+        'Networking': 12,
+        'Power & CPU': 16,
+        'Graphics': 13,
+        'Windows': 39,
+        'System Checks': 15,
+        'Refresh & Recovery': 7,
+        'Setup': 12,
+        'Advanced': 23,
+        'Privacy': 10,
+        'Visuals': 12,
+        'Tools': 69,
+      });
+    },
+  );
+
   test('safe presets exclude security-reducing and destructive tweaks', () {
     final byId = <String, dynamic>{
       for (final descriptor in TweakCatalogService().buildCatalog())
@@ -44,6 +76,30 @@ void main() {
     expect(byId['privacy_safe_debloat']?.isScriptAction, isTrue);
     expect(byId, isNot(contains('power_min_processor_state')));
   });
+
+  test(
+    'modern graphics and power-saving replacements are catalogued safely',
+    () {
+      final byId = {
+        for (final descriptor in TweakCatalogService().buildCatalog())
+          descriptor.id: descriptor,
+      };
+
+      expect(byId, contains('gaming_windowed_optimizations_on'));
+      expect(byId, contains('gaming_mpo_off'));
+      expect(byId, contains('device_power_savings_off'));
+      expect(byId, contains('gaming_amd_gpu_safe_profile'));
+      expect(byId, contains('gaming_amd_gpu_extreme_profile'));
+      expect(byId, isNot(contains('gaming_mpo_windowed_optimizations_off')));
+      expect(byId['gaming_mpo_off']!.isAggressive, isTrue);
+      expect(byId['gaming_mpo_off']!.restartRequired, isTrue);
+      expect(
+        byId['gaming_amd_gpu_safe_profile']!.requiredGpuVendors,
+        contains('amd'),
+      );
+      expect(byId['gaming_amd_gpu_extreme_profile']!.isAggressive, isTrue);
+    },
+  );
 
   test('new privacy, shell, and network toggles are catalogued safely', () {
     final byId = {

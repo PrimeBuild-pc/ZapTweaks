@@ -46,6 +46,7 @@ class TweakCatalogService {
     'explorer_optimizations',
     'notifications_minimal',
     'game_mode',
+    'gaming_mpo_off',
     'power_disable_dynamic_tick',
     'power_tsc_sync_policy',
     'network_prefer_ipv4',
@@ -152,11 +153,11 @@ class TweakCatalogService {
             gpuVendors: <String>{'nvidia'},
           ),
           'gpu_amd_optimizations': (
-            title: 'AMD GPU Optimizations',
+            title: 'AMD GPU ULPS Troubleshooting',
             description:
-                'Apply AMD graphics stack tuning and power profile tweaks.',
+                'Disables AMD ULPS for troubleshooting; it does not disable thermal protection or power gating.',
             category: 'Gaming',
-            aggressive: false,
+            aggressive: true,
             cpuVendor: null,
             gpuVendors: <String>{'amd'},
           ),
@@ -301,8 +302,9 @@ class TweakCatalogService {
             gpuVendors: <String>{},
           ),
           'game_mode': (
-            title: 'Disable Game Mode',
-            description: 'Reduce scheduling side effects and micro-stutter.',
+            title: 'Game Mode On',
+            description:
+                'Enables Windows Game Mode without changing Xbox Game Bar or Game DVR.',
             category: 'Gaming',
             aggressive: false,
             cpuVendor: null,
@@ -354,6 +356,7 @@ class TweakCatalogService {
             isAggressive: tweak.isAggressive,
             restartRequired: restartRequiredSystemTweaks.contains(tweak.id),
             requiredCpuVendor: tweak.requiredCpuVendor,
+            requiredGpuVendors: tweak.requiredGpuVendors,
             minimumWindowsBuild: tweak.minimumWindowsBuild,
             conflictingTweakIds: tweak.conflictingTweakIds,
             scriptTweak: tweak,

@@ -5,6 +5,7 @@ import 'system_tweak.dart';
 List<SystemTweak> createNetworkingTweaks() {
   return <SystemTweak>[
     NetworkAdapterPowerSavingsTweak(),
+    DevicePowerSavingsTweak(),
     NetworkIpv4OnlyTweak(),
     PreferIpv4Tweak(),
     NetworkThrottlingIndexTweak(),
@@ -176,108 +177,110 @@ class NetworkAdapterPowerSavingsTweak extends _NetworkingSystemTweak {
         id: 'network_adapter_power_savings_wake_off',
         title: 'Adapter Power Savings and Wake Off',
         description:
-            'Disables adapter-level power saving and wake features on all network class devices.',
+            'Disables power-saving and wake features on physical network adapters, with an exact backup for revert.',
+        aggressive: true,
       );
 
-  @override
-  Future<void> onApply() async {
-    await runSilentPowerShell(r'''
-$basePath = 'HKLM:\\System\\ControlSet001\\Control\\Class\\{4d36e972-e325-11ce-bfc1-08002be10318}'
-$adapterKeys = Get-ChildItem -Path $basePath -ErrorAction SilentlyContinue
-
-foreach ($key in $adapterKeys) {
-  if ($key.PSChildName -match '^\d{4}$') {
-    $regPath = $key.PSPath
-
-    New-ItemProperty -Path $regPath -Name 'PnPCapabilities' -PropertyType DWord -Value 24 -Force -ErrorAction SilentlyContinue | Out-Null
-    New-ItemProperty -Path $regPath -Name 'AdvancedEEE' -PropertyType String -Value '0' -Force -ErrorAction SilentlyContinue | Out-Null
-    New-ItemProperty -Path $regPath -Name '*EEE' -PropertyType String -Value '0' -Force -ErrorAction SilentlyContinue | Out-Null
-    New-ItemProperty -Path $regPath -Name 'EEELinkAdvertisement' -PropertyType String -Value '0' -Force -ErrorAction SilentlyContinue | Out-Null
-    New-ItemProperty -Path $regPath -Name 'SipsEnabled' -PropertyType String -Value '0' -Force -ErrorAction SilentlyContinue | Out-Null
-    New-ItemProperty -Path $regPath -Name 'ULPMode' -PropertyType String -Value '0' -Force -ErrorAction SilentlyContinue | Out-Null
-    New-ItemProperty -Path $regPath -Name 'GigaLite' -PropertyType String -Value '0' -Force -ErrorAction SilentlyContinue | Out-Null
-    New-ItemProperty -Path $regPath -Name 'EnableGreenEthernet' -PropertyType String -Value '0' -Force -ErrorAction SilentlyContinue | Out-Null
-    New-ItemProperty -Path $regPath -Name 'PowerSavingMode' -PropertyType String -Value '0' -Force -ErrorAction SilentlyContinue | Out-Null
-
-    New-ItemProperty -Path $regPath -Name 'S5WakeOnLan' -PropertyType String -Value '0' -Force -ErrorAction SilentlyContinue | Out-Null
-    New-ItemProperty -Path $regPath -Name '*WakeOnMagicPacket' -PropertyType String -Value '0' -Force -ErrorAction SilentlyContinue | Out-Null
-    New-ItemProperty -Path $regPath -Name '*ModernStandbyWoLMagicPacket' -PropertyType String -Value '0' -Force -ErrorAction SilentlyContinue | Out-Null
-    New-ItemProperty -Path $regPath -Name '*WakeOnPattern' -PropertyType String -Value '0' -Force -ErrorAction SilentlyContinue | Out-Null
-    New-ItemProperty -Path $regPath -Name 'WakeOnLink' -PropertyType String -Value '0' -Force -ErrorAction SilentlyContinue | Out-Null
-  }
-}
-''', elevated: true);
-  }
+  static const String _backupPath =
+      r'$env:ProgramData\ZapTweaks\backups\network-power-management.xml';
 
   @override
-  Future<void> onRevert() async {
-    await runSilentPowerShell(r'''
-$basePath = 'HKLM:\\System\\ControlSet001\\Control\\Class\\{4d36e972-e325-11ce-bfc1-08002be10318}'
-$adapterKeys = Get-ChildItem -Path $basePath -ErrorAction SilentlyContinue
-$values = @(
-  'PnPCapabilities','AdvancedEEE','*EEE','EEELinkAdvertisement','SipsEnabled',
-  'ULPMode','GigaLite','EnableGreenEthernet','PowerSavingMode','S5WakeOnLan',
-  '*WakeOnMagicPacket','*ModernStandbyWoLMagicPacket','*WakeOnPattern','WakeOnLink'
-)
-
-foreach ($key in $adapterKeys) {
-  if ($key.PSChildName -match '^\d{4}$') {
-    foreach ($name in $values) {
-      Remove-ItemProperty -Path $key.PSPath -Name $name -ErrorAction SilentlyContinue
-    }
-  }
+  Future<void> onApply() => runSilentPowerShell(
+    r'''
+$backup = __BACKUP_PATH__
+New-Item -ItemType Directory -Path (Split-Path $backup) -Force | Out-Null
+$adapters = @(Get-NetAdapter -Physical -ErrorAction Stop | Where-Object Status -ne 'Disabled')
+$states = foreach ($adapter in $adapters) {
+  Get-NetAdapterPowerManagement -Name $adapter.Name -ErrorAction SilentlyContinue
 }
-''', elevated: true);
-  }
+$states | Export-Clixml -LiteralPath $backup -Force
+foreach ($adapter in $adapters) {
+  Disable-NetAdapterPowerManagement -Name $adapter.Name -ArpOffload -D0PacketCoalescing -DeviceSleepOnDisconnect -NSOffload -RsnRekeyOffload -SelectiveSuspend -WakeOnMagicPacket -WakeOnPattern -ErrorAction SilentlyContinue | Out-Null
+  Restart-NetAdapter -Name $adapter.Name -ErrorAction SilentlyContinue
+}
+'''
+        .replaceAll('__BACKUP_PATH__', _backupPath),
+    elevated: true,
+  );
 
   @override
-  Future<bool> checkState() async {
-    final result = (await runPowerShellForOutput(r'''
-$basePath = 'HKLM:\\System\\ControlSet001\\Control\\Class\\{4d36e972-e325-11ce-bfc1-08002be10318}'
-$adapterKeys = Get-ChildItem -Path $basePath -ErrorAction SilentlyContinue | Where-Object { $_.PSChildName -match '^\d{4}$' }
+  Future<void> onRevert() => runSilentPowerShell(
+    r'''
+$backup = __BACKUP_PATH__
+if (-not (Test-Path -LiteralPath $backup)) { return }
+foreach ($state in @(Import-Clixml -LiteralPath $backup)) {
+  $parameters = @{ Name = $state.Name; ErrorAction = 'SilentlyContinue' }
+  foreach ($name in 'ArpOffload','D0PacketCoalescing','DeviceSleepOnDisconnect','NSOffload','RsnRekeyOffload','SelectiveSuspend','WakeOnMagicPacket','WakeOnPattern') {
+    if ($null -ne $state.$name) { $parameters[$name] = $state.$name }
+  }
+  Set-NetAdapterPowerManagement @parameters | Out-Null
+  Restart-NetAdapter -Name $state.Name -ErrorAction SilentlyContinue
+}
+'''
+        .replaceAll('__BACKUP_PATH__', _backupPath),
+    elevated: true,
+  );
 
-if (-not $adapterKeys -or $adapterKeys.Count -eq 0) {
-  Write-Output 'false'
-  return
+  @override
+  Future<bool> checkState() async => (await runPowerShellForOutput(r'''
+$states = @(Get-NetAdapter -Physical -ErrorAction SilentlyContinue | Get-NetAdapterPowerManagement -ErrorAction SilentlyContinue)
+if ($states.Count -gt 0 -and -not ($states | Where-Object { $_.SelectiveSuspend -ne 'Disabled' -or $_.WakeOnMagicPacket -ne 'Disabled' -or $_.WakeOnPattern -ne 'Disabled' })) { 'true' } else { 'false' }
+''')).toLowerCase().contains('true');
 }
 
-foreach ($key in $adapterKeys) {
-  $item = Get-ItemProperty -Path $key.PSPath -ErrorAction SilentlyContinue
-  if ($null -eq $item) {
-    Write-Output 'false'
-    return
-  }
+class DevicePowerSavingsTweak extends _NetworkingSystemTweak {
+  DevicePowerSavingsTweak()
+    : super(
+        id: 'device_power_savings_off',
+        title: 'Device Power Saving Off',
+        description:
+            'Disables WMI device power saving. This increases idle power use and is intended for desktops.',
+        aggressive: true,
+      );
 
-  $expected = @{
-    PnPCapabilities = 24
-    AdvancedEEE = '0'
-    '*EEE' = '0'
-    EEELinkAdvertisement = '0'
-    SipsEnabled = '0'
-    ULPMode = '0'
-    GigaLite = '0'
-    EnableGreenEthernet = '0'
-    PowerSavingMode = '0'
-    S5WakeOnLan = '0'
-    '*WakeOnMagicPacket' = '0'
-    '*ModernStandbyWoLMagicPacket' = '0'
-    '*WakeOnPattern' = '0'
-    WakeOnLink = '0'
-  }
-  foreach ($entry in $expected.GetEnumerator()) {
-    if ("$($item.($entry.Key))" -ne "$($entry.Value)") {
-      Write-Output 'false'
-      return
-    }
+  static const String _backupPath =
+      r'$env:ProgramData\ZapTweaks\backups\device-power-saving.xml';
+
+  @override
+  Future<void> onApply() => runSilentPowerShell(
+    r'''
+$backup = __BACKUP_PATH__
+New-Item -ItemType Directory -Path (Split-Path $backup) -Force | Out-Null
+$devices = @(Get-CimInstance -Namespace root\wmi -ClassName MSPower_DeviceEnable -ErrorAction Stop)
+$devices | Select-Object InstanceName, Enable | Export-Clixml -LiteralPath $backup -Force
+foreach ($device in $devices) {
+  $device.Enable = $false
+  Set-CimInstance -InputObject $device -ErrorAction SilentlyContinue | Out-Null
+}
+'''
+        .replaceAll('__BACKUP_PATH__', _backupPath),
+    elevated: true,
+  );
+
+  @override
+  Future<void> onRevert() => runSilentPowerShell(
+    r'''
+$backup = __BACKUP_PATH__
+if (-not (Test-Path -LiteralPath $backup)) { return }
+$states = @(Import-Clixml -LiteralPath $backup)
+$devices = @(Get-CimInstance -Namespace root\wmi -ClassName MSPower_DeviceEnable -ErrorAction SilentlyContinue)
+foreach ($state in $states) {
+  $device = $devices | Where-Object { $_.InstanceName -eq $state.InstanceName } | Select-Object -First 1
+  if ($null -ne $device) {
+    $device.Enable = [bool]$state.Enable
+    Set-CimInstance -InputObject $device -ErrorAction SilentlyContinue | Out-Null
   }
 }
+'''
+        .replaceAll('__BACKUP_PATH__', _backupPath),
+    elevated: true,
+  );
 
-Write-Output 'true'
-''')).toLowerCase();
-
-    final applied = result.contains('true');
-    return applied;
-  }
+  @override
+  Future<bool> checkState() async => (await runPowerShellForOutput(r'''
+$devices = @(Get-CimInstance -Namespace root\wmi -ClassName MSPower_DeviceEnable -ErrorAction SilentlyContinue)
+if ($devices.Count -gt 0 -and -not ($devices | Where-Object { $_.Enable -eq $true })) { 'true' } else { 'false' }
+''')).toLowerCase().contains('true');
 }
 
 class NetworkIpv4OnlyTweak extends _NetworkingSystemTweak {

@@ -288,6 +288,40 @@ void main() {
     await tester.pump(const Duration(milliseconds: 150));
   });
 
+  test('language preference is restored and persisted', () async {
+    SharedPreferences.setMockInitialValues(<String, Object>{
+      'localeCode': 'it-IT',
+      'automaticUpdateChecks': false,
+    });
+    final prefs = await SharedPreferences.getInstance();
+    final runner = _NoopProcessRunner();
+    ProcessRunner.configureShared(runner);
+    final controller = TweakController(
+      tweakManager: _FakeTweakManager(),
+      permissionService: _FakePermissionService(),
+      hardwareDetectionService: _FakeHardwareDetectionService(),
+      safetyGateService: SafetyGateService(
+        permissionService: _FakePermissionService(),
+        restorePointService: _FakeRestorePointService(),
+        preferences: prefs,
+      ),
+      systemActionService: _FakeSystemActionService(),
+      tweakCatalogService: _EmptyTweakCatalogService(),
+      metricsSamplingService: _FastMetricsSamplingService(),
+      preferences: prefs,
+      processRunner: runner,
+      appVersion: '1.5.0',
+    );
+    addTearDown(controller.dispose);
+
+    await controller.initialize();
+    expect(controller.localeCode, 'it');
+
+    await controller.setLocaleCode('zh-CN');
+    expect(controller.localeCode, 'zh');
+    expect(prefs.getString('localeCode'), 'zh');
+  });
+
   test('active Prefer IPv4 makes IPv4 Only unavailable', () async {
     SharedPreferences.setMockInitialValues(<String, Object>{
       'automaticUpdateChecks': false,

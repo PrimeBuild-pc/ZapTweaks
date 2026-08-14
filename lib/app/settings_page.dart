@@ -1,6 +1,8 @@
 import 'package:fluent_ui/fluent_ui.dart';
 
+import '../core/services/app_locale_service.dart';
 import '../features/tweaks/application/tweak_controller.dart';
+import '../l10n/app_localizations.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({
@@ -19,12 +21,49 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final update = controller.availableUpdate;
+    final strings = AppLocalizations.of(context);
 
     return ListView(
       padding: const EdgeInsets.all(20),
       children: <Widget>[
-        Text('Settings', style: FluentTheme.of(context).typography.title),
+        Text(strings.settings, style: FluentTheme.of(context).typography.title),
         const SizedBox(height: 16),
+        Card(
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(strings.language),
+                      const SizedBox(height: 3),
+                      Text(strings.languageDescription),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 16),
+                ComboBox<String>(
+                  value: controller.localeCode,
+                  items: <ComboBoxItem<String>>[
+                    for (final code in AppLocaleService.supportedCodes)
+                      ComboBoxItem<String>(
+                        value: code,
+                        child: Text(AppLocaleService.nativeNames[code]!),
+                      ),
+                  ],
+                  onChanged: (code) {
+                    if (code != null) {
+                      controller.setLocaleCode(code);
+                    }
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: 12),
         Card(
           child: Padding(
             padding: const EdgeInsets.all(16),

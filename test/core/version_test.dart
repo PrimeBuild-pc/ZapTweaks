@@ -5,6 +5,6 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   test('app metadata version matches the current release', () {
-    expect(AppMetadata.semanticVersion, '1.5.1');
+    expect(AppMetadata.semanticVersion, '1.6.0');
   });
 }
