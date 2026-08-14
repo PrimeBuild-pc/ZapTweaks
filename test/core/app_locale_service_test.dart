@@ -27,6 +27,14 @@ void main() {
         'Alimentazione e CPU',
       );
       expect(AppLocaleService.category('zh-CN', 'Tools'), '工具');
+      expect(AppLocaleService.category('it', 'Services'), 'Servizi');
+      expect(
+        AppLocaleService.loadingStatus(
+          'it',
+          'Detecting hardware and tweak states...',
+        ),
+        'Rilevamento hardware e stati dei tweak...',
+      );
       expect(AppLocaleService.category('en', 'Gaming'), 'Gaming');
     },
   );

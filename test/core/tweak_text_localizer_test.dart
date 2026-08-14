@@ -23,4 +23,32 @@ void main() {
       expect(english.title, 'AMD GPU Extreme Profile');
     },
   );
+
+  test('translates reference subtitles and generated service subtitles', () {
+    const network = TweakDescriptor(
+      id: 'network_llmnr_off',
+      title: 'LLMNR Off',
+      description: 'English fallback.',
+      category: 'Networking',
+      isAggressive: true,
+      systemKey: 'x',
+    );
+    const service = TweakDescriptor(
+      id: 'service_diagtrack_off',
+      title: 'Connected User Experiences and Telemetry Off',
+      description: 'English fallback.',
+      category: 'Services',
+      isAggressive: true,
+      systemKey: 'x',
+    );
+
+    expect(
+      TweakTextLocalizer.resolve(network, 'it').description,
+      'Disattiva la risoluzione legacy dei nomi tramite multicast locale.',
+    );
+    expect(
+      TweakTextLocalizer.resolve(service, 'it').description,
+      startsWith('Disabilita il servizio'),
+    );
+  });
 }

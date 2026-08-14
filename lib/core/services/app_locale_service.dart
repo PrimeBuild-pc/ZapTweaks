@@ -35,6 +35,72 @@ class AppLocaleService {
   static String category(String code, String value) =>
       _categories[normalize(code)]?[value] ?? value;
 
+  static String loadingStatus(String code, String value) =>
+      _loadingStatuses[normalize(code)]?[value] ?? value;
+
+  static const Map<String, Map<String, String>> _loadingStatuses =
+      <String, Map<String, String>>{
+        'it': <String, String>{
+          'Initializing...': 'Inizializzazione...',
+          'Initializing UI...': 'Inizializzazione interfaccia...',
+          'Loading preferences...': 'Caricamento preferenze...',
+          'Loading tweaks catalog...': 'Caricamento catalogo tweak...',
+          'Detecting hardware and tweak states...':
+              'Rilevamento hardware e stati dei tweak...',
+          'Sampling system metrics...': 'Campionamento metriche di sistema...',
+          'Ready': 'Pronto',
+        },
+        'de': <String, String>{
+          'Initializing...': 'Initialisierung...',
+          'Initializing UI...': 'Benutzeroberfläche wird initialisiert...',
+          'Loading preferences...': 'Einstellungen werden geladen...',
+          'Loading tweaks catalog...': 'Tweak-Katalog wird geladen...',
+          'Detecting hardware and tweak states...':
+              'Hardware und Tweak-Zustände werden erkannt...',
+          'Sampling system metrics...': 'Systemmetriken werden erfasst...',
+          'Ready': 'Bereit',
+        },
+        'es': <String, String>{
+          'Initializing...': 'Inicializando...',
+          'Initializing UI...': 'Inicializando la interfaz...',
+          'Loading preferences...': 'Cargando preferencias...',
+          'Loading tweaks catalog...': 'Cargando el catálogo de ajustes...',
+          'Detecting hardware and tweak states...':
+              'Detectando hardware y estados de ajustes...',
+          'Sampling system metrics...': 'Midiendo métricas del sistema...',
+          'Ready': 'Listo',
+        },
+        'fr': <String, String>{
+          'Initializing...': 'Initialisation...',
+          'Initializing UI...': 'Initialisation de l’interface...',
+          'Loading preferences...': 'Chargement des préférences...',
+          'Loading tweaks catalog...': 'Chargement du catalogue de réglages...',
+          'Detecting hardware and tweak states...':
+              'Détection du matériel et des réglages...',
+          'Sampling system metrics...': 'Mesure des métriques système...',
+          'Ready': 'Prêt',
+        },
+        'ru': <String, String>{
+          'Initializing...': 'Инициализация...',
+          'Initializing UI...': 'Инициализация интерфейса...',
+          'Loading preferences...': 'Загрузка настроек...',
+          'Loading tweaks catalog...': 'Загрузка каталога настроек...',
+          'Detecting hardware and tweak states...':
+              'Определение оборудования и состояний настроек...',
+          'Sampling system metrics...': 'Сбор системных метрик...',
+          'Ready': 'Готово',
+        },
+        'zh': <String, String>{
+          'Initializing...': '正在初始化...',
+          'Initializing UI...': '正在初始化界面...',
+          'Loading preferences...': '正在加载偏好设置...',
+          'Loading tweaks catalog...': '正在加载优化目录...',
+          'Detecting hardware and tweak states...': '正在检测硬件和优化状态...',
+          'Sampling system metrics...': '正在采集系统指标...',
+          'Ready': '就绪',
+        },
+      };
+
   static const Map<String, Map<String, String>> _categories =
       <String, Map<String, String>>{
         'it': <String, String>{

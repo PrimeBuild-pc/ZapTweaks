@@ -7,7 +7,16 @@ class PermissionService {
   final ProcessRunner _processRunner;
 
   Future<bool> isRunningElevated() async {
-    final result = await _processRunner.run('net', <String>['session']);
-    return result.success;
+    // `net session` reports failure when the Server service is disabled, even
+    // for an elevated process. Query the current access token instead.
+    final result = await _processRunner.run('powershell', <String>[
+      '-NoProfile',
+      '-NonInteractive',
+      '-Command',
+      r'''$identity = [Security.Principal.WindowsIdentity]::GetCurrent()
+$principal = [Security.Principal.WindowsPrincipal]::new($identity)
+$principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator).ToString().ToLower()''',
+    ]);
+    return result.success && result.stdout.trim().toLowerCase() == 'true';
   }
 }

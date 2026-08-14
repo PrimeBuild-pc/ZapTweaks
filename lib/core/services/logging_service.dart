@@ -28,28 +28,27 @@ class LoggingService {
   static final LoggingService instance = LoggingService._();
 
   bool _initialized = false;
-  IOSink? _sink;
+  File? _file;
+  Future<void>? _initialization;
 
   String get logDirectoryPath =>
       path.join(_resolveAppDataPath(), 'ZapTweaks', 'logs');
-  Timer? _flushTimer;
 
-  Future<void> initialize() async {
-    if (_initialized) {
-      return;
-    }
+  Future<void> initialize() => _initialization ??= _initialize();
 
+  Future<void> _initialize() async {
     final logDirectoryPath = this.logDirectoryPath;
     await Directory(logDirectoryPath).create(recursive: true);
 
     final sessionStamp = _formatForFileName(DateTime.now());
     final header =
         '--- ZapTweaks session started at ${DateTime.now().toIso8601String()} ---';
-    _initialized = true;
-
-    final file = File(path.join(logDirectoryPath, 'session_$sessionStamp.log'));
+    final file = File(
+      path.join(logDirectoryPath, 'session_${sessionStamp}_$pid.log'),
+    );
     await file.writeAsString('$header\n', mode: FileMode.append);
-    _sink = file.openWrite(mode: FileMode.append);
+    _file = file;
+    _initialized = true;
   }
 
   Future<void> logInfo(String message, {String source = 'App'}) {
@@ -117,18 +116,20 @@ class LoggingService {
     }
   }
 
-  Future<void> _log(LogEntry entry) => _appendRawLine(entry.toLine());
+  Future<void> _log(LogEntry entry) async {
+    try {
+      await _appendRawLine(entry.toLine());
+    } on FileSystemException {
+      // Logging must never block a system tweak when the log directory is unavailable.
+    }
+  }
 
   Future<void> _appendRawLine(String line) async {
     if (!_initialized) {
       await initialize();
     }
 
-    _sink?.writeln(line);
-    _flushTimer ??= Timer(const Duration(seconds: 1), () {
-      _flushTimer = null;
-      _sink?.flush();
-    });
+    await _file?.writeAsString('$line\n', mode: FileMode.append);
   }
 
   String _resolveAppDataPath() {

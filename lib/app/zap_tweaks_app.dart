@@ -438,7 +438,12 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
           children: <Widget>[
             const ProgressRing(),
             const SizedBox(height: 12),
-            Text(widget.controller.loadingStatus),
+            Text(
+              AppLocaleService.loadingStatus(
+                widget.controller.localeCode,
+                widget.controller.loadingStatus,
+              ),
+            ),
           ],
         ),
       );

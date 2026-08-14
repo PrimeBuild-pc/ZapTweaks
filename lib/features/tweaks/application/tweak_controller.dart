@@ -232,9 +232,21 @@ class TweakController extends ChangeNotifier {
       _loadingStatus = 'Loading tweaks catalog...';
       notifyListeners();
       _catalog = _tweakCatalogService.buildCatalog();
+      unawaited(
+        _loggingService.logInfo(
+          'Loaded ${_catalog.length} tweak catalog entries.',
+          source: 'TweakController',
+        ),
+      );
 
       _loadingStatus = 'Detecting hardware and tweak states...';
       notifyListeners();
+      unawaited(
+        _loggingService.logInfo(
+          'Detecting elevation, hardware profile, and current tweak states.',
+          source: 'TweakController',
+        ),
+      );
       final futures = await Future.wait<dynamic>(<Future<dynamic>>[
         _permissionService.isRunningElevated(),
         _hardwareDetectionService.detect(),
@@ -245,6 +257,12 @@ class TweakController extends ChangeNotifier {
       _isAdmin = futures[0] as bool;
       _hardwareProfile = futures[1] as HardwareProfile;
       final detectedStates = futures[2] as Map<String, bool>;
+      unawaited(
+        _loggingService.logInfo(
+          'Detection complete: elevation=$_isAdmin, CPU=${_hardwareProfile.cpuName}, GPUs=${_hardwareProfile.gpuNames.length}, system tweaks=${detectedStates.length}.',
+          source: 'TweakController',
+        ),
+      );
 
       for (final descriptor in _catalog) {
         if (descriptor.isSystemToggle) {
@@ -304,6 +322,12 @@ class TweakController extends ChangeNotifier {
         .whereType<SystemTweak>()
         .where((tweak) => tweak.hasState)
         .toList(growable: false);
+    unawaited(
+      _loggingService.logInfo(
+        'Detecting ${tweaks.length} stateful script tweaks.',
+        source: 'TweakController',
+      ),
+    );
     var nextIndex = 0;
 
     Future<void> worker() async {
@@ -323,6 +347,13 @@ class TweakController extends ChangeNotifier {
 
     final workerCount = tweaks.length < 8 ? tweaks.length : 8;
     await Future.wait<void>(List.generate(workerCount, (_) => worker()));
+    final appliedCount = tweaks.where((tweak) => tweak.isApplied).length;
+    unawaited(
+      _loggingService.logInfo(
+        'Script tweak detection complete: $appliedCount/${tweaks.length} applied.',
+        source: 'TweakController',
+      ),
+    );
   }
 
   void selectCategory(String category) {

@@ -16,7 +16,10 @@ class TweakTextLocalizer {
   static LocalizedTweakText resolve(TweakDescriptor descriptor, String locale) {
     final copy = _copy[locale]?[descriptor.id];
     final title = copy?.$1 ?? descriptor.title;
-    final description = copy?.$2 ?? descriptor.description;
+    final description =
+        copy?.$2 ??
+        _generatedDescription(locale, descriptor) ??
+        descriptor.description;
     final detailParts = <String>[description, '', _detail(locale, descriptor)];
     final warning = descriptor.scriptTweak?.warningMessage;
     if (warning != null && warning.trim().isNotEmpty) {
@@ -28,6 +31,64 @@ class TweakTextLocalizer {
       details: detailParts.join('\n'),
     );
   }
+
+  static String? _generatedDescription(
+    String locale,
+    TweakDescriptor descriptor,
+  ) {
+    final kind = descriptor.category == 'Shortcuts'
+        ? 'shortcut'
+        : descriptor.category == 'Services'
+        ? 'service'
+        : descriptor.id.startsWith('restore_')
+        ? 'restore'
+        : null;
+    return kind == null ? null : _generatedDescriptions[locale]?[kind];
+  }
+
+  static const Map<String, Map<String, String>>
+  _generatedDescriptions = <String, Map<String, String>>{
+    'it': <String, String>{
+      'shortcut': 'Apre lo strumento di Windows selezionato.',
+      'service':
+          'Disabilita il servizio e salva il precedente tipo di avvio per il ripristino.',
+      'restore':
+          'Installa di nuovo l’app dal catalogo di pacchetti configurato in Windows.',
+    },
+    'de': <String, String>{
+      'shortcut': 'Öffnet das ausgewählte Windows-Tool.',
+      'service':
+          'Deaktiviert den Dienst und sichert den vorherigen Starttyp für die Wiederherstellung.',
+      'restore':
+          'Installiert die App erneut aus der konfigurierten Windows-Paketquelle.',
+    },
+    'es': <String, String>{
+      'shortcut': 'Abre la herramienta de Windows seleccionada.',
+      'service':
+          'Deshabilita el servicio y guarda el tipo de inicio anterior para restaurarlo.',
+      'restore':
+          'Vuelve a instalar la aplicación desde la fuente de paquetes configurada de Windows.',
+    },
+    'fr': <String, String>{
+      'shortcut': 'Ouvre l’outil Windows sélectionné.',
+      'service':
+          'Désactive le service et enregistre son type de démarrage précédent pour la restauration.',
+      'restore':
+          'Réinstalle l’application depuis la source de paquets Windows configurée.',
+    },
+    'ru': <String, String>{
+      'shortcut': 'Открывает выбранный инструмент Windows.',
+      'service':
+          'Отключает службу и сохраняет предыдущий тип запуска для восстановления.',
+      'restore':
+          'Повторно устанавливает приложение из настроенного источника пакетов Windows.',
+    },
+    'zh': <String, String>{
+      'shortcut': '打开所选的 Windows 工具。',
+      'service': '禁用服务，并保存原启动类型以便还原。',
+      'restore': '从已配置的 Windows 软件包源重新安装应用。',
+    },
+  };
 
   static String _detail(String locale, TweakDescriptor descriptor) {
     final parts = <String>[
@@ -137,6 +198,74 @@ class TweakTextLocalizer {
       'device_power_savings_off': (
         'Disattiva risparmio energetico dispositivi',
         'Disattiva il risparmio energetico WMI dei dispositivi. Aumenta il consumo a riposo.',
+      ),
+      'network_llmnr_off': (
+        'Disattiva LLMNR',
+        'Disattiva la risoluzione legacy dei nomi tramite multicast locale.',
+      ),
+      'network_delivery_optimization_off': (
+        'Disattiva Delivery Optimization P2P',
+        'Impedisce upload e download peer-to-peer di Windows Update.',
+      ),
+      'network_fast_udp_datagram_send': (
+        'Invio datagrammi UDP veloce',
+        'Aumenta la soglia di invio AFD per carichi UDP.',
+      ),
+      'gaming_variable_refresh_rate_on': (
+        'Attiva frequenza di aggiornamento variabile',
+        'Attiva la preferenza Windows VRR per i giochi compatibili.',
+      ),
+      'gaming_extended_gpu_timeout': (
+        'Timeout GPU esteso',
+        'Imposta un ritardo TDR di 10 secondi per la diagnosi di carichi GPU instabili.',
+      ),
+      'ui_sticky_keys_shortcut_off': (
+        'Disattiva scorciatoia Tasti permanenti',
+        'Impedisce che cinque pressioni di Maiusc aprano Tasti permanenti.',
+      ),
+      'windows_ntfs_last_access_updates_off': (
+        'Disattiva aggiornamenti ultimo accesso NTFS',
+        'Impedisce a NTFS di aggiornare il timestamp a ogni lettura di file.',
+      ),
+      'toggle_printing_off': (
+        'Disattiva stampa',
+        'Disabilita il servizio Spooler di stampa fino al ripristino.',
+      ),
+      'toggle_location_off': (
+        'Disattiva posizione',
+        'Disabilita i servizi di localizzazione Windows tramite criteri.',
+      ),
+      'toggle_automatic_driver_updates_off': (
+        'Disattiva aggiornamenti automatici driver',
+        'Impedisce a Windows Update di installare automaticamente i driver.',
+      ),
+      'toggle_storage_sense_off': (
+        'Disattiva Sensore memoria',
+        'Disabilita la pulizia automatica dei file temporanei.',
+      ),
+      'toggle_activity_history_off': (
+        'Disattiva cronologia attività',
+        'Impedisce a Windows di pubblicare e caricare la cronologia attività.',
+      ),
+      'toggle_scheduled_defrag_off': (
+        'Disattiva deframmentazione/TRIM pianificata',
+        'Disabilita l’attività pianificata Ottimizza unità; l’ottimizzazione manuale resta disponibile.',
+      ),
+      'toggle_center_taskbar_icons': (
+        'Centra icone barra delle applicazioni',
+        'Usa l’allineamento centrato delle icone di Windows 11.',
+      ),
+      'checks_vbs_off': (
+        'Disattiva sicurezza basata sulla virtualizzazione',
+        'Disabilita i criteri VBS. Riduce le protezioni di isolamento di Windows e richiede un riavvio.',
+      ),
+      'checks_smart_screen_off': (
+        'Disattiva SmartScreen',
+        'Disabilita i controlli di reputazione di Windows. Usare solo per test controllati.',
+      ),
+      'checks_vulnerable_driver_blocklist_off': (
+        'Disattiva elenco blocco driver vulnerabili',
+        'Disabilita il blocco Microsoft dei driver vulnerabili, riducendo la protezione del kernel.',
       ),
     },
     'de': <String, (String, String)>{

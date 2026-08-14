@@ -131,6 +131,132 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Settings'**
   String get settings;
+
+  /// No description provided for @startWithWindows.
+  ///
+  /// In en, this message translates to:
+  /// **'Start with Windows'**
+  String get startWithWindows;
+
+  /// No description provided for @startWithWindowsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Launch ZapTweaks after you sign in to Windows.'**
+  String get startWithWindowsDescription;
+
+  /// No description provided for @openLogFolder.
+  ///
+  /// In en, this message translates to:
+  /// **'Open log folder'**
+  String get openLogFolder;
+
+  /// No description provided for @redetectSystemState.
+  ///
+  /// In en, this message translates to:
+  /// **'Re-detect system state'**
+  String get redetectSystemState;
+
+  /// No description provided for @exportProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Export profile'**
+  String get exportProfile;
+
+  /// No description provided for @importProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Import profile'**
+  String get importProfile;
+
+  /// No description provided for @resetAppSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset app settings'**
+  String get resetAppSettings;
+
+  /// No description provided for @updates.
+  ///
+  /// In en, this message translates to:
+  /// **'Updates'**
+  String get updates;
+
+  /// No description provided for @automaticUpdateNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Automatic update notifications'**
+  String get automaticUpdateNotifications;
+
+  /// No description provided for @automaticUpdateDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Check at startup and show a notification dot. Updates are never installed automatically.'**
+  String get automaticUpdateDescription;
+
+  /// No description provided for @checking.
+  ///
+  /// In en, this message translates to:
+  /// **'Checking...'**
+  String get checking;
+
+  /// No description provided for @checkNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Check now'**
+  String get checkNow;
+
+  /// No description provided for @viewRelease.
+  ///
+  /// In en, this message translates to:
+  /// **'View release'**
+  String get viewRelease;
+
+  /// No description provided for @updateNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Update now'**
+  String get updateNow;
+
+  /// No description provided for @applicationVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'Application version'**
+  String get applicationVersion;
+
+  /// No description provided for @dryRunMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Dry-run mode'**
+  String get dryRunMode;
+
+  /// No description provided for @dryRunDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Simulate commands without changing Windows.'**
+  String get dryRunDescription;
+
+  /// No description provided for @done.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get done;
+
+  /// No description provided for @operationFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Operation failed'**
+  String get operationFailed;
+
+  /// No description provided for @updateAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'An update is available'**
+  String get updateAvailable;
+
+  /// No description provided for @updateAvailableDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'You can review the release notes or install it directly.'**
+  String get updateAvailableDescription;
 }
 
 class _AppLocalizationsDelegate
