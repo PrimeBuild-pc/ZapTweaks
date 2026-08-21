@@ -1,16 +1,22 @@
 <div align="center">
-  <h1>⚡ ZapTweaks</h1>
+  <img src="readme-banner.svg" alt="ZapTweaks — Windows 11 optimization, diagnostics and recovery" width="100%">
   <p><strong>Advanced Windows 11 optimization and diagnostics companion.</strong></p>
   <p>
-    <a href="https://github.com/PrimeBuild-pc/ZapTweaks/releases/latest"><img alt="Latest release" src="https://img.shields.io/github/v/release/PrimeBuild-pc/ZapTweaks?label=release"></a>
-    <a href="https://github.com/PrimeBuild-pc/ZapTweaks/releases/latest"><img alt="Latest release downloads" src="https://img.shields.io/github/downloads/PrimeBuild-pc/ZapTweaks/latest/total?label=downloads%40latest&color=success"></a>
-    <a href="https://github.com/PrimeBuild-pc/ZapTweaks/releases"><img alt="Total downloads" src="https://img.shields.io/github/downloads/PrimeBuild-pc/ZapTweaks/total?label=total%20downloads&color=success"></a>
-    <a href="https://github.com/PrimeBuild-pc/ZapTweaks/actions/workflows/flutter-ci.yml"><img alt="Flutter CI" src="https://github.com/PrimeBuild-pc/ZapTweaks/actions/workflows/flutter-ci.yml/badge.svg"></a>
-    <a href="https://codecov.io/gh/PrimeBuild-pc/ZapTweaks"><img alt="Codecov" src="https://img.shields.io/codecov/c/github/PrimeBuild-pc/ZapTweaks?label=coverage"></a>
-    <a href="#languages"><img alt="7 interface languages" src="https://img.shields.io/badge/interface%20languages-7-6f42c1?logo=googletranslate&logoColor=white"></a>
-    <a href="#requirements"><img alt="Windows 11" src="https://img.shields.io/badge/platform-Windows%2011-0078D4?logo=windows&logoColor=white"></a>
-    <a href="https://flutter.dev/"><img alt="Built with Flutter" src="https://img.shields.io/badge/built%20with-Flutter-02569B?logo=flutter&logoColor=white"></a>
-    <a href="LICENSE"><img alt="MIT License" src="https://img.shields.io/badge/license-MIT-blue.svg"></a>
+    <a href="https://github.com/PrimeBuild-pc/ZapTweaks/commits/main"><img alt="Last commit" src="https://img.shields.io/github/last-commit/PrimeBuild-pc/ZapTweaks?style=plastic&amp;logo=git&amp;logoColor=white"></a>
+    <a href="https://github.com/PrimeBuild-pc/ZapTweaks/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/PrimeBuild-pc/ZapTweaks?style=plastic&amp;logo=github"></a>
+    <a href="https://github.com/PrimeBuild-pc/ZapTweaks/issues"><img alt="Open issues" src="https://img.shields.io/github/issues/PrimeBuild-pc/ZapTweaks?style=plastic&amp;logo=github"></a>
+  </p>
+  <p>
+    <a href="https://github.com/PrimeBuild-pc/ZapTweaks/releases/latest"><img alt="Latest release" src="https://img.shields.io/github/v/release/PrimeBuild-pc/ZapTweaks?style=plastic&amp;logo=github&amp;label=release"></a>
+    <a href="https://github.com/PrimeBuild-pc/ZapTweaks/releases"><img alt="Total downloads" src="https://img.shields.io/github/downloads/PrimeBuild-pc/ZapTweaks/total?style=plastic&amp;logo=github&amp;label=downloads&amp;color=2ea44f"></a>
+    <a href="https://github.com/PrimeBuild-pc/ZapTweaks/actions/workflows/flutter-ci.yml"><img alt="Flutter CI" src="https://img.shields.io/github/actions/workflow/status/PrimeBuild-pc/ZapTweaks/flutter-ci.yml?branch=main&amp;style=plastic&amp;logo=githubactions&amp;label=CI"></a>
+    <a href="https://codecov.io/gh/PrimeBuild-pc/ZapTweaks"><img alt="Coverage" src="https://img.shields.io/codecov/c/github/PrimeBuild-pc/ZapTweaks?style=plastic&amp;label=coverage"></a>
+  </p>
+  <p>
+    <a href="#languages"><img alt="Seven interface languages" src="https://img.shields.io/badge/UI%20languages-7-6f42c1?style=plastic&amp;logo=googletranslate&amp;logoColor=white"></a>
+    <img alt="Windows 11" src="https://img.shields.io/badge/Windows-11-0078D4?style=plastic&amp;logo=windows&amp;logoColor=white">
+    <a href="https://flutter.dev/"><img alt="Flutter" src="https://img.shields.io/badge/Flutter-Dart-02569B?style=plastic&amp;logo=flutter&amp;logoColor=white"></a>
+    <a href="LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/license-MIT-2ea44f?style=plastic"></a>
   </p>
 </div>
 
