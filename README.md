@@ -111,3 +111,9 @@ The Windows CMake build copies the complete `resources` directory next to the ex
 ## License
 
 Licensed under the [MIT License](LICENSE). Third-party tools retain their respective licenses.
+
+## Support the project
+
+If ZapTweaks saves you time, you can support its development here:
+
+[![PayPal](https://img.shields.io/badge/Support-PayPal-0070BA?style=plastic&logo=paypal&logoColor=white)](https://paypal.me/PrimeBuildOfficial?country.x=IT&locale.x=it_IT)
