@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="readme-banner.svg" alt="ZapTweaks — Windows 11 optimization, diagnostics and recovery" width="100%">
+  <img src="windows/runner/resources/app_icon.ico" alt="ZapTweaks" width="160">
   <p><strong>Advanced Windows 11 optimization and diagnostics companion.</strong></p>
   <p>
     <a href="https://github.com/PrimeBuild-pc/ZapTweaks/commits/main"><img alt="Last commit" src="https://img.shields.io/github/last-commit/PrimeBuild-pc/ZapTweaks?style=plastic&amp;logo=git&amp;logoColor=white"></a>
