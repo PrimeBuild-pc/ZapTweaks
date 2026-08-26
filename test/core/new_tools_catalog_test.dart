@@ -1,11 +1,13 @@
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:script_utility/core/services/tweak_catalog_service.dart';
+import 'package:script_utility/core/services/process_runner.dart';
+import 'package:script_utility/models/action_tweaks.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  test('catalog includes new fixes and utilities entries', () {
+  test('catalog includes new fixes and utilities entries', () async {
     final catalog = TweakCatalogService().buildCatalog();
     final ids = catalog.map((item) => item.id).toSet();
 
@@ -28,5 +30,26 @@ void main() {
       ),
       isTrue,
     );
+
+    final profileImport =
+        catalog
+                .singleWhere(
+                  (item) =>
+                      item.id == 'tool_nvidia_profile_inspector_nip_profile',
+                )
+                .scriptTweak
+            as NvidiaProfileImportTweak;
+    final profiles = profileImport.availableProfiles();
+    expect(profiles, hasLength(1));
+    expect(profiles.single.name, 'nvidia-performance-settings');
+
+    profileImport.selectProfile(profiles.single);
+    ProcessRunner.configureShared(
+      ProcessRunner(
+        mode: ProcessExecutionMode.dryRun,
+        dryRunDelay: Duration.zero,
+      ),
+    );
+    await profileImport.onApply();
   });
 }

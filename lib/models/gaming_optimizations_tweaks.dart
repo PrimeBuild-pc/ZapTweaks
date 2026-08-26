@@ -18,10 +18,11 @@ abstract class _GamingOptimizationTweak extends SystemTweak {
     required super.id,
     required super.title,
     required super.description,
+    super.category = 'Gaming Optimizations',
     super.requiredGpuVendors,
     super.isAggressive,
     super.warningMessage,
-  }) : super(category: 'Gaming Optimizations');
+  });
 }
 
 class WindowedOptimizationsOnTweak extends SystemTweak {
@@ -238,6 +239,7 @@ class AmdGpuExtremeProfileTweak extends _GamingOptimizationTweak {
         title: 'AMD GPU Extreme Profile',
         description:
             'Disables AMD thermal throttling, Crash Defender, power gating, clock gating, ULPS, ASPM, and other power-saving behavior. Desktop troubleshooting only.',
+        category: 'Graphics Scripts',
         requiredGpuVendors: const <String>{'amd'},
         isAggressive: true,
         warningMessage:
@@ -342,6 +344,7 @@ class AmdGpuSafeProfileTweak extends _GamingOptimizationTweak {
         title: 'AMD GPU Safe Profile',
         description:
             'Applies a reversible AMD driver profile without disabling thermal protection, Crash Defender, clock gating, or power gating.',
+        category: 'Graphics Scripts',
         requiredGpuVendors: const <String>{'amd'},
       );
 
@@ -422,6 +425,7 @@ class AmdUlpsOffTweak extends _GamingOptimizationTweak {
         title: 'AMD ULPS Off',
         description:
             'Disables EnableUlps on AMD display class keys. Useful for latency testing.',
+        category: 'Graphics Scripts',
         requiredGpuVendors: const <String>{'amd'},
         isAggressive: true,
         warningMessage:

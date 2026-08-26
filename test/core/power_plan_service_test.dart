@@ -14,10 +14,11 @@ void main() {
     );
 
     final plans = await service.availablePlans();
-    expect(plans, hasLength(91));
+    expect(plans, hasLength(102));
     expect(
       plans.map((plan) => plan.name),
       contains('Microsoft Ultimate Performance'),
     );
+    expect(plans.map((plan) => plan.name), contains('Slower (Downloads)'));
   });
 }

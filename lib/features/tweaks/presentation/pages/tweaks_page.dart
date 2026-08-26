@@ -2,6 +2,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 
 import '../../../../core/services/tweak_text_localizer.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../models/action_tweaks.dart';
 import '../../application/tweak_controller.dart';
 import '../widgets/power_plan_picker.dart';
 import '../widgets/tweak_switch_tile.dart';
@@ -260,6 +261,12 @@ class _TweaksPageState extends State<TweaksPage> {
           }
 
           final scriptTweak = descriptor.scriptTweak!;
+          final profileImport = scriptTweak is NvidiaProfileImportTweak
+              ? scriptTweak
+              : null;
+          final profiles =
+              profileImport?.availableProfiles() ?? const <NvidiaProfile>[];
+          profileImport?.ensureSelection(profiles);
           if (scriptTweak.hasState) {
             return Padding(
               padding: const EdgeInsets.only(bottom: 8),
@@ -340,6 +347,27 @@ class _TweaksPageState extends State<TweaksPage> {
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
+                      if (profileImport != null) ...<Widget>[
+                        SizedBox(
+                          width: 260,
+                          child: ComboBox<NvidiaProfile>(
+                            value: profileImport.selectedProfile,
+                            items: <ComboBoxItem<NvidiaProfile>>[
+                              for (final profile in profiles)
+                                ComboBoxItem<NvidiaProfile>(
+                                  value: profile,
+                                  child: Text(profile.name),
+                                ),
+                            ],
+                            onChanged: busy
+                                ? null
+                                : (profile) => setState(
+                                    () => profileImport.selectProfile(profile),
+                                  ),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                      ],
                       IconButton(
                         icon: const Icon(FluentIcons.info),
                         onPressed: () => _showTweakInfo(context, text),
@@ -354,7 +382,10 @@ class _TweaksPageState extends State<TweaksPage> {
                           ),
                         ),
                       FilledButton(
-                        onPressed: busy || !available
+                        onPressed:
+                            busy ||
+                                !available ||
+                                (profileImport != null && profiles.isEmpty)
                             ? null
                             : () async {
                                 final warningMessage = text.warningMessage

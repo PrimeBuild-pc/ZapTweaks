@@ -20,7 +20,7 @@ void main() {
               .where((file) => file.path.toLowerCase().endsWith('.pow'))
               .toList();
 
-      expect(powerPlans, hasLength(91));
+      expect(powerPlans, hasLength(102));
       expect(
         File(
           path.join(
@@ -61,6 +61,10 @@ void main() {
         referencedScripts.add(resourcePath(tweak.registrySegments));
       } else if (tweak is ExplorerSelectFileTweak) {
         referencedScripts.add(resourcePath(tweak.fileSegments));
+      } else if (tweak is NvidiaProfileImportTweak) {
+        referencedScripts.addAll(
+          tweak.availableProfiles().map((profile) => profile.filePath),
+        );
       }
     }
 

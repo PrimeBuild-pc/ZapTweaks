@@ -156,7 +156,7 @@ class TweakCatalogService {
           'gpu_nvidia_optimizations': (
             title: 'NVIDIA Optimizations',
             description: 'Apply NVIDIA graphics scheduling and latency tweaks.',
-            category: 'Gaming',
+            category: 'Graphics',
             aggressive: false,
             cpuVendor: null,
             gpuVendors: <String>{'nvidia'},
@@ -165,7 +165,7 @@ class TweakCatalogService {
             title: 'AMD GPU ULPS Troubleshooting',
             description:
                 'Disables AMD ULPS for troubleshooting; it does not disable thermal protection or power gating.',
-            category: 'Gaming',
+            category: 'Graphics',
             aggressive: true,
             cpuVendor: null,
             gpuVendors: <String>{'amd'},
@@ -173,7 +173,7 @@ class TweakCatalogService {
           'gpu_intel_optimizations': (
             title: 'Intel GPU Optimizations',
             description: 'Apply Intel graphics stack performance tuning.',
-            category: 'Gaming',
+            category: 'Graphics',
             aggressive: false,
             cpuVendor: null,
             gpuVendors: <String>{'intel'},

@@ -473,6 +473,115 @@ class BatchScriptTweak extends ActionSystemTweak {
   }
 }
 
+class NvidiaProfile {
+  const NvidiaProfile({required this.name, required this.filePath});
+
+  final String name;
+  final String filePath;
+}
+
+class NvidiaProfileImportTweak extends ActionSystemTweak {
+  NvidiaProfileImportTweak({
+    required super.id,
+    required super.title,
+    required super.description,
+    required super.category,
+    super.actionLabel = 'Import',
+    super.isAggressive,
+    super.warningMessage,
+  }) : super(type: TweakUiType.launcher);
+
+  NvidiaProfile? selectedProfile;
+
+  List<NvidiaProfile> availableProfiles() {
+    final roots = <Directory>[
+      Directory(
+        path.join(path.dirname(Platform.resolvedExecutable), 'resources'),
+      ),
+      Directory(path.join(Directory.current.path, 'resources')),
+    ];
+    Directory? root;
+    for (final candidate in roots) {
+      if (candidate.existsSync()) {
+        root = candidate;
+        break;
+      }
+    }
+    if (root == null) {
+      return const <NvidiaProfile>[];
+    }
+
+    final profiles =
+        root
+            .listSync()
+            .whereType<File>()
+            .where((file) => path.extension(file.path).toLowerCase() == '.nip')
+            .map(
+              (file) => NvidiaProfile(
+                name: path.basenameWithoutExtension(file.path),
+                filePath: file.path,
+              ),
+            )
+            .toList()
+          ..sort((left, right) => left.name.compareTo(right.name));
+    return profiles;
+  }
+
+  void selectProfile(NvidiaProfile? profile) => selectedProfile = profile;
+
+  void ensureSelection(List<NvidiaProfile> profiles) {
+    if (profiles.isEmpty) {
+      selectedProfile = null;
+      return;
+    }
+
+    final selectedPath = selectedProfile?.filePath;
+    selectedProfile = profiles.firstWhere(
+      (profile) =>
+          selectedPath != null && path.equals(profile.filePath, selectedPath),
+      orElse: () => profiles.first,
+    );
+  }
+
+  @override
+  Future<void> onApply() async {
+    final profile = selectedProfile;
+    if (profile == null ||
+        !availableProfiles().any(
+          (available) => path.equals(available.filePath, profile.filePath),
+        )) {
+      throw Exception('Select a bundled NVIDIA profile first.');
+    }
+
+    const inspectorSegments = <String>['programmi', 'nvidiaProfileInspector'];
+    final sourceDirectoryPath = resolveResourceDirectoryPath(inspectorSegments);
+    if (sourceDirectoryPath == null) {
+      throw Exception(
+        'Missing folder: ${_resourceRelativePath(inspectorSegments)}',
+      );
+    }
+
+    final inspectorDirectory = ProcessRunner.shared.isDryRun
+        ? sourceDirectoryPath
+        : await _deployResourceDirectoryToTools(inspectorSegments);
+    final inspectorPath = path.join(
+      inspectorDirectory,
+      'nvidiaProfileInspector.exe',
+    );
+    if (!File(inspectorPath).existsSync()) {
+      throw Exception('Missing NVIDIA Profile Inspector executable.');
+    }
+
+    final result = await ProcessRunner.shared.run(inspectorPath, <String>[
+      '-silentImport',
+      profile.filePath,
+    ]);
+    if (!result.success) {
+      throw Exception('NVIDIA profile import failed (${result.details}).');
+    }
+  }
+}
+
 class ExplorerSelectFileTweak extends ActionSystemTweak {
   ExplorerSelectFileTweak({
     required super.id,
