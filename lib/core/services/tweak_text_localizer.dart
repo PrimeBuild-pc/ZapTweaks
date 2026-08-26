@@ -715,8 +715,8 @@ class TweakTextLocalizer {
         "Sceneggiatura interattiva di Fr33thy.",
       ),
       "graphics_cpp_runtime": (
-        "Tempo di esecuzione C++",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Runtime Visual C++ all-in-one",
+        "Installa i runtime Visual C++ dal 2005 al 2022 (x86 e x64) con un’unica azione.",
       ),
       "graphics_directx": (
         "Tempo di esecuzione di DirectX",
@@ -1624,8 +1624,8 @@ class TweakTextLocalizer {
         "Sceneggiatura interattiva di Fr33thy.",
       ),
       "tool_nvidia_profile_inspector_nip_profile": (
-        "Impostazioni delle prestazioni NVIDIA (.nip)",
-        "Profilo incentrato sulle prestazioni. Non utilizzare se si ricerca la qualità visiva.",
+        "Profili NVIDIA Profile Inspector (.nip)",
+        "Scegli un profilo incluso e importalo direttamente con NVIDIA Profile Inspector.",
       ),
       "tool_nvidia_profile_inspector_folder": (
         "Ispettore profilo NVIDIA",
@@ -2058,8 +2058,8 @@ class TweakTextLocalizer {
         "Interaktives Skript von Fr33thy.",
       ),
       "graphics_cpp_runtime": (
-        "C++-Laufzeit",
-        "Interaktives Skript von Fr33thy.",
+        "Visual C++ All-in-One-Laufzeitpakete",
+        "Installiert die Visual-C++-Laufzeitpakete 2005–2022 (x86 und x64) in einer Aktion.",
       ),
       "graphics_directx": (
         "DirectX-Laufzeit",
@@ -2952,8 +2952,8 @@ class TweakTextLocalizer {
         "Interaktives Skript von Fr33thy.",
       ),
       "tool_nvidia_profile_inspector_nip_profile": (
-        "NVIDIA-Leistungseinstellungen (.nip)",
-        "Leistungsorientiertes Profil. Nicht verwenden, wenn Sie visuelle Qualität wünschen.",
+        "NVIDIA Profile Inspector-Profile (.nip)",
+        "Wählen Sie ein mitgeliefertes Profil aus und importieren Sie es direkt mit NVIDIA Profile Inspector.",
       ),
       "tool_nvidia_profile_inspector_folder": (
         "NVIDIA-Profilinspektor",
@@ -3386,8 +3386,8 @@ class TweakTextLocalizer {
         "Guión interactivo de Fr33thy.",
       ),
       "graphics_cpp_runtime": (
-        "Tiempo de ejecución de C++",
-        "Guión interactivo de Fr33thy.",
+        "Runtimes Visual C++ todo en uno",
+        "Instala los runtimes de Visual C++ de 2005 a 2022 (x86 y x64) en una sola acción.",
       ),
       "graphics_directx": (
         "Tiempo de ejecución de DirectX",
@@ -4277,8 +4277,8 @@ class TweakTextLocalizer {
         "Guión interactivo de Fr33thy.",
       ),
       "tool_nvidia_profile_inspector_nip_profile": (
-        "Configuración de rendimiento de NVIDIA (.nip)",
-        "Perfil centrado en el desempeño. No lo utilice si busca calidad visual.",
+        "Perfiles de NVIDIA Profile Inspector (.nip)",
+        "Elige un perfil incluido e impórtalo directamente con NVIDIA Profile Inspector.",
       ),
       "tool_nvidia_profile_inspector_folder": (
         "Inspector de perfiles de NVIDIA",
@@ -4708,8 +4708,8 @@ class TweakTextLocalizer {
         "Script interactif de Fr33thy.",
       ),
       "graphics_cpp_runtime": (
-        "Exécution C++",
-        "Script interactif de Fr33thy.",
+        "Runtimes Visual C++ tout-en-un",
+        "Installe les runtimes Visual C++ 2005 à 2022 (x86 et x64) en une seule action.",
       ),
       "graphics_directx": (
         "Exécution DirectX",
@@ -5599,8 +5599,8 @@ class TweakTextLocalizer {
         "Script interactif de Fr33thy.",
       ),
       "tool_nvidia_profile_inspector_nip_profile": (
-        "Paramètres de performances NVIDIA (.nip)",
-        "Profil axé sur la performance. Ne pas utiliser si vous recherchez une qualité visuelle.",
+        "Profils NVIDIA Profile Inspector (.nip)",
+        "Choisissez un profil inclus et importez-le directement avec NVIDIA Profile Inspector.",
       ),
       "tool_nvidia_profile_inspector_folder": (
         "Inspecteur de profil NVIDIA",
@@ -6024,8 +6024,8 @@ class TweakTextLocalizer {
         "Интерактивный сценарий от Fr33thy.",
       ),
       "graphics_cpp_runtime": (
-        "С++ среда выполнения",
-        "Интерактивный сценарий от Fr33thy.",
+        "Пакет сред выполнения Visual C++",
+        "Устанавливает среды выполнения Visual C++ 2005–2022 (x86 и x64) одним действием.",
       ),
       "graphics_directx": (
         "Среда выполнения DirectX",
@@ -6927,8 +6927,8 @@ class TweakTextLocalizer {
         "Интерактивный сценарий от Fr33thy.",
       ),
       "tool_nvidia_profile_inspector_nip_profile": (
-        "Настройки производительности NVIDIA (.nip)",
-        "Профиль, ориентированный на производительность. Не используйте, если вам нужно визуальное качество.",
+        "Профили NVIDIA Profile Inspector (.nip)",
+        "Выберите встроенный профиль и импортируйте его напрямую через NVIDIA Profile Inspector.",
       ),
       "tool_nvidia_profile_inspector_folder": (
         "Инспектор профилей NVIDIA",
@@ -7213,7 +7213,10 @@ class TweakTextLocalizer {
         "将 Win32PrioritySeparation 设置为 26（十六进制 0x1a） - 优先考虑前台应用程序 CPU 时间。经典游戏调整可降低输入延迟。",
       ),
       "graphics_amd_settings": ("AMD 设置", "Fr33thy 的互动脚本。"),
-      "graphics_cpp_runtime": ("C++ 运行时", "Fr33thy 的互动脚本。"),
+      "graphics_cpp_runtime": (
+        "Visual C++ 一体化运行库",
+        "一键安装 Visual C++ 2005–2022 运行库（x86 和 x64）。",
+      ),
       "graphics_directx": ("DirectX运行时", "Fr33thy 的互动脚本。"),
       "graphics_driver_clean": ("驱动清洁", "Fr33thy 的互动脚本。"),
       "graphics_driver_install_debloat_settings": (
@@ -7688,8 +7691,8 @@ class TweakTextLocalizer {
       "tool_mouse_movement_recorder": ("鼠标移动记录器", "检查有效的鼠标轮询行为。"),
       "hardware_mouse_polling_rate_test_script": ("鼠标轮询率测试", "Fr33thy 的互动脚本。"),
       "tool_nvidia_profile_inspector_nip_profile": (
-        "NVIDIA 性能设置 (.nip)",
-        "以性能为中心的配置文件。如果您追求视觉质量，请勿使用。",
+        "NVIDIA Profile Inspector 配置文件 (.nip)",
+        "选择内置配置文件，并使用 NVIDIA Profile Inspector 直接导入。",
       ),
       "tool_nvidia_profile_inspector_folder": (
         "NVIDIA 配置文件检查器",

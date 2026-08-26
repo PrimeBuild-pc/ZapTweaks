@@ -38,7 +38,7 @@ const List<String> _scriptDefinitions = <String>[
   '!graphics_p0_state|P0 State|Graphics Scripts|interactive_scripts/5 Graphics/8 P0 State.ps1',
   '!graphics_msi_mode_script|MSI Mode (Script Variant)|Graphics Scripts|interactive_scripts/5 Graphics/9 Msi Mode.ps1',
   '!graphics_directx|DirectX Runtime|Graphics Scripts|interactive_scripts/5 Graphics/10 DirectX.ps1',
-  '!graphics_cpp_runtime|C++ Runtime|Graphics Scripts|interactive_scripts/5 Graphics/11 C++.ps1',
+  '!graphics_cpp_runtime|Visual C++ All-in-One Runtimes|Graphics Scripts|interactive_scripts/5 Graphics/11 C++.ps1',
   'graphics_resolution_refresh_rate|Resolution Refresh Rate|Graphics Scripts|interactive_scripts/5 Graphics/12 Resolution Refresh Rate.ps1',
   '!graphics_hags_windowed|HAGS Windowed|Graphics Scripts|interactive_scripts/5 Graphics/13 Hags Windowed.ps1',
   '!windows_start_menu_taskbar_script|Start Menu Taskbar (Script Variant)|Windows Scripts|interactive_scripts/6 Windows/1 Start Menu Taskbar.ps1',
@@ -110,9 +110,16 @@ List<SystemTweak> createRecoveredScriptTweaks() {
         return ScriptInteractiveTweak(
           id: aggressive ? fields[0].substring(1) : fields[0],
           title: fields[1],
-          description: 'Interactive script by Fr33thy.',
+          description: fields[0] == '!graphics_cpp_runtime'
+              ? 'Installs Visual C++ 2005-2022 runtimes (x86 and x64) in one action.'
+              : 'Interactive script by Fr33thy.',
           category: fields[2],
           scriptSegments: fields[3].split('/'),
+          actionLabel:
+              fields[0] == '!graphics_directx' ||
+                  fields[0] == '!graphics_cpp_runtime'
+              ? 'Install'
+              : 'Run Script',
           isAggressive: aggressive,
         );
       })

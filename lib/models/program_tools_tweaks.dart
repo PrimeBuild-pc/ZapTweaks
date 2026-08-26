@@ -358,14 +358,12 @@ List<SystemTweak> createProgramToolTweaks() {
       launchExecutableRelativePath: 'nvidiaProfileInspector.exe',
       isAggressive: true,
     ),
-    ExplorerSelectFileTweak(
+    NvidiaProfileImportTweak(
       id: 'tool_nvidia_profile_inspector_nip_profile',
-      title: 'NVIDIA Performance Settings (.nip)',
+      title: 'NVIDIA Profile Inspector Profiles (.nip)',
       description:
-          'Performance-focused profile. Do not use if you are looking for visual quality.',
+          'Choose a bundled profile and import it directly with NVIDIA Profile Inspector.',
       category: 'Drivers & Installers',
-      fileSegments: <String>['nvidia-performance-settings.nip'],
-      actionLabel: 'Show in Explorer',
       isAggressive: true,
     ),
     DirectoryLauncherTweak(

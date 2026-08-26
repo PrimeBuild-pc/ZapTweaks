@@ -41,10 +41,10 @@ void main() {
       expect(catalog.map((item) => item.id).toSet(), hasLength(catalog.length));
       expect(categoryTotals, <String, int>{
         'Shortcuts': 29,
-        'Gaming': 20,
+        'Gaming': 14,
         'Networking': 15,
         'Power & CPU': 16,
-        'Graphics': 13,
+        'Graphics': 19,
         'Windows': 45,
         'System Checks': 18,
         'Services': 31,
@@ -102,6 +102,36 @@ void main() {
       expect(byId['gaming_amd_gpu_extreme_profile']!.isAggressive, isTrue);
     },
   );
+
+  test('runtimes and GPU/Power pill tweaks use their intended sections', () {
+    final catalog = TweakCatalogService().buildCatalog();
+    final byId = {for (final descriptor in catalog) descriptor.id: descriptor};
+
+    for (final id in <String>[
+      'gpu_nvidia_optimizations',
+      'gpu_amd_optimizations',
+      'gpu_intel_optimizations',
+      'gaming_amd_gpu_safe_profile',
+      'gaming_amd_gpu_extreme_profile',
+      'gaming_amd_ulps_off',
+    ]) {
+      expect(byId[id]!.category, 'Graphics', reason: id);
+      expect(byId[id]!.isScriptAction, isFalse, reason: id);
+    }
+
+    expect(
+      catalog
+          .where((item) => item.category == 'Power & CPU')
+          .every((item) => !item.isScriptAction),
+      isTrue,
+    );
+    expect(byId['graphics_directx']!.scriptTweak!.actionLabel, 'Install');
+    expect(byId['graphics_cpp_runtime']!.scriptTweak!.actionLabel, 'Install');
+    expect(
+      byId['graphics_cpp_runtime']!.title,
+      'Visual C++ All-in-One Runtimes',
+    );
+  });
 
   test('new privacy, shell, and network toggles are catalogued safely', () {
     final byId = {
