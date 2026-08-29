@@ -16,9 +16,24 @@ void main() {
     expect(ids.contains('tool_fix_tools_fastclean'), isTrue);
     expect(ids.contains('tool_gaming_net_diagnostic'), isTrue);
     expect(ids.contains('tool_nvidia_profile_inspector_nip_profile'), isTrue);
+    expect(ids.contains('tool_nvidia_profile_inspector_download'), isTrue);
+    expect(ids.contains('tool_wtools_setup'), isTrue);
+    expect(ids.contains('tool_wtools_official_page'), isTrue);
     expect(ids.contains('tool_ctt_winutil'), isTrue);
     expect(ids.contains('tool_install_winhance'), isTrue);
     expect(ids.contains('tool_star_ethernet_analyzer_video'), isTrue);
+    expect(
+      ids.intersection(<String>{
+        'refresh_network_driver',
+        'installers_nvidia_profile_inspector',
+        'hardware_background_polling_rate_cap_script',
+        'hardware_mouse_polling_rate_test_script',
+        'hardware_controller_polling_rate_script',
+        'check_hw_info',
+        'tool_star_ethernet_analyzer_start_bat',
+      }),
+      isEmpty,
+    );
 
     expect(
       catalog.any((item) => item.id == 'tool_nvidia_profile_inspector_folder'),
@@ -40,10 +55,17 @@ void main() {
                 .scriptTweak
             as NvidiaProfileImportTweak;
     final profiles = profileImport.availableProfiles();
-    expect(profiles, hasLength(1));
-    expect(profiles.single.name, 'nvidia-performance-settings');
+    expect(profiles, hasLength(16));
+    expect(
+      profiles.map((profile) => profile.name),
+      containsAll(<String>[
+        'nvidia-performance-settings',
+        'FortniteDX12_2025Profile_by_Jackpot',
+        'NovaOS',
+      ]),
+    );
 
-    profileImport.selectProfile(profiles.single);
+    profileImport.selectProfile(profiles.first);
     ProcessRunner.configureShared(
       ProcessRunner(
         mode: ProcessExecutionMode.dryRun,

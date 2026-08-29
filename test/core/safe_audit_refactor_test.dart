@@ -34,8 +34,8 @@ class _CapturingLaunchRunner extends ProcessRunner {
 void main() {
   test('safe audit preserves actions and PowerShell encoding', () async {
     final tweaks = createRecoveredScriptTweaks();
-    expect(tweaks, hasLength(92));
-    expect(tweaks.map((item) => item.id).toSet(), hasLength(92));
+    expect(tweaks, hasLength(90));
+    expect(tweaks.map((item) => item.id).toSet(), hasLength(90));
 
     late List<String> capturedArguments;
     final runner = ProcessRunner(

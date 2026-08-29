@@ -6,31 +6,6 @@ List<SystemTweak> createHardwareTweaks() {
   return <SystemTweak>[
     BackgroundPollingRateCapTweak(),
     ScriptInteractiveTweak(
-      id: 'hardware_background_polling_rate_cap_script',
-      title: 'Background Polling Rate Cap (Script Variant)',
-      description: 'Interactive script by Fr33thy.',
-      category: 'Drivers & Installers',
-      scriptSegments: <String>[
-        'interactive_scripts',
-        '7 Hardware',
-        '2 Background Polling Rate Cap.ps1',
-      ],
-      actionLabel: 'Run Script',
-      isAggressive: true,
-    ),
-    ScriptInteractiveTweak(
-      id: 'hardware_mouse_polling_rate_test_script',
-      title: 'Mouse Polling Rate Test',
-      description: 'Interactive script by Fr33thy.',
-      category: 'Drivers & Installers',
-      scriptSegments: <String>[
-        'interactive_scripts',
-        '7 Hardware',
-        '3 Mouse Polling Rate Test.ps1',
-      ],
-      actionLabel: 'Run Script',
-    ),
-    ScriptInteractiveTweak(
       id: 'hardware_controller_overclock_script',
       title: 'Controller Overclock',
       description: 'Interactive script by Fr33thy.',
@@ -42,18 +17,6 @@ List<SystemTweak> createHardwareTweaks() {
       ],
       actionLabel: 'Run Script',
       isAggressive: true,
-    ),
-    ScriptInteractiveTweak(
-      id: 'hardware_controller_polling_rate_script',
-      title: 'Controller Polling Rate Test',
-      description: 'Interactive script by Fr33thy.',
-      category: 'Drivers & Installers',
-      scriptSegments: <String>[
-        'interactive_scripts',
-        '7 Hardware',
-        '5 Controller Polling Rate Test.ps1',
-      ],
-      actionLabel: 'Run Script',
     ),
   ];
 }

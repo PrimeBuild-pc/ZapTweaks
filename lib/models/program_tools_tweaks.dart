@@ -349,6 +349,14 @@ List<SystemTweak> createProgramToolTweaks() {
       directorySegments: <String>['programmi', 'hwi_834'],
       launchExecutableRelativePath: 'HWiNFO64.EXE',
     ),
+    ExternalUrlLauncherTweak(
+      id: 'tool_nvidia_profile_inspector_download',
+      title: 'Download NVIDIA Profile Inspector',
+      description: 'Opens the official NVIDIA Profile Inspector releases page.',
+      category: 'Drivers & Installers',
+      url: 'https://github.com/Orbmu2k/nvidiaProfileInspector/releases',
+      actionLabel: 'Open Download',
+    ),
     DirectoryLauncherTweak(
       id: 'tool_nvidia_profile_inspector_folder',
       title: 'NVIDIA Profile Inspector',
@@ -386,6 +394,25 @@ List<SystemTweak> createProgramToolTweaks() {
     ),
 
     // Newly integrated external and bundled utilities
+    ExecutableLauncherTweak(
+      id: 'tool_wtools_setup',
+      title: 'WTools 1.0.9.3 Installer',
+      description:
+          'Installs the bundled, Wagnardsoft-signed WTools 1.0.9.3 package.',
+      category: 'Drivers & Installers',
+      executableSegments: <String>['programmi', 'WTools v1.0.9.3_setup.exe'],
+      actionLabel: 'Install',
+      isAggressive: true,
+    ),
+    ExternalUrlLauncherTweak(
+      id: 'tool_wtools_official_page',
+      title: 'WTools Official Page',
+      description:
+          'Opens the official Wagnardsoft page for downloads and updates.',
+      category: 'Drivers & Installers',
+      url: 'https://www.wagnardsoft.com/wtools',
+      actionLabel: 'Open Download',
+    ),
     DirectoryLauncherTweak(
       id: 'tool_rammap_folder',
       title: 'RAMMap',
@@ -519,19 +546,6 @@ List<SystemTweak> createProgramToolTweaks() {
       ],
       isAggressive: true,
     ),
-    BatchScriptTweak(
-      id: 'tool_star_ethernet_analyzer_start_bat',
-      title: 'Star Ethernet Analyzer Launcher',
-      description:
-          'Runs the bundled batch launcher for Star Ethernet Analyzer.',
-      category: 'Drivers & Installers',
-      batchSegments: <String>[
-        'programmi',
-        'Star Ethernet Analyzer',
-        '3. Start Analyzer here.bat',
-      ],
-    ),
-
     // Newly added scripts and programs
     ExecutableLauncherTweak(
       id: 'tool_rtl_utility',

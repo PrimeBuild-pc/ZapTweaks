@@ -286,6 +286,18 @@ class TweakTextLocalizer {
         'Disattiva elenco blocco driver vulnerabili',
         'Disabilita il blocco Microsoft dei driver vulnerabili, riducendo la protezione del kernel.',
       ),
+      'tool_nvidia_profile_inspector_download': (
+        'Scarica NVIDIA Profile Inspector',
+        'Apre la pagina ufficiale delle release di NVIDIA Profile Inspector.',
+      ),
+      'tool_wtools_setup': (
+        'Installa WTools 1.0.9.3',
+        'Installa il pacchetto WTools 1.0.9.3 incluso e firmato da Wagnardsoft.',
+      ),
+      'tool_wtools_official_page': (
+        'Pagina ufficiale WTools',
+        'Apre la pagina ufficiale Wagnardsoft per download e aggiornamenti.',
+      ),
     },
     'de': <String, (String, String)>{
       'game_mode': (
@@ -307,6 +319,18 @@ class TweakTextLocalizer {
       'device_power_savings_off': (
         'Geräte-Energiesparen aus',
         'Deaktiviert WMI-Energiesparen für Geräte und erhöht den Leerlaufverbrauch.',
+      ),
+      'tool_nvidia_profile_inspector_download': (
+        'NVIDIA Profile Inspector herunterladen',
+        'Öffnet die offizielle Release-Seite von NVIDIA Profile Inspector.',
+      ),
+      'tool_wtools_setup': (
+        'WTools 1.0.9.3 installieren',
+        'Installiert das gebündelte, von Wagnardsoft signierte WTools-1.0.9.3-Paket.',
+      ),
+      'tool_wtools_official_page': (
+        'Offizielle WTools-Seite',
+        'Öffnet die offizielle Wagnardsoft-Seite für Downloads und Updates.',
       ),
     },
     'es': <String, (String, String)>{
@@ -330,6 +354,18 @@ class TweakTextLocalizer {
         'Desactivar ahorro de energía de dispositivos',
         'Desactiva el ahorro de energía WMI de dispositivos y aumenta el consumo en reposo.',
       ),
+      'tool_nvidia_profile_inspector_download': (
+        'Descargar NVIDIA Profile Inspector',
+        'Abre la página oficial de versiones de NVIDIA Profile Inspector.',
+      ),
+      'tool_wtools_setup': (
+        'Instalar WTools 1.0.9.3',
+        'Instala el paquete WTools 1.0.9.3 incluido y firmado por Wagnardsoft.',
+      ),
+      'tool_wtools_official_page': (
+        'Página oficial de WTools',
+        'Abre la página oficial de Wagnardsoft para descargas y actualizaciones.',
+      ),
     },
     'fr': <String, (String, String)>{
       'game_mode': (
@@ -351,6 +387,18 @@ class TweakTextLocalizer {
       'device_power_savings_off': (
         'Désactiver l’économie d’énergie des appareils',
         'Désactive l’économie d’énergie WMI des appareils et augmente la consommation au repos.',
+      ),
+      'tool_nvidia_profile_inspector_download': (
+        'Télécharger NVIDIA Profile Inspector',
+        'Ouvre la page officielle des versions de NVIDIA Profile Inspector.',
+      ),
+      'tool_wtools_setup': (
+        'Installer WTools 1.0.9.3',
+        'Installe le paquet WTools 1.0.9.3 inclus et signé par Wagnardsoft.',
+      ),
+      'tool_wtools_official_page': (
+        'Page officielle de WTools',
+        'Ouvre la page officielle Wagnardsoft pour les téléchargements et mises à jour.',
       ),
     },
     'ru': <String, (String, String)>{
@@ -374,6 +422,18 @@ class TweakTextLocalizer {
         'Отключить энергосбережение устройств',
         'Отключает энергосбережение устройств WMI и повышает потребление в простое.',
       ),
+      'tool_nvidia_profile_inspector_download': (
+        'Скачать NVIDIA Profile Inspector',
+        'Открывает официальную страницу выпусков NVIDIA Profile Inspector.',
+      ),
+      'tool_wtools_setup': (
+        'Установить WTools 1.0.9.3',
+        'Устанавливает комплект WTools 1.0.9.3 с подписью Wagnardsoft.',
+      ),
+      'tool_wtools_official_page': (
+        'Официальная страница WTools',
+        'Открывает официальную страницу Wagnardsoft для загрузок и обновлений.',
+      ),
     },
     'zh': <String, (String, String)>{
       'game_mode': ('开启游戏模式', '开启 Windows 游戏模式，不会修改 Game Bar 或 Game DVR。'),
@@ -387,6 +447,15 @@ class TweakTextLocalizer {
         '关闭 AMD 热保护和节能保护。仅限监控温度的台式机测试。',
       ),
       'device_power_savings_off': ('关闭设备节能', '关闭设备的 WMI 节能功能并提高待机功耗。'),
+      'tool_nvidia_profile_inspector_download': (
+        '下载 NVIDIA Profile Inspector',
+        '打开 NVIDIA Profile Inspector 官方发布页面。',
+      ),
+      'tool_wtools_setup': (
+        '安装 WTools 1.0.9.3',
+        '安装内置且由 Wagnardsoft 签名的 WTools 1.0.9.3 软件包。',
+      ),
+      'tool_wtools_official_page': ('WTools 官方页面', '打开 Wagnardsoft 官方下载和更新页面。'),
     },
   };
 
