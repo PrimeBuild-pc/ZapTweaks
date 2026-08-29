@@ -61,13 +61,5 @@ List<SystemTweak> createCheckTweaks() {
       category: 'System Checks',
       scriptSegments: <String>['interactive_scripts', '1 Check', '8 Gpu Test.ps1'],
     ),
-    ScriptInteractiveTweak(
-      id: 'check_hw_info',
-      title: 'HW Info',
-      description: 'Interactive hardware info script by Fr33thy.',
-      category: 'System Checks',
-      scriptSegments: <String>['interactive_scripts', '1 Check', '9 Hw Info.ps1'],
-    ),
   ];
 }
-

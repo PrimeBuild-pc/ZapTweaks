@@ -46,14 +46,14 @@ void main() {
         'Power & CPU': 16,
         'Graphics': 19,
         'Windows': 45,
-        'System Checks': 18,
+        'System Checks': 17,
         'Services': 31,
-        'Refresh & Recovery': 24,
+        'Refresh & Recovery': 23,
         'Setup': 12,
         'Advanced': 23,
         'Privacy': 12,
         'Visuals': 14,
-        'Tools': 70,
+        'Tools': 68,
       });
     },
   );
@@ -165,8 +165,8 @@ void main() {
   test('compact recovered script table preserves every action', () {
     final tweaks = createRecoveredScriptTweaks();
 
-    expect(tweaks, hasLength(92));
-    expect(tweaks.map((item) => item.id).toSet(), hasLength(92));
+    expect(tweaks, hasLength(90));
+    expect(tweaks.map((item) => item.id).toSet(), hasLength(90));
     expect(tweaks, everyElement(isA<ScriptInteractiveTweak>()));
     expect(
       tweaks.cast<ScriptInteractiveTweak>(),
