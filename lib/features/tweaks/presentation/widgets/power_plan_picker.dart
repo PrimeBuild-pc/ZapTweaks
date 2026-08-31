@@ -21,11 +21,17 @@ class _PowerPlanPickerState extends State<PowerPlanPicker> {
 
   Future<void> _run(Future<dynamic> Function() action) async {
     setState(() => _busy = true);
-    final result = await action();
+    final dynamic result;
+    try {
+      result = await action();
+    } finally {
+      if (mounted) {
+        setState(() => _busy = false);
+      }
+    }
     if (!mounted) {
       return;
     }
-    setState(() => _busy = false);
     displayInfoBar(
       context,
       builder: (_, close) => InfoBar(
@@ -112,6 +118,12 @@ class _PowerPlanPickerState extends State<PowerPlanPicker> {
                               ),
                         child: Text(strings.restorePreviousPlan),
                       ),
+                      if (_busy)
+                        const SizedBox(
+                          width: 18,
+                          height: 18,
+                          child: ProgressRing(strokeWidth: 2),
+                        ),
                     ],
                   ),
               ],

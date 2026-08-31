@@ -274,7 +274,17 @@ void main() {
     final navigation = tester.widget<NavigationView>(
       find.byType(NavigationView),
     );
-    expect(navigation.pane!.items.whereType<PaneItemSeparator>(), hasLength(1));
+    // Home is split off above a labelled Tweaks group, and Settings sits below
+    // it: two separators plus one header. They are excluded from
+    // effectiveItems, so the category tap loop below proves the selected index
+    // still lines up with controller.categories.
+    expect(navigation.pane!.items.whereType<PaneItemSeparator>(), hasLength(2));
+    expect(navigation.pane!.items.whereType<PaneItemHeader>(), hasLength(1));
+    expect(
+      navigation.pane!.items.first,
+      isA<PaneItem>(),
+      reason: 'Home stays the first selectable item',
+    );
     for (final category in controller.categories) {
       final item = find.text(category).first;
       await tester.ensureVisible(item);

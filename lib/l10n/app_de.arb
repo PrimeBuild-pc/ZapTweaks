@@ -74,7 +74,7 @@
   "restartRequiredDescription": "Um eine oder mehrere Änderungen vollständig zu übernehmen, ist ein Systemneustart erforderlich.",
   "advancedActionsIncluded": "Erweiterte Aktionen enthalten",
   "advancedActionsDescription": "Externe Tools, Startaktionen und skriptgesteuerte Dienstprogramme sind hier für schnelle Diagnose- und Wartungsworkflows gruppiert.",
-  "aggressiveTweakWarning": "Aggressiver Tweak. Ein Wiederherstellungspunkt ist obligatorisch.",
+  "aggressiveTweakWarning": "Aggressiver Tweak. Ein Wiederherstellungspunkt wird empfohlen.",
   "networkReconnectWarning": "Möglicherweise ist eine erneute Verbindung des Netzwerkadapters oder ein Neustart des Systems erforderlich.",
   "actionWarning": "Aktionswarnung",
   "unknownError": "Unbekannter Fehler.",
@@ -98,5 +98,11 @@
   "mice": "Mäuse",
   "noMice": "Keine Mäuse entdeckt",
   "keyboards": "Tastaturen",
-  "noKeyboards": "Keine Tastaturen erkannt"
+  "noKeyboards": "Keine Tastaturen erkannt",
+  "restorePointPromptTitle": "Wiederherstellungspunkt erstellen?",
+  "restorePointPromptMessage": "ZapTweaks kann vor Systemänderungen einen Windows-Wiederherstellungspunkt erstellen. Das ist optional: Beim Überspringen wird die Änderung trotzdem angewendet. Die Frage erscheint nur einmal pro Sitzung.",
+  "skip": "Überspringen",
+  "continueAction": "Fortfahren",
+  "tweaksSectionHeader": "TWEAKS",
+  "startingUp": "ZapTweaks wird gestartet"
 }

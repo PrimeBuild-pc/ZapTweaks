@@ -259,7 +259,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get aggressiveTweakWarning =>
-      'Агрессивная настройка. Точка восстановления обязательна.';
+      'Агрессивная настройка. Рекомендуется точка восстановления.';
 
   @override
   String get networkReconnectWarning =>
@@ -335,4 +335,23 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get noKeyboards => 'Клавиатуры не обнаружены';
+
+  @override
+  String get restorePointPromptTitle => 'Создать точку восстановления?';
+
+  @override
+  String get restorePointPromptMessage =>
+      'ZapTweaks может создать точку восстановления Windows перед изменением системных настроек. Это необязательно: если пропустить, изменение всё равно будет применено. Вопрос задаётся один раз за сеанс.';
+
+  @override
+  String get skip => 'Пропустить';
+
+  @override
+  String get continueAction => 'Продолжить';
+
+  @override
+  String get tweaksSectionHeader => 'НАСТРОЙКИ';
+
+  @override
+  String get startingUp => 'Запуск ZapTweaks';
 }

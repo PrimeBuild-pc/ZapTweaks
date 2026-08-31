@@ -6,6 +6,7 @@ class TweakDescriptor {
     required this.title,
     required this.description,
     required this.category,
+    this.collection = 'General',
     this.isAggressive = false,
     this.restartRequired = false,
     this.requiredCpuVendor,
@@ -20,6 +21,10 @@ class TweakDescriptor {
   final String title;
   final String description;
   final String category;
+
+  /// Intermediate grouping inside a sidebar category, rendered as a collapsible
+  /// collection in the tweaks page.
+  final String collection;
   final bool isAggressive;
   final bool restartRequired;
   final String? requiredCpuVendor;

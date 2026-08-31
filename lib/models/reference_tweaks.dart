@@ -586,6 +586,9 @@ class WingetRestoreTweak extends ActionSystemTweak {
   final String packageId;
 
   @override
+  bool get requiresSafetyPrompt => false;
+
+  @override
   Future<void> onApply() async {
     final result = await ProcessRunner.shared.run('winget', <String>[
       'install',
@@ -615,6 +618,9 @@ class WingetInteractiveTweak extends ActionSystemTweak {
         warningMessage:
             'Uninstall only software you recognize. Removed desktop applications cannot be restored by ZapTweaks.',
       );
+
+  @override
+  bool get requiresSafetyPrompt => false;
 
   @override
   Future<void> onApply() async {
@@ -702,6 +708,9 @@ class WindowsSettingsLauncherTweak extends ActionSystemTweak {
        );
 
   final String command;
+
+  @override
+  bool get requiresSafetyPrompt => false;
 
   @override
   Future<void> onApply() async {

@@ -17,6 +17,244 @@ class LocalizedTweakText {
 }
 
 class TweakTextLocalizer {
+  /// Localized display name for a collection header. Falls back to the
+  /// English name when a locale has no entry.
+  static String collection(String name, String locale) =>
+      _collectionNames[locale]?[name] ?? name;
+
+  static const Map<String, Map<String, String>> _collectionNames =
+      <String, Map<String, String>>{
+        'it': <String, String>{
+          'Telemetry & Diagnostics': 'Telemetria e diagnostica',
+          'Network & Sharing Services': 'Servizi di rete e condivisione',
+          'Cards & Payment Services': 'Servizi smart card e pagamenti',
+          'Shell & Account Services': 'Servizi shell e account',
+          'Xbox Services': 'Servizi Xbox',
+          'Shell & Appearance Scripts': 'Script shell e aspetto',
+          'Debloat & Cleanup Scripts': 'Script di debloat e pulizia',
+          'Devices & Audio Scripts': 'Script dispositivi e audio',
+          'System Configuration Scripts': 'Script di configurazione sistema',
+          'Core Optimizations': 'Ottimizzazioni principali',
+          'Additional Toggles': 'Interruttori aggiuntivi',
+          'Windows Toggles': 'Interruttori Windows',
+          'Interface Toggles': 'Interruttori interfaccia',
+          'Privacy Toggles': 'Interruttori privacy',
+          'Security Toggles': 'Interruttori sicurezza',
+          'Service Toggles': 'Interruttori servizi',
+          'Advanced Toggles': 'Interruttori avanzati',
+          'Windows Shortcuts': 'Scorciatoie Windows',
+          'Input & Peripherals': 'Input e periferiche',
+          'Monitoring & Diagnostics': 'Monitoraggio e diagnostica',
+          'GPU & Display': 'GPU e display',
+          'Network Tools': 'Strumenti di rete',
+          'Stress Testing': 'Stress test',
+          'System Maintenance': 'Manutenzione del sistema',
+          'Debloat & Suites': 'Debloat e suite',
+          'Driver Scripts': 'Script driver',
+          'Hardware Checks': 'Controlli hardware',
+          'Windows Scripts': 'Script Windows',
+          'Setup Scripts': 'Script di configurazione',
+          'Recovery Scripts': 'Script di ripristino',
+          'Restore Apps': 'Ripristina app',
+          'Advanced Scripts': 'Script avanzati',
+          'Firmware Tools': 'Strumenti firmware',
+          'Debloat Tools': 'Strumenti di debloat',
+          'Scripts & Tools': 'Script e strumenti',
+          'Other': 'Altro',
+        },
+        'de': <String, String>{
+          'Telemetry & Diagnostics': 'Telemetrie und Diagnose',
+          'Network & Sharing Services': 'Netzwerk- und Freigabedienste',
+          'Cards & Payment Services': 'Karten- und Zahlungsdienste',
+          'Shell & Account Services': 'Shell- und Kontodienste',
+          'Xbox Services': 'Xbox-Dienste',
+          'Shell & Appearance Scripts': 'Shell- und Darstellungsskripte',
+          'Debloat & Cleanup Scripts': 'Debloat- und Bereinigungsskripte',
+          'Devices & Audio Scripts': 'Geräte- und Audioskripte',
+          'System Configuration Scripts': 'Systemkonfigurationsskripte',
+          'Core Optimizations': 'Kernoptimierungen',
+          'Additional Toggles': 'Zusätzliche Schalter',
+          'Windows Toggles': 'Windows-Schalter',
+          'Interface Toggles': 'Oberflächen-Schalter',
+          'Privacy Toggles': 'Datenschutz-Schalter',
+          'Security Toggles': 'Sicherheitsschalter',
+          'Service Toggles': 'Dienst-Schalter',
+          'Advanced Toggles': 'Erweiterte Schalter',
+          'Windows Shortcuts': 'Windows-Verknüpfungen',
+          'Input & Peripherals': 'Eingabe und Peripherie',
+          'Monitoring & Diagnostics': 'Überwachung und Diagnose',
+          'GPU & Display': 'GPU und Anzeige',
+          'Network Tools': 'Netzwerkwerkzeuge',
+          'Stress Testing': 'Stresstests',
+          'System Maintenance': 'Systemwartung',
+          'Debloat & Suites': 'Debloat und Suiten',
+          'Driver Scripts': 'Treiber-Skripte',
+          'Hardware Checks': 'Hardware-Prüfungen',
+          'Windows Scripts': 'Windows-Skripte',
+          'Setup Scripts': 'Einrichtungsskripte',
+          'Recovery Scripts': 'Wiederherstellungsskripte',
+          'Restore Apps': 'Apps wiederherstellen',
+          'Advanced Scripts': 'Erweiterte Skripte',
+          'Firmware Tools': 'Firmware-Werkzeuge',
+          'Debloat Tools': 'Debloat-Werkzeuge',
+          'Scripts & Tools': 'Skripte und Werkzeuge',
+          'Other': 'Sonstiges',
+        },
+        'es': <String, String>{
+          'Telemetry & Diagnostics': 'Telemetría y diagnóstico',
+          'Network & Sharing Services': 'Servicios de red y uso compartido',
+          'Cards & Payment Services': 'Servicios de tarjetas y pagos',
+          'Shell & Account Services': 'Servicios de shell y cuentas',
+          'Xbox Services': 'Servicios de Xbox',
+          'Shell & Appearance Scripts': 'Scripts de shell y apariencia',
+          'Debloat & Cleanup Scripts': 'Scripts de debloat y limpieza',
+          'Devices & Audio Scripts': 'Scripts de dispositivos y audio',
+          'System Configuration Scripts':
+              'Scripts de configuración del sistema',
+          'Core Optimizations': 'Optimizaciones principales',
+          'Additional Toggles': 'Interruptores adicionales',
+          'Windows Toggles': 'Interruptores de Windows',
+          'Interface Toggles': 'Interruptores de interfaz',
+          'Privacy Toggles': 'Interruptores de privacidad',
+          'Security Toggles': 'Interruptores de seguridad',
+          'Service Toggles': 'Interruptores de servicios',
+          'Advanced Toggles': 'Interruptores avanzados',
+          'Windows Shortcuts': 'Accesos directos de Windows',
+          'Input & Peripherals': 'Entrada y periféricos',
+          'Monitoring & Diagnostics': 'Supervisión y diagnóstico',
+          'GPU & Display': 'GPU y pantalla',
+          'Network Tools': 'Herramientas de red',
+          'Stress Testing': 'Pruebas de estrés',
+          'System Maintenance': 'Mantenimiento del sistema',
+          'Debloat & Suites': 'Debloat y suites',
+          'Driver Scripts': 'Scripts de controladores',
+          'Hardware Checks': 'Comprobaciones de hardware',
+          'Windows Scripts': 'Scripts de Windows',
+          'Setup Scripts': 'Scripts de configuración',
+          'Recovery Scripts': 'Scripts de recuperación',
+          'Restore Apps': 'Restaurar aplicaciones',
+          'Advanced Scripts': 'Scripts avanzados',
+          'Firmware Tools': 'Herramientas de firmware',
+          'Debloat Tools': 'Herramientas de debloat',
+          'Scripts & Tools': 'Scripts y herramientas',
+          'Other': 'Otros',
+        },
+        'fr': <String, String>{
+          'Telemetry & Diagnostics': 'Télémétrie et diagnostic',
+          'Network & Sharing Services': 'Services réseau et partage',
+          'Cards & Payment Services': 'Services de cartes et paiements',
+          'Shell & Account Services': 'Services shell et comptes',
+          'Xbox Services': 'Services Xbox',
+          'Shell & Appearance Scripts': 'Scripts shell et apparence',
+          'Debloat & Cleanup Scripts': 'Scripts de débloat et nettoyage',
+          'Devices & Audio Scripts': 'Scripts périphériques et audio',
+          'System Configuration Scripts': 'Scripts de configuration système',
+          'Core Optimizations': 'Optimisations principales',
+          'Additional Toggles': 'Bascules supplémentaires',
+          'Windows Toggles': 'Bascules Windows',
+          'Interface Toggles': 'Bascules d’interface',
+          'Privacy Toggles': 'Bascules de confidentialité',
+          'Security Toggles': 'Bascules de sécurité',
+          'Service Toggles': 'Bascules de services',
+          'Advanced Toggles': 'Bascules avancées',
+          'Windows Shortcuts': 'Raccourcis Windows',
+          'Input & Peripherals': 'Entrées et périphériques',
+          'Monitoring & Diagnostics': 'Surveillance et diagnostic',
+          'GPU & Display': 'GPU et affichage',
+          'Network Tools': 'Outils réseau',
+          'Stress Testing': 'Tests de charge',
+          'System Maintenance': 'Maintenance du système',
+          'Debloat & Suites': 'Débloat et suites',
+          'Driver Scripts': 'Scripts de pilotes',
+          'Hardware Checks': 'Vérifications matérielles',
+          'Windows Scripts': 'Scripts Windows',
+          'Setup Scripts': 'Scripts de configuration',
+          'Recovery Scripts': 'Scripts de récupération',
+          'Restore Apps': 'Restaurer les applications',
+          'Advanced Scripts': 'Scripts avancés',
+          'Firmware Tools': 'Outils de firmware',
+          'Debloat Tools': 'Outils de débloat',
+          'Scripts & Tools': 'Scripts et outils',
+          'Other': 'Autres',
+        },
+        'ru': <String, String>{
+          'Telemetry & Diagnostics': 'Телеметрия и диагностика',
+          'Network & Sharing Services': 'Сетевые службы и общий доступ',
+          'Cards & Payment Services': 'Службы карт и платежей',
+          'Shell & Account Services': 'Службы оболочки и учётных записей',
+          'Xbox Services': 'Службы Xbox',
+          'Shell & Appearance Scripts': 'Скрипты оболочки и оформления',
+          'Debloat & Cleanup Scripts': 'Скрипты очистки и дебloat',
+          'Devices & Audio Scripts': 'Скрипты устройств и звука',
+          'System Configuration Scripts': 'Скрипты настройки системы',
+          'Core Optimizations': 'Основные оптимизации',
+          'Additional Toggles': 'Дополнительные переключатели',
+          'Windows Toggles': 'Переключатели Windows',
+          'Interface Toggles': 'Переключатели интерфейса',
+          'Privacy Toggles': 'Переключатели конфиденциальности',
+          'Security Toggles': 'Переключатели безопасности',
+          'Service Toggles': 'Переключатели служб',
+          'Advanced Toggles': 'Расширенные переключатели',
+          'Windows Shortcuts': 'Ярлыки Windows',
+          'Input & Peripherals': 'Ввод и периферия',
+          'Monitoring & Diagnostics': 'Мониторинг и диагностика',
+          'GPU & Display': 'Видеокарта и дисплей',
+          'Network Tools': 'Сетевые инструменты',
+          'Stress Testing': 'Стресс-тесты',
+          'System Maintenance': 'Обслуживание системы',
+          'Debloat & Suites': 'Дебloat и наборы',
+          'Driver Scripts': 'Скрипты драйверов',
+          'Hardware Checks': 'Проверки оборудования',
+          'Windows Scripts': 'Скрипты Windows',
+          'Setup Scripts': 'Скрипты настройки',
+          'Recovery Scripts': 'Скрипты восстановления',
+          'Restore Apps': 'Восстановление приложений',
+          'Advanced Scripts': 'Расширенные скрипты',
+          'Firmware Tools': 'Инструменты прошивки',
+          'Debloat Tools': 'Инструменты дебloat',
+          'Scripts & Tools': 'Скрипты и инструменты',
+          'Other': 'Прочее',
+        },
+        'zh': <String, String>{
+          'Telemetry & Diagnostics': '遥测与诊断',
+          'Network & Sharing Services': '网络与共享服务',
+          'Cards & Payment Services': '智能卡与支付服务',
+          'Shell & Account Services': '外壳与账户服务',
+          'Xbox Services': 'Xbox 服务',
+          'Shell & Appearance Scripts': '外壳与外观脚本',
+          'Debloat & Cleanup Scripts': '精简与清理脚本',
+          'Devices & Audio Scripts': '设备与音频脚本',
+          'System Configuration Scripts': '系统配置脚本',
+          'Core Optimizations': '核心优化',
+          'Additional Toggles': '其他开关',
+          'Windows Toggles': 'Windows 开关',
+          'Interface Toggles': '界面开关',
+          'Privacy Toggles': '隐私开关',
+          'Security Toggles': '安全开关',
+          'Service Toggles': '服务开关',
+          'Advanced Toggles': '高级开关',
+          'Windows Shortcuts': 'Windows 快捷方式',
+          'Input & Peripherals': '输入与外设',
+          'Monitoring & Diagnostics': '监控与诊断',
+          'GPU & Display': '显卡与显示',
+          'Network Tools': '网络工具',
+          'Stress Testing': '压力测试',
+          'System Maintenance': '系统维护',
+          'Debloat & Suites': '精简与套件',
+          'Driver Scripts': '驱动脚本',
+          'Hardware Checks': '硬件检查',
+          'Windows Scripts': 'Windows 脚本',
+          'Setup Scripts': '设置脚本',
+          'Recovery Scripts': '恢复脚本',
+          'Restore Apps': '恢复应用',
+          'Advanced Scripts': '高级脚本',
+          'Firmware Tools': '固件工具',
+          'Debloat Tools': '精简工具',
+          'Scripts & Tools': '脚本与工具',
+          'Other': '其他',
+        },
+      };
+
   static bool hasTranslation(TweakDescriptor descriptor, String locale) =>
       locale == 'en' ||
       _reviewedCopy[locale]?.containsKey(descriptor.id) == true ||
@@ -1539,6 +1777,10 @@ class TweakTextLocalizer {
         "Rapporto sulla batteria",
         "Correggi lo script diagnostico degli strumenti.",
       ),
+      "tool_device_tweaker_script": (
+        "Device Tweaker (LLG x LLC)",
+        "Apre lo script GUI Device Tweaker incluso per la messa a punto di interrupt, MSI e alimentazione per singolo dispositivo.",
+      ),
       "tool_beyond_performance_device_tweaker_discord": (
         "Oltre le prestazioni del dispositivo Tweaker",
         "Apre il canale pubblico Beyond Performance Discord che distribuisce Device Tweaker.",
@@ -1595,10 +1837,6 @@ class TweakTextLocalizer {
         "Correggi il programma di avvio degli strumenti",
         "Esegue il menu di avvio batch Strumenti di correzione.",
       ),
-      "tool_fortnite_diagnostic_ping": (
-        "Strumento ping diagnostico Fortnite di Alexanderthedad",
-        "Esegue il comando diagnostico remoto ufficiale per la risoluzione dei problemi del ping di Fortnite.",
-      ),
       "tool_furmark_setup": (
         "Programma di installazione di FurMark",
         "Pacchetto di installazione per test di stress della GPU.",
@@ -1647,14 +1885,6 @@ class TweakTextLocalizer {
       "tool_interrupt_affinity_policy": (
         "Strumento di policy di affinità di interruzione",
         "Affinità di interrupt e utilità di ottimizzazione dei criteri IRQ.",
-      ),
-      "tool_interrupt_affinity_policy_ia64": (
-        "Strumento di policy di affinità di interruzione (IA64)",
-        "Build IA64 dell'utilità dei criteri di affinità di interruzione.",
-      ),
-      "tool_interrupt_affinity_policy_x86": (
-        "Strumento di policy di affinità di interruzione (x86)",
-        "build x86 dell'utilità dei criteri di affinità di interruzione.",
       ),
       "tool_msi_afterburner_setup": (
         "Programma di installazione di MSI Afterburner",
@@ -1780,9 +2010,49 @@ class TweakTextLocalizer {
         "ProvaMem5",
         "Utilità per test di stress della RAM.",
       ),
-      "tool_usb_latency_analyzer_v2_marius_heier": (
-        "Analizzatore di latenza USB V2 di Marius Heier",
-        "Esegue lo strumento diagnostico di Marius Heier in una finestra PowerShell con privilegi elevati visibile. Ciò non applica modifiche ed è destinato all'output diagnostico della console.",
+      "tool_marius_heier_tools_hub": (
+        "Hub strumenti Marius Heier",
+        "Apre l'indice di tools.mariusheier.com con tutti gli strumenti diagnostici per latenza, polling e input.",
+      ),
+      "tool_marius_deeppoll_script": (
+        "Analizzatore polling USB DeepPoll (script)",
+        "Esegue DeepPoll in una finestra PowerShell con privilegi elevati: analisi del polling rate USB con precisione al microsecondo tramite tracciamento ETW del kernel.",
+      ),
+      "tool_marius_deeppoll_web": (
+        "Analizzatore polling USB DeepPoll (web)",
+        "Apre la pagina web di DeepPoll che descrive l'analizzatore del polling rate USB.",
+      ),
+      "tool_marius_deeplog_script": (
+        "Registratore input DeepLog (script)",
+        "Esegue DeepLog in una finestra PowerShell con privilegi elevati: registra 30 secondi di input del controller con uno snapshot di sistema per la diagnostica.",
+      ),
+      "tool_marius_deeplog_web": (
+        "Registratore input DeepLog (web)",
+        "Apre la pagina web di DeepLog che descrive il registratore di input del controller.",
+      ),
+      "tool_marius_rig_script": (
+        "Report hardware Rig Profiles (script)",
+        "Esegue lo script diagnostico Rig Profiles che raccoglie e invia il profilo hardware e le informazioni di compatibilità.",
+      ),
+      "tool_marius_rig_web": (
+        "Report hardware Rig Profiles (web)",
+        "Apre la pagina web di Rig Profiles che descrive l'invio del profilo hardware.",
+      ),
+      "tool_marius_cpudirect_script": (
+        "Verifica porte USB CPU Direct (script)",
+        "Esegue CPU Direct in una finestra PowerShell con privilegi elevati: verifica se i dispositivi USB usano porte collegate direttamente alla CPU o al chipset e rileva gli hub.",
+      ),
+      "tool_marius_cpudirect_web": (
+        "Verifica porte USB CPU Direct (web)",
+        "Apre la pagina web di CPU Direct che descrive il controllo delle porte USB.",
+      ),
+      "tool_marius_step_count_noise_web": (
+        "Demo joystick passi contro rumore",
+        "Apre la demo nel browser che mostra perché un joystick a 12 bit rumoroso genera chattering anche alla massima risoluzione.",
+      ),
+      "tool_marius_usb_hid_analyzer_web": (
+        "Analizzatore polling USB HID",
+        "Apre lo strumento nel browser che misura la frequenza di polling reale del dispositivo, il jitter, la costanza dei tempi e la velocità della periferica.",
       ),
       "tool_unpark_cpu": (
         "Annulla parcheggio CPU",
@@ -2870,6 +3140,10 @@ class TweakTextLocalizer {
         "Batteriebericht",
         "Fix Tools-Diagnoseskript.",
       ),
+      "tool_device_tweaker_script": (
+        "Device Tweaker (LLG x LLC)",
+        "Öffnet das mitgelieferte Device-Tweaker-GUI-Skript zur gerätebezogenen Abstimmung von Interrupts, MSI und Energieoptionen.",
+      ),
       "tool_beyond_performance_device_tweaker_discord": (
         "Beyond Performance Device Tweaker",
         "Öffnet den öffentlichen Beyond Performance Discord-Kanal, der Device Tweaker vertreibt.",
@@ -2923,10 +3197,6 @@ class TweakTextLocalizer {
         "Fix Tools Launcher",
         "Führt das Batch-Launcher-Menü „Fix Tools“ aus.",
       ),
-      "tool_fortnite_diagnostic_ping": (
-        "Fortnite-Diagnose-Ping-Tool von Alexanderthedad",
-        "Führt den offiziellen Ferndiagnosebefehl zur Fortnite-Ping-Fehlerbehebung aus.",
-      ),
       "tool_furmark_setup": (
         "FurMark-Installationsprogramm",
         "GPU-Stresstest-Installationspaket.",
@@ -2975,14 +3245,6 @@ class TweakTextLocalizer {
       "tool_interrupt_affinity_policy": (
         "Affinitätsrichtlinien-Tool unterbrechen",
         "Dienstprogramm zur Interrupt-Affinität und IRQ-Richtlinienoptimierung.",
-      ),
-      "tool_interrupt_affinity_policy_ia64": (
-        "Interrupt Affinity Policy Tool (IA64)",
-        "IA64-Build des Interrupt-Affinitätsrichtlinien-Dienstprogramms.",
-      ),
-      "tool_interrupt_affinity_policy_x86": (
-        "Interrupt Affinity Policy Tool (x86)",
-        "x86-Build des Interrupt-Affinitätsrichtlinien-Dienstprogramms.",
       ),
       "tool_msi_afterburner_setup": (
         "MSI Afterburner-Installationsprogramm",
@@ -3108,9 +3370,49 @@ class TweakTextLocalizer {
         "TestMem5",
         "Dienstprogramm zum RAM-Stresstest.",
       ),
-      "tool_usb_latency_analyzer_v2_marius_heier": (
-        "USB-Latenzanalysator V2 von Marius Heier",
-        "Führt das Diagnosetool von Marius Heier in einem sichtbaren erhöhten PowerShell-Fenster aus. Dies betrifft keine Optimierungen und ist für die Konsolendiagnoseausgabe gedacht.",
+      "tool_marius_heier_tools_hub": (
+        "Marius Heier Tools Hub",
+        "Öffnet das Verzeichnis von tools.mariusheier.com mit allen Diagnosewerkzeugen für Latenz, Polling und Eingabe.",
+      ),
+      "tool_marius_deeppoll_script": (
+        "DeepPoll USB-Polling-Analysator (Skript)",
+        "Führt DeepPoll in einem erhöhten PowerShell-Fenster aus: Analyse der USB-Polling-Rate mit Mikrosekundengenauigkeit über Kernel-ETW-Tracing.",
+      ),
+      "tool_marius_deeppoll_web": (
+        "DeepPoll USB-Polling-Analysator (Web)",
+        "Öffnet die Webseite von DeepPoll, die den USB-Polling-Raten-Analysator beschreibt.",
+      ),
+      "tool_marius_deeplog_script": (
+        "DeepLog Eingabe-Rekorder (Skript)",
+        "Führt DeepLog in einem erhöhten PowerShell-Fenster aus: zeichnet 30 Sekunden Controller-Eingaben mit einem System-Snapshot für die Diagnose auf.",
+      ),
+      "tool_marius_deeplog_web": (
+        "DeepLog Eingabe-Rekorder (Web)",
+        "Öffnet die Webseite von DeepLog, die den Controller-Eingabe-Rekorder beschreibt.",
+      ),
+      "tool_marius_rig_script": (
+        "Rig Profiles Hardware-Bericht (Skript)",
+        "Führt das Rig-Profiles-Diagnoseskript aus, das ein Hardwareprofil und Kompatibilitätsinformationen sammelt und übermittelt.",
+      ),
+      "tool_marius_rig_web": (
+        "Rig Profiles Hardware-Bericht (Web)",
+        "Öffnet die Webseite von Rig Profiles, die die Übermittlung des Hardwareprofils beschreibt.",
+      ),
+      "tool_marius_cpudirect_script": (
+        "CPU-Direct-USB-Portprüfung (Skript)",
+        "Führt CPU Direct in einem erhöhten PowerShell-Fenster aus: prüft, ob USB-Geräte an CPU-direkten oder Chipsatz-Ports hängen, und erkennt Hubs.",
+      ),
+      "tool_marius_cpudirect_web": (
+        "CPU-Direct-USB-Portprüfung (Web)",
+        "Öffnet die Webseite von CPU Direct, die die USB-Portprüfung beschreibt.",
+      ),
+      "tool_marius_step_count_noise_web": (
+        "Joystick-Demo: Schrittanzahl gegen Rauschen",
+        "Öffnet die Browser-Demo, die zeigt, warum ein verrauschter 12-Bit-Joystick selbst bei voller Auflösung flattert.",
+      ),
+      "tool_marius_usb_hid_analyzer_web": (
+        "USB-HID-Polling-Analysator",
+        "Öffnet das Browser-Tool, das die tatsächliche Polling-Frequenz, den Jitter, die Timing-Konstanz und die Geschwindigkeit des Geräts misst.",
       ),
       "tool_unpark_cpu": (
         "CPU entparken",
@@ -4192,6 +4494,10 @@ class TweakTextLocalizer {
         "Informe de batería",
         "Script de diagnóstico de herramientas de reparación.",
       ),
+      "tool_device_tweaker_script": (
+        "Device Tweaker (LLG x LLC)",
+        "Abre el script con interfaz gráfica Device Tweaker incluido para ajustar interrupciones, MSI y energía por dispositivo.",
+      ),
       "tool_beyond_performance_device_tweaker_discord": (
         "Más allá del ajuste del dispositivo de rendimiento",
         "Abre el canal público Beyond Performance Discord que distribuye Device Tweaker.",
@@ -4248,10 +4554,6 @@ class TweakTextLocalizer {
         "Lanzador de herramientas de reparación",
         "Ejecuta el menú del iniciador por lotes de Fix Tools.",
       ),
-      "tool_fortnite_diagnostic_ping": (
-        "Herramienta de ping de diagnóstico de Fortnite de Alexanderthedad",
-        "Ejecuta el comando de diagnóstico remoto oficial para la resolución de problemas de ping de Fortnite.",
-      ),
       "tool_furmark_setup": (
         "Instalador de FurMark",
         "Paquete de instalación de prueba de estrés de GPU.",
@@ -4300,14 +4602,6 @@ class TweakTextLocalizer {
       "tool_interrupt_affinity_policy": (
         "Herramienta de política de afinidad de interrupción",
         "Utilidad de ajuste de políticas de IRQ y afinidad de interrupciones.",
-      ),
-      "tool_interrupt_affinity_policy_ia64": (
-        "Herramienta de política de afinidad de interrupción (IA64)",
-        "Construcción IA64 de la utilidad de política de afinidad de interrupciones.",
-      ),
-      "tool_interrupt_affinity_policy_x86": (
-        "Herramienta de política de afinidad de interrupción (x86)",
-        "Construcción x86 de la utilidad de política de afinidad de interrupciones.",
       ),
       "tool_msi_afterburner_setup": (
         "Instalador de posquemador MSI",
@@ -4433,9 +4727,49 @@ class TweakTextLocalizer {
         "PruebaMem5",
         "Utilidad de prueba de estrés de RAM.",
       ),
-      "tool_usb_latency_analyzer_v2_marius_heier": (
-        "Analizador de latencia USB V2 de marius heier",
-        "Ejecuta la herramienta de diagnóstico de Marius Heier en una ventana elevada visible de PowerShell. Esto no aplica ajustes y está destinado a la salida de diagnóstico de la consola.",
+      "tool_marius_heier_tools_hub": (
+        "Centro de herramientas de Marius Heier",
+        "Abre el índice de tools.mariusheier.com con todas las herramientas de diagnóstico de latencia, sondeo y entrada.",
+      ),
+      "tool_marius_deeppoll_script": (
+        "Analizador de sondeo USB DeepPoll (script)",
+        "Ejecuta DeepPoll en una ventana de PowerShell con privilegios elevados: analiza la tasa de sondeo USB con precisión de microsegundos mediante trazado ETW del kernel.",
+      ),
+      "tool_marius_deeppoll_web": (
+        "Analizador de sondeo USB DeepPoll (web)",
+        "Abre la página web de DeepPoll que describe el analizador de la tasa de sondeo USB.",
+      ),
+      "tool_marius_deeplog_script": (
+        "Grabador de entrada DeepLog (script)",
+        "Ejecuta DeepLog en una ventana de PowerShell con privilegios elevados: graba 30 segundos de entrada del mando con una instantánea del sistema para diagnóstico.",
+      ),
+      "tool_marius_deeplog_web": (
+        "Grabador de entrada DeepLog (web)",
+        "Abre la página web de DeepLog que describe el grabador de entrada del mando.",
+      ),
+      "tool_marius_rig_script": (
+        "Informe de hardware Rig Profiles (script)",
+        "Ejecuta el script de diagnóstico Rig Profiles, que recopila y envía el perfil de hardware y la información de compatibilidad.",
+      ),
+      "tool_marius_rig_web": (
+        "Informe de hardware Rig Profiles (web)",
+        "Abre la página web de Rig Profiles que describe el envío del perfil de hardware.",
+      ),
+      "tool_marius_cpudirect_script": (
+        "Comprobación de puertos USB CPU Direct (script)",
+        "Ejecuta CPU Direct en una ventana de PowerShell con privilegios elevados: comprueba si los dispositivos USB están en puertos conectados directamente a la CPU o al chipset y detecta concentradores.",
+      ),
+      "tool_marius_cpudirect_web": (
+        "Comprobación de puertos USB CPU Direct (web)",
+        "Abre la página web de CPU Direct que describe la comprobación de los puertos USB.",
+      ),
+      "tool_marius_step_count_noise_web": (
+        "Demostración de joystick: pasos frente a ruido",
+        "Abre la demostración en el navegador que muestra por qué un joystick de 12 bits con ruido vibra incluso a resolución completa.",
+      ),
+      "tool_marius_usb_hid_analyzer_web": (
+        "Analizador de sondeo USB HID",
+        "Abre la herramienta del navegador que mide la frecuencia real de sondeo del dispositivo, el jitter, la constancia temporal y la velocidad del periférico.",
       ),
       "tool_unpark_cpu": (
         "Desaparcar CPU",
@@ -5514,6 +5848,10 @@ class TweakTextLocalizer {
         "Rapport de batterie",
         "Réparer le script de diagnostic des outils.",
       ),
+      "tool_device_tweaker_script": (
+        "Device Tweaker (LLG x LLC)",
+        "Ouvre le script à interface graphique Device Tweaker fourni pour régler les interruptions, le MSI et l'alimentation par périphérique.",
+      ),
       "tool_beyond_performance_device_tweaker_discord": (
         "Au-delà des performances",
         "Ouvre la chaîne publique Beyond Performance Discord qui distribue Device Tweaker.",
@@ -5570,10 +5908,6 @@ class TweakTextLocalizer {
         "Fixer le lanceur d'outils",
         "Exécute le menu du lanceur de lots Fix Tools.",
       ),
-      "tool_fortnite_diagnostic_ping": (
-        "Outil de diagnostic Ping Fortnite par Alexanderthedad",
-        "Exécute la commande officielle de diagnostic à distance pour le dépannage du ping Fortnite.",
-      ),
       "tool_furmark_setup": (
         "Installateur FurMark",
         "Package d'installation de test de stress GPU.",
@@ -5622,14 +5956,6 @@ class TweakTextLocalizer {
       "tool_interrupt_affinity_policy": (
         "Outil de stratégie d’affinité d’interruption",
         "Utilitaire d'affinité d'interruption et de réglage des politiques d'IRQ.",
-      ),
-      "tool_interrupt_affinity_policy_ia64": (
-        "Outil de stratégie d’affinité d’interruption (IA64)",
-        "Construction IA64 de l'utilitaire de politique d'affinité d'interruption.",
-      ),
-      "tool_interrupt_affinity_policy_x86": (
-        "Outil de stratégie d’affinité d’interruption (x86)",
-        "Version x86 de l'utilitaire de stratégie d'affinité d'interruption.",
       ),
       "tool_msi_afterburner_setup": (
         "Programme d'installation du programme de postcombustion MSI",
@@ -5752,9 +6078,49 @@ class TweakTextLocalizer {
         "Outil d’optimisation et de diagnostic de la pile réseau.",
       ),
       "tool_testmem5_folder": ("TestMem5", "Utilitaire de test de stress RAM."),
-      "tool_usb_latency_analyzer_v2_marius_heier": (
-        "Analyseur de latence USB V2 par Marius Heier",
-        "Exécute l'outil de diagnostic de Marius Heier dans une fenêtre PowerShell visible et élevée. Cela ne s'applique pas aux ajustements et est destiné à la sortie des diagnostics de la console.",
+      "tool_marius_heier_tools_hub": (
+        "Centre d'outils Marius Heier",
+        "Ouvre l'index de tools.mariusheier.com avec tous les outils de diagnostic de latence, d'interrogation et d'entrée.",
+      ),
+      "tool_marius_deeppoll_script": (
+        "Analyseur d'interrogation USB DeepPoll (script)",
+        "Exécute DeepPoll dans une fenêtre PowerShell avec privilèges élevés : analyse du taux d'interrogation USB à la microseconde via le traçage ETW du noyau.",
+      ),
+      "tool_marius_deeppoll_web": (
+        "Analyseur d'interrogation USB DeepPoll (web)",
+        "Ouvre la page web de DeepPoll qui décrit l'analyseur du taux d'interrogation USB.",
+      ),
+      "tool_marius_deeplog_script": (
+        "Enregistreur d'entrées DeepLog (script)",
+        "Exécute DeepLog dans une fenêtre PowerShell avec privilèges élevés : enregistre 30 secondes d'entrées de manette avec un instantané du système pour le diagnostic.",
+      ),
+      "tool_marius_deeplog_web": (
+        "Enregistreur d'entrées DeepLog (web)",
+        "Ouvre la page web de DeepLog qui décrit l'enregistreur d'entrées de manette.",
+      ),
+      "tool_marius_rig_script": (
+        "Rapport matériel Rig Profiles (script)",
+        "Exécute le script de diagnostic Rig Profiles qui collecte et envoie le profil matériel et les informations de compatibilité.",
+      ),
+      "tool_marius_rig_web": (
+        "Rapport matériel Rig Profiles (web)",
+        "Ouvre la page web de Rig Profiles qui décrit l'envoi du profil matériel.",
+      ),
+      "tool_marius_cpudirect_script": (
+        "Vérification des ports USB CPU Direct (script)",
+        "Exécute CPU Direct dans une fenêtre PowerShell avec privilèges élevés : vérifie si les périphériques USB sont sur des ports reliés directement au CPU ou au chipset et détecte les concentrateurs.",
+      ),
+      "tool_marius_cpudirect_web": (
+        "Vérification des ports USB CPU Direct (web)",
+        "Ouvre la page web de CPU Direct qui décrit la vérification des ports USB.",
+      ),
+      "tool_marius_step_count_noise_web": (
+        "Démo joystick : nombre de pas contre bruit",
+        "Ouvre la démo navigateur qui montre pourquoi un joystick 12 bits bruité vibre même à pleine résolution.",
+      ),
+      "tool_marius_usb_hid_analyzer_web": (
+        "Analyseur d'interrogation USB HID",
+        "Ouvre l'outil navigateur qui mesure la fréquence d'interrogation réelle du périphérique, la gigue, la régularité temporelle et sa vitesse.",
       ),
       "tool_unpark_cpu": (
         "Déparquer le processeur",
@@ -6839,6 +7205,10 @@ class TweakTextLocalizer {
         "Отчет о батарее",
         "Диагностический скрипт Fix Tools.",
       ),
+      "tool_device_tweaker_script": (
+        "Device Tweaker (LLG x LLC)",
+        "Открывает встроенный скрипт с графическим интерфейсом Device Tweaker для настройки прерываний, MSI и питания по устройствам.",
+      ),
       "tool_beyond_performance_device_tweaker_discord": (
         "Твикер устройств Beyond Performance",
         "Открывает общедоступный канал Beyond Performance Discord, на котором распространяется Device Tweaker.",
@@ -6895,10 +7265,6 @@ class TweakTextLocalizer {
         "Исправить инструменты запуска",
         "Запускает меню пакетного запуска Fix Tools.",
       ),
-      "tool_fortnite_diagnostic_ping": (
-        "Инструмент диагностики Fortnite от Alexanderthedad",
-        "Запускает официальную команду удаленной диагностики для устранения неполадок с пингом Fortnite.",
-      ),
       "tool_furmark_setup": (
         "Установщик FurMark",
         "Пакет установки стресс-тестирования графического процессора.",
@@ -6950,14 +7316,6 @@ class TweakTextLocalizer {
       "tool_interrupt_affinity_policy": (
         "Инструмент политики сходства прерываний",
         "Утилита настройки привязки прерываний и политики IRQ.",
-      ),
-      "tool_interrupt_affinity_policy_ia64": (
-        "Инструмент политики сходства прерываний (IA64)",
-        "Сборка IA64 утилиты политики привязки прерываний.",
-      ),
-      "tool_interrupt_affinity_policy_x86": (
-        "Инструмент политики сходства прерываний (x86)",
-        "x86-сборка утилиты политики привязки прерываний.",
       ),
       "tool_msi_afterburner_setup": (
         "Установщик MSI Afterburner",
@@ -7083,9 +7441,49 @@ class TweakTextLocalizer {
         "ТестМем5",
         "Утилита стресс-тестирования оперативной памяти.",
       ),
-      "tool_usb_latency_analyzer_v2_marius_heier": (
-        "Анализатор задержки USB V2 от Мариуса Хейера",
-        "Запускает диагностический инструмент Мариуса Хейера в видимом окне PowerShell с повышенными правами. Это не применяет твики и предназначено для вывода консольной диагностики.",
+      "tool_marius_heier_tools_hub": (
+        "Центр инструментов Marius Heier",
+        "Открывает каталог tools.mariusheier.com со всеми диагностическими инструментами для задержки, опроса и ввода.",
+      ),
+      "tool_marius_deeppoll_script": (
+        "Анализатор опроса USB DeepPoll (скрипт)",
+        "Запускает DeepPoll в окне PowerShell с повышенными правами: анализ частоты опроса USB с точностью до микросекунды через трассировку ядра ETW.",
+      ),
+      "tool_marius_deeppoll_web": (
+        "Анализатор опроса USB DeepPoll (веб)",
+        "Открывает веб-страницу DeepPoll с описанием анализатора частоты опроса USB.",
+      ),
+      "tool_marius_deeplog_script": (
+        "Регистратор ввода DeepLog (скрипт)",
+        "Запускает DeepLog в окне PowerShell с повышенными правами: записывает 30 секунд ввода с контроллера вместе со снимком системы для диагностики.",
+      ),
+      "tool_marius_deeplog_web": (
+        "Регистратор ввода DeepLog (веб)",
+        "Открывает веб-страницу DeepLog с описанием регистратора ввода контроллера.",
+      ),
+      "tool_marius_rig_script": (
+        "Аппаратный отчёт Rig Profiles (скрипт)",
+        "Запускает диагностический сценарий Rig Profiles, который собирает и отправляет профиль оборудования и сведения о совместимости.",
+      ),
+      "tool_marius_rig_web": (
+        "Аппаратный отчёт Rig Profiles (веб)",
+        "Открывает веб-страницу Rig Profiles с описанием отправки профиля оборудования.",
+      ),
+      "tool_marius_cpudirect_script": (
+        "Проверка портов USB CPU Direct (скрипт)",
+        "Запускает CPU Direct в окне PowerShell с повышенными правами: проверяет, подключены ли USB-устройства к портам напрямую от процессора или через чипсет, и определяет концентраторы.",
+      ),
+      "tool_marius_cpudirect_web": (
+        "Проверка портов USB CPU Direct (веб)",
+        "Открывает веб-страницу CPU Direct с описанием проверки портов USB.",
+      ),
+      "tool_marius_step_count_noise_web": (
+        "Демонстрация джойстика: число шагов против шума",
+        "Открывает браузерную демонстрацию, показывающую, почему шумный 12-битный джойстик дребезжит даже при полном разрешении.",
+      ),
+      "tool_marius_usb_hid_analyzer_web": (
+        "Анализатор опроса USB HID",
+        "Открывает браузерный инструмент, который измеряет реальную частоту опроса устройства, джиттер, стабильность тайминга и скорость.",
       ),
       "tool_unpark_cpu": (
         "Разпарковать процессор",
@@ -7681,6 +8079,10 @@ class TweakTextLocalizer {
         "Fr33thy 的互动脚本。",
       ),
       "tool_fix_tools_battery_report": ("电池报告", "修复工具诊断脚本。"),
+      "tool_device_tweaker_script": (
+        "Device Tweaker (LLG x LLC)",
+        "打开随附的 Device Tweaker 图形界面脚本，用于逐设备调整中断、MSI 和电源设置。",
+      ),
       "tool_beyond_performance_device_tweaker_discord": (
         "超越性能设备调整器",
         "打开分发 Device Tweaker 的公共 Beyond Performance Discord 频道。",
@@ -7704,10 +8106,6 @@ class TweakTextLocalizer {
       ),
       "tool_fix_tools_fastclean": ("快速清洁", "修复工具清理脚本。"),
       "tool_fix_tools_runner": ("修复工具启动器", "运行“修复工具”批处理启动器菜单。"),
-      "tool_fortnite_diagnostic_ping": (
-        "Alexanderthedad 的 Fortnite 诊断 Ping 工具",
-        "运行官方远程诊断命令以进行 Fortnite ping 故障排除。",
-      ),
       "tool_furmark_setup": ("FurMark 安装程序", "GPU 压力测试安装程序包。"),
       "tool_gpu_dword_manager": ("GPU 双字管理器", "GPU 注册表 DWORD 调整实用程序。"),
       "tool_gpuz": ("GPU-Z", "详细的 GPU 诊断和传感器。"),
@@ -7739,14 +8137,6 @@ class TweakTextLocalizer {
         "列出终端中已安装的 Winget 应用程序，以便您可以选择要删除的应用程序。",
       ),
       "tool_interrupt_affinity_policy": ("中断亲和性策略工具", "中断关联和 IRQ 策略调整实用程序。"),
-      "tool_interrupt_affinity_policy_ia64": (
-        "中断亲和性策略工具 (IA64)",
-        "中断关联策略实用程序的 IA64 构建。",
-      ),
-      "tool_interrupt_affinity_policy_x86": (
-        "中断关联策略工具 (x86)",
-        "x86 构建的中断关联策略实用程序。",
-      ),
       "tool_msi_afterburner_setup": ("MSI 加力燃烧器安装程序", "GPU 超频和监控安装程序。"),
       "installers_msi_afterburner": (
         "MSI Afterburner 脚本安装程序",
@@ -7805,9 +8195,49 @@ class TweakTextLocalizer {
       ),
       "tool_tcp_optimizer_folder": ("TCP优化器", "网络堆栈优化和诊断工具。"),
       "tool_testmem5_folder": ("测试内存5", "RAM 压力测试实用程序。"),
-      "tool_usb_latency_analyzer_v2_marius_heier": (
-        "USB 延迟分析器 V2，作者：marius heier",
-        "在可见的提升的 PowerShell 窗口中运行 Marius Heier 的诊断工具。这不应用调整，用于控制台诊断输出。",
+      "tool_marius_heier_tools_hub": (
+        "Marius Heier 工具中心",
+        "打开 tools.mariusheier.com 索引页，其中包含所有延迟、轮询和输入诊断工具。",
+      ),
+      "tool_marius_deeppoll_script": (
+        "DeepPoll USB 轮询分析器（脚本）",
+        "在提升权限的 PowerShell 窗口中运行 DeepPoll：通过内核 ETW 跟踪以微秒精度分析 USB 轮询率。",
+      ),
+      "tool_marius_deeppoll_web": (
+        "DeepPoll USB 轮询分析器（网页）",
+        "打开介绍 USB 轮询率分析器的 DeepPoll 网页。",
+      ),
+      "tool_marius_deeplog_script": (
+        "DeepLog 输入记录器（脚本）",
+        "在提升权限的 PowerShell 窗口中运行 DeepLog：记录 30 秒手柄输入并附带系统快照以供诊断。",
+      ),
+      "tool_marius_deeplog_web": (
+        "DeepLog 输入记录器（网页）",
+        "打开介绍手柄输入记录器的 DeepLog 网页。",
+      ),
+      "tool_marius_rig_script": (
+        "Rig Profiles 硬件报告（脚本）",
+        "运行 Rig Profiles 诊断脚本，收集并提交硬件配置和兼容性信息。",
+      ),
+      "tool_marius_rig_web": (
+        "Rig Profiles 硬件报告（网页）",
+        "打开介绍硬件配置提交的 Rig Profiles 网页。",
+      ),
+      "tool_marius_cpudirect_script": (
+        "CPU Direct USB 端口检查（脚本）",
+        "在提升权限的 PowerShell 窗口中运行 CPU Direct：检查 USB 设备连接的是 CPU 直连端口还是芯片组端口，并检测集线器。",
+      ),
+      "tool_marius_cpudirect_web": (
+        "CPU Direct USB 端口检查（网页）",
+        "打开介绍 USB 端口检查的 CPU Direct 网页。",
+      ),
+      "tool_marius_step_count_noise_web": (
+        "摇杆步进数与噪声演示",
+        "打开浏览器演示，说明为何有噪声的 12 位摇杆即使在全分辨率下也会抖动。",
+      ),
+      "tool_marius_usb_hid_analyzer_web": (
+        "USB HID 轮询分析器",
+        "打开浏览器工具，测量设备的实际轮询频率、抖动、时序一致性和设备速度。",
       ),
       "tool_unpark_cpu": ("取消CPU停放", "CPU 核心卸载实用程序。"),
       "tool_vivetool_folder": (
@@ -7955,8 +8385,6 @@ class TweakTextLocalizer {
           "Esperimento di compatibilità legacy. Prova un gioco alla volta e ripristina se la presentazione si interrompe.",
       "This action changes advanced NIC interrupt moderation registry values. Restart is recommended after applying changes.":
           "Questa azione modifica i valori avanzati del registro di sistema relativi alla moderazione delle interruzioni della scheda NIC. Si consiglia di riavviare dopo aver applicato le modifiche.",
-      "This action executes a remote PowerShell command from alexanderthedad.com. Continue only if you trust the source.":
-          "Questa azione esegue un comando remoto di PowerShell da alexanderthedad.com. Continua solo se ti fidi della fonte.",
       "This action executes a remote PowerShell command from debloat.raphi.re and can change system configuration. Continue only if you trust the source.":
           "Questa azione esegue un comando PowerShell remoto da debloat.raphi.re e può modificare la configurazione del sistema. Continua solo se ti fidi della fonte.",
       "This action executes a remote PowerShell command from github.com/FR33THYFR33THY and applies invasive debloat changes. There is no in-app revert for this action. Continue only if you fully trust the source.":
@@ -7965,6 +8393,8 @@ class TweakTextLocalizer {
           "Questa azione esegue un comando remoto di PowerShell da tools.mariusheier.com. Continua solo se ti fidi della fonte.",
       "This action runs the official remote WinUtil script from christitus.com. Review its choices before applying changes.":
           "Questa azione esegue lo script WinUtil remoto ufficiale da christitus.com. Rivedi le sue scelte prima di applicare le modifiche.",
+      "Device Tweaker changes per-device interrupt affinity, MSI mode, and power settings. Review each change in its window before applying it.":
+          "Device Tweaker modifica l'affinità degli interrupt, la modalità MSI e le impostazioni di alimentazione per singolo dispositivo. Controlla ogni modifica nella sua finestra prima di applicarla.",
       "This opens the author-provided public Discord source. Review the shared file, version, and instructions before running any device tweak.":
           "Questo apre la fonte Discord pubblica fornita dall'autore. Esamina il file condiviso, la versione e le istruzioni prima di eseguire qualsiasi modifica del dispositivo.",
       "Uninstall only software you recognize. Removed desktop applications cannot be restored by ZapTweaks.":
@@ -7995,8 +8425,6 @@ class TweakTextLocalizer {
           "Experiment zur Legacy-Kompatibilität. Testen Sie jeweils ein Spiel und kehren Sie zurück, wenn die Präsentation unterbrochen wird.",
       "This action changes advanced NIC interrupt moderation registry values. Restart is recommended after applying changes.":
           "Diese Aktion ändert die erweiterten Registrierungswerte für die NIC-Interrupt-Moderation. Nach der Übernahme der Änderungen wird ein Neustart empfohlen.",
-      "This action executes a remote PowerShell command from alexanderthedad.com. Continue only if you trust the source.":
-          "Diese Aktion führt einen Remote-PowerShell-Befehl von alexanderthedad.com aus. Fahren Sie nur fort, wenn Sie der Quelle vertrauen.",
       "This action executes a remote PowerShell command from debloat.raphi.re and can change system configuration. Continue only if you trust the source.":
           "Diese Aktion führt einen Remote-PowerShell-Befehl von debloat.raphi.re aus und kann die Systemkonfiguration ändern. Fahren Sie nur fort, wenn Sie der Quelle vertrauen.",
       "This action executes a remote PowerShell command from github.com/FR33THYFR33THY and applies invasive debloat changes. There is no in-app revert for this action. Continue only if you fully trust the source.":
@@ -8005,6 +8433,8 @@ class TweakTextLocalizer {
           "Diese Aktion führt einen Remote-PowerShell-Befehl von tools.mariusheier.com aus. Fahren Sie nur fort, wenn Sie der Quelle vertrauen.",
       "This action runs the official remote WinUtil script from christitus.com. Review its choices before applying changes.":
           "Diese Aktion führt das offizielle Remote-WinUtil-Skript von christitus.com aus. Überprüfen Sie die Auswahl, bevor Sie Änderungen vornehmen.",
+      "Device Tweaker changes per-device interrupt affinity, MSI mode, and power settings. Review each change in its window before applying it.":
+          "Device Tweaker ändert die Interrupt-Affinität, den MSI-Modus und die Energieeinstellungen einzelner Geräte. Prüfen Sie jede Änderung in seinem Fenster, bevor Sie sie anwenden.",
       "This opens the author-provided public Discord source. Review the shared file, version, and instructions before running any device tweak.":
           "Dadurch wird die vom Autor bereitgestellte öffentliche Discord-Quelle geöffnet. Überprüfen Sie die freigegebene Datei, Version und Anweisungen, bevor Sie eine Geräteoptimierung durchführen.",
       "Uninstall only software you recognize. Removed desktop applications cannot be restored by ZapTweaks.":
@@ -8035,8 +8465,6 @@ class TweakTextLocalizer {
           "Experimento de compatibilidad heredada. Pruebe un juego a la vez y revierta si se rompe la presentación.",
       "This action changes advanced NIC interrupt moderation registry values. Restart is recommended after applying changes.":
           "Esta acción cambia los valores avanzados del registro de moderación de interrupciones de NIC. Se recomienda reiniciar después de aplicar los cambios.",
-      "This action executes a remote PowerShell command from alexanderthedad.com. Continue only if you trust the source.":
-          "Esta acción ejecuta un comando remoto de PowerShell desde alexanderthedad.com. Continúe solo si confía en la fuente.",
       "This action executes a remote PowerShell command from debloat.raphi.re and can change system configuration. Continue only if you trust the source.":
           "Esta acción ejecuta un comando remoto de PowerShell desde debloat.raphi.re y puede cambiar la configuración del sistema. Continúe solo si confía en la fuente.",
       "This action executes a remote PowerShell command from github.com/FR33THYFR33THY and applies invasive debloat changes. There is no in-app revert for this action. Continue only if you fully trust the source.":
@@ -8045,6 +8473,8 @@ class TweakTextLocalizer {
           "Esta acción ejecuta un comando remoto de PowerShell desde tools.mariusheier.com. Continúe solo si confía en la fuente.",
       "This action runs the official remote WinUtil script from christitus.com. Review its choices before applying changes.":
           "Esta acción ejecuta el script WinUtil remoto oficial de christitus.com. Revise sus opciones antes de aplicar cambios.",
+      "Device Tweaker changes per-device interrupt affinity, MSI mode, and power settings. Review each change in its window before applying it.":
+          "Device Tweaker cambia la afinidad de interrupciones, el modo MSI y la configuración de energía de cada dispositivo. Revise cada cambio en su ventana antes de aplicarlo.",
       "This opens the author-provided public Discord source. Review the shared file, version, and instructions before running any device tweak.":
           "Esto abre la fuente pública de Discord proporcionada por el autor. Revise el archivo compartido, la versión y las instrucciones antes de ejecutar cualquier modificación del dispositivo.",
       "Uninstall only software you recognize. Removed desktop applications cannot be restored by ZapTweaks.":
@@ -8075,8 +8505,6 @@ class TweakTextLocalizer {
           "Expérience de compatibilité héritée. Testez un jeu à la fois et revenez si la présentation est interrompue.",
       "This action changes advanced NIC interrupt moderation registry values. Restart is recommended after applying changes.":
           "Cette action modifie les valeurs avancées du registre de modération des interruptions de la carte réseau. Le redémarrage est recommandé après avoir appliqué les modifications.",
-      "This action executes a remote PowerShell command from alexanderthedad.com. Continue only if you trust the source.":
-          "Cette action exécute une commande PowerShell distante depuis alexanderthedad.com. Continuez seulement si vous faites confiance à la source.",
       "This action executes a remote PowerShell command from debloat.raphi.re and can change system configuration. Continue only if you trust the source.":
           "Cette action exécute une commande PowerShell distante depuis debloat.raphi.re et peut modifier la configuration du système. Continuez seulement si vous faites confiance à la source.",
       "This action executes a remote PowerShell command from github.com/FR33THYFR33THY and applies invasive debloat changes. There is no in-app revert for this action. Continue only if you fully trust the source.":
@@ -8085,6 +8513,8 @@ class TweakTextLocalizer {
           "Cette action exécute une commande PowerShell distante à partir de tools.mariusheier.com. Continuez seulement si vous faites confiance à la source.",
       "This action runs the official remote WinUtil script from christitus.com. Review its choices before applying changes.":
           "Cette action exécute le script WinUtil distant officiel de christitus.com. Revoyez ses choix avant d’appliquer les modifications.",
+      "Device Tweaker changes per-device interrupt affinity, MSI mode, and power settings. Review each change in its window before applying it.":
+          "Device Tweaker modifie l'affinité des interruptions, le mode MSI et les paramètres d'alimentation de chaque périphérique. Vérifiez chaque changement dans sa fenêtre avant de l'appliquer.",
       "This opens the author-provided public Discord source. Review the shared file, version, and instructions before running any device tweak.":
           "Cela ouvre la source Discord publique fournie par l'auteur. Vérifiez le fichier partagé, la version et les instructions avant d'exécuter un réglage de l'appareil.",
       "Uninstall only software you recognize. Removed desktop applications cannot be restored by ZapTweaks.":
@@ -8115,8 +8545,6 @@ class TweakTextLocalizer {
           "Эксперимент по совместимости с устаревшими версиями. Тестируйте одну игру за раз и возвращайтесь, если презентация не работает.",
       "This action changes advanced NIC interrupt moderation registry values. Restart is recommended after applying changes.":
           "Это действие изменяет расширенные значения реестра модерации прерываний NIC. После применения изменений рекомендуется перезагрузить компьютер.",
-      "This action executes a remote PowerShell command from alexanderthedad.com. Continue only if you trust the source.":
-          "Это действие выполняет удаленную команду PowerShell с сайта alexanderthedad.com. Продолжайте, только если вы доверяете источнику.",
       "This action executes a remote PowerShell command from debloat.raphi.re and can change system configuration. Continue only if you trust the source.":
           "Это действие выполняет удаленную команду PowerShell из debloat.raphi.re и может изменить конфигурацию системы. Продолжайте, только если вы доверяете источнику.",
       "This action executes a remote PowerShell command from github.com/FR33THYFR33THY and applies invasive debloat changes. There is no in-app revert for this action. Continue only if you fully trust the source.":
@@ -8125,6 +8553,8 @@ class TweakTextLocalizer {
           "Это действие выполняет удаленную команду PowerShell с сайта tools.mariusheier.com. Продолжайте, только если вы доверяете источнику.",
       "This action runs the official remote WinUtil script from christitus.com. Review its choices before applying changes.":
           "Это действие запускает официальный удаленный сценарий WinUtil с сайта christitus.com. Прежде чем применять изменения, просмотрите его варианты.",
+      "Device Tweaker changes per-device interrupt affinity, MSI mode, and power settings. Review each change in its window before applying it.":
+          "Device Tweaker изменяет привязку прерываний, режим MSI и параметры питания для каждого устройства. Проверьте каждое изменение в его окне перед применением.",
       "This opens the author-provided public Discord source. Review the shared file, version, and instructions before running any device tweak.":
           "Откроется предоставленный автором общедоступный источник Discord. Прежде чем запускать какую-либо настройку устройства, просмотрите общий файл, версию и инструкции.",
       "Uninstall only software you recognize. Removed desktop applications cannot be restored by ZapTweaks.":
@@ -8155,8 +8585,6 @@ class TweakTextLocalizer {
           "遗留兼容性实验。一次测试一款游戏，如果演示中断则恢复。",
       "This action changes advanced NIC interrupt moderation registry values. Restart is recommended after applying changes.":
           "此操作更改高级 NIC 中断调节注册表值。建议在应用更改后重新启动。",
-      "This action executes a remote PowerShell command from alexanderthedad.com. Continue only if you trust the source.":
-          "此操作从 alexanderthedad.com 执行远程 PowerShell 命令。仅当您信任来源时才继续。",
       "This action executes a remote PowerShell command from debloat.raphi.re and can change system configuration. Continue only if you trust the source.":
           "此操作从 debloat.raphi.re 执行远程 PowerShell 命令，并且可以更改系统配置。仅当您信任来源时才继续。",
       "This action executes a remote PowerShell command from github.com/FR33THYFR33THY and applies invasive debloat changes. There is no in-app revert for this action. Continue only if you fully trust the source.":
@@ -8165,6 +8593,8 @@ class TweakTextLocalizer {
           "此操作从tools.marisheier.com 执行远程PowerShell 命令。仅当您信任来源时才继续。",
       "This action runs the official remote WinUtil script from christitus.com. Review its choices before applying changes.":
           "此操作运行来自 christitus.com 的官方远程 WinUtil 脚本。在应用更改之前检查其选择。",
+      "Device Tweaker changes per-device interrupt affinity, MSI mode, and power settings. Review each change in its window before applying it.":
+          "Device Tweaker 会更改每个设备的中断亲和性、MSI 模式和电源设置。应用前请在其窗口中检查每一项更改。",
       "This opens the author-provided public Discord source. Review the shared file, version, and instructions before running any device tweak.":
           "这将打开作者提供的公共 Discord 源。在运行任何设备调整之前查看共享文件、版本和说明。",
       "Uninstall only software you recognize. Removed desktop applications cannot be restored by ZapTweaks.":

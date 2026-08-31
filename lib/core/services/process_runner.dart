@@ -111,6 +111,8 @@ class ProcessRunner {
     'explorer.exe',
     'bcdedit',
     'bcdedit.exe',
+    'winget',
+    'winget.exe',
   };
 
   ProcessExecutionMode get mode => _mode;

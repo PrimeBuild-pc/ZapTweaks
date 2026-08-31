@@ -79,6 +79,7 @@ class TweakController extends ChangeNotifier {
   static const String _executionModeKey = 'executionMode';
   static const String _automaticUpdateChecksKey = 'automaticUpdateChecks';
   static const String _lastSelectedPresetPrefix = 'preset:';
+  static const String _expandedCollectionsKey = 'expandedCollections';
   static const String _localeCodeKey = AppLocaleService.preferenceKey;
   static const String _startWithWindowsKey = 'startWithWindows';
   static const int _maxMetricsPoints = 40;
@@ -114,7 +115,25 @@ class TweakController extends ChangeNotifier {
   List<double> _vramHistory = const <double>[];
 
   String _loadingStatus = 'Initializing...';
+
+  /// Startup steps shown in order on the loading screen. The last four run in
+  /// parallel and tick off as each finishes, so a slow one (hardware detection
+  /// shells out to PowerShell) never looks like a freeze.
+  static const List<String> loadingSteps = <String>[
+    'Loading preferences...',
+    'Loading tweaks catalog...',
+    'Checking administrator rights...',
+    'Detecting hardware...',
+    'Reading system tweak states...',
+    'Reading script tweak states...',
+  ];
+  final Set<String> _completedLoadingSteps = <String>{};
   final Map<String, String> _selectedPresets = <String, String>{};
+
+  /// "category/collection" keys the user has opened. Collections start closed
+  /// so a category page opens as a short, scannable list, and the choice is
+  /// remembered across restarts.
+  final Set<String> _expandedCollections = <String>{};
 
   bool get isLoading => _isLoading;
   bool get isAdmin => _isAdmin;
@@ -129,6 +148,7 @@ class TweakController extends ChangeNotifier {
   ];
   bool get isDryRunMode => _processRunner.isDryRun;
   String get loadingStatus => _loadingStatus;
+  bool isLoadingStepDone(String step) => _completedLoadingSteps.contains(step);
   String get appVersion => _appVersion;
   bool get automaticUpdateChecksEnabled => _automaticUpdateChecksEnabled;
   bool get startWithWindows => _startWithWindows;
@@ -215,13 +235,14 @@ class TweakController extends ChangeNotifier {
   Future<void> initialize() async {
     _isLoading = true;
     _loadingStatus = 'Initializing UI...';
+    _completedLoadingSteps.clear();
     notifyListeners();
 
     try {
-      _loadingStatus = 'Loading preferences...';
-      notifyListeners();
+      _beginLoadingStep('Loading preferences...');
       _restoreExecutionModeFromPreferences();
       _restorePresetSelections();
+      _restoreExpandedCollections();
       _automaticUpdateChecksEnabled =
           _preferences.getBool(_automaticUpdateChecksKey) ?? true;
       _startWithWindows = _preferences.getBool(_startWithWindowsKey) ?? false;
@@ -229,8 +250,8 @@ class TweakController extends ChangeNotifier {
         _preferences.getString(_localeCodeKey) ?? AppLocaleService.systemCode(),
       );
 
-      _loadingStatus = 'Loading tweaks catalog...';
-      notifyListeners();
+      _completeLoadingStep('Loading preferences...');
+      _beginLoadingStep('Loading tweaks catalog...');
       _catalog = _tweakCatalogService.buildCatalog();
       unawaited(
         _loggingService.logInfo(
@@ -239,8 +260,8 @@ class TweakController extends ChangeNotifier {
         ),
       );
 
-      _loadingStatus = 'Detecting hardware and tweak states...';
-      notifyListeners();
+      _completeLoadingStep('Loading tweaks catalog...');
+      _beginLoadingStep('Checking administrator rights...');
       unawaited(
         _loggingService.logInfo(
           'Detecting elevation, hardware profile, and current tweak states.',
@@ -248,10 +269,22 @@ class TweakController extends ChangeNotifier {
         ),
       );
       final futures = await Future.wait<dynamic>(<Future<dynamic>>[
-        _permissionService.isRunningElevated(),
-        _hardwareDetectionService.detect(),
-        _tweakManager.detectCurrentTweakStates(),
-        _initializeScriptStates(),
+        _trackLoadingStep(
+          'Checking administrator rights...',
+          _permissionService.isRunningElevated(),
+        ),
+        _trackLoadingStep(
+          'Detecting hardware...',
+          _hardwareDetectionService.detect(),
+        ),
+        _trackLoadingStep(
+          'Reading system tweak states...',
+          _tweakManager.detectCurrentTweakStates(),
+        ),
+        _trackLoadingStep(
+          'Reading script tweak states...',
+          _initializeScriptStates(),
+        ),
       ]);
 
       _isAdmin = futures[0] as bool;
@@ -276,6 +309,7 @@ class TweakController extends ChangeNotifier {
       _needsRestart = _preferences.getBool(_needsRestartKey) ?? false;
     } finally {
       _isLoading = false;
+      _completedLoadingSteps.addAll(loadingSteps);
       _loadingStatus = 'Ready';
       notifyListeners();
       Future<void>.delayed(Duration.zero, _startMetricsSampling);
@@ -444,13 +478,22 @@ class TweakController extends ChangeNotifier {
       );
     }
 
-    final gate = await _safetyGateService.ensureSafety(
-      requireRestorePoint: descriptor.isAggressive,
-      askUserToCreateRestorePoint: confirmRestorePoint,
-    );
-    return gate.allowsExecution
-        ? _setSystemTweak(descriptor, nextValue)
-        : _mapGateFailure(gate);
+    // Mark busy up front: creating a restore point can take a while and the
+    // user needs a spinner for the whole operation, not just the apply step.
+    _markBusy(descriptor.id);
+    try {
+      final gate = await _safetyGateService.ensureSafety(
+        requireRestorePoint: true,
+        askUserToCreateRestorePoint: confirmRestorePoint,
+      );
+      if (!gate.allowsExecution) {
+        return _mapGateFailure(gate);
+      }
+    } finally {
+      _clearBusy(descriptor.id);
+    }
+
+    return _setSystemTweak(descriptor, nextValue);
   }
 
   Future<OperationResult> _setSystemTweak(
@@ -532,13 +575,20 @@ class TweakController extends ChangeNotifier {
       );
     }
 
-    final gate = await _safetyGateService.ensureSafety(
-      requireRestorePoint: descriptor.isAggressive,
-      askUserToCreateRestorePoint: confirmRestorePoint,
-    );
-    return gate.allowsExecution
-        ? _runScriptTweak(descriptor)
-        : _mapGateFailure(gate);
+    _markBusy(descriptor.id);
+    try {
+      final gate = await _safetyGateService.ensureSafety(
+        requireRestorePoint: descriptor.scriptTweak!.requiresSafetyPrompt,
+        askUserToCreateRestorePoint: confirmRestorePoint,
+      );
+      if (!gate.allowsExecution) {
+        return _mapGateFailure(gate);
+      }
+    } finally {
+      _clearBusy(descriptor.id);
+    }
+
+    return _runScriptTweak(descriptor);
   }
 
   Future<OperationResult> _runScriptTweak(
@@ -609,27 +659,43 @@ class TweakController extends ChangeNotifier {
       );
     }
 
-    final toggles = categoryTweaks(category)
-        .where((item) => item.isSystemToggle && isDescriptorAvailable(item))
-        .toList();
-    final gate = await _safetyGateService.ensureSafety(
-      requireRestorePoint: true,
-      askUserToCreateRestorePoint: confirmRestorePoint,
-    );
-    if (!gate.allowsExecution) {
-      return _mapGateFailure(gate);
+    final categoryDescriptors = categoryTweaks(category);
+    if (categoryDescriptors.any((item) => _busyTweaks.contains(item.id))) {
+      return const OperationResult(
+        success: false,
+        message: 'Wait for the current category operation to finish.',
+      );
     }
 
-    for (final descriptor in toggles) {
-      if ((_toggleStates[descriptor.id] ?? false) == enabled) {
-        continue;
+    final toggles = categoryDescriptors
+        .where((item) => item.isSystemToggle && isDescriptorAvailable(item))
+        .toList();
+
+    _busyPresetCategories.add(category);
+    notifyListeners();
+    try {
+      final gate = await _safetyGateService.ensureSafety(
+        requireRestorePoint: true,
+        askUserToCreateRestorePoint: confirmRestorePoint,
+      );
+      if (!gate.allowsExecution) {
+        return _mapGateFailure(gate);
       }
-      final result = await _setSystemTweak(descriptor, enabled);
-      if (!result.success) {
-        return result;
+
+      for (final descriptor in toggles) {
+        if ((_toggleStates[descriptor.id] ?? false) == enabled) {
+          continue;
+        }
+        final result = await _setSystemTweak(descriptor, enabled);
+        if (!result.success) {
+          return result;
+        }
       }
+      return const OperationResult(success: true);
+    } finally {
+      _busyPresetCategories.remove(category);
+      notifyListeners();
     }
-    return const OperationResult(success: true);
   }
 
   /// Applies a preset profile to all available toggles in a category.
@@ -678,7 +744,7 @@ class TweakController extends ChangeNotifier {
     try {
       if (descriptors.isNotEmpty) {
         final gate = await _safetyGateService.ensureSafety(
-          requireRestorePoint: descriptors.any((item) => item.isAggressive),
+          requireRestorePoint: true,
           askUserToCreateRestorePoint: confirmRestorePoint,
         );
         if (!gate.allowsExecution) {
@@ -958,6 +1024,67 @@ class TweakController extends ChangeNotifier {
         ? ProcessExecutionMode.dryRun
         : ProcessExecutionMode.production;
     _processRunner.setMode(nextMode);
+  }
+
+  /// True when the user has opened this collection before. Closed by default.
+  bool isCollectionExpanded(String category, String collection) =>
+      _expandedCollections.contains(_collectionKey(category, collection));
+
+  /// Remembers an expand/collapse so the layout survives a restart. The
+  /// Expander owns its own visual state, so this does not notify listeners.
+  Future<void> setCollectionExpanded(
+    String category,
+    String collection,
+    bool expanded,
+  ) async {
+    final key = _collectionKey(category, collection);
+    if (expanded
+        ? !_expandedCollections.add(key)
+        : !_expandedCollections.remove(key)) {
+      return;
+    }
+
+    await _preferences.setStringList(
+      _expandedCollectionsKey,
+      _expandedCollections.toList(growable: false),
+    );
+  }
+
+  String _collectionKey(String category, String collection) =>
+      '$category/$collection';
+
+  void _beginLoadingStep(String step) {
+    _loadingStatus = step;
+    notifyListeners();
+  }
+
+  void _completeLoadingStep(String step) {
+    _completedLoadingSteps.add(step);
+    notifyListeners();
+  }
+
+  /// Marks [step] done when [work] settles and moves the caption to the next
+  /// step still running, so parallel work reads as steady progress.
+  Future<T> _trackLoadingStep<T>(String step, Future<T> work) async {
+    try {
+      return await work;
+    } finally {
+      _completedLoadingSteps.add(step);
+      final next = loadingSteps.firstWhere(
+        (candidate) => !_completedLoadingSteps.contains(candidate),
+        orElse: () => 'Ready',
+      );
+      _loadingStatus = next;
+      notifyListeners();
+    }
+  }
+
+  void _restoreExpandedCollections() {
+    _expandedCollections
+      ..clear()
+      ..addAll(
+        _preferences.getStringList(_expandedCollectionsKey) ?? const <String>[],
+      );
   }
 
   void _restorePresetSelections() {

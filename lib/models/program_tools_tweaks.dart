@@ -42,6 +42,19 @@ List<SystemTweak> createProgramToolTweaks() {
       warningMessage:
           'This opens the author-provided public Discord source. Review the shared file, version, and instructions before running any device tweak.',
     ),
+    ScriptInteractiveTweak(
+      id: 'tool_device_tweaker_script',
+      title: 'Device Tweaker (LLG x LLC)',
+      description:
+          'Opens the bundled Device Tweaker GUI script for per-device interrupt, MSI, and power tuning.',
+      category: 'Drivers & Installers',
+      scriptSegments: <String>['interactive_scripts', 'DeviceTweaker.ps1'],
+      actionLabel: 'Open Tool',
+      isAggressive: true,
+      warningMessage:
+          'Device Tweaker changes per-device interrupt affinity, MSI mode, and power settings. '
+          'Review each change in its window before applying it.',
+    ),
     ExternalUrlLauncherTweak(
       id: 'tool_scewin_gui_releases',
       title: 'SCEWIN-GUI Releases',
@@ -78,19 +91,6 @@ List<SystemTweak> createProgramToolTweaks() {
       warningMessage:
           'VBIOS flashing can permanently brick a GPU. Back up the ROM, verify the exact board, and remove any temporary driver after use.',
     ),
-    PowerShellCommandTweak(
-      id: 'tool_fortnite_diagnostic_ping',
-      title: 'Fortnite Diagnostic Ping Tool by Alexanderthedad',
-      description:
-          'Runs the official remote diagnostic command for Fortnite ping troubleshooting.',
-      category: 'Drivers & Installers',
-      command: 'irm https://alexanderthedad.com/ping-fortnite.ps1 | iex',
-      actionLabel: 'Run Tool',
-      isAggressive: true,
-      warningMessage:
-          'This action executes a remote PowerShell command from '
-          'alexanderthedad.com. Continue only if you trust the source.',
-    ),
     ExternalUrlLauncherTweak(
       id: 'tool_winslopr_releases',
       title: 'Download Winslopr',
@@ -100,16 +100,112 @@ List<SystemTweak> createProgramToolTweaks() {
       url: 'https://github.com/builtbybel/Winslopr/releases',
       actionLabel: 'Open Releases',
     ),
-    PowerShellTerminalCommandTweak(
-      id: 'tool_usb_latency_analyzer_v2_marius_heier',
-      title: 'USB Latency Analyzer V2 by marius heier',
+    ExternalUrlLauncherTweak(
+      id: "tool_marius_heier_tools_hub",
+      title: "Marius Heier Tools Hub",
       description:
-          'Runs Marius Heier\'s diagnostic tool in a visible elevated PowerShell window. This does not apply tweaks and is intended for console diagnostics output.',
+          "Opens the tools.mariusheier.com index with every latency, polling and input diagnostic tool.",
       category: 'Drivers & Installers',
-      command: 'irm https://tools.mariusheier.com/cpudirect.ps1 | iex',
+      url: "https://tools.mariusheier.com/",
+      actionLabel: 'Open',
+    ),
+    PowerShellTerminalCommandTweak(
+      id: "tool_marius_deeppoll_script",
+      title: "DeepPoll USB Polling Analyzer (Script)",
+      description:
+          "Runs DeepPoll in an elevated PowerShell window: USB polling rate analysis with microsecond precision via kernel ETW tracing.",
+      category: 'Drivers & Installers',
+      command: "irm https://tools.mariusheier.com/deeppoll.ps1 | iex",
       actionLabel: 'Run Tool',
       warningMessage:
-          'This action executes a remote PowerShell command from tools.mariusheier.com. Continue only if you trust the source.',
+          "This action executes a remote PowerShell command from tools.mariusheier.com. Continue only if you trust the source.",
+    ),
+    ExternalUrlLauncherTweak(
+      id: "tool_marius_deeppoll_web",
+      title: "DeepPoll USB Polling Analyzer (Web)",
+      description:
+          "Opens the DeepPoll web page describing the USB polling rate analyzer.",
+      category: 'Drivers & Installers',
+      url: "https://tools.mariusheier.com/deeppoll.html",
+      actionLabel: 'Open',
+    ),
+    PowerShellTerminalCommandTweak(
+      id: "tool_marius_deeplog_script",
+      title: "DeepLog Input Recorder (Script)",
+      description:
+          "Runs DeepLog in an elevated PowerShell window: records 30 seconds of controller input with a system snapshot for diagnostics.",
+      category: 'Drivers & Installers',
+      command: "irm https://tools.mariusheier.com/deeplog.ps1 | iex",
+      actionLabel: 'Run Tool',
+      warningMessage:
+          "This action executes a remote PowerShell command from tools.mariusheier.com. Continue only if you trust the source.",
+    ),
+    ExternalUrlLauncherTweak(
+      id: "tool_marius_deeplog_web",
+      title: "DeepLog Input Recorder (Web)",
+      description:
+          "Opens the DeepLog web page describing the controller input recorder.",
+      category: 'Drivers & Installers',
+      url: "https://tools.mariusheier.com/deeplog.html",
+      actionLabel: 'Open',
+    ),
+    PowerShellTerminalCommandTweak(
+      id: "tool_marius_rig_script",
+      title: "Rig Profiles Hardware Report (Script)",
+      description:
+          "Runs the Rig Profiles diagnostic script that collects and submits a hardware profile and compatibility information.",
+      category: 'Drivers & Installers',
+      command: "irm https://tools.mariusheier.com/rig.ps1 | iex",
+      actionLabel: 'Run Tool',
+      warningMessage:
+          "This action executes a remote PowerShell command from tools.mariusheier.com. Continue only if you trust the source.",
+    ),
+    ExternalUrlLauncherTweak(
+      id: "tool_marius_rig_web",
+      title: "Rig Profiles Hardware Report (Web)",
+      description:
+          "Opens the Rig Profiles web page describing the hardware profile submission.",
+      category: 'Drivers & Installers',
+      url: "https://tools.mariusheier.com/rig.html",
+      actionLabel: 'Open',
+    ),
+    PowerShellTerminalCommandTweak(
+      id: "tool_marius_cpudirect_script",
+      title: "CPU Direct USB Port Check (Script)",
+      description:
+          "Runs CPU Direct in an elevated PowerShell window: checks whether USB devices sit on CPU-direct or chipset ports and detects hubs.",
+      category: 'Drivers & Installers',
+      command: "irm https://tools.mariusheier.com/cpudirect.ps1 | iex",
+      actionLabel: 'Run Tool',
+      warningMessage:
+          "This action executes a remote PowerShell command from tools.mariusheier.com. Continue only if you trust the source.",
+    ),
+    ExternalUrlLauncherTweak(
+      id: "tool_marius_cpudirect_web",
+      title: "CPU Direct USB Port Check (Web)",
+      description:
+          "Opens the CPU Direct web page describing the USB port check.",
+      category: 'Drivers & Installers',
+      url: "https://tools.mariusheier.com/cpudirect.html",
+      actionLabel: 'Open',
+    ),
+    ExternalUrlLauncherTweak(
+      id: "tool_marius_step_count_noise_web",
+      title: "Step Count vs Noise Joystick Demo",
+      description:
+          "Opens the browser demo showing why a noisy 12-bit joystick chatters even at full resolution.",
+      category: 'Drivers & Installers',
+      url: "https://tools.mariusheier.com/step-count-vs-noise-joystick.html",
+      actionLabel: 'Open',
+    ),
+    ExternalUrlLauncherTweak(
+      id: "tool_marius_usb_hid_analyzer_web",
+      title: "USB HID Polling Analyzer",
+      description:
+          "Opens the browser tool that measures real device polling frequency, jitter, timing consistency and device speed.",
+      category: 'Drivers & Installers',
+      url: "https://tools.mariusheier.com/poll_checker.html",
+      actionLabel: 'Open',
     ),
     PowerShellTerminalCommandTweak(
       id: 'tool_install_win11_debloat_raphire',
@@ -156,7 +252,7 @@ List<SystemTweak> createProgramToolTweaks() {
       actionLabel: 'Install',
       isAggressive: true,
     ),
-    PowerShellCommandTweak(
+    PowerShellTerminalCommandTweak(
       id: 'tool_winsux_debloat',
       title: 'WinSux by Fr33hty',
       description:
@@ -231,30 +327,6 @@ List<SystemTweak> createProgramToolTweaks() {
         'programmi',
         'Interrupt_Affinity_Policy_Tool',
         'intPolicy_x64.exe',
-      ],
-      isAggressive: true,
-    ),
-    ExecutableLauncherTweak(
-      id: 'tool_interrupt_affinity_policy_x86',
-      title: 'Interrupt Affinity Policy Tool (x86)',
-      description: 'x86 build of interrupt affinity policy utility.',
-      category: 'Drivers & Installers',
-      executableSegments: <String>[
-        'programmi',
-        'Interrupt_Affinity_Policy_Tool',
-        'intPolicy_x86.exe',
-      ],
-      isAggressive: true,
-    ),
-    ExecutableLauncherTweak(
-      id: 'tool_interrupt_affinity_policy_ia64',
-      title: 'Interrupt Affinity Policy Tool (IA64)',
-      description: 'IA64 build of interrupt affinity policy utility.',
-      category: 'Drivers & Installers',
-      executableSegments: <String>[
-        'programmi',
-        'Interrupt_Affinity_Policy_Tool',
-        'intPolicy_ia64.exe',
       ],
       isAggressive: true,
     ),

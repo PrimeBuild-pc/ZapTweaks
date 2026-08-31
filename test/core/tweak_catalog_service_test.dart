@@ -53,7 +53,7 @@ void main() {
         'Advanced': 23,
         'Privacy': 12,
         'Visuals': 14,
-        'Tools': 68,
+        'Tools': 76,
       });
     },
   );

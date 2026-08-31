@@ -1,4 +1,5 @@
 import '../models/tweak_descriptor.dart';
+import 'tweak_collections.dart';
 import '../../models/check_tweaks.dart';
 import '../../models/gaming_optimizations_tweaks.dart';
 import '../../models/hardware_tweaks.dart';
@@ -78,6 +79,16 @@ class TweakCatalogService {
       final rightCategoryIndex = navigationCategories.indexOf(right.category);
       if (leftCategoryIndex != rightCategoryIndex) {
         return leftCategoryIndex.compareTo(rightCategoryIndex);
+      }
+
+      final collectionCompare = TweakCollections.orderIndex(
+        left.collection,
+      ).compareTo(TweakCollections.orderIndex(right.collection));
+      if (collectionCompare != 0) {
+        return collectionCompare;
+      }
+      if (left.collection != right.collection) {
+        return left.collection.compareTo(right.collection);
       }
 
       final typeCompare = _tweakTypeSortWeight(
@@ -329,6 +340,11 @@ class TweakCatalogService {
           title: entry.value.title,
           description: entry.value.description,
           category: entry.value.category,
+          collection: TweakCollections.resolve(
+            id: entry.key,
+            category: entry.value.category,
+            tweak: null,
+          ),
           isAggressive: entry.value.aggressive,
           restartRequired: restartRequiredSystemTweaks.contains(entry.key),
           requiredCpuVendor: entry.value.cpuVendor,
@@ -356,23 +372,27 @@ class TweakCatalogService {
       ...createHardwareTweaks(),
     ];
 
-    return tweaks
-        .map(
-          (tweak) => TweakDescriptor(
-            id: tweak.id,
-            title: tweak.title,
-            description: tweak.description,
-            category: _mapToNavigationCategory(tweak.category),
-            isAggressive: tweak.isAggressive,
-            restartRequired: restartRequiredSystemTweaks.contains(tweak.id),
-            requiredCpuVendor: tweak.requiredCpuVendor,
-            requiredGpuVendors: tweak.requiredGpuVendors,
-            minimumWindowsBuild: tweak.minimumWindowsBuild,
-            conflictingTweakIds: tweak.conflictingTweakIds,
-            scriptTweak: tweak,
-          ),
-        )
-        .toList();
+    return tweaks.map((tweak) {
+      final category = _mapToNavigationCategory(tweak.category);
+      return TweakDescriptor(
+        id: tweak.id,
+        title: tweak.title,
+        description: tweak.description,
+        category: category,
+        collection: TweakCollections.resolve(
+          id: tweak.id,
+          category: category,
+          tweak: tweak,
+        ),
+        isAggressive: tweak.isAggressive,
+        restartRequired: restartRequiredSystemTweaks.contains(tweak.id),
+        requiredCpuVendor: tweak.requiredCpuVendor,
+        requiredGpuVendors: tweak.requiredGpuVendors,
+        minimumWindowsBuild: tweak.minimumWindowsBuild,
+        conflictingTweakIds: tweak.conflictingTweakIds,
+        scriptTweak: tweak,
+      );
+    }).toList();
   }
 
   String _mapToNavigationCategory(String sourceCategory) {

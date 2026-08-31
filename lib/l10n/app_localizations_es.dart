@@ -260,7 +260,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get aggressiveTweakWarning =>
-      'Ajuste agresivo. Un punto de restauración es obligatorio.';
+      'Ajuste agresivo. Se recomienda un punto de restauración.';
 
   @override
   String get networkReconnectWarning =>
@@ -335,4 +335,23 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get noKeyboards => 'No se detectaron teclados';
+
+  @override
+  String get restorePointPromptTitle => '¿Crear un punto de restauración?';
+
+  @override
+  String get restorePointPromptMessage =>
+      'ZapTweaks puede crear un punto de restauración de Windows antes de cambiar la configuración del sistema. Es opcional: si lo omites, el cambio se aplica igualmente. Solo se pregunta una vez por sesión.';
+
+  @override
+  String get skip => 'Omitir';
+
+  @override
+  String get continueAction => 'Continuar';
+
+  @override
+  String get tweaksSectionHeader => 'AJUSTES';
+
+  @override
+  String get startingUp => 'Iniciando ZapTweaks';
 }
