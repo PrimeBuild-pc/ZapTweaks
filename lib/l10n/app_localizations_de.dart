@@ -260,7 +260,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get aggressiveTweakWarning =>
-      'Aggressiver Tweak. Ein Wiederherstellungspunkt ist obligatorisch.';
+      'Aggressiver Tweak. Ein Wiederherstellungspunkt wird empfohlen.';
 
   @override
   String get networkReconnectWarning =>
@@ -336,4 +336,23 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get noKeyboards => 'Keine Tastaturen erkannt';
+
+  @override
+  String get restorePointPromptTitle => 'Wiederherstellungspunkt erstellen?';
+
+  @override
+  String get restorePointPromptMessage =>
+      'ZapTweaks kann vor Systemänderungen einen Windows-Wiederherstellungspunkt erstellen. Das ist optional: Beim Überspringen wird die Änderung trotzdem angewendet. Die Frage erscheint nur einmal pro Sitzung.';
+
+  @override
+  String get skip => 'Überspringen';
+
+  @override
+  String get continueAction => 'Fortfahren';
+
+  @override
+  String get tweaksSectionHeader => 'TWEAKS';
+
+  @override
+  String get startingUp => 'ZapTweaks wird gestartet';
 }

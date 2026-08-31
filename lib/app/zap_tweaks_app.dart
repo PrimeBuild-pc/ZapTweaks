@@ -163,24 +163,30 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
                     },
                     size: const NavigationPaneSize(openWidth: 240),
                     displayMode: PaneDisplayMode.auto,
+                    // Headers and separators are filtered out of
+                    // NavigationPane.effectiveItems, so they do not shift the
+                    // selected index away from `categories`.
                     items: <NavigationPaneItem>[
+                      _buildPaneItem(context, categories.first),
+                      PaneItemSeparator(),
+                      PaneItemHeader(
+                        header: Padding(
+                          padding: const EdgeInsets.only(left: 4, bottom: 2),
+                          child: Text(
+                            strings.tweaksSectionHeader,
+                            style: FluentTheme.of(
+                              context,
+                            ).typography.caption?.copyWith(letterSpacing: 0.6),
+                          ),
+                        ),
+                      ),
                       ...categories
+                          .skip(1)
                           .where(
                             (category) =>
                                 category != TweakController.settingsCategory,
                           )
-                          .map(
-                            (category) => PaneItem(
-                              icon: Icon(_iconForCategory(category)),
-                              title: Text(
-                                AppLocaleService.category(
-                                  widget.controller.localeCode,
-                                  category,
-                                ),
-                              ),
-                              body: _buildCategoryBody(category),
-                            ),
-                          ),
+                          .map((category) => _buildPaneItem(context, category)),
                       PaneItemSeparator(),
                       PaneItem(
                         icon: const Icon(FluentIcons.settings),
@@ -191,20 +197,20 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
                           ),
                         ),
                         body: _buildCategoryBody(
+                          context,
                           TweakController.settingsCategory,
                         ),
                       ),
                     ],
+                    // Only surfaced once a newer release has actually been
+                    // detected. Manual checks live in Settings.
                     footerItems: <NavigationPaneItem>[
-                      PaneItemAction(
-                        icon: _buildUpdatesIcon(),
-                        title: Text(
-                          widget.controller.isUpdateAvailable
-                              ? strings.updateAvailableShort
-                              : strings.updates,
+                      if (widget.controller.isUpdateAvailable)
+                        PaneItemAction(
+                          icon: _buildUpdatesIcon(),
+                          title: Text(strings.updateAvailableShort),
+                          onTap: _handleUpdatesPressed,
                         ),
-                        onTap: _handleUpdatesPressed,
-                      ),
                     ],
                   ),
                 ),
@@ -240,6 +246,16 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
           );
         },
       ),
+    );
+  }
+
+  PaneItem _buildPaneItem(BuildContext paneContext, String category) {
+    return PaneItem(
+      icon: Icon(_iconForCategory(category)),
+      title: Text(
+        AppLocaleService.category(widget.controller.localeCode, category),
+      ),
+      body: _buildCategoryBody(paneContext, category),
     );
   }
 
@@ -448,23 +464,9 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
     );
   }
 
-  Widget _buildCategoryBody(String category) {
+  Widget _buildCategoryBody(BuildContext context, String category) {
     if (widget.controller.isLoading) {
-      return Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            const ProgressRing(),
-            const SizedBox(height: 12),
-            Text(
-              AppLocaleService.loadingStatus(
-                widget.controller.localeCode,
-                widget.controller.loadingStatus,
-              ),
-            ),
-          ],
-        ),
-      );
+      return _buildLoadingView(context);
     }
 
     if (category == 'Home') {
@@ -487,7 +489,96 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
     return TweaksPage(
       controller: widget.controller,
       category: category,
-      onSafetyPrompt: _showRestorePointDialog,
+      onSafetyPrompt: _showConfirmDialog,
+    );
+  }
+
+  /// Startup screen. Listing each step with its own state is what tells the
+  /// user the app is working rather than hung on a slow hardware probe.
+  Widget _buildLoadingView(BuildContext context) {
+    final strings = AppLocalizations.of(context);
+    final locale = widget.controller.localeCode;
+    final current = widget.controller.loadingStatus;
+
+    return Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 380),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                const SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: ProgressRing(strokeWidth: 3),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    strings.startingUp,
+                    style: FluentTheme.of(context).typography.subtitle,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 18),
+            for (final step in TweakController.loadingSteps)
+              _buildLoadingStepRow(
+                context,
+                label: AppLocaleService.loadingStatus(locale, step),
+                done: widget.controller.isLoadingStepDone(step),
+                active: step == current,
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLoadingStepRow(
+    BuildContext context, {
+    required String label,
+    required bool done,
+    required bool active,
+  }) {
+    final theme = FluentTheme.of(context);
+    final Widget marker;
+    if (done) {
+      marker = Icon(FluentIcons.check_mark, size: 12, color: Colors.green);
+    } else if (active) {
+      marker = const SizedBox(
+        width: 12,
+        height: 12,
+        child: ProgressRing(strokeWidth: 2),
+      );
+    } else {
+      marker = Icon(
+        FluentIcons.circle_ring,
+        size: 10,
+        color: theme.inactiveColor.withValues(alpha: 0.35),
+      );
+    }
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5),
+      child: Row(
+        children: <Widget>[
+          SizedBox(width: 16, child: Center(child: marker)),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              label,
+              style: done || active
+                  ? theme.typography.body
+                  : theme.typography.body?.copyWith(
+                      color: theme.inactiveColor.withValues(alpha: 0.45),
+                    ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -584,7 +675,12 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
     }
   }
 
-  Future<bool> _showRestorePointDialog(String title, String message) async {
+  Future<bool> _showConfirmDialog(
+    String title,
+    String message, {
+    String? confirmLabel,
+    String? cancelLabel,
+  }) async {
     final dialogContext = _navigatorKey.currentContext;
     if (dialogContext == null) {
       return false;
@@ -599,12 +695,15 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
           actions: <Widget>[
             Button(
               onPressed: () => Navigator.of(dialogContext).pop(false),
-              child: Text(AppLocalizations.of(dialogContext).cancel),
+              child: Text(
+                cancelLabel ?? AppLocalizations.of(dialogContext).cancel,
+              ),
             ),
             FilledButton(
               onPressed: () => Navigator.of(dialogContext).pop(true),
               child: Text(
-                AppLocalizations.of(dialogContext).createRestorePoint,
+                confirmLabel ??
+                    AppLocalizations.of(dialogContext).continueAction,
               ),
             ),
           ],

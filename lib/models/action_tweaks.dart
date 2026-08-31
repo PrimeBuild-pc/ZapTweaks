@@ -174,6 +174,9 @@ class ExecutableLauncherTweak extends ActionSystemTweak {
   final List<String> arguments;
 
   @override
+  bool get requiresSafetyPrompt => false;
+
+  @override
   Future<void> onApply() async {
     try {
       final sourceExecutablePath = resolveResourceFilePath(executableSegments);
@@ -215,6 +218,9 @@ class DirectoryLauncherTweak extends ActionSystemTweak {
 
   final List<String> directorySegments;
   final String? launchExecutableRelativePath;
+
+  @override
+  bool get requiresSafetyPrompt => false;
 
   @override
   Future<void> onApply() async {
@@ -297,6 +303,9 @@ class ScriptInteractiveTweak extends ActionSystemTweak {
   final List<String> scriptSegments;
 
   @override
+  bool get requiresSafetyPrompt => isAggressive;
+
+  @override
   Future<void> onApply() async {
     _validateRelativeSegments(scriptSegments);
 
@@ -335,6 +344,9 @@ class ExternalUrlLauncherTweak extends ActionSystemTweak {
   final String url;
 
   @override
+  bool get requiresSafetyPrompt => false;
+
+  @override
   Future<void> onApply() async {
     final uri = Uri.tryParse(url);
     if (uri == null || uri.scheme != 'https' || uri.host.isEmpty) {
@@ -346,36 +358,6 @@ class ExternalUrlLauncherTweak extends ActionSystemTweak {
     ]);
     if (!result.success) {
       throw Exception('Unable to open URL: $url (${result.details})');
-    }
-  }
-}
-
-class PowerShellCommandTweak extends ActionSystemTweak {
-  PowerShellCommandTweak({
-    required super.id,
-    required super.title,
-    required super.description,
-    required super.category,
-    required this.command,
-    super.actionLabel = 'Run',
-    super.isAggressive,
-    super.warningMessage,
-  }) : super(type: TweakUiType.interactiveScript);
-
-  final String command;
-
-  @override
-  Future<void> onApply() async {
-    final result = await ProcessRunner.shared.run('powershell', <String>[
-      '-NoProfile',
-      '-ExecutionPolicy',
-      'Bypass',
-      '-Command',
-      command,
-    ], timeout: const Duration(minutes: 3));
-
-    if (!result.success) {
-      throw Exception('Failed to execute command (${result.details}).');
     }
   }
 }
@@ -395,6 +377,9 @@ class PowerShellTerminalCommandTweak extends ActionSystemTweak {
 
   final String command;
   final bool elevated;
+
+  @override
+  bool get requiresSafetyPrompt => isAggressive;
 
   @override
   Future<void> onApply() async {
@@ -437,6 +422,9 @@ class BatchScriptTweak extends ActionSystemTweak {
 
   final List<String> batchSegments;
   final List<String> arguments;
+
+  @override
+  bool get requiresSafetyPrompt => isAggressive;
 
   @override
   Future<void> onApply() async {
@@ -597,6 +585,9 @@ class ExplorerSelectFileTweak extends ActionSystemTweak {
 
   final List<String> fileSegments;
   final bool openWithDefaultApp;
+
+  @override
+  bool get requiresSafetyPrompt => false;
 
   @override
   Future<void> onApply() async {

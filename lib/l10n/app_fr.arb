@@ -74,7 +74,7 @@
   "restartRequiredDescription": "Un redémarrage du système est nécessaire pour appliquer complètement une ou plusieurs modifications.",
   "advancedActionsIncluded": "Actions avancées incluses",
   "advancedActionsDescription": "Les outils externes, les actions de lancement et les utilitaires basés sur des scripts sont regroupés ici pour des diagnostics rapides et des flux de travail de maintenance.",
-  "aggressiveTweakWarning": "Ajustement agressif. Un point de restauration est obligatoire.",
+  "aggressiveTweakWarning": "Ajustement agressif. Un point de restauration est recommandé.",
   "networkReconnectWarning": "Une reconnexion de la carte réseau ou un redémarrage du système peuvent être nécessaires.",
   "actionWarning": "Avertissement d'action",
   "unknownError": "Erreur inconnue.",
@@ -98,5 +98,11 @@
   "mice": "Souris",
   "noMice": "Aucune souris détectée",
   "keyboards": "Claviers",
-  "noKeyboards": "Aucun clavier détecté"
+  "noKeyboards": "Aucun clavier détecté",
+  "restorePointPromptTitle": "Créer un point de restauration ?",
+  "restorePointPromptMessage": "ZapTweaks peut créer un point de restauration Windows avant de modifier les paramètres système. C'est facultatif : si vous passez, la modification est appliquée quand même. La question n'est posée qu'une fois par session.",
+  "skip": "Passer",
+  "continueAction": "Continuer",
+  "tweaksSectionHeader": "RÉGLAGES",
+  "startingUp": "Démarrage de ZapTweaks"
 }

@@ -248,7 +248,7 @@ class AppLocalizationsZh extends AppLocalizations {
       '外部工具、启动器操作和脚本驱动的实用程序都集中在此处，以实现快速诊断和维护工作流程。';
 
   @override
-  String get aggressiveTweakWarning => '激进的调整。还原点是必需的。';
+  String get aggressiveTweakWarning => '激进的调整。建议创建还原点。';
 
   @override
   String get networkReconnectWarning => '可能需要重新连接网络适配器或重新启动系统。';
@@ -321,4 +321,23 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get noKeyboards => '未检测到键盘';
+
+  @override
+  String get restorePointPromptTitle => '创建还原点？';
+
+  @override
+  String get restorePointPromptMessage =>
+      'ZapTweaks 可以在更改系统设置前创建 Windows 还原点。这是可选的：跳过后仍会应用更改。每次运行只询问一次。';
+
+  @override
+  String get skip => '跳过';
+
+  @override
+  String get continueAction => '继续';
+
+  @override
+  String get tweaksSectionHeader => '优化项';
+
+  @override
+  String get startingUp => '正在启动 ZapTweaks';
 }

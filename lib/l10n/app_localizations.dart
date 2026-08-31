@@ -555,7 +555,7 @@ abstract class AppLocalizations {
   /// No description provided for @aggressiveTweakWarning.
   ///
   /// In en, this message translates to:
-  /// **'Aggressive tweak. A restore point is mandatory.'**
+  /// **'Aggressive tweak. A restore point is recommended.'**
   String get aggressiveTweakWarning;
 
   /// No description provided for @networkReconnectWarning.
@@ -701,6 +701,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No keyboards detected'**
   String get noKeyboards;
+
+  /// No description provided for @restorePointPromptTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a restore point?'**
+  String get restorePointPromptTitle;
+
+  /// No description provided for @restorePointPromptMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'ZapTweaks can create a Windows restore point before changing system settings. This is optional: skip it and the change is applied anyway. You are asked only once per session.'**
+  String get restorePointPromptMessage;
+
+  /// No description provided for @skip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get skip;
+
+  /// No description provided for @continueAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get continueAction;
+
+  /// No description provided for @tweaksSectionHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'TWEAKS'**
+  String get tweaksSectionHeader;
+
+  /// No description provided for @startingUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Starting ZapTweaks'**
+  String get startingUp;
 }
 
 class _AppLocalizationsDelegate

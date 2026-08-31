@@ -9,6 +9,11 @@ class HardwareDetectionService {
 
   final ProcessRunner _processRunner;
 
+  /// Detection runs as one PowerShell process. It is passed as a base64
+  /// -EncodedCommand, so the whole script must stay well under the 32767
+  /// character Windows command-line limit once encoded (roughly 12000 source
+  /// characters). Keep comments out of the string - they are payload.
+  /// `hardware_detection_script_test.dart` fails the build if it grows too far.
   static const String _detectionScript = r'''
 $ProgressPreference = 'SilentlyContinue'
 $ErrorActionPreference = 'SilentlyContinue'
@@ -57,25 +62,88 @@ function Get-NetworkDriverModel {
   return 'NDIS'
 }
 
-function Get-InputDevices {
-  param([string]$CimClass)
-  $named = @()
-  $fallback = @()
-  foreach ($device in (Get-CimInstance $CimClass)) {
-    $fallbackName = "$($device.Name)".Trim()
-    $name = ''
-    if ($device.PNPDeviceID) {
-      $properties = Get-PnpDeviceProperty -InstanceId "$($device.PNPDeviceID)" -KeyName DEVPKEY_Device_BusReportedDeviceDesc,DEVPKEY_Device_FriendlyName -ErrorAction SilentlyContinue
-      $name = @($properties | Where-Object { $_.Data } | ForEach-Object { "$($_.Data)".Trim() } | Where-Object { $_ } | Select-Object -First 1)[0]
+$genericNamePattern = '(?i)^(hid[- ]compliant|usb input device|usb composite|generic |standard |wireless (receiver|dongle)$|composite )'
+
+$usbRootCache = @{}
+$productNameCache = @{}
+$primaryProtocolCache = @{}
+
+function Get-UsbRootInstanceId {
+  param([string]$InstanceId)
+  if ($usbRootCache.ContainsKey($InstanceId)) { return $usbRootCache[$InstanceId] }
+  $current = $InstanceId
+  for ($i = 0; $i -lt 8; $i++) {
+    $parent = (Get-PnpDeviceProperty -InstanceId $current -KeyName DEVPKEY_Device_Parent -ErrorAction SilentlyContinue).Data
+    if (-not $parent -or $parent -notlike 'USB\VID_*') { break }
+    $current = $parent
+    if ($current -match '^USB\\VID_[0-9A-Fa-f]{4}&PID_[0-9A-Fa-f]{4}\\') { break }
+  }
+  $usbRootCache[$InstanceId] = $current
+  return $current
+}
+
+function Get-DeviceProductName {
+  param([string]$InstanceId)
+  if ([string]::IsNullOrWhiteSpace($InstanceId)) { return '' }
+  if ($productNameCache.ContainsKey($InstanceId)) { return $productNameCache[$InstanceId] }
+  $resolved = ''
+  $properties = Get-PnpDeviceProperty -InstanceId $InstanceId -KeyName DEVPKEY_Device_BusReportedDeviceDesc,DEVPKEY_Device_FriendlyName,DEVPKEY_Device_DeviceDesc -ErrorAction SilentlyContinue
+  foreach ($key in @('DEVPKEY_Device_BusReportedDeviceDesc','DEVPKEY_Device_FriendlyName','DEVPKEY_Device_DeviceDesc')) {
+    $value = "$(($properties | Where-Object { $_.KeyName -eq $key } | Select-Object -First 1).Data)".Trim()
+    if ($value -and $value -notmatch $genericNamePattern) { $resolved = $value; break }
+  }
+  $productNameCache[$InstanceId] = $resolved
+  return $resolved
+}
+
+function Get-PrimaryHidProtocol {
+  param([string]$RootInstanceId)
+  if ($RootInstanceId -notmatch 'VID_([0-9A-Fa-f]{4})&PID_([0-9A-Fa-f]{4})') { return '' }
+  $devicePrefix = "VID_$($Matches[1])&PID_$($Matches[2])&MI_"
+  if ($primaryProtocolCache.ContainsKey($devicePrefix)) { return $primaryProtocolCache[$devicePrefix] }
+  $primary = ''
+  $bestIndex = 99
+  try {
+    foreach ($k in (Get-ChildItem 'HKLM:\SYSTEM\CurrentControlSet\Enum\USB' -ErrorAction Stop | Where-Object { $_.PSChildName -like "$devicePrefix*" })) {
+      $index = 99
+      if ($k.PSChildName -match '&MI_([0-9A-Fa-f]{2})$') { $index = [Convert]::ToInt32($Matches[1], 16) }
+      if ($index -ge $bestIndex) { continue }
+      foreach ($inst in (Get-ChildItem $k.PSPath -ErrorAction SilentlyContinue)) {
+        foreach ($id in @((Get-ItemProperty $inst.PSPath -Name CompatibleIDs -ErrorAction SilentlyContinue).CompatibleIDs)) {
+          if ("$id" -match 'Class_03&SubClass_01&Prot_02') { $primary = 'Mouse'; $bestIndex = $index; break }
+          if ("$id" -match 'Class_03&SubClass_01&Prot_01') { $primary = 'Keyboard'; $bestIndex = $index; break }
+        }
+      }
     }
-    if ($name -and $name -notmatch '(?i)^HID-compliant|^USB Input Device') {
-      $named += $name
-    } elseif ($fallbackName) {
-      $fallback += $fallbackName
+  } catch {}
+  $primaryProtocolCache[$devicePrefix] = $primary
+  return $primary
+}
+
+function Get-InputDevices {
+  param([string]$DeviceClass)
+  $results = [ordered]@{}
+  try { $devices = @(Get-PnpDevice -Class $DeviceClass -PresentOnly -ErrorAction Stop) } catch { $devices = @() }
+  foreach ($device in $devices) {
+    if (-not $device.InstanceId) { continue }
+    $root = Get-UsbRootInstanceId $device.InstanceId
+    $primary = Get-PrimaryHidProtocol $root
+    if ($primary -and $primary -ne $DeviceClass) { continue }
+    $name = Get-DeviceProductName $root
+    if (-not $name) { $name = Get-DeviceProductName $device.InstanceId }
+    $vid = ''
+    $productId = ''
+    if ($root -match 'VID_([0-9A-Fa-f]{4})&PID_([0-9A-Fa-f]{4})') { $vid = $Matches[1].ToUpperInvariant(); $productId = $Matches[2].ToUpperInvariant() }
+    if (-not $results.Contains($root)) { $results[$root] = "$name|$vid|$productId" }
+  }
+  if ($results.Count -eq 0) {
+    $cimClass = if ($DeviceClass -eq 'Mouse') { 'Win32_PointingDevice' } else { 'Win32_Keyboard' }
+    foreach ($device in (Get-CimInstance $cimClass -ErrorAction SilentlyContinue)) {
+      $name = "$($device.Name)".Trim()
+      if ($name -and -not $results.Contains($name)) { $results[$name] = "$name||" }
     }
   }
-  if ($named.Count -gt 0) { return @($named | Sort-Object -Unique) }
-  return @($fallback | Sort-Object -Unique)
+  return @($results.Values | Sort-Object -Unique)
 }
 
 function Convert-WmiText {
@@ -129,6 +197,8 @@ $chipsetDrivers = @($signedDrivers.Values | Where-Object {
 $monitors = @(Get-CimInstance -Namespace root\wmi -ClassName WmiMonitorID | ForEach-Object {
   $name = Convert-WmiText $_.UserFriendlyName
   $manufacturer = Convert-WmiText $_.ManufacturerName
+  $name = "$name".Trim()
+  $manufacturer = "$manufacturer".Trim()
   if ($name -and $manufacturer) { "$manufacturer $name" } elseif ($name) { $name }
 } | Where-Object { $_ } | Sort-Object -Unique)
 if ($monitors.Count -eq 0) {
@@ -144,11 +214,69 @@ if ($monitors.Count -eq 0) {
   networkAdapters = $networkAdapters
   audioDevices = $audioDevices
   monitors = $monitors
-  mice = Get-InputDevices 'Win32_PointingDevice'
-  keyboards = Get-InputDevices 'Win32_Keyboard'
+  mice = Get-InputDevices 'Mouse'
+  keyboards = Get-InputDevices 'Keyboard'
   windowsBuild = if ($os.BuildNumber) { [int]$os.BuildNumber } else { 0 }
 } | ConvertTo-Json -Compress -Depth 4
 ''';
+
+  /// USB vendor IDs for peripheral makers, used to prefix a bare product
+  /// string with the brand. Only verified entries belong here: showing the
+  /// wrong brand is worse than showing none, so an unknown VID falls through to
+  /// the raw VID/PID instead of a guess.
+  static const Map<String, String> _usbVendors = <String, String>{
+    '046D': 'Logitech',
+    '1532': 'Razer',
+    '1B1C': 'Corsair',
+    '1038': 'SteelSeries',
+    '045E': 'Microsoft',
+    '0B05': 'ASUS',
+    '1E7D': 'ROCCAT',
+    '413C': 'Dell',
+    '17EF': 'Lenovo',
+    '05AC': 'Apple',
+    '0458': 'Genius',
+    '2717': 'Xiaomi',
+    '24AE': 'Rapoo',
+    '31E3': 'Wooting',
+    '3434': 'Keychron',
+    '0951': 'Kingston',
+    '03F0': 'HP',
+    '04F2': 'Chicony',
+    '3554': 'Compx',
+  };
+
+  /// Turns one `name|VID|PID` row from the detection script into the label
+  /// shown on the Home page.
+  static String formatInputDevice(String raw) {
+    final parts = raw.split('|');
+    var name = parts.isNotEmpty ? parts[0].trim() : '';
+    final vendorId = parts.length > 1 ? parts[1].trim().toUpperCase() : '';
+    final productId = parts.length > 2 ? parts[2].trim().toUpperCase() : '';
+    final vendor = _usbVendors[vendorId];
+
+    if (name.isNotEmpty &&
+        vendor != null &&
+        !name.toLowerCase().contains(vendor.toLowerCase())) {
+      name = '$vendor $name';
+    }
+    if (name.isEmpty) {
+      name = vendor ?? 'Unknown device';
+    }
+    // Unbranded devices keep their hardware ids so they stay identifiable.
+    if (vendorId.isNotEmpty && vendor == null) {
+      name = '$name [VID_$vendorId/PID_$productId]';
+    }
+    return name;
+  }
+
+  List<String> _inputDevices(Object? value) {
+    final seen = <String>{};
+    return _strings(value)
+        .map(formatInputDevice)
+        .where((entry) => entry.isNotEmpty && seen.add(entry))
+        .toList(growable: false);
+  }
 
   String _detectCpuVendor(String cpuName) {
     final normalized = cpuName.trim().toLowerCase();
@@ -205,8 +333,8 @@ if ($monitors.Count -eq 0) {
         gpuDrivers: _strings(decoded['gpuDrivers']),
         chipsetDrivers: _strings(decoded['chipsetDrivers']),
         monitors: _strings(decoded['monitors']),
-        mice: _strings(decoded['mice']),
-        keyboards: _strings(decoded['keyboards']),
+        mice: _inputDevices(decoded['mice']),
+        keyboards: _inputDevices(decoded['keyboards']),
         windowsBuild: (decoded['windowsBuild'] as num?)?.toInt() ?? 0,
       );
     } catch (_) {

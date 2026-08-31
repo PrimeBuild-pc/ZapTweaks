@@ -191,4 +191,34 @@ void main() {
       expect(result.stderr.toLowerCase(), contains('outside trusted roots'));
     });
   });
+  test('winget is an allowed system executable', () async {
+    var invoked = 0;
+
+    final runner = ProcessRunner(
+      loggingService: LoggingService.instance,
+      processRunDelegate:
+          (
+            String executable,
+            List<String> arguments, {
+            bool runInShell = false,
+          }) async {
+            invoked++;
+            return ProcessResult(0, 0, '', '');
+          },
+    );
+
+    final result = await runner.run('winget', <String>[
+      'install',
+      '--exact',
+      '--id',
+      'Microsoft.Sysinternals.Suite',
+    ]);
+
+    expect(
+      invoked,
+      1,
+      reason: 'blocking winget breaks every app restore and winget install',
+    );
+    expect(result.success, isTrue);
+  });
 }

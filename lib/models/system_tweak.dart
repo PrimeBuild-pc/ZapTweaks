@@ -37,6 +37,15 @@ abstract class SystemTweak {
 
   bool get hasState => type == TweakUiType.toggle;
 
+  /// True when the entry warrants the once-per-session restore-point prompt.
+  ///
+  /// Toggles and imports that ZapTweaks applies itself always do. Entries that
+  /// only open something (a download page, a bundled tool, a Windows settings
+  /// panel, a winget install) never do. Entries that hand a script off to a
+  /// terminal sit in between: they follow [isAggressive], so a diagnostic
+  /// read-out stays prompt-free while a debloat run does not.
+  bool get requiresSafetyPrompt => true;
+
   Future<void> runAction() => onApply();
 
   Future<void> runSilentPowerShell(String script, {bool elevated = false}) =>

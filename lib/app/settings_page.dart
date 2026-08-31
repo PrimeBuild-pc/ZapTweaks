@@ -4,7 +4,7 @@ import '../core/services/app_locale_service.dart';
 import '../features/tweaks/application/tweak_controller.dart';
 import '../l10n/app_localizations.dart';
 
-class SettingsPage extends StatelessWidget {
+class SettingsPage extends StatefulWidget {
   const SettingsPage({
     super.key,
     required this.controller,
@@ -17,6 +17,17 @@ class SettingsPage extends StatelessWidget {
   final Future<void> Function() onCheckForUpdates;
   final Future<void> Function() onInstallUpdate;
   final Future<void> Function() onViewRelease;
+
+  @override
+  State<SettingsPage> createState() => _SettingsPageState();
+}
+
+class _SettingsPageState extends State<SettingsPage> {
+  /// Set while a maintenance action runs, so the buttons show a spinner
+  /// instead of looking unresponsive.
+  bool _isRunningOperation = false;
+
+  TweakController get controller => widget.controller;
 
   @override
   Widget build(BuildContext context) {
@@ -97,30 +108,48 @@ class SettingsPage extends StatelessWidget {
               runSpacing: 8,
               children: <Widget>[
                 Button(
-                  onPressed: () =>
-                      _runOperation(context, controller.openLogFolder),
+                  onPressed: _isRunningOperation
+                      ? null
+                      : () => _runOperation(context, controller.openLogFolder),
                   child: Text(strings.openLogFolder),
                 ),
                 Button(
-                  onPressed: () =>
-                      _runOperation(context, controller.redetectSystemState),
+                  onPressed: _isRunningOperation
+                      ? null
+                      : () => _runOperation(
+                          context,
+                          controller.redetectSystemState,
+                        ),
                   child: Text(strings.redetectSystemState),
                 ),
                 Button(
-                  onPressed: () =>
-                      _runOperation(context, controller.exportProfile),
+                  onPressed: _isRunningOperation
+                      ? null
+                      : () => _runOperation(context, controller.exportProfile),
                   child: Text(strings.exportProfile),
                 ),
                 Button(
-                  onPressed: () =>
-                      _runOperation(context, controller.importProfile),
+                  onPressed: _isRunningOperation
+                      ? null
+                      : () => _runOperation(context, controller.importProfile),
                   child: Text(strings.importProfile),
                 ),
                 Button(
-                  onPressed: () =>
-                      _runOperation(context, controller.resetAppSettings),
+                  onPressed: _isRunningOperation
+                      ? null
+                      : () =>
+                            _runOperation(context, controller.resetAppSettings),
                   child: Text(strings.resetAppSettings),
                 ),
+                if (_isRunningOperation)
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+                    child: SizedBox(
+                      width: 18,
+                      height: 18,
+                      child: ProgressRing(strokeWidth: 2),
+                    ),
+                  ),
               ],
             ),
           ),
@@ -175,7 +204,7 @@ class SettingsPage extends StatelessWidget {
                     Button(
                       onPressed: controller.isCheckingForUpdates
                           ? null
-                          : onCheckForUpdates,
+                          : widget.onCheckForUpdates,
                       child: controller.isCheckingForUpdates
                           ? Row(
                               mainAxisSize: MainAxisSize.min,
@@ -193,13 +222,13 @@ class SettingsPage extends StatelessWidget {
                     ),
                     if (update != null) ...<Widget>[
                       Button(
-                        onPressed: onViewRelease,
+                        onPressed: widget.onViewRelease,
                         child: Text(strings.viewRelease),
                       ),
                       FilledButton(
                         onPressed: update.installerUrl == null
                             ? null
-                            : onInstallUpdate,
+                            : widget.onInstallUpdate,
                         child: Text(strings.updateNow),
                       ),
                     ],
@@ -263,7 +292,15 @@ class SettingsPage extends StatelessWidget {
     BuildContext context,
     Future<dynamic> Function() action,
   ) async {
-    final result = await action();
+    setState(() => _isRunningOperation = true);
+    final dynamic result;
+    try {
+      result = await action();
+    } finally {
+      if (mounted) {
+        setState(() => _isRunningOperation = false);
+      }
+    }
     if (!context.mounted) return;
     final strings = AppLocalizations.of(context);
     displayInfoBar(

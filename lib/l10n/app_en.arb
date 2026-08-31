@@ -109,7 +109,7 @@
   "restartRequiredDescription": "A system restart is required to fully apply one or more changes.",
   "advancedActionsIncluded": "Advanced actions included",
   "advancedActionsDescription": "External tools, launcher actions, and script-driven utilities are grouped here for quick diagnostics and maintenance workflows.",
-  "aggressiveTweakWarning": "Aggressive tweak. A restore point is mandatory.",
+  "aggressiveTweakWarning": "Aggressive tweak. A restore point is recommended.",
   "networkReconnectWarning": "Network adapter reconnect or system restart may be required.",
   "actionWarning": "Action warning",
   "unknownError": "Unknown error.",
@@ -133,5 +133,11 @@
   "mice": "Mice",
   "noMice": "No mice detected",
   "keyboards": "Keyboards",
-  "noKeyboards": "No keyboards detected"
+  "noKeyboards": "No keyboards detected",
+  "restorePointPromptTitle": "Create a restore point?",
+  "restorePointPromptMessage": "ZapTweaks can create a Windows restore point before changing system settings. This is optional: skip it and the change is applied anyway. You are asked only once per session.",
+  "skip": "Skip",
+  "continueAction": "Continue",
+  "tweaksSectionHeader": "TWEAKS",
+  "startingUp": "Starting ZapTweaks"
 }

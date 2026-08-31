@@ -74,7 +74,7 @@
   "restartRequiredDescription": "Es necesario reiniciar el sistema para aplicar completamente uno o más cambios.",
   "advancedActionsIncluded": "Acciones avanzadas incluidas",
   "advancedActionsDescription": "Aquí se agrupan herramientas externas, acciones del iniciador y utilidades basadas en scripts para diagnósticos rápidos y flujos de trabajo de mantenimiento.",
-  "aggressiveTweakWarning": "Ajuste agresivo. Un punto de restauración es obligatorio.",
+  "aggressiveTweakWarning": "Ajuste agresivo. Se recomienda un punto de restauración.",
   "networkReconnectWarning": "Es posible que sea necesario volver a conectar el adaptador de red o reiniciar el sistema.",
   "actionWarning": "Advertencia de acción",
   "unknownError": "Error desconocido.",
@@ -98,5 +98,11 @@
   "mice": "ratones",
   "noMice": "No se detectaron ratones",
   "keyboards": "Teclados",
-  "noKeyboards": "No se detectaron teclados"
+  "noKeyboards": "No se detectaron teclados",
+  "restorePointPromptTitle": "¿Crear un punto de restauración?",
+  "restorePointPromptMessage": "ZapTweaks puede crear un punto de restauración de Windows antes de cambiar la configuración del sistema. Es opcional: si lo omites, el cambio se aplica igualmente. Solo se pregunta una vez por sesión.",
+  "skip": "Omitir",
+  "continueAction": "Continuar",
+  "tweaksSectionHeader": "AJUSTES",
+  "startingUp": "Iniciando ZapTweaks"
 }

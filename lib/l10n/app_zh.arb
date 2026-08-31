@@ -74,7 +74,7 @@
   "restartRequiredDescription": "需要重新启动系统才能完全应用一项或多项更改。",
   "advancedActionsIncluded": "包括高级操作",
   "advancedActionsDescription": "外部工具、启动器操作和脚本驱动的实用程序都集中在此处，以实现快速诊断和维护工作流程。",
-  "aggressiveTweakWarning": "激进的调整。还原点是必需的。",
+  "aggressiveTweakWarning": "激进的调整。建议创建还原点。",
   "networkReconnectWarning": "可能需要重新连接网络适配器或重新启动系统。",
   "actionWarning": "动作警告",
   "unknownError": "未知错误。",
@@ -98,5 +98,11 @@
   "mice": "小鼠",
   "noMice": "未检测到老鼠",
   "keyboards": "键盘",
-  "noKeyboards": "未检测到键盘"
+  "noKeyboards": "未检测到键盘",
+  "restorePointPromptTitle": "创建还原点？",
+  "restorePointPromptMessage": "ZapTweaks 可以在更改系统设置前创建 Windows 还原点。这是可选的：跳过后仍会应用更改。每次运行只询问一次。",
+  "skip": "跳过",
+  "continueAction": "继续",
+  "tweaksSectionHeader": "优化项",
+  "startingUp": "正在启动 ZapTweaks"
 }

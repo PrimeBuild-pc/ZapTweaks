@@ -41,6 +41,13 @@ class AppLocaleService {
   static const Map<String, Map<String, String>> _loadingStatuses =
       <String, Map<String, String>>{
         'it': <String, String>{
+          'Checking administrator rights...':
+              'Verifica dei privilegi di amministratore...',
+          'Detecting hardware...': 'Rilevamento hardware...',
+          'Reading system tweak states...':
+              'Lettura degli stati dei tweak di sistema...',
+          'Reading script tweak states...':
+              'Lettura degli stati dei tweak da script...',
           'Initializing...': 'Inizializzazione...',
           'Initializing UI...': 'Inizializzazione interfaccia...',
           'Loading preferences...': 'Caricamento preferenze...',
@@ -51,6 +58,13 @@ class AppLocaleService {
           'Ready': 'Pronto',
         },
         'de': <String, String>{
+          'Checking administrator rights...':
+              'Administratorrechte werden geprüft...',
+          'Detecting hardware...': 'Hardware wird erkannt...',
+          'Reading system tweak states...':
+              'Zustände der System-Tweaks werden gelesen...',
+          'Reading script tweak states...':
+              'Zustände der Skript-Tweaks werden gelesen...',
           'Initializing...': 'Initialisierung...',
           'Initializing UI...': 'Benutzeroberfläche wird initialisiert...',
           'Loading preferences...': 'Einstellungen werden geladen...',
@@ -61,6 +75,13 @@ class AppLocaleService {
           'Ready': 'Bereit',
         },
         'es': <String, String>{
+          'Checking administrator rights...':
+              'Comprobando permisos de administrador...',
+          'Detecting hardware...': 'Detectando hardware...',
+          'Reading system tweak states...':
+              'Leyendo el estado de los ajustes del sistema...',
+          'Reading script tweak states...':
+              'Leyendo el estado de los ajustes por script...',
           'Initializing...': 'Inicializando...',
           'Initializing UI...': 'Inicializando la interfaz...',
           'Loading preferences...': 'Cargando preferencias...',
@@ -71,6 +92,13 @@ class AppLocaleService {
           'Ready': 'Listo',
         },
         'fr': <String, String>{
+          'Checking administrator rights...':
+              'Vérification des droits administrateur...',
+          'Detecting hardware...': 'Détection du matériel...',
+          'Reading system tweak states...':
+              'Lecture de l’état des réglages système...',
+          'Reading script tweak states...':
+              'Lecture de l’état des réglages par script...',
           'Initializing...': 'Initialisation...',
           'Initializing UI...': 'Initialisation de l’interface...',
           'Loading preferences...': 'Chargement des préférences...',
@@ -81,6 +109,12 @@ class AppLocaleService {
           'Ready': 'Prêt',
         },
         'ru': <String, String>{
+          'Checking administrator rights...': 'Проверка прав администратора...',
+          'Detecting hardware...': 'Определение оборудования...',
+          'Reading system tweak states...':
+              'Чтение состояний системных настроек...',
+          'Reading script tweak states...':
+              'Чтение состояний скриптовых настроек...',
           'Initializing...': 'Инициализация...',
           'Initializing UI...': 'Инициализация интерфейса...',
           'Loading preferences...': 'Загрузка настроек...',
@@ -91,6 +125,10 @@ class AppLocaleService {
           'Ready': 'Готово',
         },
         'zh': <String, String>{
+          'Checking administrator rights...': '正在检查管理员权限...',
+          'Detecting hardware...': '正在检测硬件...',
+          'Reading system tweak states...': '正在读取系统优化状态...',
+          'Reading script tweak states...': '正在读取脚本优化状态...',
           'Initializing...': '正在初始化...',
           'Initializing UI...': '正在初始化界面...',
           'Loading preferences...': '正在加载偏好设置...',

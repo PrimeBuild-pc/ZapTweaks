@@ -74,7 +74,7 @@
   "restartRequiredDescription": "Per applicare completamente una o più modifiche è necessario il riavvio del sistema.",
   "advancedActionsIncluded": "Azioni avanzate incluse",
   "advancedActionsDescription": "Strumenti esterni, azioni di avvio e utilità basate su script sono raggruppati qui per flussi di lavoro di diagnostica e manutenzione rapidi.",
-  "aggressiveTweakWarning": "Modifica aggressiva. Un punto di ripristino è obbligatorio.",
+  "aggressiveTweakWarning": "Modifica aggressiva. Un punto di ripristino è consigliato.",
   "networkReconnectWarning": "Potrebbe essere necessaria la riconnessione dell'adattatore di rete o il riavvio del sistema.",
   "actionWarning": "Avviso di azione",
   "unknownError": "Errore sconosciuto.",
@@ -98,5 +98,11 @@
   "mice": "Mouse",
   "noMice": "Nessun mouse rilevato",
   "keyboards": "Tastiere",
-  "noKeyboards": "Nessuna tastiera rilevata"
+  "noKeyboards": "Nessuna tastiera rilevata",
+  "restorePointPromptTitle": "Creare un punto di ripristino?",
+  "restorePointPromptMessage": "ZapTweaks può creare un punto di ripristino di Windows prima di modificare le impostazioni di sistema. È facoltativo: se lo salti la modifica viene applicata comunque. La richiesta compare una sola volta per sessione.",
+  "skip": "Salta",
+  "continueAction": "Continua",
+  "tweaksSectionHeader": "TWEAK",
+  "startingUp": "Avvio di ZapTweaks"
 }
