@@ -43,6 +43,8 @@ dependencies:
   http: ^1.2.2
   system_theme: ^3.2.0
   flutter_svg: ^2.2.3
+  sqlite3: ^3.0.0
+  crypto: ^3.0.0
 
 dev_dependencies:
   flutter_test:
@@ -66,6 +68,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/icons/
+    - assets/catalog/legacy_catalog.json
 
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a

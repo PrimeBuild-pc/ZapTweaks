@@ -23,6 +23,7 @@ import '../../../core/services/safety_gate_service.dart';
 import '../../../core/services/system_action_service.dart';
 import '../../../core/services/tweak_catalog_service.dart';
 import '../../../core/tweak_manager.dart';
+import '../../../legacy/adapters/legacy_catalog_adapter.dart';
 import '../../../models/system_tweak.dart';
 
 class TweakController extends ChangeNotifier {
@@ -39,6 +40,7 @@ class TweakController extends ChangeNotifier {
     required String appVersion,
     LoggingService? loggingService,
     PowerPlanService? powerPlanService,
+    Future<LegacyCatalogAdapter> Function()? legacyCatalogAdapterLoader,
   }) : _tweakManager = tweakManager,
        _permissionService = permissionService,
        _hardwareDetectionService = hardwareDetectionService,
@@ -55,7 +57,10 @@ class TweakController extends ChangeNotifier {
              processRunner: processRunner,
            ),
        _appVersion = appVersion,
-       _loggingService = loggingService ?? LoggingService.instance;
+       _loggingService = loggingService ?? LoggingService.instance,
+       _legacyCatalogAdapterLoader =
+           legacyCatalogAdapterLoader ??
+           (() async => LegacyCatalogAdapter.identity);
 
   final TweakManager _tweakManager;
   final PermissionService _permissionService;
@@ -69,6 +74,7 @@ class TweakController extends ChangeNotifier {
   final PowerPlanService _powerPlanService;
   final String _appVersion;
   final LoggingService _loggingService;
+  final Future<LegacyCatalogAdapter> Function() _legacyCatalogAdapterLoader;
 
   static const String defaultPreset = 'Default';
   static const String safePreset = 'Safe';
@@ -82,6 +88,7 @@ class TweakController extends ChangeNotifier {
   static const String _expandedCollectionsKey = 'expandedCollections';
   static const String _localeCodeKey = AppLocaleService.preferenceKey;
   static const String _startWithWindowsKey = 'startWithWindows';
+  static const String _expertModeKey = 'expertMode';
   static const int _maxMetricsPoints = 40;
   static const Set<String> _interactionLockingTweaks = <String>{
     'network_low_latency_bandwidth_profile',
@@ -91,7 +98,8 @@ class TweakController extends ChangeNotifier {
   bool _isAdmin = false;
   bool _needsRestart = false;
   HardwareProfile _hardwareProfile = HardwareProfile.unknown;
-  String _selectedCategory = TweakCatalogService.navigationCategories.first;
+  String _selectedCategory =
+      TweakCatalogService.oneAppNavigationCategories.first;
 
   final Map<String, bool> _toggleStates = <String, bool>{};
   final Set<String> _busyTweaks = <String>{};
@@ -102,6 +110,8 @@ class TweakController extends ChangeNotifier {
   bool _isSystemOperationActive = false;
   bool _automaticUpdateChecksEnabled = true;
   bool _startWithWindows = false;
+  bool _expertModeEnabled = false;
+  String _searchQuery = '';
   String _localeCode = AppLocaleService.systemCode();
   bool _isCheckingForUpdates = false;
   UpdateInfo? _availableUpdate;
@@ -142,16 +152,17 @@ class TweakController extends ChangeNotifier {
   String get selectedCategory => _selectedCategory;
   Map<String, bool> get toggleStates => _toggleStates;
   Set<String> get busyTweaks => _busyTweaks;
-  List<String> get categories => const <String>[
-    ...TweakCatalogService.navigationCategories,
-    settingsCategory,
-  ];
+  List<String> get categories => TweakCatalogService.oneAppNavigationCategories
+      .where((category) => category != 'Expert' || _expertModeEnabled)
+      .toList(growable: false);
   bool get isDryRunMode => _processRunner.isDryRun;
   String get loadingStatus => _loadingStatus;
   bool isLoadingStepDone(String step) => _completedLoadingSteps.contains(step);
   String get appVersion => _appVersion;
   bool get automaticUpdateChecksEnabled => _automaticUpdateChecksEnabled;
   bool get startWithWindows => _startWithWindows;
+  bool get expertModeEnabled => _expertModeEnabled;
+  String get searchQuery => _searchQuery;
   String get localeCode => _localeCode;
   bool get isCheckingForUpdates => _isCheckingForUpdates;
   bool get isUpdateAvailable => _availableUpdate != null;
@@ -228,8 +239,34 @@ class TweakController extends ChangeNotifier {
 
   List<TweakDescriptor> categoryTweaks(String category) {
     return _catalog
-        .where((descriptor) => descriptor.category == category)
+        .where(
+          (descriptor) =>
+              descriptor.category == category && !descriptor.isAlias,
+        )
         .toList(growable: false);
+  }
+
+  List<TweakDescriptor> searchTweaks(String query) {
+    final normalized = query.trim().toLowerCase();
+    if (normalized.isEmpty) return const <TweakDescriptor>[];
+
+    final byId = <String, TweakDescriptor>{
+      for (final descriptor in _catalog) descriptor.id: descriptor,
+    };
+    final results = <String, TweakDescriptor>{};
+    for (final descriptor in _catalog) {
+      if (!_expertModeEnabled && descriptor.category == 'Expert') continue;
+      final haystack =
+          '${descriptor.id} ${descriptor.title} '
+                  '${descriptor.description}'
+              .toLowerCase();
+      if (!haystack.contains(normalized)) continue;
+      final resolved = descriptor.aliasTarget == null
+          ? descriptor
+          : (byId[descriptor.aliasTarget!] ?? descriptor);
+      results[resolved.id] = resolved;
+    }
+    return results.values.toList(growable: false);
   }
 
   Future<void> initialize() async {
@@ -246,13 +283,15 @@ class TweakController extends ChangeNotifier {
       _automaticUpdateChecksEnabled =
           _preferences.getBool(_automaticUpdateChecksKey) ?? true;
       _startWithWindows = _preferences.getBool(_startWithWindowsKey) ?? false;
+      _expertModeEnabled = _preferences.getBool(_expertModeKey) ?? false;
       _localeCode = AppLocaleService.normalize(
         _preferences.getString(_localeCodeKey) ?? AppLocaleService.systemCode(),
       );
 
       _completeLoadingStep('Loading preferences...');
       _beginLoadingStep('Loading tweaks catalog...');
-      _catalog = _tweakCatalogService.buildCatalog();
+      final adapter = await _legacyCatalogAdapterLoader();
+      _catalog = adapter.adapt(_tweakCatalogService.buildCatalog());
       unawaited(
         _loggingService.logInfo(
           'Loaded ${_catalog.length} tweak catalog entries.',
@@ -391,15 +430,30 @@ class TweakController extends ChangeNotifier {
   }
 
   void selectCategory(String category) {
-    if (_selectedCategory == category) {
-      return;
-    }
-
+    if (!categories.contains(category) || _selectedCategory == category) return;
     _selectedCategory = category;
+    _searchQuery = '';
+    notifyListeners();
+  }
+
+  void setSearchQuery(String query) {
+    if (_searchQuery == query) return;
+    _searchQuery = query;
+    notifyListeners();
+  }
+
+  Future<void> setExpertModeEnabled(bool enabled) async {
+    if (_expertModeEnabled == enabled) return;
+    _expertModeEnabled = enabled;
+    await _preferences.setBool(_expertModeKey, enabled);
+    if (!enabled && _selectedCategory == 'Expert') {
+      _selectedCategory = TweakCatalogService.oneAppNavigationCategories.first;
+    }
     notifyListeners();
   }
 
   bool isDescriptorAvailable(TweakDescriptor descriptor) {
+    if (descriptor.isRejected) return false;
     if (_isDescriptorEnabled(descriptor)) {
       return true;
     }
@@ -436,6 +490,9 @@ class TweakController extends ChangeNotifier {
   }
 
   String availabilityHint(TweakDescriptor descriptor) {
+    if (descriptor.isRejected) {
+      return 'Documented for compatibility, but intentionally not automated.';
+    }
     if (descriptor.requiredCpuVendor != null &&
         !_hardwareProfile.supportsCpu(descriptor.requiredCpuVendor)) {
       return 'Available only on ${descriptor.requiredCpuVendor!.toUpperCase()} CPUs.';
@@ -855,6 +912,8 @@ class TweakController extends ChangeNotifier {
       _processRunner.setMode(ProcessExecutionMode.production);
       _automaticUpdateChecksEnabled = true;
       _startWithWindows = false;
+      _expertModeEnabled = false;
+      _searchQuery = '';
       _localeCode = AppLocaleService.systemCode();
       _needsRestart = false;
       _selectedPresets.clear();
@@ -931,6 +990,7 @@ class TweakController extends ChangeNotifier {
       _restorePresetSelections();
       _automaticUpdateChecksEnabled =
           _preferences.getBool(_automaticUpdateChecksKey) ?? true;
+      _expertModeEnabled = _preferences.getBool(_expertModeKey) ?? false;
       _localeCode = AppLocaleService.normalize(
         _preferences.getString(_localeCodeKey),
       );

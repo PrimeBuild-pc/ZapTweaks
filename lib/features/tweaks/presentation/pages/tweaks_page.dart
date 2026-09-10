@@ -14,10 +14,12 @@ class TweaksPage extends StatefulWidget {
     required this.controller,
     required this.category,
     required this.onSafetyPrompt,
+    this.descriptors,
   });
 
   final TweakController controller;
   final String category;
+  final List<TweakDescriptor>? descriptors;
   final Future<bool> Function(
     String title,
     String message, {
@@ -39,15 +41,10 @@ class TweaksPage extends StatefulWidget {
 class _TweaksPageState extends State<TweaksPage> {
   bool _bannerDismissed = false;
 
-  static const Set<String> _presetHiddenCategories = <String>{
-    'Tools',
-    'Refresh & Recovery',
-    'Setup',
-  };
-
   @override
   Widget build(BuildContext context) {
-    final tweaks = widget.controller.categoryTweaks(widget.category);
+    final tweaks =
+        widget.descriptors ?? widget.controller.categoryTweaks(widget.category);
     final availableTweaks = tweaks
         .where(widget.controller.isDescriptorAvailable)
         .toList(growable: false);
@@ -59,122 +56,12 @@ class _TweaksPageState extends State<TweaksPage> {
     }
 
     final strings = AppLocalizations.of(context);
-    final showPresets =
-        widget.controller.categoryHasToggleableItems(widget.category) &&
-        !_presetHiddenCategories.contains(widget.category);
-    final showBulkActions = widget.controller.categoryHasToggleableItems(
-      widget.category,
-      systemOnly: true,
-    );
-    const categoriesWithoutHardwareBanner = <String>{
-      'Visuals',
-      'Privacy',
-      'Advanced',
-      'Windows',
-      'Networking',
-      'Gaming',
-    };
-    final showHardwareBanner =
-        showBulkActions &&
-        !categoriesWithoutHardwareBanner.contains(widget.category);
-    final categoryBusy = widget.controller.isPresetBusy(widget.category);
 
     return ListView(
       padding: const EdgeInsets.all(16),
       children: <Widget>[
-        if (widget.category == 'Power & CPU') ...<Widget>[
+        if (widget.category == 'Gaming & Performance') ...<Widget>[
           PowerPlanPicker(controller: widget.controller),
-          const SizedBox(height: 12),
-        ],
-        if (showPresets) ...<Widget>[
-          _buildPresetsCard(context),
-          const SizedBox(height: 12),
-        ],
-        if (showHardwareBanner) ...<Widget>[
-          Card(
-            child: Padding(
-              padding: const EdgeInsets.all(14),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    strings.detectedHardware,
-                    style: FluentTheme.of(context).typography.bodyStrong,
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    strings.cpuValue(widget.controller.hardwareProfile.cpuName),
-                  ),
-                  Text(
-                    widget.controller.hardwareProfile.gpuNames.isEmpty
-                        ? strings.gpuUnknown
-                        : strings.gpuValue(
-                            widget.controller.hardwareProfile.gpuNames.join(
-                              ' | ',
-                            ),
-                          ),
-                  ),
-                  Text(
-                    strings.ramValue(
-                      widget.controller.hardwareProfile.ramInstalledLabel,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(height: 12),
-        ],
-        if (showBulkActions) ...<Widget>[
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            crossAxisAlignment: WrapCrossAlignment.center,
-            children: <Widget>[
-              FilledButton(
-                onPressed: categoryBusy
-                    ? null
-                    : () async {
-                        final result = await widget.controller.setAllInCategory(
-                          widget.category,
-                          true,
-                          confirmRestorePoint: _promptRestorePoint,
-                        );
-                        _reportFailure(result.success, result.message);
-                      },
-                child: Text(strings.enableAllVisible),
-              ),
-              Button(
-                onPressed: categoryBusy
-                    ? null
-                    : () async {
-                        final result = await widget.controller.setAllInCategory(
-                          widget.category,
-                          false,
-                          confirmRestorePoint: _promptRestorePoint,
-                        );
-                        _reportFailure(result.success, result.message);
-                      },
-                child: Text(strings.disableAllVisible),
-              ),
-              if (categoryBusy)
-                const SizedBox(
-                  width: 18,
-                  height: 18,
-                  child: ProgressRing(strokeWidth: 2),
-                ),
-              if (widget.controller.needsRestart)
-                FilledButton(
-                  child: Text(strings.restartNow),
-                  onPressed: () async {
-                    await widget.controller.restartSystem();
-                    if (mounted) {
-                      setState(() => _bannerDismissed = false);
-                    }
-                  },
-                ),
-            ],
-          ),
           const SizedBox(height: 12),
         ],
         if (widget.controller.needsRestart && !_bannerDismissed)
@@ -512,85 +399,6 @@ class _TweaksPageState extends State<TweaksPage> {
             child: Text(AppLocalizations.of(context).close),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildPresetsCard(BuildContext context) {
-    final presets = widget.controller.presetsForCategory(widget.category);
-    final selectedPreset = widget.controller.selectedPresetForCategory(
-      widget.category,
-    );
-
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(14),
-        child: Row(
-          children: <Widget>[
-            Text(
-              AppLocalizations.of(context).presets,
-              style: FluentTheme.of(context).typography.bodyStrong,
-            ),
-            const SizedBox(width: 12),
-            if (presets.length == 1)
-              Text(presets.first)
-            else
-              ComboBox<String>(
-                value: selectedPreset,
-                items: presets
-                    .map(
-                      (preset) => ComboBoxItem<String>(
-                        value: preset,
-                        child: Text(preset),
-                      ),
-                    )
-                    .toList(growable: false),
-                onChanged: widget.controller.isPresetBusy(widget.category)
-                    ? null
-                    : (nextPreset) async {
-                        if (nextPreset == null ||
-                            nextPreset == selectedPreset) {
-                          return;
-                        }
-
-                        final result = await widget.controller
-                            .applyPresetToCategory(
-                              widget.category,
-                              nextPreset,
-                              confirmRestorePoint: _promptRestorePoint,
-                            );
-
-                        if (!result.success && context.mounted) {
-                          displayInfoBar(
-                            context,
-                            builder: (_, close) => InfoBar(
-                              title: Text(
-                                AppLocalizations.of(context).presetFailed,
-                              ),
-                              content: Text(
-                                result.message ??
-                                    AppLocalizations.of(context).unknownError,
-                              ),
-                              action: IconButton(
-                                icon: const Icon(FluentIcons.clear),
-                                onPressed: close,
-                              ),
-                              severity: InfoBarSeverity.error,
-                            ),
-                          );
-                        }
-                      },
-              ),
-            if (widget.controller.isPresetBusy(widget.category)) ...<Widget>[
-              const SizedBox(width: 12),
-              const SizedBox(
-                width: 18,
-                height: 18,
-                child: ProgressRing(strokeWidth: 2),
-              ),
-            ],
-          ],
-        ),
       ),
     );
   }

@@ -139,5 +139,9 @@
   "skip": "Skip",
   "continueAction": "Continue",
   "tweaksSectionHeader": "TWEAKS",
-  "startingUp": "Starting ZapTweaks"
+  "startingUp": "Starting ZapTweaks",
+  "expertMode": "Expert mode",
+  "expertModeDescription": "Show advanced operations and external tools. Safety restrictions still apply.",
+  "searchOperations": "Search operations",
+  "searchResults": "Search results"
 }

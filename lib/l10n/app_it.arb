@@ -104,5 +104,9 @@
   "skip": "Salta",
   "continueAction": "Continua",
   "tweaksSectionHeader": "TWEAK",
-  "startingUp": "Avvio di ZapTweaks"
+  "startingUp": "Avvio di ZapTweaks",
+  "expertMode": "Modalità esperto",
+  "expertModeDescription": "Mostra operazioni avanzate e tool esterni. Le restrizioni di sicurezza restano attive.",
+  "searchOperations": "Cerca operazioni",
+  "searchResults": "Risultati della ricerca"
 }

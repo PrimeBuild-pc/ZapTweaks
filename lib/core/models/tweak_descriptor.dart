@@ -15,6 +15,8 @@ class TweakDescriptor {
     this.conflictingTweakIds = const <String>{},
     this.systemKey,
     this.scriptTweak,
+    this.migrationDisposition = 'legacy',
+    this.aliasTarget,
   });
 
   final String id;
@@ -33,8 +35,36 @@ class TweakDescriptor {
   final Set<String> conflictingTweakIds;
   final String? systemKey;
   final SystemTweak? scriptTweak;
+  final String migrationDisposition;
+  final String? aliasTarget;
 
   bool get isSystemToggle => systemKey != null;
   bool get isScriptToggle => scriptTweak != null && scriptTweak!.hasState;
   bool get isScriptAction => scriptTweak != null && !scriptTweak!.hasState;
+  bool get isAlias => migrationDisposition == 'alias';
+  bool get isRejected => migrationDisposition == 'rejected';
+
+  TweakDescriptor copyWith({
+    String? category,
+    String? migrationDisposition,
+    String? aliasTarget,
+  }) {
+    return TweakDescriptor(
+      id: id,
+      title: title,
+      description: description,
+      category: category ?? this.category,
+      collection: collection,
+      isAggressive: isAggressive,
+      restartRequired: restartRequired,
+      requiredCpuVendor: requiredCpuVendor,
+      requiredGpuVendors: requiredGpuVendors,
+      minimumWindowsBuild: minimumWindowsBuild,
+      conflictingTweakIds: conflictingTweakIds,
+      systemKey: systemKey,
+      scriptTweak: scriptTweak,
+      migrationDisposition: migrationDisposition ?? this.migrationDisposition,
+      aliasTarget: aliasTarget ?? this.aliasTarget,
+    );
+  }
 }

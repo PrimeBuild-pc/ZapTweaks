@@ -355,4 +355,17 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get startingUp => 'ZapTweaks wird gestartet';
+
+  @override
+  String get expertMode => 'Expert mode';
+
+  @override
+  String get expertModeDescription =>
+      'Show advanced operations and external tools. Safety restrictions still apply.';
+
+  @override
+  String get searchOperations => 'Search operations';
+
+  @override
+  String get searchResults => 'Search results';
 }

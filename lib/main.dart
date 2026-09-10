@@ -20,6 +20,7 @@ import 'core/services/system_action_service.dart';
 import 'core/services/tweak_catalog_service.dart';
 import 'core/tweak_manager.dart';
 import 'features/tweaks/application/tweak_controller.dart';
+import 'legacy/adapters/legacy_catalog_adapter.dart';
 
 Future<void> _initWindowIfNeeded() async {
   if (!Platform.isWindows) {
@@ -42,6 +43,7 @@ Future<void> main() async {
   ]);
 
   final prefs = bootstrapResults[2] as SharedPreferences;
+  final legacyCatalogAdapter = await LegacyCatalogAdapter.load();
 
   await LoggingService.instance.logInfo(
     'Application startup sequence started.',
@@ -76,6 +78,7 @@ Future<void> main() async {
     processRunner: processRunner,
     loggingService: LoggingService.instance,
     appVersion: AppMetadata.semanticVersion,
+    legacyCatalogAdapterLoader: () async => legacyCatalogAdapter,
   );
 
   runApp(ZapTweaksApp(controller: controller));

@@ -200,6 +200,32 @@ void main() {
     await tester.pump(const Duration(milliseconds: 150));
   });
 
+  test('Expert navigation is opt-in and persisted', () async {
+    final controller = await _buildController();
+    addTearDown(controller.dispose);
+    await controller.initialize();
+
+    expect(controller.categories, isNot(contains('Expert')));
+    expect(controller.categories, <String>[
+      'Home',
+      'Guided Setup',
+      'Apps',
+      'Drivers',
+      'Gaming & Performance',
+      'Windows',
+      'Diagnostics & Recovery',
+      'Settings',
+    ]);
+
+    await controller.setExpertModeEnabled(true);
+
+    expect(controller.categories, contains('Expert'));
+    expect(
+      (await SharedPreferences.getInstance()).getBool('expertMode'),
+      isTrue,
+    );
+  });
+
   test('every startup step is reported and completed', () async {
     final controller = await _buildController();
 

@@ -1,0 +1,2821 @@
+{
+  "schemaVersion": 1,
+  "source": "docs/NEW PLAN.md#allegato-a--matrice-vincolante-dei-346-id-legacy",
+  "invariants": {
+    "legacyIdCount": 346,
+    "externalLegacyIds": 78,
+    "scriptVariantTitles": 37,
+    "directAliasCandidates": 23,
+    "destinations": {
+      "App": 32,
+      "Diagnostica & Ripristino": 20,
+      "Driver": 10,
+      "Esperto": 118,
+      "Gaming & Prestazioni": 70,
+      "Setup guidato": 10,
+      "Windows": 86
+    },
+    "dispositions": {
+      "alias": 23,
+      "external": 78,
+      "legacy": 28,
+      "legacyToNative": 68,
+      "native": 115,
+      "rejected": 1,
+      "shortcut": 33
+    }
+  },
+  "entries": [
+    {
+      "index": 1,
+      "id": "shortcut_advanced_system_settings",
+      "title": "Advanced System Settings",
+      "destination": "Windows",
+      "disposition": "shortcut",
+      "target": "launcher Windows nativo"
+    },
+    {
+      "index": 2,
+      "id": "shortcut_bluetooth",
+      "title": "Bluetooth and devices",
+      "destination": "Windows",
+      "disposition": "shortcut",
+      "target": "launcher Windows nativo"
+    },
+    {
+      "index": 3,
+      "id": "shortcut_computer_management",
+      "title": "Computer Management",
+      "destination": "Diagnostica & Ripristino",
+      "disposition": "shortcut",
+      "target": "launcher Windows nativo"
+    },
+    {
+      "index": 4,
+      "id": "shortcut_device_manager",
+      "title": "Device Manager",
+      "destination": "Driver",
+      "disposition": "shortcut",
+      "target": "launcher Windows nativo"
+    },
+    {
+      "index": 5,
+      "id": "shortcut_directx_diagnostic",
+      "title": "DirectX Diagnostic",
+      "destination": "Diagnostica & Ripristino",
+      "disposition": "shortcut",
+      "target": "launcher Windows nativo"
+    },
+    {
+      "index": 6,
+      "id": "shortcut_disk_management",
+      "title": "Disk Management",
+      "destination": "Diagnostica & Ripristino",
+      "disposition": "shortcut",
+      "target": "launcher Windows nativo"
+    },
+    {
+      "index": 7,
+      "id": "shortcut_display",
+      "title": "Display",
+      "destination": "Windows",
+      "disposition": "shortcut",
+      "target": "launcher Windows nativo"
+    },
+    {
+      "index": 8,
+      "id": "shortcut_environment_variables",
+      "title": "Environment Variables",
+      "destination": "Esperto",
+      "disposition": "shortcut",
+      "target": "launcher Windows nativo"
+    },
+    {
+      "index": 9,
+      "id": "shortcut_event_viewer",
+      "title": "Event Viewer",
+      "destination": "Diagnostica & Ripristino",
+      "disposition": "shortcut",
+      "target": "launcher Windows nativo"
+    },
+    {
+      "index": 10,
+      "id": "shortcut_game_mode",
+      "title": "Game Mode Settings",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "shortcut",
+      "target": "launcher Windows nativo"
+    },
+    {
+      "index": 11,
+      "id": "shortcut_graphics_settings",
+      "title": "Graphics Settings",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "shortcut",
+      "target": "launcher Windows nativo"
+    },
+    {
+      "index": 12,
+      "id": "shortcut_hosts_file",
+      "title": "Hosts File",
+      "destination": "Esperto",
+      "disposition": "shortcut",
+      "target": "launcher Windows nativo"
+    },
+    {
+      "index": 13,
+      "id": "shortcut_installed_apps",
+      "title": "Installed Apps",
+      "destination": "App",
+      "disposition": "shortcut",
+      "target": "launcher Windows nativo"
+    },
+    {
+      "index": 14,
+      "id": "shortcut_network",
+      "title": "Network",
+      "destination": "Windows",
+      "disposition": "shortcut",
+      "target": "launcher Windows nativo"
+    },
+    {
+      "index": 15,
+      "id": "shortcut_optional_features",
+      "title": "Optional Features",
+      "destination": "Windows",
+      "disposition": "shortcut",
+      "target": "launcher Windows nativo"
+    },
+    {
+      "index": 16,
+      "id": "shortcut_performance_monitor",
+      "title": "Performance Monitor",
+      "destination": "Diagnostica & Ripristino",
+      "disposition": "shortcut",
+      "target": "launcher Windows nativo"
+    },
+    {
+      "index": 17,
+      "id": "shortcut_personalization",
+      "title": "Personalization",
+      "destination": "Windows",
+      "disposition": "shortcut",
+      "target": "launcher Windows nativo"
+    },
+    {
+      "index": 18,
+      "id": "shortcut_power_battery",
+      "title": "Power and battery",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "shortcut",
+      "target": "launcher Windows nativo"
+    },
+    {
+      "index": 19,
+      "id": "shortcut_privacy_security",
+      "title": "Privacy and security",
+      "destination": "Windows",
+      "disposition": "shortcut",
+      "target": "launcher Windows nativo"
+    },
+    {
+      "index": 20,
+      "id": "shortcut_registry_editor",
+      "title": "Registry Editor",
+      "destination": "Esperto",
+      "disposition": "shortcut",
+      "target": "launcher Windows nativo"
+    },
+    {
+      "index": 21,
+      "id": "shortcut_reliability_history",
+      "title": "Reliability History",
+      "destination": "Diagnostica & Ripristino",
+      "disposition": "shortcut",
+      "target": "launcher Windows nativo"
+    },
+    {
+      "index": 22,
+      "id": "shortcut_resource_monitor",
+      "title": "Resource Monitor",
+      "destination": "Diagnostica & Ripristino",
+      "disposition": "shortcut",
+      "target": "launcher Windows nativo"
+    },
+    {
+      "index": 23,
+      "id": "shortcut_services",
+      "title": "Services",
+      "destination": "Windows",
+      "disposition": "shortcut",
+      "target": "launcher Windows nativo"
+    },
+    {
+      "index": 24,
+      "id": "shortcut_sound",
+      "title": "Sound",
+      "destination": "Windows",
+      "disposition": "shortcut",
+      "target": "launcher Windows nativo"
+    },
+    {
+      "index": 25,
+      "id": "shortcut_startup_folder",
+      "title": "Startup Folder",
+      "destination": "Windows",
+      "disposition": "shortcut",
+      "target": "launcher Windows nativo"
+    },
+    {
+      "index": 26,
+      "id": "shortcut_system_configuration",
+      "title": "System Configuration",
+      "destination": "Esperto",
+      "disposition": "shortcut",
+      "target": "launcher Windows nativo"
+    },
+    {
+      "index": 27,
+      "id": "shortcut_task_scheduler",
+      "title": "Task Scheduler",
+      "destination": "Esperto",
+      "disposition": "shortcut",
+      "target": "launcher Windows nativo"
+    },
+    {
+      "index": 28,
+      "id": "shortcut_windows_features",
+      "title": "Windows Features",
+      "destination": "Windows",
+      "disposition": "shortcut",
+      "target": "launcher Windows nativo"
+    },
+    {
+      "index": 29,
+      "id": "shortcut_windows_update",
+      "title": "Windows Update",
+      "destination": "Windows",
+      "disposition": "shortcut",
+      "target": "launcher Windows nativo"
+    },
+    {
+      "index": 30,
+      "id": "cpu_amd_optimizations",
+      "title": "AMD Ryzen Optimizations",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "legacy",
+      "target": "scomporre il toggle composito in operation atomiche; conservare l’ID come ricetta di compatibilità"
+    },
+    {
+      "index": 31,
+      "id": "cpu_unparking",
+      "title": "CPU Core Unparking",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "legacy",
+      "target": "scomporre il toggle composito in operation atomiche; conservare l’ID come ricetta di compatibilità"
+    },
+    {
+      "index": 32,
+      "id": "cpu_power_management",
+      "title": "CPU Power Management",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "legacy",
+      "target": "scomporre il toggle composito in operation atomiche; conservare l’ID come ricetta di compatibilità"
+    },
+    {
+      "index": 33,
+      "id": "game_mode",
+      "title": "Game Mode On",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "legacy",
+      "target": "scomporre il toggle composito in operation atomiche; conservare l’ID come ricetta di compatibilità"
+    },
+    {
+      "index": 34,
+      "id": "cpu_intel_optimizations",
+      "title": "Intel CPU Optimizations",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "legacy",
+      "target": "scomporre il toggle composito in operation atomiche; conservare l’ID come ricetta di compatibilità"
+    },
+    {
+      "index": 35,
+      "id": "ram_optimizations",
+      "title": "RAM Optimizations",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "legacy",
+      "target": "scomporre il toggle composito in operation atomiche; conservare l’ID come ricetta di compatibilità"
+    },
+    {
+      "index": 36,
+      "id": "storage_optimizations",
+      "title": "Storage Optimizations",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "legacy",
+      "target": "scomporre il toggle composito in operation atomiche; conservare l’ID come ricetta di compatibilità"
+    },
+    {
+      "index": 37,
+      "id": "timer_latency",
+      "title": "Timer and Latency",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "legacy",
+      "target": "scomporre il toggle composito in operation atomiche; conservare l’ID come ricetta di compatibilità"
+    },
+    {
+      "index": 38,
+      "id": "gaming_mpo_off",
+      "title": "Disable Multiplane Overlay (MPO)",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 39,
+      "id": "gaming_extended_gpu_timeout",
+      "title": "Extended GPU Timeout",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 40,
+      "id": "gaming_legacy_flip_fse",
+      "title": "Fullscreen Exclusive Legacy Flip",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 41,
+      "id": "gaming_composed_flip_immediate_mode",
+      "title": "Hardware Composed Independent Flip",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 42,
+      "id": "gaming_windowed_optimizations_on",
+      "title": "Optimizations for Windowed Games On",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 43,
+      "id": "gaming_variable_refresh_rate_on",
+      "title": "Variable Refresh Rate On",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 44,
+      "id": "network_ecn_disabled",
+      "title": "Disable ECN",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "legacy",
+      "target": "scomporre il toggle composito in operation atomiche; conservare l’ID come ricetta di compatibilità"
+    },
+    {
+      "index": 45,
+      "id": "network_timestamps_disabled",
+      "title": "Disable TCP Timestamps",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "legacy",
+      "target": "scomporre il toggle composito in operation atomiche; conservare l’ID come ricetta di compatibilità"
+    },
+    {
+      "index": 46,
+      "id": "network_rss_enabled",
+      "title": "Enable RSS",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "legacy",
+      "target": "scomporre il toggle composito in operation atomiche; conservare l’ID come ricetta di compatibilità"
+    },
+    {
+      "index": 47,
+      "id": "network_optimizations",
+      "title": "Network Optimizations",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "legacy",
+      "target": "scomporre il toggle composito in operation atomiche; conservare l’ID come ricetta di compatibilità"
+    },
+    {
+      "index": 48,
+      "id": "network_adapter_power_savings_wake_off",
+      "title": "Adapter Power Savings and Wake Off",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 49,
+      "id": "network_delivery_optimization_off",
+      "title": "Delivery Optimization P2P Off",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 50,
+      "id": "device_power_savings_off",
+      "title": "Device Power Saving Off",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 51,
+      "id": "network_fast_udp_datagram_send",
+      "title": "Fast UDP Datagram Send",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 52,
+      "id": "network_ipv4_only",
+      "title": "IPv4 Only Bindings",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 53,
+      "id": "network_llmnr_off",
+      "title": "LLMNR Off",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 54,
+      "id": "network_low_latency_bandwidth_profile",
+      "title": "Low-Latency Network Profile",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 55,
+      "id": "network_mmagent_features_off",
+      "title": "MMAgent Features Off",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 56,
+      "id": "network_throttling_index_off",
+      "title": "Network Throttling Index Off",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 57,
+      "id": "network_prefer_ipv4",
+      "title": "Prefer IPv4 over IPv6",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 58,
+      "id": "network_itr_interactive_config",
+      "title": "NIC ITR Interactive Config",
+      "destination": "Esperto",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 59,
+      "id": "power_amd_preferred_cores",
+      "title": "AMD Preferred Cores",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 60,
+      "id": "power_cpu_core_parking_off",
+      "title": "CPU Core Parking Off",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 61,
+      "id": "power_disable_cstates",
+      "title": "Disable CPU C-States",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 62,
+      "id": "power_cpu_idle_demote_promote",
+      "title": "Disable CPU Idle Demote/Promote",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 63,
+      "id": "power_disable_dynamic_tick",
+      "title": "Disable Dynamic Tick",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 64,
+      "id": "power_fast_startup_hibernate_off",
+      "title": "Fast Startup and Hibernate Off",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 65,
+      "id": "power_global_timer_resolution",
+      "title": "Global Timer Resolution Requests",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 66,
+      "id": "power_hardware_pstates_intel",
+      "title": "Intel Hardware P-States (HWP)",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 67,
+      "id": "power_max_processor_state",
+      "title": "Maximum Processor State (100%)",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 68,
+      "id": "power_throttling_off",
+      "title": "Power Throttling Off",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 69,
+      "id": "power_processor_boost_mode",
+      "title": "Processor Performance Boost Mode",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 70,
+      "id": "power_processor_time_check_interval",
+      "title": "Processor Time Check Interval (5ms)",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 71,
+      "id": "power_system_responsiveness_registry",
+      "title": "System Responsiveness (10)",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 72,
+      "id": "power_tsc_sync_policy",
+      "title": "TSC Sync Policy (Enhanced)",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 73,
+      "id": "power_ultimate_performance_plan",
+      "title": "Ultimate Performance Power Plan",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 74,
+      "id": "power_win32_priority_separation",
+      "title": "Win32 Priority Separation (Gaming)",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 75,
+      "id": "gpu_amd_optimizations",
+      "title": "AMD GPU ULPS Troubleshooting",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "legacy",
+      "target": "scomporre il toggle composito in operation atomiche; conservare l’ID come ricetta di compatibilità"
+    },
+    {
+      "index": 76,
+      "id": "gpu_intel_optimizations",
+      "title": "Intel GPU Optimizations",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "legacy",
+      "target": "scomporre il toggle composito in operation atomiche; conservare l’ID come ricetta di compatibilità"
+    },
+    {
+      "index": 77,
+      "id": "gpu_nvidia_optimizations",
+      "title": "NVIDIA Optimizations",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "legacy",
+      "target": "scomporre il toggle composito in operation atomiche; conservare l’ID come ricetta di compatibilità"
+    },
+    {
+      "index": 78,
+      "id": "gaming_amd_gpu_extreme_profile",
+      "title": "AMD GPU Extreme Profile",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "legacy",
+      "target": "compatibilità soltanto; nuovo sistema di profili rinviato alla Fase 8"
+    },
+    {
+      "index": 79,
+      "id": "gaming_amd_gpu_safe_profile",
+      "title": "AMD GPU Safe Profile",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "legacy",
+      "target": "compatibilità soltanto; nuovo sistema di profili rinviato alla Fase 8"
+    },
+    {
+      "index": 80,
+      "id": "gaming_amd_ulps_off",
+      "title": "AMD ULPS Off",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 81,
+      "id": "graphics_amd_settings",
+      "title": "AMD Settings",
+      "destination": "Driver",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 82,
+      "id": "graphics_directx",
+      "title": "DirectX Runtime",
+      "destination": "App",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 83,
+      "id": "graphics_driver_clean",
+      "title": "Driver Clean",
+      "destination": "Driver",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 84,
+      "id": "graphics_driver_install_debloat_settings",
+      "title": "Driver Install Debloat & Settings",
+      "destination": "Driver",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 85,
+      "id": "graphics_driver_install_latest",
+      "title": "Driver Install Latest",
+      "destination": "Driver",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 86,
+      "id": "graphics_hags_windowed",
+      "title": "HAGS Windowed",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 87,
+      "id": "graphics_hdcp",
+      "title": "HDCP",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 88,
+      "id": "graphics_intel_settings",
+      "title": "Intel Settings",
+      "destination": "Driver",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 89,
+      "id": "graphics_msi_mode_script",
+      "title": "MSI Mode (Script Variant)",
+      "destination": "Esperto",
+      "disposition": "alias",
+      "target": "device.interrupt.editor; unire solo dopo verifica di equivalenza semantica",
+      "aliasTarget": "device.interrupt.editor"
+    },
+    {
+      "index": 90,
+      "id": "graphics_nvidia_settings",
+      "title": "NVIDIA Settings",
+      "destination": "Driver",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 91,
+      "id": "graphics_p0_state",
+      "title": "P0 State",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 92,
+      "id": "graphics_resolution_refresh_rate",
+      "title": "Resolution Refresh Rate",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 93,
+      "id": "graphics_cpp_runtime",
+      "title": "Visual C++ All-in-One Runtimes",
+      "destination": "App",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 94,
+      "id": "system_responsiveness",
+      "title": "System Responsiveness",
+      "destination": "Windows",
+      "disposition": "legacy",
+      "target": "scomporre il toggle composito in operation atomiche; conservare l’ID come ricetta di compatibilità"
+    },
+    {
+      "index": 95,
+      "id": "windows_update",
+      "title": "Windows Update Behavior",
+      "destination": "Windows",
+      "disposition": "legacy",
+      "target": "scomporre il toggle composito in operation atomiche; conservare l’ID come ricetta di compatibilità"
+    },
+    {
+      "index": 96,
+      "id": "windows_auto_reboot_after_bsod_off",
+      "title": "Auto-reboot After BSOD Off",
+      "destination": "Windows",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 97,
+      "id": "toggle_automatic_driver_updates_off",
+      "title": "Automatic Driver Updates Off",
+      "destination": "Driver",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 98,
+      "id": "windows_automatic_maintenance_off",
+      "title": "Automatic Maintenance Off",
+      "destination": "Windows",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 99,
+      "id": "windows_ntfs_last_access_updates_off",
+      "title": "NTFS Last-Access Updates Off",
+      "destination": "Windows",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 100,
+      "id": "toggle_scheduled_defrag_off",
+      "title": "Scheduled Defrag / TRIM Off",
+      "destination": "Windows",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 101,
+      "id": "toggle_storage_sense_off",
+      "title": "Storage Sense Off",
+      "destination": "Windows",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 102,
+      "id": "windows_context_menu_script",
+      "title": "Context Menu (Script Variant)",
+      "destination": "Windows",
+      "disposition": "alias",
+      "target": "ui_context_menu_clean; unire solo dopo verifica di equivalenza semantica",
+      "aliasTarget": "ui_context_menu_clean"
+    },
+    {
+      "index": 103,
+      "id": "windows_control_panel_settings_script",
+      "title": "Control Panel Settings (Script Variant)",
+      "destination": "Windows",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 104,
+      "id": "windows_notepad_settings",
+      "title": "Notepad Settings",
+      "destination": "Windows",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 105,
+      "id": "windows_scaling",
+      "title": "Scaling",
+      "destination": "Windows",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 106,
+      "id": "windows_signout_lockscreen_wallpaper_black",
+      "title": "Signout Lockscreen Wallpaper Black",
+      "destination": "Windows",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 107,
+      "id": "windows_start_menu_layout_script",
+      "title": "Start Menu Layout (Script Variant)",
+      "destination": "Windows",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 108,
+      "id": "windows_start_menu_shortcuts_script",
+      "title": "Start Menu Shortcuts (Script Variant)",
+      "destination": "Windows",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 109,
+      "id": "windows_start_menu_taskbar_script",
+      "title": "Start Menu Taskbar (Script Variant)",
+      "destination": "Windows",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 110,
+      "id": "windows_theme_black_script",
+      "title": "Theme Black (Script Variant)",
+      "destination": "Windows",
+      "disposition": "alias",
+      "target": "ui_dark_theme; unire solo dopo verifica di equivalenza semantica",
+      "aliasTarget": "ui_dark_theme"
+    },
+    {
+      "index": 111,
+      "id": "windows_user_account_pictures_black",
+      "title": "User Account Pictures Black",
+      "destination": "Windows",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 112,
+      "id": "windows_widgets_script",
+      "title": "Widgets (Script Variant)",
+      "destination": "Windows",
+      "disposition": "alias",
+      "target": "privacy_widgets; unire solo dopo verifica di equivalenza semantica",
+      "aliasTarget": "privacy_widgets"
+    },
+    {
+      "index": 113,
+      "id": "windows_device_manager_power_savings_wake",
+      "title": "Device Manager Power Savings & Wake",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 114,
+      "id": "windows_loudness_eq",
+      "title": "Loudness EQ",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 115,
+      "id": "windows_nvme_faster_driver",
+      "title": "NVME Faster Driver",
+      "destination": "Driver",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 116,
+      "id": "windows_network_adapter_power_savings_script",
+      "title": "Network Adapter Power Savings & Wake (Script Variant)",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "alias",
+      "target": "network_adapter_power_savings_wake_off; unire solo dopo verifica di equivalenza semantica",
+      "aliasTarget": "network_adapter_power_savings_wake_off"
+    },
+    {
+      "index": 117,
+      "id": "windows_network_ipv4_only_script",
+      "title": "Network IPv4 Only (Script Variant)",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "alias",
+      "target": "network_ipv4_only; unire solo dopo verifica di equivalenza semantica",
+      "aliasTarget": "network_ipv4_only"
+    },
+    {
+      "index": 118,
+      "id": "windows_pointer_precision_script",
+      "title": "Pointer Precision (Script Variant)",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "alias",
+      "target": "ui_pointer_precision_off; unire solo dopo verifica di equivalenza semantica",
+      "aliasTarget": "ui_pointer_precision_off"
+    },
+    {
+      "index": 119,
+      "id": "windows_sound",
+      "title": "Sound",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 120,
+      "id": "windows_write_cache_buffer_flushing",
+      "title": "Write Cache Buffer Flushing",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 121,
+      "id": "windows_core_isolation_script",
+      "title": "Core Isolation (Script Variant)",
+      "destination": "Esperto",
+      "disposition": "alias",
+      "target": "checks_core_isolation_off; unire solo dopo verifica di equivalenza semantica",
+      "aliasTarget": "checks_core_isolation_off"
+    },
+    {
+      "index": 122,
+      "id": "windows_defender_optimize",
+      "title": "Defender Optimize",
+      "destination": "Esperto",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 123,
+      "id": "windows_gamebar_script",
+      "title": "Gamebar (Script Variant)",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "alias",
+      "target": "privacy_gamebar; unire solo dopo verifica di equivalenza semantica",
+      "aliasTarget": "privacy_gamebar"
+    },
+    {
+      "index": 124,
+      "id": "windows_gamemode",
+      "title": "Gamemode",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 125,
+      "id": "windows_power_plan_script",
+      "title": "Power Plan (Script Variant)",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "alias",
+      "target": "power.plan.editor; unire solo dopo verifica di equivalenza semantica",
+      "aliasTarget": "power.plan.editor"
+    },
+    {
+      "index": 126,
+      "id": "windows_restore_point",
+      "title": "Restore Point",
+      "destination": "Diagnostica & Ripristino",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 127,
+      "id": "windows_timer_resolution_script",
+      "title": "Timer Resolution (Script Variant)",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "alias",
+      "target": "power_global_timer_resolution; unire solo dopo verifica di equivalenza semantica",
+      "aliasTarget": "power_global_timer_resolution"
+    },
+    {
+      "index": 128,
+      "id": "windows_uac_script",
+      "title": "UAC (Script Variant)",
+      "destination": "Esperto",
+      "disposition": "alias",
+      "target": "checks_uac_off; unire solo dopo verifica di equivalenza semantica",
+      "aliasTarget": "checks_uac_off"
+    },
+    {
+      "index": 129,
+      "id": "windows_autoruns_startup_tasks_apps_check",
+      "title": "Autoruns Startup Tasks & Apps Check",
+      "destination": "App",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 130,
+      "id": "windows_bloatware_script",
+      "title": "Bloatware (Script Variant)",
+      "destination": "App",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 131,
+      "id": "windows_bloatware_legacy_apps_check_script",
+      "title": "Bloatware Legacy Apps Check (Script Variant)",
+      "destination": "App",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 132,
+      "id": "windows_bloatware_legacy_features_check_script",
+      "title": "Bloatware Legacy Features Check (Script Variant)",
+      "destination": "App",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 133,
+      "id": "windows_bloatware_taskmgr_check_script",
+      "title": "Bloatware TaskMgr Check (Script Variant)",
+      "destination": "App",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 134,
+      "id": "windows_bloatware_uwp_apps_check_script",
+      "title": "Bloatware UWP Apps Check (Script Variant)",
+      "destination": "App",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 135,
+      "id": "windows_bloatware_uwp_features_check_script",
+      "title": "Bloatware UWP Features Check (Script Variant)",
+      "destination": "App",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 136,
+      "id": "windows_cleanup",
+      "title": "Cleanup",
+      "destination": "Diagnostica & Ripristino",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 137,
+      "id": "windows_copilot_script",
+      "title": "Copilot (Script Variant)",
+      "destination": "Windows",
+      "disposition": "alias",
+      "target": "privacy_copilot; unire solo dopo verifica di equivalenza semantica",
+      "aliasTarget": "privacy_copilot"
+    },
+    {
+      "index": 138,
+      "id": "windows_edge_webview_script",
+      "title": "Edge & WebView (Script Variant)",
+      "destination": "App",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 139,
+      "id": "checks_core_isolation_off",
+      "title": "Core Isolation Memory Integrity Off",
+      "destination": "Esperto",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 140,
+      "id": "checks_dep_off",
+      "title": "Data Execution Prevention Off",
+      "destination": "Esperto",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 141,
+      "id": "checks_firewall_off",
+      "title": "Firewall Off",
+      "destination": "Esperto",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 142,
+      "id": "checks_memory_compression_off",
+      "title": "Memory Compression Off",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 143,
+      "id": "checks_smart_screen_off",
+      "title": "SmartScreen Off",
+      "destination": "Esperto",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 144,
+      "id": "checks_spectre_meltdown_off",
+      "title": "Spectre/Meltdown Mitigations Off",
+      "destination": "Esperto",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 145,
+      "id": "checks_uac_off",
+      "title": "UAC Off",
+      "destination": "Esperto",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 146,
+      "id": "checks_vbs_off",
+      "title": "Virtualization-Based Security Off",
+      "destination": "Esperto",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 147,
+      "id": "checks_vulnerable_driver_blocklist_off",
+      "title": "Vulnerable Driver Blocklist Off",
+      "destination": "Esperto",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 148,
+      "id": "check_bios_settings",
+      "title": "BIOS Settings Guide",
+      "destination": "Diagnostica & Ripristino",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 149,
+      "id": "check_bios_update",
+      "title": "BIOS Update Search",
+      "destination": "Diagnostica & Ripristino",
+      "disposition": "shortcut",
+      "target": "fonte ufficiale del produttore"
+    },
+    {
+      "index": 150,
+      "id": "check_cpu_test",
+      "title": "CPU Test",
+      "destination": "Diagnostica & Ripristino",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 151,
+      "id": "check_gpu_check",
+      "title": "GPU Check",
+      "destination": "Diagnostica & Ripristino",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 152,
+      "id": "check_gpu_test",
+      "title": "GPU Test",
+      "destination": "Diagnostica & Ripristino",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 153,
+      "id": "check_ram_check",
+      "title": "RAM Check",
+      "destination": "Diagnostica & Ripristino",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 154,
+      "id": "check_ram_test",
+      "title": "RAM Test",
+      "destination": "Diagnostica & Ripristino",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 155,
+      "id": "check_space_check",
+      "title": "Space Check",
+      "destination": "Diagnostica & Ripristino",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 156,
+      "id": "service_diagtrack_off",
+      "title": "Connected User Experiences and Telemetry Off",
+      "destination": "Windows",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 157,
+      "id": "service_diagsvc_off",
+      "title": "Diagnostic Execution Service Off",
+      "destination": "Windows",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 158,
+      "id": "service_inventorysvc_off",
+      "title": "Inventory and Compatibility Appraisal Off",
+      "destination": "Windows",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 159,
+      "id": "service_pcasvc_off",
+      "title": "Program Compatibility Assistant Service Off",
+      "destination": "Windows",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 160,
+      "id": "service_troubleshootingsvc_off",
+      "title": "Recommended Troubleshooting Service Off",
+      "destination": "Windows",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 161,
+      "id": "service_retaildemo_off",
+      "title": "Retail Demo Service Off",
+      "destination": "Windows",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 162,
+      "id": "service_svsvc_off",
+      "title": "Spot Verifier Off",
+      "destination": "Windows",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 163,
+      "id": "service_dmwappushservice_off",
+      "title": "WAP Push Message Routing Service Off",
+      "destination": "Windows",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 164,
+      "id": "service_wersvc_off",
+      "title": "Windows Error Reporting Service Off",
+      "destination": "Windows",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 165,
+      "id": "service_wecsvc_off",
+      "title": "Windows Event Collector Off",
+      "destination": "Windows",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 166,
+      "id": "service_wisvc_off",
+      "title": "Windows Insider Service Off",
+      "destination": "Windows",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 167,
+      "id": "service_devquerybroker_off",
+      "title": "DevQuery Background Discovery Broker Off",
+      "destination": "Windows",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 168,
+      "id": "service_mapsbroker_off",
+      "title": "Downloaded Maps Manager Off",
+      "destination": "Windows",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 169,
+      "id": "service_remoteregistry_off",
+      "title": "Remote Registry Off",
+      "destination": "Windows",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 170,
+      "id": "service_remoteaccess_off",
+      "title": "Routing and Remote Access Off",
+      "destination": "Windows",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 171,
+      "id": "service_lmhosts_off",
+      "title": "TCP/IP NetBIOS Helper Off",
+      "destination": "Windows",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 172,
+      "id": "service_wmpnetworksvc_off",
+      "title": "Windows Media Player Network Sharing Off",
+      "destination": "Windows",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 173,
+      "id": "service_efs_off",
+      "title": "Encrypting File System Off",
+      "destination": "Windows",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 174,
+      "id": "service_semgrsvc_off",
+      "title": "Payments and NFC/SE Manager Off",
+      "destination": "Windows",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 175,
+      "id": "service_scdeviceenum_off",
+      "title": "Smart Card Device Enumeration Off",
+      "destination": "Windows",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 176,
+      "id": "service_scardsvr_off",
+      "title": "Smart Card Off",
+      "destination": "Windows",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 177,
+      "id": "service_pimindexmaintenancesvc_off",
+      "title": "Contact Data Off",
+      "destination": "Windows",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 178,
+      "id": "service_trkwks_off",
+      "title": "Distributed Link Tracking Client Off",
+      "destination": "Windows",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 179,
+      "id": "service_wpcmonsvc_off",
+      "title": "Parental Controls Off",
+      "destination": "Windows",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 180,
+      "id": "toggle_printing_off",
+      "title": "Printing Off",
+      "destination": "Windows",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 181,
+      "id": "service_shpamsvc_off",
+      "title": "Shared PC Account Manager Off",
+      "destination": "Windows",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 182,
+      "id": "service_messagingservice_off",
+      "title": "Text Messaging Off",
+      "destination": "Windows",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 183,
+      "id": "service_wpnservice_off",
+      "title": "Windows Push Notifications System Service Off",
+      "destination": "Windows",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 184,
+      "id": "service_xblauthmanager_off",
+      "title": "Xbox Live Auth Manager Off",
+      "destination": "Windows",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 185,
+      "id": "service_xblgamesave_off",
+      "title": "Xbox Live Game Save Off",
+      "destination": "Windows",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 186,
+      "id": "service_xboxnetapisvc_off",
+      "title": "Xbox Live Networking Service Off",
+      "destination": "Windows",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 187,
+      "id": "refresh_account_local",
+      "title": "Account Local",
+      "destination": "Setup guidato",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 188,
+      "id": "refresh_autounattend",
+      "title": "Autounattend",
+      "destination": "Setup guidato",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 189,
+      "id": "refresh_factory_reset",
+      "title": "Factory Reset",
+      "destination": "Diagnostica & Ripristino",
+      "disposition": "shortcut",
+      "target": "Recovery di Windows"
+    },
+    {
+      "index": 190,
+      "id": "refresh_reinstall",
+      "title": "Reinstall",
+      "destination": "Diagnostica & Ripristino",
+      "disposition": "shortcut",
+      "target": "Recovery di Windows"
+    },
+    {
+      "index": 191,
+      "id": "refresh_to_bios",
+      "title": "To BIOS",
+      "destination": "Diagnostica & Ripristino",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 192,
+      "id": "refresh_updates_drivers_block",
+      "title": "Updates Drivers Block",
+      "destination": "Driver",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 193,
+      "id": "restore_clipchamp_clipchamp",
+      "title": "Restore Clipchamp",
+      "destination": "App",
+      "disposition": "native",
+      "target": "gestore AppX/App; conservare questo ID"
+    },
+    {
+      "index": 194,
+      "id": "restore_microsoft_windowsalarms",
+      "title": "Restore Clock",
+      "destination": "App",
+      "disposition": "native",
+      "target": "gestore AppX/App; conservare questo ID"
+    },
+    {
+      "index": 195,
+      "id": "restore_microsoft_devhome",
+      "title": "Restore Dev Home",
+      "destination": "App",
+      "disposition": "native",
+      "target": "gestore AppX/App; conservare questo ID"
+    },
+    {
+      "index": 196,
+      "id": "restore_microsoft_windowsfeedbackhub",
+      "title": "Restore Feedback Hub",
+      "destination": "App",
+      "disposition": "native",
+      "target": "gestore AppX/App; conservare questo ID"
+    },
+    {
+      "index": 197,
+      "id": "restore_microsoft_family",
+      "title": "Restore Microsoft Family",
+      "destination": "App",
+      "disposition": "native",
+      "target": "gestore AppX/App; conservare questo ID"
+    },
+    {
+      "index": 198,
+      "id": "restore_microsoft_windowsstore",
+      "title": "Restore Microsoft Store",
+      "destination": "App",
+      "disposition": "native",
+      "target": "gestore AppX/App; conservare questo ID"
+    },
+    {
+      "index": 199,
+      "id": "restore_microsoft_todos",
+      "title": "Restore Microsoft To Do",
+      "destination": "App",
+      "disposition": "native",
+      "target": "gestore AppX/App; conservare questo ID"
+    },
+    {
+      "index": 200,
+      "id": "restore_microsoft_microsoftofficehub",
+      "title": "Restore Office Hub",
+      "destination": "App",
+      "disposition": "native",
+      "target": "gestore AppX/App; conservare questo ID"
+    },
+    {
+      "index": 201,
+      "id": "restore_microsoft_onedrive",
+      "title": "Restore OneDrive",
+      "destination": "App",
+      "disposition": "native",
+      "target": "gestore AppX/App; conservare questo ID"
+    },
+    {
+      "index": 202,
+      "id": "restore_microsoft_outlookforwindows",
+      "title": "Restore Outlook (new)",
+      "destination": "App",
+      "disposition": "native",
+      "target": "gestore AppX/App; conservare questo ID"
+    },
+    {
+      "index": 203,
+      "id": "restore_microsoft_yourphone",
+      "title": "Restore Phone Link",
+      "destination": "App",
+      "disposition": "native",
+      "target": "gestore AppX/App; conservare questo ID"
+    },
+    {
+      "index": 204,
+      "id": "restore_microsoft_powerautomatedesktop",
+      "title": "Restore Power Automate",
+      "destination": "App",
+      "disposition": "native",
+      "target": "gestore AppX/App; conservare questo ID"
+    },
+    {
+      "index": 205,
+      "id": "restore_microsoft_quickassist",
+      "title": "Restore Quick Assist",
+      "destination": "App",
+      "disposition": "native",
+      "target": "gestore AppX/App; conservare questo ID"
+    },
+    {
+      "index": 206,
+      "id": "restore_microsoft_stickynotes",
+      "title": "Restore Sticky Notes",
+      "destination": "App",
+      "disposition": "native",
+      "target": "gestore AppX/App; conservare questo ID"
+    },
+    {
+      "index": 207,
+      "id": "restore_microsoft_gamingapp",
+      "title": "Restore Xbox App",
+      "destination": "App",
+      "disposition": "native",
+      "target": "gestore AppX/App; conservare questo ID"
+    },
+    {
+      "index": 208,
+      "id": "restore_microsoft_xboxgamingoverlay",
+      "title": "Restore Xbox Game Bar",
+      "destination": "App",
+      "disposition": "native",
+      "target": "gestore AppX/App; conservare questo ID"
+    },
+    {
+      "index": 209,
+      "id": "restore_microsoft_xboxidentityprovider",
+      "title": "Restore Xbox Identity Provider",
+      "destination": "App",
+      "disposition": "native",
+      "target": "gestore AppX/App; conservare questo ID"
+    },
+    {
+      "index": 210,
+      "id": "setup_activation_script",
+      "title": "Activation (Script Variant)",
+      "destination": "Setup guidato",
+      "disposition": "shortcut",
+      "target": "Impostazioni di attivazione Windows"
+    },
+    {
+      "index": 211,
+      "id": "setup_background_apps_script",
+      "title": "Background Apps (Script Variant)",
+      "destination": "Setup guidato",
+      "disposition": "alias",
+      "target": "ui_background_apps_off; unire solo dopo verifica di equivalenza semantica",
+      "aliasTarget": "ui_background_apps_off"
+    },
+    {
+      "index": 212,
+      "id": "setup_bitlocker",
+      "title": "BitLocker",
+      "destination": "Setup guidato",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 213,
+      "id": "setup_convert_home_to_pro",
+      "title": "Convert Home To Pro",
+      "destination": "Setup guidato",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 214,
+      "id": "setup_date_language_region_time",
+      "title": "Date Language Region Time",
+      "destination": "Setup guidato",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 215,
+      "id": "setup_edge_settings_script",
+      "title": "Edge Settings (Script Variant)",
+      "destination": "Setup guidato",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 216,
+      "id": "setup_keys",
+      "title": "Keys",
+      "destination": "Setup guidato",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 217,
+      "id": "setup_memory_compression_script",
+      "title": "Memory Compression (Script Variant)",
+      "destination": "Gaming & Prestazioni",
+      "disposition": "alias",
+      "target": "checks_memory_compression_off; unire solo dopo verifica di equivalenza semantica",
+      "aliasTarget": "checks_memory_compression_off"
+    },
+    {
+      "index": 218,
+      "id": "setup_startup_apps_7",
+      "title": "Startup Apps (7)",
+      "destination": "App",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 219,
+      "id": "setup_startup_apps_8",
+      "title": "Startup Apps (8)",
+      "destination": "App",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 220,
+      "id": "setup_store_settings_script",
+      "title": "Store Settings (Script Variant)",
+      "destination": "App",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 221,
+      "id": "setup_updates_pause",
+      "title": "Updates Pause",
+      "destination": "Setup guidato",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 222,
+      "id": "bcd_optimizations",
+      "title": "Advanced Boot Optimizations",
+      "destination": "Esperto",
+      "disposition": "legacy",
+      "target": "scomporre il toggle composito in operation atomiche; conservare l’ID come ricetta di compatibilità"
+    },
+    {
+      "index": 223,
+      "id": "services_disable",
+      "title": "Diagnostics Services",
+      "destination": "Esperto",
+      "disposition": "legacy",
+      "target": "scomporre il toggle composito in operation atomiche; conservare l’ID come ricetta di compatibilità"
+    },
+    {
+      "index": 224,
+      "id": "advanced_core_1_thread_1",
+      "title": "Core 1 Thread 1",
+      "destination": "Esperto",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 225,
+      "id": "advanced_dep_script",
+      "title": "Data Execution Prevention (Script Variant)",
+      "destination": "Esperto",
+      "disposition": "alias",
+      "target": "checks_dep_off; unire solo dopo verifica di equivalenza semantica",
+      "aliasTarget": "checks_dep_off"
+    },
+    {
+      "index": 226,
+      "id": "advanced_defender",
+      "title": "Defender",
+      "destination": "Esperto",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 227,
+      "id": "advanced_driver_whql_secure_boot_bypass",
+      "title": "Driver WHQL Secure Boot Bypass",
+      "destination": "Esperto",
+      "disposition": "rejected",
+      "target": "documentare il rischio; non automatizzare il bypass di WHQL o Secure Boot"
+    },
+    {
+      "index": 228,
+      "id": "advanced_file_download_security_warning",
+      "title": "File Download Security Warning",
+      "destination": "Esperto",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 229,
+      "id": "advanced_firewall_script",
+      "title": "Firewall (Script Variant)",
+      "destination": "Esperto",
+      "disposition": "alias",
+      "target": "checks_firewall_off; unire solo dopo verifica di equivalenza semantica",
+      "aliasTarget": "checks_firewall_off"
+    },
+    {
+      "index": 230,
+      "id": "advanced_hardware_composed_flip_script",
+      "title": "Hardware Composed Independent Flip (Script Variant)",
+      "destination": "Esperto",
+      "disposition": "alias",
+      "target": "gaming_composed_flip_immediate_mode; unire solo dopo verifica di equivalenza semantica",
+      "aliasTarget": "gaming_composed_flip_immediate_mode"
+    },
+    {
+      "index": 231,
+      "id": "advanced_hardware_legacy_flip_script",
+      "title": "Hardware Legacy Flip (Script Variant)",
+      "destination": "Esperto",
+      "disposition": "alias",
+      "target": "gaming_legacy_flip_fse; unire solo dopo verifica di equivalenza semantica",
+      "aliasTarget": "gaming_legacy_flip_fse"
+    },
+    {
+      "index": 232,
+      "id": "advanced_keyboard_shortcuts",
+      "title": "Keyboard Shortcuts",
+      "destination": "Esperto",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 233,
+      "id": "advanced_mmagent_features_script",
+      "title": "MMAgent Features (Script Variant)",
+      "destination": "Esperto",
+      "disposition": "alias",
+      "target": "network_mmagent_features_off; unire solo dopo verifica di equivalenza semantica",
+      "aliasTarget": "network_mmagent_features_off"
+    },
+    {
+      "index": 234,
+      "id": "advanced_mpo_script",
+      "title": "MPO (Script Variant)",
+      "destination": "Esperto",
+      "disposition": "alias",
+      "target": "gaming_mpo_off; unire solo dopo verifica di equivalenza semantica",
+      "aliasTarget": "gaming_mpo_off"
+    },
+    {
+      "index": 235,
+      "id": "advanced_priority",
+      "title": "Priority",
+      "destination": "Esperto",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 236,
+      "id": "advanced_rebar_force",
+      "title": "ReBar Force",
+      "destination": "Esperto",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 237,
+      "id": "advanced_smt_ht",
+      "title": "SMT HT",
+      "destination": "Esperto",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 238,
+      "id": "advanced_services",
+      "title": "Services",
+      "destination": "Esperto",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 239,
+      "id": "advanced_spectre_meltdown_script",
+      "title": "Spectre Meltdown (Script Variant)",
+      "destination": "Esperto",
+      "disposition": "alias",
+      "target": "checks_spectre_meltdown_off; unire solo dopo verifica di equivalenza semantica",
+      "aliasTarget": "checks_spectre_meltdown_off"
+    },
+    {
+      "index": 240,
+      "id": "advanced_start_search_shell_mobsync",
+      "title": "Start Search Shell Mobsync",
+      "destination": "Esperto",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 241,
+      "id": "advanced_ulps_script",
+      "title": "ULPS (Script Variant)",
+      "destination": "Esperto",
+      "disposition": "alias",
+      "target": "gaming_amd_ulps_off; unire solo dopo verifica di equivalenza semantica",
+      "aliasTarget": "gaming_amd_ulps_off"
+    },
+    {
+      "index": 242,
+      "id": "tool_amdvbflash_download",
+      "title": "AMDVBFlash Download",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 243,
+      "id": "tool_nvidia_nvflash_download",
+      "title": "NVIDIA NVFlash Download",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 244,
+      "id": "tool_scewin_gui_releases",
+      "title": "SCEWIN-GUI Releases",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 245,
+      "id": "telemetry_disable",
+      "title": "Disable Telemetry",
+      "destination": "Windows",
+      "disposition": "legacy",
+      "target": "scomporre il toggle composito in operation atomiche; conservare l’ID come ricetta di compatibilità"
+    },
+    {
+      "index": 246,
+      "id": "privacy_tracking",
+      "title": "Privacy and Tracking",
+      "destination": "Windows",
+      "disposition": "legacy",
+      "target": "scomporre il toggle composito in operation atomiche; conservare l’ID come ricetta di compatibilità"
+    },
+    {
+      "index": 247,
+      "id": "toggle_activity_history_off",
+      "title": "Activity History Off",
+      "destination": "Windows",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 248,
+      "id": "privacy_consumer_content",
+      "title": "Consumer Content and Auto-App Suggestions",
+      "destination": "Windows",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 249,
+      "id": "privacy_copilot",
+      "title": "Copilot Disable",
+      "destination": "Windows",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 250,
+      "id": "privacy_gamebar",
+      "title": "Game Bar and Capture Overlay",
+      "destination": "Windows",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 251,
+      "id": "toggle_location_off",
+      "title": "Location Off",
+      "destination": "Windows",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 252,
+      "id": "privacy_online_search_suggestions",
+      "title": "Online Search Suggestions Off",
+      "destination": "Windows",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 253,
+      "id": "privacy_powershell_telemetry",
+      "title": "PowerShell 7 Telemetry Off",
+      "destination": "Windows",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 254,
+      "id": "privacy_widgets",
+      "title": "Widgets and News Feed",
+      "destination": "Windows",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 255,
+      "id": "privacy_safe_debloat",
+      "title": "Safe Debloat Preset",
+      "destination": "App",
+      "disposition": "legacy",
+      "target": "compatibilità soltanto; nuovo sistema di profili rinviato alla Fase 8"
+    },
+    {
+      "index": 256,
+      "id": "tool_winsux_debloat",
+      "title": "WinSux by Fr33hty",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 257,
+      "id": "visual_effects",
+      "title": "Disable Visual Effects",
+      "destination": "Windows",
+      "disposition": "legacy",
+      "target": "scomporre il toggle composito in operation atomiche; conservare l’ID come ricetta di compatibilità"
+    },
+    {
+      "index": 258,
+      "id": "explorer_optimizations",
+      "title": "Explorer Optimizations",
+      "destination": "Windows",
+      "disposition": "legacy",
+      "target": "scomporre il toggle composito in operation atomiche; conservare l’ID come ricetta di compatibilità"
+    },
+    {
+      "index": 259,
+      "id": "notifications_minimal",
+      "title": "Minimal Notifications",
+      "destination": "Windows",
+      "disposition": "legacy",
+      "target": "scomporre il toggle composito in operation atomiche; conservare l’ID come ricetta di compatibilità"
+    },
+    {
+      "index": 260,
+      "id": "ui_optimizations",
+      "title": "UI Optimizations",
+      "destination": "Windows",
+      "disposition": "legacy",
+      "target": "scomporre il toggle composito in operation atomiche; conservare l’ID come ricetta di compatibilità"
+    },
+    {
+      "index": 261,
+      "id": "ui_background_apps_off",
+      "title": "Background Apps Off",
+      "destination": "Windows",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 262,
+      "id": "toggle_center_taskbar_icons",
+      "title": "Center Taskbar Icons",
+      "destination": "Windows",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 263,
+      "id": "ui_context_menu_clean",
+      "title": "Context Menu Clean",
+      "destination": "Windows",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 264,
+      "id": "ui_folder_discovery_off",
+      "title": "Folder Type Discovery Off",
+      "destination": "Windows",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 265,
+      "id": "ui_hide_explorer_gallery",
+      "title": "Hide File Explorer Gallery",
+      "destination": "Windows",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 266,
+      "id": "ui_pointer_precision_off",
+      "title": "Pointer Precision Off",
+      "destination": "Windows",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 267,
+      "id": "ui_start_taskbar_clean",
+      "title": "Start Menu and Taskbar Clean",
+      "destination": "Windows",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 268,
+      "id": "ui_sticky_keys_shortcut_off",
+      "title": "Sticky Keys Shortcut Off",
+      "destination": "Windows",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 269,
+      "id": "ui_taskbar_end_task",
+      "title": "Taskbar End Task",
+      "destination": "Windows",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 270,
+      "id": "ui_dark_theme",
+      "title": "Theme Black",
+      "destination": "Windows",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 271,
+      "id": "hardware_background_polling_rate_cap",
+      "title": "Background Polling Rate Cap",
+      "destination": "Esperto",
+      "disposition": "native",
+      "target": "migrare con lettura, snapshot, verifica e rollback esatto; conservare l’ID"
+    },
+    {
+      "index": 272,
+      "id": "tool_beyond_performance_device_tweaker_discord",
+      "title": "Beyond Performance Device Tweaker",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 273,
+      "id": "tool_marius_cpudirect_script",
+      "title": "CPU Direct USB Port Check (Script)",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 274,
+      "id": "tool_marius_cpudirect_web",
+      "title": "CPU Direct USB Port Check (Web)",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 275,
+      "id": "hardware_controller_overclock_script",
+      "title": "Controller Overclock",
+      "destination": "Esperto",
+      "disposition": "legacyToNative",
+      "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "index": 276,
+      "id": "tool_marius_deeplog_script",
+      "title": "DeepLog Input Recorder (Script)",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 277,
+      "id": "tool_marius_deeplog_web",
+      "title": "DeepLog Input Recorder (Web)",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 278,
+      "id": "tool_marius_deeppoll_script",
+      "title": "DeepPoll USB Polling Analyzer (Script)",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 279,
+      "id": "tool_marius_deeppoll_web",
+      "title": "DeepPoll USB Polling Analyzer (Web)",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 280,
+      "id": "tool_device_tweaker_script",
+      "title": "Device Tweaker (LLG x LLC)",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 281,
+      "id": "tool_interrupt_affinity_policy",
+      "title": "Interrupt Affinity Policy Tool",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 282,
+      "id": "tool_msi_util_folder",
+      "title": "MSI Utility v3",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 283,
+      "id": "tool_marius_heier_tools_hub",
+      "title": "Marius Heier Tools Hub",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 284,
+      "id": "tool_mouse_flat_curve",
+      "title": "Mouse Flat Curve",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 285,
+      "id": "tool_mouse_movement_recorder",
+      "title": "Mouse Movement Recorder",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 286,
+      "id": "tool_polling_rate_tester_app",
+      "title": "Polling Rate Tester App",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 287,
+      "id": "tool_controller_polling",
+      "title": "Polling Tool",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 288,
+      "id": "tool_marius_step_count_noise_web",
+      "title": "Step Count vs Noise Joystick Demo",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 289,
+      "id": "tool_marius_usb_hid_analyzer_web",
+      "title": "USB HID Polling Analyzer",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 290,
+      "id": "tool_hidusbf_folder",
+      "title": "hidusbf",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 291,
+      "id": "tool_autoruns_folder",
+      "title": "Autoruns",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 292,
+      "id": "tool_fix_tools_battery_report",
+      "title": "Battery Report",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 293,
+      "id": "tool_cpuz_folder",
+      "title": "CPU-Z",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 294,
+      "id": "tool_gpuz",
+      "title": "GPU-Z",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 295,
+      "id": "tool_gaming_net_diagnostic",
+      "title": "Gaming Network Diagnostic",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 296,
+      "id": "tool_hwinfo_folder",
+      "title": "HWiNFO",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 297,
+      "id": "tool_rammap_folder",
+      "title": "RAMMap",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 298,
+      "id": "tool_marius_rig_script",
+      "title": "Rig Profiles Hardware Report (Script)",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 299,
+      "id": "tool_marius_rig_web",
+      "title": "Rig Profiles Hardware Report (Web)",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 300,
+      "id": "tool_star_ethernet_analyzer_folder",
+      "title": "Star Ethernet Analyzer",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 301,
+      "id": "tool_star_ethernet_analyzer_script",
+      "title": "Star Ethernet Analyzer Script",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 302,
+      "id": "tool_star_ethernet_analyzer_video",
+      "title": "Star Ethernet Analyzer Video Guide",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 303,
+      "id": "tool_cru_folder",
+      "title": "CRU",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 304,
+      "id": "installers_cru_sre",
+      "title": "CRU SRE Script Installer",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 305,
+      "id": "tool_nvidia_profile_inspector_download",
+      "title": "Download NVIDIA Profile Inspector",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 306,
+      "id": "tool_gpu_dword_manager",
+      "title": "GPU DWORD Manager",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 307,
+      "id": "tool_msi_afterburner_setup",
+      "title": "MSI Afterburner Installer",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 308,
+      "id": "installers_msi_afterburner",
+      "title": "MSI Afterburner Script Installer",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 309,
+      "id": "tool_more_clock_tool",
+      "title": "More Clock Tool",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 310,
+      "id": "installers_more_clock_tool",
+      "title": "More Clock Tool Script Installer",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 311,
+      "id": "tool_more_power_tool_setup",
+      "title": "MorePowerTool Installer",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 312,
+      "id": "tool_nvidia_profile_inspector_folder",
+      "title": "NVIDIA Profile Inspector",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 313,
+      "id": "tool_nvidia_profile_inspector_nip_profile",
+      "title": "NVIDIA Profile Inspector Profiles (.nip)",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 314,
+      "id": "tool_radeon_tuner_folder",
+      "title": "Radeon Tuner",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 315,
+      "id": "tool_wtools_setup",
+      "title": "WTools 1.0.9.3 Installer",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 316,
+      "id": "tool_wtools_official_page",
+      "title": "WTools Official Page",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 317,
+      "id": "tool_rtl_utility",
+      "title": "RTL Utility",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 318,
+      "id": "tool_fix_tools_reset_network",
+      "title": "Reset Network",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 319,
+      "id": "tool_tcp_optimizer_folder",
+      "title": "TCP Optimizer",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 320,
+      "id": "tool_furmark_setup",
+      "title": "FurMark Installer",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 321,
+      "id": "tool_prime95_folder",
+      "title": "Prime95",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 322,
+      "id": "tool_testmem5_folder",
+      "title": "TestMem5",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 323,
+      "id": "tool_fix_tools_change_name",
+      "title": "Change Name",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 324,
+      "id": "tool_cleanmgrplus_folder",
+      "title": "Cleanmgr+",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 325,
+      "id": "tool_device_cleanup_folder",
+      "title": "Device Cleanup",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 326,
+      "id": "tool_dismpp_folder",
+      "title": "Dism++",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 327,
+      "id": "tool_driver_store_explorer_folder",
+      "title": "Driver Store Explorer (RAPR)",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 328,
+      "id": "tool_fix_tools_fastclean",
+      "title": "FastClean",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 329,
+      "id": "tool_fix_tools_runner",
+      "title": "Fix Tools Launcher",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 330,
+      "id": "tool_fix_tools_permessi",
+      "title": "Permessi",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 331,
+      "id": "tool_power_settings_explorer",
+      "title": "PowerSettingsExplorer",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 332,
+      "id": "tool_queue_size_tuner",
+      "title": "Queue Size Tuner",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 333,
+      "id": "tool_fix_tools_ripristina_anteprime",
+      "title": "Ripristina Anteprime",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 334,
+      "id": "tool_fix_tools_sfc_dism",
+      "title": "SFC & DISM",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 335,
+      "id": "tool_unpark_cpu",
+      "title": "Unpark CPU",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 336,
+      "id": "tool_vivetool_folder",
+      "title": "ViVeTool",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 337,
+      "id": "tool_winslopr_releases",
+      "title": "Download Winslopr",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 338,
+      "id": "tool_import_disable_advanced_services_profile",
+      "title": "Import Disable Advanced Services Profile",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 339,
+      "id": "tool_import_minimal_services_profile",
+      "title": "Import Minimal Services Profile",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 340,
+      "id": "tool_sysinternals_suite_winget",
+      "title": "Install Sysinternals Suite",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 341,
+      "id": "tool_install_win11_debloat_raphire",
+      "title": "Install Win11 Debloat",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 342,
+      "id": "tool_install_winhance",
+      "title": "Install Winhance",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 343,
+      "id": "installers_menu",
+      "title": "Installers Menu",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 344,
+      "id": "tool_winget_interactive_uninstaller",
+      "title": "Interactive App Uninstaller",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 345,
+      "id": "tool_ctt_winutil",
+      "title": "Run CTT WinUtil",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "index": 346,
+      "id": "tool_winscript_batch",
+      "title": "WinScript Batch Utility",
+      "destination": "Esperto",
+      "disposition": "external",
+      "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    }
+  ]
+}

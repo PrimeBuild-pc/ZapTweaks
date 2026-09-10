@@ -34,7 +34,6 @@ class ZapTweaksApp extends StatefulWidget {
 }
 
 class _ZapTweaksAppState extends State<ZapTweaksApp> {
-  bool _adminDialogShown = false;
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
   Color _systemAccentColor = const Color(0xFF0078D4);
   StreamSubscription<dynamic>? _accentSubscription;
@@ -97,23 +96,7 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
   }
 
   void _onControllerUpdate() {
-    if (!mounted) {
-      return;
-    }
-
-    if (!widget.controller.isLoading &&
-        !widget.controller.isAdmin &&
-        !_adminDialogShown) {
-      _adminDialogShown = true;
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (!mounted) {
-          return;
-        }
-        _showAdminRequiredDialog();
-      });
-    }
-
-    setState(() {});
+    if (mounted) setState(() {});
   }
 
   @override
@@ -163,6 +146,15 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
                     },
                     size: const NavigationPaneSize(openWidth: 240),
                     displayMode: PaneDisplayMode.auto,
+                    autoSuggestBox: TextBox(
+                      placeholder: strings.searchOperations,
+                      prefix: const Padding(
+                        padding: EdgeInsets.only(left: 10),
+                        child: Icon(FluentIcons.search, size: 16),
+                      ),
+                      onChanged: widget.controller.setSearchQuery,
+                    ),
+                    autoSuggestBoxReplacement: const Icon(FluentIcons.search),
                     // Headers and separators are filtered out of
                     // NavigationPane.effectiveItems, so they do not shift the
                     // selected index away from `categories`.
@@ -469,6 +461,18 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
       return _buildLoadingView(context);
     }
 
+    final strings = AppLocalizations.of(context);
+    if (widget.controller.searchQuery.trim().isNotEmpty) {
+      return TweaksPage(
+        controller: widget.controller,
+        category: strings.searchResults,
+        descriptors: widget.controller.searchTweaks(
+          widget.controller.searchQuery,
+        ),
+        onSafetyPrompt: _showConfirmDialog,
+      );
+    }
+
     if (category == 'Home') {
       return _buildHomeStatsPage();
     }
@@ -480,10 +484,6 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
         onInstallUpdate: _installAvailableUpdate,
         onViewRelease: _viewAvailableRelease,
       );
-    }
-
-    if (!widget.controller.isAdmin) {
-      return _buildAdminRequiredView();
     }
 
     return TweaksPage(
@@ -622,50 +622,22 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
     );
   }
 
-  Widget _buildAdminRequiredView() {
-    return Center(
-      child: SizedBox(
-        width: 540,
-        child: InfoBar(
-          title: Text(AppLocalizations.of(context).adminPrivilegesRequired),
-          content: Text(AppLocalizations.of(context).adminRequiredBanner),
-          severity: InfoBarSeverity.error,
-          isLong: true,
-        ),
-      ),
-    );
-  }
-
   IconData _iconForCategory(String category) {
     switch (category) {
-      case 'Shortcuts':
-        return FluentIcons.open_file;
-      case 'Gaming':
+      case 'Guided Setup':
+        return FluentIcons.completed;
+      case 'Apps':
+        return FluentIcons.app_icon_default;
+      case 'Drivers':
+        return FluentIcons.devices3;
+      case 'Gaming & Performance':
         return FluentIcons.game;
-      case 'Networking':
-        return FluentIcons.internet_sharing;
-      case 'Power & CPU':
-        return FluentIcons.power_button;
-      case 'Graphics':
-        return FluentIcons.picture;
       case 'Windows':
         return FluentIcons.shield;
-      case 'System Checks':
+      case 'Diagnostics & Recovery':
         return FluentIcons.health;
-      case 'Services':
-        return FluentIcons.settings;
-      case 'Refresh & Recovery':
-        return FluentIcons.history;
-      case 'Setup':
+      case 'Expert':
         return FluentIcons.developer_tools;
-      case 'Advanced':
-        return FluentIcons.warning;
-      case 'Privacy':
-        return FluentIcons.lock;
-      case 'Visuals':
-        return FluentIcons.view;
-      case 'Tools':
-        return FluentIcons.toolbox;
       case TweakController.settingsCategory:
         return FluentIcons.settings;
       case 'Home':
@@ -712,30 +684,6 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
     );
 
     return result ?? false;
-  }
-
-  void _showAdminRequiredDialog() {
-    final dialogContext = _navigatorKey.currentContext;
-    if (dialogContext == null) {
-      return;
-    }
-
-    showDialog<void>(
-      context: dialogContext,
-      builder: (dialogContext) {
-        final strings = AppLocalizations.of(dialogContext);
-        return ContentDialog(
-          title: Text(strings.adminPrivilegesRequired),
-          content: Text(strings.adminRequiredDialog),
-          actions: <Widget>[
-            FilledButton(
-              onPressed: () => Navigator.of(dialogContext).pop(),
-              child: Text(strings.understood),
-            ),
-          ],
-        );
-      },
-    );
   }
 
   void _showAboutDialog() {

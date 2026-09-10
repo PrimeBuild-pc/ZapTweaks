@@ -14,6 +14,18 @@ import '../../models/system_tweak.dart';
 import '../../models/ui_visuals_tweaks.dart';
 
 class TweakCatalogService {
+  static const List<String> oneAppNavigationCategories = <String>[
+    'Home',
+    'Guided Setup',
+    'Apps',
+    'Drivers',
+    'Gaming & Performance',
+    'Windows',
+    'Diagnostics & Recovery',
+    'Expert',
+    'Settings',
+  ];
+
   static const List<String> navigationCategories = <String>[
     'Home',
     'Shortcuts',

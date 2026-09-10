@@ -84,6 +84,30 @@ class _SettingsPageState extends State<SettingsPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
+                      Text(strings.expertMode),
+                      const SizedBox(height: 3),
+                      Text(strings.expertModeDescription),
+                    ],
+                  ),
+                ),
+                ToggleSwitch(
+                  checked: controller.expertModeEnabled,
+                  onChanged: controller.setExpertModeEnabled,
+                ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: 12),
+        Card(
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
                       Text(strings.startWithWindows),
                       SizedBox(height: 3),
                       Text(strings.startWithWindowsDescription),

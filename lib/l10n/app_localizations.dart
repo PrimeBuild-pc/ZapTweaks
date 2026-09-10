@@ -737,6 +737,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Starting ZapTweaks'**
   String get startingUp;
+
+  /// No description provided for @expertMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Expert mode'**
+  String get expertMode;
+
+  /// No description provided for @expertModeDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Show advanced operations and external tools. Safety restrictions still apply.'**
+  String get expertModeDescription;
+
+  /// No description provided for @searchOperations.
+  ///
+  /// In en, this message translates to:
+  /// **'Search operations'**
+  String get searchOperations;
+
+  /// No description provided for @searchResults.
+  ///
+  /// In en, this message translates to:
+  /// **'Search results'**
+  String get searchResults;
 }
 
 class _AppLocalizationsDelegate
