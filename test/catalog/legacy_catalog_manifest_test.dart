@@ -48,4 +48,29 @@ void main() {
         .toSet();
     expect(catalogIds, ids.toSet());
   });
+
+  test('legacy aliases are complete and acyclic', () {
+    final root =
+        jsonDecode(
+              File('assets/catalog/legacy_catalog.json').readAsStringSync(),
+            )
+            as Map<String, dynamic>;
+    final entries = (root['entries'] as List<dynamic>)
+        .cast<Map<String, dynamic>>();
+    final aliases = <String, String>{
+      for (final entry in entries.where(
+        (entry) => entry['disposition'] == 'alias',
+      ))
+        entry['id'] as String: entry['aliasTarget'] as String,
+    };
+
+    for (final start in aliases.keys) {
+      final visited = <String>{};
+      String? current = start;
+      while (current != null && aliases.containsKey(current)) {
+        expect(visited.add(current), isTrue, reason: 'Alias cycle at $start');
+        current = aliases[current];
+      }
+    }
+  });
 }

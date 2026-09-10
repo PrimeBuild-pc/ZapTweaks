@@ -19,6 +19,16 @@ class DirectOperationExecutor implements OperationExecutor {
   ) => definition.apply(request);
 }
 
+class RejectingElevatedExecutor implements OperationExecutor {
+  const RejectingElevatedExecutor();
+
+  @override
+  Future<void> apply(
+    OperationDefinition definition,
+    OperationRequest request,
+  ) => throw StateError('No elevated helper is connected.');
+}
+
 class PlanEngine {
   PlanEngine({
     required this.registry,
@@ -29,7 +39,7 @@ class PlanEngine {
     OperationExecutor? userExecutor,
     OperationExecutor? elevatedExecutor,
   }) : userExecutor = userExecutor ?? const DirectOperationExecutor(),
-       elevatedExecutor = elevatedExecutor ?? const DirectOperationExecutor();
+       elevatedExecutor = elevatedExecutor ?? const RejectingElevatedExecutor();
 
   final OperationRegistry registry;
   final OperationContext context;
