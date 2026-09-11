@@ -147,6 +147,34 @@ class OperationStore {
     }
   }
 
+  int markRunningPlansInterrupted() {
+    final count =
+        database
+                .select(
+                  "SELECT COUNT(*) AS total FROM plans WHERE status = 'running'",
+                )
+                .single['total']
+            as int;
+    if (count == 0) return 0;
+
+    database.execute('BEGIN IMMEDIATE');
+    try {
+      database.execute(
+        "UPDATE plans SET status = 'interrupted' WHERE status = 'running'",
+      );
+      database.execute(
+        "UPDATE plan_items SET status = 'failed', "
+        "error = COALESCE(error, 'Application stopped during this operation.') "
+        "WHERE status = 'applying'",
+      );
+      database.execute('COMMIT');
+      return count;
+    } catch (_) {
+      database.execute('ROLLBACK');
+      rethrow;
+    }
+  }
+
   List<OperationPlan> loadIncomplete() {
     final rows = database.select(
       "SELECT * FROM plans WHERE status IN ('running', 'failed', "

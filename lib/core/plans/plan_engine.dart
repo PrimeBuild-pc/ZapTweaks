@@ -106,32 +106,83 @@ class PlanEngine {
       }
       store?.save(plan);
 
+      var stopSystemMutations = false;
       for (final item in plan.items.where(
         (item) => item.status == PlanItemStatus.snapshotted,
       )) {
+        if (stopSystemMutations) {
+          item
+            ..status = PlanItemStatus.skipped
+            ..error = 'Skipped after an earlier system mutation failed.';
+          continue;
+        }
+
         final definition = registry.resolve(item.operationId);
+        final failedDependency = definition.dependencies.any((dependency) {
+          final dependencyItem = plan.items.cast<PlanItem?>().firstWhere(
+            (candidate) => candidate?.operationId == dependency,
+            orElse: () => null,
+          );
+          return dependencyItem == null ||
+              dependencyItem.status == PlanItemStatus.failed ||
+              dependencyItem.status == PlanItemStatus.skipped;
+        });
+        if (failedDependency) {
+          item
+            ..status = PlanItemStatus.skipped
+            ..error = 'Skipped because a dependency did not complete.';
+          continue;
+        }
+
         item.status = PlanItemStatus.applying;
         store?.save(plan);
-        final executor =
-            definition.privilege == OperationPrivilege.administrator
-            ? elevatedExecutor
-            : userExecutor;
-        await executor.apply(definition, item.request);
-        final observed = await definition.verify(item.request);
-        item.written = observed;
-        if (observed.kind == OperationStateKind.pendingRestart) {
-          item.status = PlanItemStatus.pendingRestart;
-          plan.restartRequired = true;
-        } else if (observed.kind == OperationStateKind.configured &&
-            _valuesEqual(observed.value, item.request.desiredValue)) {
-          item.status = PlanItemStatus.verified;
-        } else {
-          throw StateError(
-            '${definition.id} verification returned ${observed.kind.name}.',
+        try {
+          final executor =
+              definition.privilege == OperationPrivilege.administrator
+              ? elevatedExecutor
+              : userExecutor;
+          await executor.apply(definition, item.request);
+          final observed = await definition.verify(item.request);
+          item.written = observed;
+          final valueMatches = _valuesEqual(
+            observed.value,
+            item.request.desiredValue,
           );
+          if (observed.kind == OperationStateKind.pendingRestart &&
+              valueMatches) {
+            item.status = PlanItemStatus.pendingRestart;
+            plan.restartRequired = true;
+          } else if (observed.kind == OperationStateKind.configured &&
+              valueMatches) {
+            item.status = PlanItemStatus.verified;
+          } else {
+            throw StateError(
+              '${definition.id} verification returned '
+              '${observed.kind.name} with an unexpected value.',
+            );
+          }
+        } catch (error) {
+          item
+            ..status = PlanItemStatus.failed
+            ..error = error.toString();
+          if (definition.scope != OperationScope.app) {
+            stopSystemMutations = true;
+          }
         }
       }
-      plan.status = PlanStatus.completed;
+
+      final hasFailure = plan.items.any(
+        (item) => item.status == PlanItemStatus.failed,
+      );
+      final mayNeedRollback = plan.items.any(
+        (item) =>
+            item.status == PlanItemStatus.verified ||
+            item.status == PlanItemStatus.pendingRestart ||
+            (item.status == PlanItemStatus.failed && item.snapshot != null),
+      );
+      plan.status = hasFailure
+          ? (mayNeedRollback ? PlanStatus.rollbackRequired : PlanStatus.failed)
+          : PlanStatus.completed;
     } catch (error) {
       final current = plan.items.where(
         (item) => item.status == PlanItemStatus.applying,
@@ -141,14 +192,7 @@ class PlanEngine {
           ..status = PlanItemStatus.failed
           ..error = error.toString();
       }
-      plan.status =
-          plan.items.any(
-            (item) =>
-                item.status == PlanItemStatus.verified ||
-                item.status == PlanItemStatus.pendingRestart,
-          )
-          ? PlanStatus.rollbackRequired
-          : PlanStatus.failed;
+      plan.status = PlanStatus.failed;
     }
     store?.save(plan);
     return plan;
@@ -162,7 +206,8 @@ class PlanEngine {
     for (final item in plan.items.reversed.where(
       (item) =>
           item.status == PlanItemStatus.verified ||
-          item.status == PlanItemStatus.pendingRestart,
+          item.status == PlanItemStatus.pendingRestart ||
+          item.status == PlanItemStatus.failed,
     )) {
       final definition = registry.resolve(item.operationId);
       final snapshot = item.snapshot;

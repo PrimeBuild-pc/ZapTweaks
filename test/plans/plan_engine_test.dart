@@ -10,13 +10,23 @@ import 'package:script_utility/core/plans/operation_plan.dart';
 import 'package:script_utility/core/plans/plan_engine.dart';
 
 class _MemoryOperation extends OperationDefinition {
-  _MemoryOperation(this.id, this.scope, this._values);
+  _MemoryOperation(
+    this.id,
+    this.scope,
+    this._values, {
+    this.throwOnApply = false,
+    this.restartPending = false,
+    this.restartPendingValue,
+  });
 
   @override
   final String id;
   @override
   final OperationScope scope;
   final Map<String, Object?> _values;
+  final bool throwOnApply;
+  final bool restartPending;
+  final Object? restartPendingValue;
   @override
   List<String> get legacyAliases => const <String>[];
 
@@ -24,6 +34,7 @@ class _MemoryOperation extends OperationDefinition {
 
   @override
   Future<void> apply(OperationRequest request) async {
+    if (throwOnApply) throw StateError('fixture failure');
     _values[_key(request)] = request.desiredValue;
   }
 
@@ -72,7 +83,15 @@ class _MemoryOperation extends OperationDefinition {
       : const SupportResult.unsupported('Windows 11 x64 is required.');
 
   @override
-  Future<OperationState> verify(OperationRequest request) => inspect(request);
+  Future<OperationState> verify(OperationRequest request) async {
+    if (restartPending) {
+      return OperationState(
+        OperationStateKind.pendingRestart,
+        value: restartPendingValue ?? _values[_key(request)],
+      );
+    }
+    return inspect(request);
+  }
 
   @override
   EvidenceLevel get benefitEvidence => EvidenceLevel.unverified;
@@ -177,6 +196,95 @@ void main() {
       expect(values, isEmpty);
     },
   );
+
+  test('independent app failures do not block later app operations', () async {
+    final values = <String, Object?>{};
+    final engine = PlanEngine(
+      registry: OperationRegistry(<OperationDefinition>[
+        _MemoryOperation(
+          'app.first.install',
+          OperationScope.app,
+          values,
+          throwOnApply: true,
+        ),
+        _MemoryOperation('app.second.install', OperationScope.app, values),
+      ]),
+      context: const OperationContext(windowsBuild: 26100, edition: 'Pro'),
+      user: 'test-user',
+      appVersion: 'test',
+    );
+    final plan = await engine.plan(const <OperationRequest>[
+      OperationRequest(operationId: 'app.first.install', desiredValue: true),
+      OperationRequest(operationId: 'app.second.install', desiredValue: true),
+    ]);
+
+    await engine.execute(plan);
+
+    expect(plan.items.first.status, PlanItemStatus.failed);
+    expect(plan.items.last.status, PlanItemStatus.verified);
+    expect(values['app.second.install/'], isTrue);
+    expect(plan.status, PlanStatus.rollbackRequired);
+  });
+
+  test('pending restart must preserve the requested value', () async {
+    final values = <String, Object?>{};
+    final operation = _MemoryOperation(
+      'driver.sample.configure',
+      OperationScope.driver,
+      values,
+      restartPending: true,
+      restartPendingValue: false,
+    );
+    final engine = PlanEngine(
+      registry: OperationRegistry(<OperationDefinition>[operation]),
+      context: const OperationContext(windowsBuild: 26100, edition: 'Pro'),
+      user: 'test-user',
+      appVersion: 'test',
+    );
+    final plan = await engine.plan(const <OperationRequest>[
+      OperationRequest(
+        operationId: 'driver.sample.configure',
+        desiredValue: true,
+      ),
+    ]);
+    await engine.execute(plan);
+
+    expect(plan.status, PlanStatus.rollbackRequired);
+    expect(plan.items.single.status, PlanItemStatus.failed);
+  });
+
+  test('running plans are marked interrupted after a crash', () {
+    final database = sqlite3.openInMemory();
+    addTearDown(database.close);
+    final store = OperationStore(database);
+    final plan = OperationPlan(
+      id: 'interrupted-plan',
+      createdAt: DateTime.utc(2026),
+      user: 'test-user',
+      appVersion: 'test',
+      windowsBuild: 26100,
+      status: PlanStatus.running,
+      items: <PlanItem>[
+        PlanItem(
+          operationId: 'registry.sample.set',
+          request: const OperationRequest(
+            operationId: 'registry.sample.set',
+            desiredValue: true,
+          ),
+          before: const OperationState(OperationStateKind.absent),
+          status: PlanItemStatus.applying,
+        ),
+      ],
+    );
+    store.save(plan);
+
+    expect(store.markRunningPlansInterrupted(), 1);
+
+    final recovered = store.loadIncomplete().single;
+    expect(recovered.status, PlanStatus.interrupted);
+    expect(recovered.items.single.status, PlanItemStatus.failed);
+    expect(recovered.items.single.error, contains('stopped'));
+  });
 
   test('rollback refuses to overwrite a later manual change', () async {
     final values = <String, Object?>{};

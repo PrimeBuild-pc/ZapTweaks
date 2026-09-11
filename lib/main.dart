@@ -1,7 +1,8 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:bitsdojo_window/bitsdojo_window.dart';
-import 'package:fluent_ui/fluent_ui.dart' show Alignment, Size;
+import 'package:fluent_ui/fluent_ui.dart' show Size;
 import 'package:flutter/widgets.dart' show WidgetsFlutterBinding, runApp;
 import 'package:flutter_acrylic/flutter_acrylic.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -9,6 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'app/app_metadata.dart';
 import 'app/zap_tweaks_app.dart';
 import 'app/window_effect_coordinator.dart';
+import 'app/window_placement.dart';
 import 'core/services/hardware_detection_service.dart';
 import 'core/services/logging_service.dart';
 import 'core/services/metrics_sampling_service.dart';
@@ -18,6 +20,7 @@ import 'core/services/restore_point_service.dart';
 import 'core/services/safety_gate_service.dart';
 import 'core/services/system_action_service.dart';
 import 'core/services/tweak_catalog_service.dart';
+import 'core/security/elevated_helper.dart';
 import 'core/tweak_manager.dart';
 import 'features/tweaks/application/tweak_controller.dart';
 import 'legacy/adapters/legacy_catalog_adapter.dart';
@@ -33,8 +36,23 @@ Future<void> _initWindowIfNeeded() async {
   await WindowEffectCoordinator.instance.applyNow();
 }
 
-Future<void> main() async {
+Future<void> main(List<String> arguments) async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  if (arguments.length == 3 && arguments.first == '--zaptweaks-helper') {
+    final processRunner = ProcessRunner();
+    ProcessRunner.configureShared(processRunner);
+    final exitCode = await ElevatedHelperHost(
+      allowedDirectory: defaultElevatedHelperDirectory(),
+      catalogService: TweakCatalogService(),
+      tweakManager: TweakManager(
+        loggingService: LoggingService.instance,
+        processRunner: processRunner,
+      ),
+      restorePointService: RestorePointService(processRunner: processRunner),
+    ).run(File(utf8.decode(base64Url.decode(arguments[1]))), arguments[2]);
+    exit(exitCode);
+  }
 
   final bootstrapResults = await Future.wait<dynamic>(<Future<dynamic>>[
     _initWindowIfNeeded(),
@@ -79,15 +97,22 @@ Future<void> main() async {
     loggingService: LoggingService.instance,
     appVersion: AppMetadata.semanticVersion,
     legacyCatalogAdapterLoader: () async => legacyCatalogAdapter,
+    elevatedHelperClient: ElevatedHelperClient(
+      directory: defaultElevatedHelperDirectory(),
+    ),
   );
 
   runApp(ZapTweaksApp(controller: controller));
 
   doWhenWindowReady(() {
+    const initialSize = Size(1280, 820);
     appWindow.minSize = const Size(1100, 720);
-    appWindow.size = const Size(1280, 820);
-    appWindow.alignment = Alignment.center;
+    appWindow.size = initialSize;
     appWindow.title = AppMetadata.productName;
     appWindow.show();
+    appWindow.position = primaryWindowPosition(
+      windowsPrimaryDisplaySize(),
+      initialSize,
+    );
   });
 }

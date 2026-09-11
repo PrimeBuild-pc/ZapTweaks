@@ -45,6 +45,7 @@ dependencies:
   flutter_svg: ^2.2.3
   sqlite3: ^3.0.0
   crypto: ^3.0.0
+  win32: ^5.15.0
 
 dev_dependencies:
   flutter_test:

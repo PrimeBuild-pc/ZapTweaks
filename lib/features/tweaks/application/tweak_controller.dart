@@ -24,6 +24,7 @@ import '../../../core/services/system_action_service.dart';
 import '../../../core/services/tweak_catalog_service.dart';
 import '../../../core/tweak_manager.dart';
 import '../../../legacy/adapters/legacy_catalog_adapter.dart';
+import '../../../core/security/elevated_helper.dart';
 import '../../../models/system_tweak.dart';
 
 class TweakController extends ChangeNotifier {
@@ -41,6 +42,7 @@ class TweakController extends ChangeNotifier {
     LoggingService? loggingService,
     PowerPlanService? powerPlanService,
     Future<LegacyCatalogAdapter> Function()? legacyCatalogAdapterLoader,
+    ElevatedHelperClient? elevatedHelperClient,
   }) : _tweakManager = tweakManager,
        _permissionService = permissionService,
        _hardwareDetectionService = hardwareDetectionService,
@@ -60,7 +62,8 @@ class TweakController extends ChangeNotifier {
        _loggingService = loggingService ?? LoggingService.instance,
        _legacyCatalogAdapterLoader =
            legacyCatalogAdapterLoader ??
-           (() async => LegacyCatalogAdapter.identity);
+           (() async => LegacyCatalogAdapter.identity),
+       _elevatedHelperClient = elevatedHelperClient;
 
   final TweakManager _tweakManager;
   final PermissionService _permissionService;
@@ -75,6 +78,7 @@ class TweakController extends ChangeNotifier {
   final String _appVersion;
   final LoggingService _loggingService;
   final Future<LegacyCatalogAdapter> Function() _legacyCatalogAdapterLoader;
+  final ElevatedHelperClient? _elevatedHelperClient;
 
   static const String defaultPreset = 'Default';
   static const String safePreset = 'Safe';
@@ -108,6 +112,8 @@ class TweakController extends ChangeNotifier {
   Timer? _metricsTicker;
   bool _isSamplingMetrics = false;
   bool _isSystemOperationActive = false;
+  Future<bool>? _helperRestorePointDecision;
+  bool _helperRestorePointAttempted = false;
   bool _automaticUpdateChecksEnabled = true;
   bool _startWithWindows = false;
   bool _expertModeEnabled = false;
@@ -537,6 +543,28 @@ class TweakController extends ChangeNotifier {
 
     // Mark busy up front: creating a restore point can take a while and the
     // user needs a spinner for the whole operation, not just the apply step.
+    if (_processRunner.isDryRun) {
+      return _setSystemTweak(descriptor, nextValue);
+    }
+
+    if (!_isAdmin && _elevatedHelperClient != null) {
+      try {
+        _helperRestorePointDecision ??= confirmRestorePoint();
+        final createRestorePoint =
+            !_helperRestorePointAttempted &&
+            await _helperRestorePointDecision!;
+        _helperRestorePointAttempted |= createRestorePoint;
+        return _setSystemTweak(
+          descriptor,
+          nextValue,
+          createRestorePoint: createRestorePoint,
+        );
+      } catch (error) {
+        _helperRestorePointDecision = null;
+        return OperationResult(success: false, message: error.toString());
+      }
+    }
+
     _markBusy(descriptor.id);
     try {
       final gate = await _safetyGateService.ensureSafety(
@@ -555,8 +583,9 @@ class TweakController extends ChangeNotifier {
 
   Future<OperationResult> _setSystemTweak(
     TweakDescriptor descriptor,
-    bool nextValue,
-  ) async {
+    bool nextValue, {
+    bool createRestorePoint = false,
+  }) async {
     if (nextValue && !isDescriptorAvailable(descriptor)) {
       return OperationResult(
         success: false,
@@ -572,31 +601,54 @@ class TweakController extends ChangeNotifier {
 
     _isSystemOperationActive = true;
     final previous = _toggleStates[descriptor.id] ?? false;
+    if (_processRunner.isDryRun) {
+      _isSystemOperationActive = false;
+      return const OperationResult(
+        success: true,
+        message: 'Dry run completed without changing Windows.',
+      );
+    }
     _markBusy(descriptor.id);
     _toggleStates[descriptor.id] = nextValue;
     notifyListeners();
 
     try {
-      final result = await _tweakManager.applyTweak(
-        descriptor.systemKey!,
-        nextValue,
-      );
-      if (!result.success) {
-        _toggleStates[descriptor.id] = previous;
-        return OperationResult(
-          success: false,
-          message: result.errors.join('\n'),
+      if (!_isAdmin && _elevatedHelperClient != null) {
+        final result = await _elevatedHelperClient.applySystemTweak(
+          operationId: descriptor.id,
+          desiredValue: nextValue,
+          createRestorePoint: createRestorePoint,
         );
-      }
+        if (!result.success || result.observed != nextValue) {
+          _toggleStates[descriptor.id] = previous;
+          return OperationResult(
+            success: false,
+            message:
+                result.message ??
+                'State verification failed for ${descriptor.title}.',
+          );
+        }
+      } else {
+        final result = await _tweakManager.applyTweak(
+          descriptor.systemKey!,
+          nextValue,
+        );
+        if (!result.success) {
+          _toggleStates[descriptor.id] = previous;
+          return OperationResult(
+            success: false,
+            message: result.errors.join('\n'),
+          );
+        }
 
-      if (!_processRunner.isDryRun &&
-          await _tweakManager.detectTweakState(descriptor.systemKey!) !=
-              nextValue) {
-        _toggleStates[descriptor.id] = previous;
-        return OperationResult(
-          success: false,
-          message: 'State verification failed for ${descriptor.title}.',
-        );
+        if (await _tweakManager.detectTweakState(descriptor.systemKey!) !=
+            nextValue) {
+          _toggleStates[descriptor.id] = previous;
+          return OperationResult(
+            success: false,
+            message: 'State verification failed for ${descriptor.title}.',
+          );
+        }
       }
 
       await _preferences.setBool(descriptor.id, nextValue);
