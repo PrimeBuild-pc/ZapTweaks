@@ -9,6 +9,7 @@ import 'package:script_utility/core/operations/registry_dword_operation.dart';
 import 'package:script_utility/core/persistence/operation_store.dart';
 import 'package:script_utility/core/plans/operation_plan.dart';
 import 'package:script_utility/core/plans/plan_engine.dart';
+import 'package:script_utility/core/services/process_runner.dart';
 import 'package:script_utility/platform/windows/registry_value_store.dart';
 import 'package:sqlite3/sqlite3.dart';
 
@@ -71,8 +72,13 @@ RegistryDwordOperation _operation(RegistryValueStore store) =>
 
 void main() {
   test('native catalog migrates Taskbar End task to the typed engine', () {
-    final operation = createNativeOperationCatalog(_MemoryRegistry()).single;
+    final operations = createNativeOperationCatalog(
+      _MemoryRegistry(),
+      ProcessRunner(mode: ProcessExecutionMode.dryRun),
+    );
+    final operation = operations.first;
 
+    expect(operations, hasLength(18));
     expect(operation.id, 'ui_taskbar_end_task');
     expect(operation.scope, OperationScope.user);
     expect(operation.rollbackCapability, RollbackCapability.exact);

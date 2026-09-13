@@ -7,7 +7,7 @@ This ledger tracks `docs/NEW PLAN.md`. A phase is complete only when its gate is
 | 0 — Baseline | Complete | `assets/catalog/legacy_catalog.json`; 346-ID, uniqueness, destination, disposition and alias tests | — |
 | 1 — Shell | Complete | Final navigation, global search, opt-in Expert mode, legacy adapter, external tools retained, no startup UAC, opaque bulk presets hidden | — |
 | 2 — Foundations | In progress | Typed operation contract/state/evidence, registry, deterministic Plan Engine, typed snapshots, SQLite v1 journal/reboot tables, conflict-aware privileged rollback, helper allowlist, nonce/hash-bound typed request files, ACL-restricted IPC directory and temporary `runas` helper mode; first production operation `ui_taskbar_end_task` now uses the Plan Engine and typed Win32 Registry I/O | Route one complete multi-item `OperationPlan` per helper launch and stream progress |
-| 3 — Setup and Apps | In progress | Provider/scope-aware app inventory parser, removal preview model, 17 Microsoft restore identities | Native wizard and mutation operations through Plan Engine |
+| 3 — Setup and Apps | In progress | Provider/scope-aware AppX/winget JSON inventory with explicit incomplete-scope reporting and temporary-file cleanup; removal preview model; 17 Microsoft restore operations use verified fixed Store/winget IDs, explicit sources and the Plan Engine | Wizard, elevated all-user/provisioned inventory, optional components, startup and previewed removal operations |
 | 4 — Drivers | In progress | Driver identity/rollback model, expiring policy model, HTTPS/hash/publisher verifier | SetupAPI/Driver Store inventory and verified install/reboot continuation |
 | 5 — Gaming and hardware | In progress | Topology-aware RSS, MSI limit and non-truncating affinity validators | PowrProf, SetupAPI/IRQ and NDIS platform implementations |
 | 6 — Windows and diagnostics | In progress | Cleanup preview scanner and deterministic diagnostic-session lifecycle | SCM, Task Scheduler, ETW collectors, repair and recovery UI |
@@ -16,7 +16,7 @@ This ledger tracks `docs/NEW PLAN.md`. A phase is complete only when its gate is
 
 ## Last local verification
 
-- `flutter test -j 1`: 115 tests passed.
+- `flutter test -j 1`: 120 tests passed.
 - `flutter analyze`: no issues.
 - `flutter build windows --debug` and `--release`: succeeded.
 - The main executable starts as `asInvoker`; real UAC helper smoke tests

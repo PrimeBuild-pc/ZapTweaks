@@ -18,6 +18,7 @@ class _MemoryOperation extends OperationDefinition {
     this.restartPending = false,
     this.restartPendingValue,
     this.operationPrivilege = OperationPrivilege.user,
+    this.forcedInspectKind,
   });
 
   @override
@@ -29,6 +30,7 @@ class _MemoryOperation extends OperationDefinition {
   final bool restartPending;
   final Object? restartPendingValue;
   final OperationPrivilege operationPrivilege;
+  final OperationStateKind? forcedInspectKind;
   @override
   List<String> get legacyAliases => const <String>[];
 
@@ -61,6 +63,7 @@ class _MemoryOperation extends OperationDefinition {
 
   @override
   Future<OperationState> inspect(OperationRequest request) async {
+    if (forcedInspectKind != null) return OperationState(forcedInspectKind!);
     final key = _key(request);
     return _values.containsKey(key)
         ? OperationState(OperationStateKind.configured, value: _values[key])
@@ -230,6 +233,31 @@ void main() {
     expect(plan.items.last.status, PlanItemStatus.verified);
     expect(values['app.second.install/'], isTrue);
     expect(plan.status, PlanStatus.rollbackRequired);
+  });
+
+  test('unknown inspection state never becomes a mutation', () async {
+    final values = <String, Object?>{};
+    final engine = PlanEngine(
+      registry: OperationRegistry(<OperationDefinition>[
+        _MemoryOperation(
+          'registry.unknown.set',
+          OperationScope.user,
+          values,
+          forcedInspectKind: OperationStateKind.unknown,
+        ),
+      ]),
+      context: const OperationContext(windowsBuild: 26100, edition: 'Pro'),
+      user: 'test-user',
+      appVersion: 'test',
+    );
+    final plan = await engine.plan(const <OperationRequest>[
+      OperationRequest(operationId: 'registry.unknown.set', desiredValue: true),
+    ]);
+
+    await engine.execute(plan);
+
+    expect(plan.items.single.status, PlanItemStatus.skipped);
+    expect(values, isEmpty);
   });
 
   test('an absent state satisfies an explicit null desired value', () async {

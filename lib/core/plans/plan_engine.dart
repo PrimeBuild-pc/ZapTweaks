@@ -80,14 +80,18 @@ class PlanEngine {
               OperationStateKind.notApplicable,
               message: support.reason,
             );
+      final canPlan =
+          support.supported &&
+          before.kind != OperationStateKind.unknown &&
+          before.kind != OperationStateKind.notApplicable &&
+          before.kind != OperationStateKind.error;
       items.add(
         PlanItem(
           operationId: definition.id,
           request: request,
           before: before,
-          status: support.supported
-              ? PlanItemStatus.planned
-              : PlanItemStatus.skipped,
+          status: canPlan ? PlanItemStatus.planned : PlanItemStatus.skipped,
+          error: canPlan ? null : support.reason ?? before.message,
         ),
       );
     }

@@ -26,8 +26,7 @@ class AppInventoryParser {
             version: (map['InstalledVersion'] ?? map['Version']) as String?,
             publisher: map['Publisher'] as String?,
             scopes: const <AppInstallScope>{AppInstallScope.currentUser},
-            source: (map['Source'] ?? sourceMap['SourceDetails'] ?? 'winget')
-                .toString(),
+            source: _wingetSource(map, sourceMap),
             reinstallable: true,
           ),
         );
@@ -38,32 +37,48 @@ class AppInventoryParser {
 
   List<AppPackage> parseAppx(String json) {
     final decoded = jsonDecode(json);
-    final rows = decoded is List ? decoded : <dynamic>[decoded];
-    return rows
-        .map((row) {
-          final map = Map<String, dynamic>.from(row as Map);
-          final scopes = <AppInstallScope>{};
-          if (map['CurrentUser'] == true) {
-            scopes.add(AppInstallScope.currentUser);
-          }
-          if (map['AllUsers'] == true) {
-            scopes.add(AppInstallScope.allUsers);
-          }
-          if (map['Provisioned'] == true) {
-            scopes.add(AppInstallScope.provisioned);
-          }
-          return AppPackage(
-            provider: AppProvider.appx,
-            packageId: map['Name'] as String,
-            name: (map['DisplayName'] ?? map['Name']) as String,
-            version: map['Version'] as String?,
-            publisher: map['Publisher'] as String?,
-            scopes: scopes,
-            source: 'Microsoft Store',
-            reinstallable: map['Reinstallable'] == true,
-          );
-        })
-        .toList(growable: false);
+    final rows = decoded is List
+        ? decoded
+        : decoded is Map
+        ? <dynamic>[decoded]
+        : const <dynamic>[];
+    final packages = <String, AppPackage>{};
+    for (final row in rows) {
+      final map = Map<String, dynamic>.from(row as Map);
+      final id = map['Name'] as String?;
+      if (id == null || id.isEmpty) continue;
+      final scopes = <AppInstallScope>{
+        if (map['CurrentUser'] == true) AppInstallScope.currentUser,
+        if (map['AllUsers'] == true) AppInstallScope.allUsers,
+        if (map['Provisioned'] == true) AppInstallScope.provisioned,
+      };
+      final previous = packages[id];
+      packages[id] = AppPackage(
+        provider: AppProvider.appx,
+        packageId: id,
+        name: (map['DisplayName'] ?? previous?.name ?? id) as String,
+        version: map['Version'] as String? ?? previous?.version,
+        publisher: map['Publisher'] as String? ?? previous?.publisher,
+        scopes: <AppInstallScope>{...?previous?.scopes, ...scopes},
+        source: 'Microsoft Store',
+        reinstallable:
+            previous?.reinstallable == true || map['Reinstallable'] == true,
+      );
+    }
+    return packages.values.toList(growable: false);
+  }
+
+  static String _wingetSource(
+    Map<String, dynamic> package,
+    Map<String, dynamic> source,
+  ) {
+    final explicit = package['Source'];
+    if (explicit != null) return explicit.toString();
+    final details = source['SourceDetails'];
+    if (details is Map) {
+      return (details['Name'] ?? details['Identifier'] ?? 'winget').toString();
+    }
+    return details?.toString() ?? 'winget';
   }
 
   AppRemovalPreview previewRemoval(

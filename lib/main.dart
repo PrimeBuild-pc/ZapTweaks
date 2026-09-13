@@ -75,6 +75,8 @@ Future<void> main(List<String> arguments) async {
 
   final prefs = bootstrapResults[2] as SharedPreferences;
   final legacyCatalogAdapter = await LegacyCatalogAdapter.load();
+  final processRunner = ProcessRunner();
+  ProcessRunner.configureShared(processRunner);
   final dataDirectory = Directory(
     path.join(
       Platform.environment['LOCALAPPDATA'] ?? Directory.systemTemp.path,
@@ -87,15 +89,16 @@ Future<void> main(List<String> arguments) async {
   );
   operationStore.markRunningPlansInterrupted();
   final operationRegistry = OperationRegistry(
-    createNativeOperationCatalog(const WindowsRegistryValueStore()),
+    createNativeOperationCatalog(
+      const WindowsRegistryValueStore(),
+      processRunner,
+    ),
   );
 
   await LoggingService.instance.logInfo(
     'Application startup sequence started.',
   );
 
-  final processRunner = ProcessRunner();
-  ProcessRunner.configureShared(processRunner);
   final permissionService = PermissionService(processRunner: processRunner);
   final restorePointService = RestorePointService(processRunner: processRunner);
   final safetyGateService = SafetyGateService(

@@ -712,6 +712,9 @@ class TweakController extends ChangeNotifier {
     if (_nativeToggleEnabledValues.containsKey(descriptor.id)) {
       return _runNativeToggle(descriptor);
     }
+    if (_operationRegistry?.contains(descriptor.id) == true) {
+      return _runNativeAction(descriptor);
+    }
 
     _markBusy(descriptor.id);
     try {
@@ -727,6 +730,43 @@ class TweakController extends ChangeNotifier {
     }
 
     return _runScriptTweak(descriptor);
+  }
+
+  Future<OperationResult> _runNativeAction(TweakDescriptor descriptor) async {
+    final engine = _planEngine;
+    if (engine == null) {
+      return const OperationResult(
+        success: false,
+        message: 'Native operation engine is unavailable.',
+      );
+    }
+    _markBusy(descriptor.id);
+    try {
+      final plan = await engine.plan(<OperationRequest>[
+        OperationRequest(operationId: descriptor.id, desiredValue: true),
+      ]);
+      await engine.execute(plan, dryRun: _processRunner.isDryRun);
+      if (plan.status == PlanStatus.dryRunComplete) {
+        return const OperationResult(
+          success: true,
+          message: 'Dry run completed without changing Windows.',
+        );
+      }
+      final item = plan.items.single;
+      if (plan.status != PlanStatus.completed ||
+          item.status != PlanItemStatus.verified) {
+        return OperationResult(
+          success: false,
+          message: item.error ?? item.before.message ?? 'Operation failed.',
+        );
+      }
+      await _preferences.setBool('executed:${descriptor.id}', true);
+      return const OperationResult(success: true);
+    } catch (error) {
+      return OperationResult(success: false, message: error.toString());
+    } finally {
+      _clearBusy(descriptor.id);
+    }
   }
 
   Future<OperationResult> _runNativeToggle(
@@ -759,8 +799,9 @@ class TweakController extends ChangeNotifier {
           message: 'Dry run completed without changing Windows.',
         );
       }
-      if (plan.status != PlanStatus.completed) {
-        final item = plan.items.single;
+      final item = plan.items.single;
+      if (plan.status != PlanStatus.completed ||
+          item.status != PlanItemStatus.verified) {
         return OperationResult(
           success: false,
           message: item.error ?? item.before.message ?? 'Operation failed.',
