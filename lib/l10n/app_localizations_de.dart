@@ -368,4 +368,11 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get searchResults => 'Search results';
+
+  @override
+  String get operationTaskbarEndTaskTitle => 'Taskbar End task';
+
+  @override
+  String get operationTaskbarEndTaskDescription =>
+      'Show End task in taskbar app context menus.';
 }

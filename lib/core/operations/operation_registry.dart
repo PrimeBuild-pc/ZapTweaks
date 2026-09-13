@@ -24,6 +24,9 @@ class OperationRegistry {
 
   Iterable<OperationDefinition> get definitions => _definitions.values;
 
+  bool contains(String idOrAlias) =>
+      _definitions.containsKey(idOrAlias) || _aliases.containsKey(idOrAlias);
+
   OperationDefinition resolve(String idOrAlias) {
     final id = _aliases[idOrAlias] ?? idOrAlias;
     final definition = _definitions[id];

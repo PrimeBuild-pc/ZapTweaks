@@ -7,6 +7,11 @@ import 'operation_plan.dart';
 
 abstract class OperationExecutor {
   Future<void> apply(OperationDefinition definition, OperationRequest request);
+  Future<void> rollback(
+    OperationDefinition definition,
+    OperationRequest request,
+    OperationSnapshot snapshot,
+  );
 }
 
 class DirectOperationExecutor implements OperationExecutor {
@@ -17,6 +22,13 @@ class DirectOperationExecutor implements OperationExecutor {
     OperationDefinition definition,
     OperationRequest request,
   ) => definition.apply(request);
+
+  @override
+  Future<void> rollback(
+    OperationDefinition definition,
+    OperationRequest request,
+    OperationSnapshot snapshot,
+  ) => definition.rollback(request, snapshot);
 }
 
 class RejectingElevatedExecutor implements OperationExecutor {
@@ -26,6 +38,13 @@ class RejectingElevatedExecutor implements OperationExecutor {
   Future<void> apply(
     OperationDefinition definition,
     OperationRequest request,
+  ) => throw StateError('No elevated helper is connected.');
+
+  @override
+  Future<void> rollback(
+    OperationDefinition definition,
+    OperationRequest request,
+    OperationSnapshot snapshot,
   ) => throw StateError('No elevated helper is connected.');
 }
 
@@ -101,8 +120,15 @@ class PlanEngine {
         (item) => item.status == PlanItemStatus.planned,
       )) {
         final definition = registry.resolve(item.operationId);
-        item.snapshot = await definition.captureSnapshot(item.request);
-        item.status = PlanItemStatus.snapshotted;
+        try {
+          item.snapshot = await definition.captureSnapshot(item.request);
+          item.status = PlanItemStatus.snapshotted;
+        } catch (error) {
+          item
+            ..status = PlanItemStatus.failed
+            ..error = error.toString();
+          rethrow;
+        }
       }
       store?.save(plan);
 
@@ -152,8 +178,10 @@ class PlanEngine {
               valueMatches) {
             item.status = PlanItemStatus.pendingRestart;
             plan.restartRequired = true;
-          } else if (observed.kind == OperationStateKind.configured &&
-              valueMatches) {
+          } else if ((observed.kind == OperationStateKind.configured &&
+                  valueMatches) ||
+              (observed.kind == OperationStateKind.absent &&
+                  item.request.desiredValue == null)) {
             item.status = PlanItemStatus.verified;
           } else {
             throw StateError(
@@ -224,14 +252,22 @@ class PlanEngine {
         conflict = true;
         continue;
       }
-      await definition.rollback(item.request, snapshot);
-      final restored = await definition.inspect(item.request);
-      if (!restored.sameValue(snapshot.expectedAfterRollback)) {
-        item.status = PlanItemStatus.rollbackConflict;
+      final executor = definition.privilege == OperationPrivilege.administrator
+          ? elevatedExecutor
+          : userExecutor;
+      try {
+        await executor.rollback(definition, item.request, snapshot);
+        final restored = await definition.inspect(item.request);
+        if (!restored.sameValue(snapshot.expectedAfterRollback)) {
+          throw StateError('${definition.id} rollback verification failed.');
+        }
+        item.status = PlanItemStatus.rolledBack;
+      } catch (error) {
+        item
+          ..status = PlanItemStatus.rollbackConflict
+          ..error = error.toString();
         conflict = true;
-        continue;
       }
-      item.status = PlanItemStatus.rolledBack;
     }
     plan.status = conflict
         ? PlanStatus.rollbackConflict

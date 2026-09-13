@@ -12,6 +12,12 @@ import '../../../core/models/safety_gate_result.dart';
 import '../../../core/models/system_metrics_snapshot.dart';
 import '../../../core/models/tweak_descriptor.dart';
 import '../../../core/models/update_info.dart';
+import '../../../core/operations/operation.dart';
+import '../../../core/operations/operation_registry.dart';
+import '../../../core/persistence/operation_store.dart';
+import '../../../core/plans/operation_plan.dart';
+import '../../../core/plans/plan_engine.dart';
+import '../../../core/security/elevated_helper.dart';
 import '../../../core/services/app_locale_service.dart';
 import '../../../core/services/hardware_detection_service.dart';
 import '../../../core/services/logging_service.dart';
@@ -24,7 +30,6 @@ import '../../../core/services/system_action_service.dart';
 import '../../../core/services/tweak_catalog_service.dart';
 import '../../../core/tweak_manager.dart';
 import '../../../legacy/adapters/legacy_catalog_adapter.dart';
-import '../../../core/security/elevated_helper.dart';
 import '../../../models/system_tweak.dart';
 
 class TweakController extends ChangeNotifier {
@@ -43,6 +48,8 @@ class TweakController extends ChangeNotifier {
     PowerPlanService? powerPlanService,
     Future<LegacyCatalogAdapter> Function()? legacyCatalogAdapterLoader,
     ElevatedHelperClient? elevatedHelperClient,
+    OperationRegistry? operationRegistry,
+    OperationStore? operationStore,
   }) : _tweakManager = tweakManager,
        _permissionService = permissionService,
        _hardwareDetectionService = hardwareDetectionService,
@@ -63,7 +70,9 @@ class TweakController extends ChangeNotifier {
        _legacyCatalogAdapterLoader =
            legacyCatalogAdapterLoader ??
            (() async => LegacyCatalogAdapter.identity),
-       _elevatedHelperClient = elevatedHelperClient;
+       _elevatedHelperClient = elevatedHelperClient,
+       _operationRegistry = operationRegistry,
+       _operationStore = operationStore;
 
   final TweakManager _tweakManager;
   final PermissionService _permissionService;
@@ -79,6 +88,9 @@ class TweakController extends ChangeNotifier {
   final LoggingService _loggingService;
   final Future<LegacyCatalogAdapter> Function() _legacyCatalogAdapterLoader;
   final ElevatedHelperClient? _elevatedHelperClient;
+  final OperationRegistry? _operationRegistry;
+  final OperationStore? _operationStore;
+  PlanEngine? _planEngine;
 
   static const String defaultPreset = 'Default';
   static const String safePreset = 'Safe';
@@ -96,6 +108,9 @@ class TweakController extends ChangeNotifier {
   static const int _maxMetricsPoints = 40;
   static const Set<String> _interactionLockingTweaks = <String>{
     'network_low_latency_bandwidth_profile',
+  };
+  static const Map<String, int> _nativeToggleEnabledValues = <String, int>{
+    'ui_taskbar_end_task': 1,
   };
 
   bool _isLoading = true;
@@ -334,6 +349,18 @@ class TweakController extends ChangeNotifier {
 
       _isAdmin = futures[0] as bool;
       _hardwareProfile = futures[1] as HardwareProfile;
+      if (_operationRegistry != null) {
+        _planEngine = PlanEngine(
+          registry: _operationRegistry,
+          context: OperationContext(
+            windowsBuild: _hardwareProfile.windowsBuild,
+            edition: 'Home/Pro',
+          ),
+          user: Platform.environment['USERNAME'] ?? 'current-user',
+          appVersion: _appVersion,
+          store: _operationStore,
+        );
+      }
       final detectedStates = futures[2] as Map<String, bool>;
       unawaited(
         _loggingService.logInfo(
@@ -551,8 +578,7 @@ class TweakController extends ChangeNotifier {
       try {
         _helperRestorePointDecision ??= confirmRestorePoint();
         final createRestorePoint =
-            !_helperRestorePointAttempted &&
-            await _helperRestorePointDecision!;
+            !_helperRestorePointAttempted && await _helperRestorePointDecision!;
         _helperRestorePointAttempted |= createRestorePoint;
         return _setSystemTweak(
           descriptor,
@@ -683,6 +709,9 @@ class TweakController extends ChangeNotifier {
         message: 'A preset is being applied to this category.',
       );
     }
+    if (_nativeToggleEnabledValues.containsKey(descriptor.id)) {
+      return _runNativeToggle(descriptor);
+    }
 
     _markBusy(descriptor.id);
     try {
@@ -700,10 +729,59 @@ class TweakController extends ChangeNotifier {
     return _runScriptTweak(descriptor);
   }
 
+  Future<OperationResult> _runNativeToggle(
+    TweakDescriptor descriptor, {
+    bool? target,
+  }) async {
+    final engine = _planEngine;
+    if (engine == null || !engine.registry.contains(descriptor.id)) {
+      return const OperationResult(
+        success: false,
+        message: 'Native operation engine is unavailable.',
+      );
+    }
+    final tweak = descriptor.scriptTweak!;
+    final desired = target ?? !tweak.isApplied;
+    _markBusy(descriptor.id);
+    try {
+      final plan = await engine.plan(<OperationRequest>[
+        OperationRequest(
+          operationId: descriptor.id,
+          desiredValue: desired
+              ? _nativeToggleEnabledValues[descriptor.id]
+              : null,
+        ),
+      ]);
+      await engine.execute(plan, dryRun: _processRunner.isDryRun);
+      if (plan.status == PlanStatus.dryRunComplete) {
+        return const OperationResult(
+          success: true,
+          message: 'Dry run completed without changing Windows.',
+        );
+      }
+      if (plan.status != PlanStatus.completed) {
+        final item = plan.items.single;
+        return OperationResult(
+          success: false,
+          message: item.error ?? item.before.message ?? 'Operation failed.',
+        );
+      }
+      tweak.isApplied = desired;
+      return const OperationResult(success: true);
+    } catch (error) {
+      return OperationResult(success: false, message: error.toString());
+    } finally {
+      _clearBusy(descriptor.id);
+    }
+  }
+
   Future<OperationResult> _runScriptTweak(
     TweakDescriptor descriptor, {
     bool? target,
   }) async {
+    if (_nativeToggleEnabledValues.containsKey(descriptor.id)) {
+      return _runNativeToggle(descriptor, target: target);
+    }
     final tweak = descriptor.scriptTweak!;
     final desiredState = tweak.hasState ? target ?? !tweak.isApplied : null;
     if (desiredState == true && !isDescriptorAvailable(descriptor)) {

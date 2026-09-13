@@ -108,5 +108,7 @@
   "expertMode": "Modalità esperto",
   "expertModeDescription": "Mostra operazioni avanzate e tool esterni. Le restrizioni di sicurezza restano attive.",
   "searchOperations": "Cerca operazioni",
-  "searchResults": "Risultati della ricerca"
+  "searchResults": "Risultati della ricerca",
+  "operationTaskbarEndTaskTitle": "Termina attività dalla barra",
+  "operationTaskbarEndTaskDescription": "Mostra Termina attività nei menu contestuali delle app sulla barra delle applicazioni."
 }

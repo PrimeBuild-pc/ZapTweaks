@@ -761,6 +761,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Search results'**
   String get searchResults;
+
+  /// No description provided for @operationTaskbarEndTaskTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Taskbar End task'**
+  String get operationTaskbarEndTaskTitle;
+
+  /// No description provided for @operationTaskbarEndTaskDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Show End task in taskbar app context menus.'**
+  String get operationTaskbarEndTaskDescription;
 }
 
 class _AppLocalizationsDelegate

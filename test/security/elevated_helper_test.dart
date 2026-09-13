@@ -67,9 +67,9 @@ void main() {
       var launches = 0;
       final client = ElevatedHelperClient(
         directory: directory,
-        launcher: (_, request, nonce) async {
+        launcher: (_, request, nonce, digest) async {
           launches++;
-          return host.run(request, nonce);
+          return host.run(request, nonce, digest);
         },
       );
 
@@ -104,8 +104,36 @@ void main() {
       restorePointService: _Restore(),
     );
 
-    expect(await host.run(request, nonce), 2);
+    expect(await host.run(request, nonce, 'invalid'), 2);
     expect(await File('${request.path}.response').exists(), isFalse);
+  });
+
+  test('helper rejects a request changed after approval', () async {
+    final directory = await Directory.systemTemp.createTemp('zap-helper-');
+    addTearDown(() => directory.delete(recursive: true));
+    final manager = _Manager();
+    final host = ElevatedHelperHost(
+      allowedDirectory: directory,
+      catalogService: _Catalog(),
+      tweakManager: manager,
+      restorePointService: _Restore(),
+    );
+    final client = ElevatedHelperClient(
+      directory: directory,
+      launcher: (_, request, nonce, digest) async {
+        await request.writeAsString('{}');
+        return host.run(request, nonce, digest);
+      },
+    );
+
+    final result = await client.applySystemTweak(
+      operationId: 'sample_toggle',
+      desiredValue: true,
+      createRestorePoint: false,
+    );
+
+    expect(result.success, isFalse);
+    expect(manager.value, isFalse);
   });
 
   test('helper rejects IDs that are not fixed in the local catalog', () async {
@@ -119,7 +147,7 @@ void main() {
     );
     final client = ElevatedHelperClient(
       directory: directory,
-      launcher: (_, request, nonce) => host.run(request, nonce),
+      launcher: (_, request, nonce, digest) => host.run(request, nonce, digest),
     );
 
     final result = await client.applySystemTweak(

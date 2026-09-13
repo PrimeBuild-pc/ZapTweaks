@@ -143,5 +143,7 @@
   "expertMode": "Expert mode",
   "expertModeDescription": "Show advanced operations and external tools. Safety restrictions still apply.",
   "searchOperations": "Search operations",
-  "searchResults": "Search results"
+  "searchResults": "Search results",
+  "operationTaskbarEndTaskTitle": "Taskbar End task",
+  "operationTaskbarEndTaskDescription": "Show End task in taskbar app context menus."
 }

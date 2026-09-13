@@ -368,4 +368,11 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get searchResults => 'Risultati della ricerca';
+
+  @override
+  String get operationTaskbarEndTaskTitle => 'Termina attività dalla barra';
+
+  @override
+  String get operationTaskbarEndTaskDescription =>
+      'Mostra Termina attività nei menu contestuali delle app sulla barra delle applicazioni.';
 }

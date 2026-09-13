@@ -17,6 +17,7 @@ class _MemoryOperation extends OperationDefinition {
     this.throwOnApply = false,
     this.restartPending = false,
     this.restartPendingValue,
+    this.operationPrivilege = OperationPrivilege.user,
   });
 
   @override
@@ -27,6 +28,7 @@ class _MemoryOperation extends OperationDefinition {
   final bool throwOnApply;
   final bool restartPending;
   final Object? restartPendingValue;
+  final OperationPrivilege operationPrivilege;
   @override
   List<String> get legacyAliases => const <String>[];
 
@@ -35,7 +37,11 @@ class _MemoryOperation extends OperationDefinition {
   @override
   Future<void> apply(OperationRequest request) async {
     if (throwOnApply) throw StateError('fixture failure');
-    _values[_key(request)] = request.desiredValue;
+    if (request.desiredValue == null) {
+      _values.remove(_key(request));
+    } else {
+      _values[_key(request)] = request.desiredValue;
+    }
   }
 
   @override
@@ -115,7 +121,7 @@ class _MemoryOperation extends OperationDefinition {
   EvidenceLevel get mechanismEvidence => EvidenceLevel.documented;
 
   @override
-  OperationPrivilege get privilege => OperationPrivilege.user;
+  OperationPrivilege get privilege => operationPrivilege;
 
   @override
   RestartImpact get restartImpact => RestartImpact.none;
@@ -226,6 +232,25 @@ void main() {
     expect(plan.status, PlanStatus.rollbackRequired);
   });
 
+  test('an absent state satisfies an explicit null desired value', () async {
+    final values = <String, Object?>{'registry.sample.set/': 1};
+    final engine = PlanEngine(
+      registry: OperationRegistry(<OperationDefinition>[
+        _MemoryOperation('registry.sample.set', OperationScope.user, values),
+      ]),
+      context: const OperationContext(windowsBuild: 26100, edition: 'Pro'),
+      user: 'test-user',
+      appVersion: 'test',
+    );
+    final plan = await engine.plan(const <OperationRequest>[
+      OperationRequest(operationId: 'registry.sample.set', desiredValue: null),
+    ]);
+    await engine.execute(plan);
+
+    expect(plan.status, PlanStatus.completed);
+    expect(plan.items.single.written?.kind, OperationStateKind.absent);
+  });
+
   test('pending restart must preserve the requested value', () async {
     final values = <String, Object?>{};
     final operation = _MemoryOperation(
@@ -284,6 +309,40 @@ void main() {
     expect(recovered.status, PlanStatus.interrupted);
     expect(recovered.items.single.status, PlanItemStatus.failed);
     expect(recovered.items.single.error, contains('stopped'));
+  });
+
+  test('administrator rollback also requires the helper', () async {
+    final values = <String, Object?>{};
+    final operation = _MemoryOperation(
+      'registry.admin.set',
+      OperationScope.machine,
+      values,
+      operationPrivilege: OperationPrivilege.administrator,
+    );
+    final directEngine = PlanEngine(
+      registry: OperationRegistry(<OperationDefinition>[operation]),
+      context: const OperationContext(windowsBuild: 26100, edition: 'Pro'),
+      user: 'test-user',
+      appVersion: 'test',
+      elevatedExecutor: const DirectOperationExecutor(),
+    );
+    final plan = await directEngine.plan(const <OperationRequest>[
+      OperationRequest(operationId: 'registry.admin.set', desiredValue: true),
+    ]);
+    await directEngine.execute(plan);
+
+    final rejectingEngine = PlanEngine(
+      registry: OperationRegistry(<OperationDefinition>[operation]),
+      context: const OperationContext(windowsBuild: 26100, edition: 'Pro'),
+      user: 'test-user',
+      appVersion: 'test',
+    );
+
+    await rejectingEngine.rollback(plan);
+
+    expect(plan.status, PlanStatus.rollbackConflict);
+    expect(plan.items.single.error, contains('No elevated helper'));
+    expect(values['registry.admin.set/'], isTrue);
   });
 
   test('rollback refuses to overwrite a later manual change', () async {

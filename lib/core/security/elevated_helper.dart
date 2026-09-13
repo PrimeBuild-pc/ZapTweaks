@@ -1,6 +1,9 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
+
+import 'package:crypto/crypto.dart';
 
 import '../models/tweak_descriptor.dart';
 import '../services/restore_point_service.dart';
@@ -13,7 +16,12 @@ Directory defaultElevatedHelperDirectory() => Directory(
 );
 
 typedef HelperLauncher =
-    Future<int> Function(String executable, File request, String nonce);
+    Future<int> Function(
+      String executable,
+      File request,
+      String nonce,
+      String digest,
+    );
 typedef DirectorySecurity = Future<void> Function(Directory directory);
 
 class ElevatedHelperResult {
@@ -53,20 +61,21 @@ class ElevatedHelperClient {
       '${_directory.path}${Platform.pathSeparator}$nonce.json',
     );
     final response = File('${request.path}.response');
-    await request.writeAsString(
+    final payload = utf8.encode(
       jsonEncode(<String, Object?>{
         'nonce': nonce,
         'operationId': operationId,
         'desiredValue': desiredValue,
         'createRestorePoint': createRestorePoint,
       }),
-      flush: true,
     );
+    await request.writeAsBytes(payload, flush: true);
     try {
       final exitCode = await _launcher(
         Platform.resolvedExecutable,
         request,
         nonce,
+        sha256.convert(payload).toString(),
       );
       if (!await response.exists()) {
         return ElevatedHelperResult(
@@ -111,22 +120,29 @@ class ElevatedHelperClient {
     String executable,
     File request,
     String nonce,
+    String digest,
   ) async {
     String quote(String value) => value.replaceAll("'", "''");
     final encodedPath = base64Url.encode(utf8.encode(request.path));
     final script =
         "\$p=Start-Process -FilePath '${quote(executable)}' "
-        "-Verb RunAs -Wait -PassThru -ArgumentList @("
-        "'--zaptweaks-helper','$encodedPath','$nonce'); "
-        'exit \$p.ExitCode';
+        "-Verb RunAs -PassThru -ArgumentList @("
+        "'--zaptweaks-helper','$encodedPath','$nonce','$digest'); "
+        r"if(-not $p.WaitForExit(300000)){Stop-Process -Id $p.Id -Force;exit 124}; "
+        r'exit $p.ExitCode';
     final encoded = base64.encode(const Utf16Encoder().convert(script));
-    final result = await Process.run('powershell.exe', <String>[
+    final process = await Process.start('powershell.exe', <String>[
       '-NoProfile',
       '-NonInteractive',
       '-EncodedCommand',
       encoded,
     ]);
-    return result.exitCode;
+    try {
+      return await process.exitCode.timeout(const Duration(minutes: 6));
+    } on TimeoutException {
+      process.kill();
+      return 124;
+    }
   }
 
   static String _nonce() {
@@ -154,7 +170,11 @@ class ElevatedHelperHost {
   final TweakManager _tweakManager;
   final RestorePointService _restorePointService;
 
-  Future<int> run(File requestFile, String expectedNonce) async {
+  Future<int> run(
+    File requestFile,
+    String expectedNonce,
+    String expectedDigest,
+  ) async {
     File? response;
     try {
       final noncePattern = RegExp(r'^[0-9a-f]{64}$');
@@ -168,9 +188,12 @@ class ElevatedHelperHost {
       if (!await requestFile.exists() || await requestFile.length() > 4096) {
         throw StateError('Invalid helper request file.');
       }
+      final payload = await requestFile.readAsBytes();
+      if (sha256.convert(payload).toString() != expectedDigest) {
+        throw StateError('Helper request integrity check failed.');
+      }
       response = File('${requestFile.path}.response');
-      final json =
-          jsonDecode(await requestFile.readAsString()) as Map<String, dynamic>;
+      final json = jsonDecode(utf8.decode(payload)) as Map<String, dynamic>;
       if (json.length != 4 ||
           json['nonce'] != expectedNonce ||
           json['operationId'] is! String ||

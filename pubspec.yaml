@@ -46,6 +46,7 @@ dependencies:
   sqlite3: ^3.0.0
   crypto: ^3.0.0
   win32: ^5.15.0
+  ffi: ^2.1.4
 
 dev_dependencies:
   flutter_test:
