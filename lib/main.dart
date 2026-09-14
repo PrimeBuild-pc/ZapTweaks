@@ -14,6 +14,7 @@ import 'app/zap_tweaks_app.dart';
 import 'app/window_effect_coordinator.dart';
 import 'app/window_placement.dart';
 import 'core/operations/native_operation_catalog.dart';
+import 'core/operations/operation.dart';
 import 'core/operations/operation_registry.dart';
 import 'core/persistence/operation_store.dart';
 import 'core/services/hardware_detection_service.dart';
@@ -26,10 +27,12 @@ import 'core/services/safety_gate_service.dart';
 import 'core/services/system_action_service.dart';
 import 'core/services/tweak_catalog_service.dart';
 import 'core/security/elevated_helper.dart';
+import 'core/security/elevated_operation_executor.dart';
 import 'core/tweak_manager.dart';
 import 'features/tweaks/application/tweak_controller.dart';
 import 'legacy/adapters/legacy_catalog_adapter.dart';
 import 'platform/windows/registry_value_store.dart';
+import 'platform/windows/windows_version.dart';
 
 Future<void> _initWindowIfNeeded() async {
   if (!Platform.isWindows) {
@@ -58,6 +61,16 @@ Future<void> main(List<String> arguments) async {
           ),
           restorePointService: RestorePointService(
             processRunner: processRunner,
+          ),
+          operationRegistry: OperationRegistry(
+            createNativeOperationCatalog(
+              const WindowsRegistryValueStore(),
+              processRunner,
+            ),
+          ),
+          operationContext: OperationContext(
+            windowsBuild: windowsBuildNumber(),
+            edition: 'Home/Pro',
           ),
         ).run(
           File(utf8.decode(base64Url.decode(arguments[1]))),
@@ -107,6 +120,9 @@ Future<void> main(List<String> arguments) async {
     preferences: prefs,
   );
 
+  final helperClient = ElevatedHelperClient(
+    directory: defaultElevatedHelperDirectory(),
+  );
   final controller = TweakController(
     tweakManager: TweakManager(loggingService: LoggingService.instance),
     permissionService: permissionService,
@@ -127,9 +143,8 @@ Future<void> main(List<String> arguments) async {
     loggingService: LoggingService.instance,
     appVersion: AppMetadata.semanticVersion,
     legacyCatalogAdapterLoader: () async => legacyCatalogAdapter,
-    elevatedHelperClient: ElevatedHelperClient(
-      directory: defaultElevatedHelperDirectory(),
-    ),
+    elevatedHelperClient: helperClient,
+    elevatedOperationExecutor: ElevatedOperationExecutor(helperClient),
     operationRegistry: operationRegistry,
     operationStore: operationStore,
   );

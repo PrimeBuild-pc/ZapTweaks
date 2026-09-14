@@ -50,6 +50,7 @@ class TweakController extends ChangeNotifier {
     ElevatedHelperClient? elevatedHelperClient,
     OperationRegistry? operationRegistry,
     OperationStore? operationStore,
+    OperationExecutor? elevatedOperationExecutor,
   }) : _tweakManager = tweakManager,
        _permissionService = permissionService,
        _hardwareDetectionService = hardwareDetectionService,
@@ -72,7 +73,8 @@ class TweakController extends ChangeNotifier {
            (() async => LegacyCatalogAdapter.identity),
        _elevatedHelperClient = elevatedHelperClient,
        _operationRegistry = operationRegistry,
-       _operationStore = operationStore;
+       _operationStore = operationStore,
+       _elevatedOperationExecutor = elevatedOperationExecutor;
 
   final TweakManager _tweakManager;
   final PermissionService _permissionService;
@@ -90,6 +92,7 @@ class TweakController extends ChangeNotifier {
   final ElevatedHelperClient? _elevatedHelperClient;
   final OperationRegistry? _operationRegistry;
   final OperationStore? _operationStore;
+  final OperationExecutor? _elevatedOperationExecutor;
   PlanEngine? _planEngine;
 
   static const String defaultPreset = 'Default';
@@ -111,6 +114,7 @@ class TweakController extends ChangeNotifier {
   };
   static const Map<String, int> _nativeToggleEnabledValues = <String, int>{
     'ui_taskbar_end_task': 1,
+    'power_throttling_off': 1,
   };
 
   bool _isLoading = true;
@@ -359,6 +363,7 @@ class TweakController extends ChangeNotifier {
           user: Platform.environment['USERNAME'] ?? 'current-user',
           appVersion: _appVersion,
           store: _operationStore,
+          elevatedExecutor: _elevatedOperationExecutor,
         );
       }
       final detectedStates = futures[2] as Map<String, bool>;

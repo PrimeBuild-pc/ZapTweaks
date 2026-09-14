@@ -4,11 +4,15 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:script_utility/core/models/restore_point_result.dart';
 import 'package:script_utility/core/models/tweak_descriptor.dart';
+import 'package:script_utility/core/operations/operation.dart';
+import 'package:script_utility/core/operations/operation_registry.dart';
+import 'package:script_utility/core/operations/registry_dword_operation.dart';
 import 'package:script_utility/core/security/elevated_helper.dart';
 import 'package:script_utility/core/services/process_runner.dart';
 import 'package:script_utility/core/services/restore_point_service.dart';
 import 'package:script_utility/core/services/tweak_catalog_service.dart';
 import 'package:script_utility/core/tweak_manager.dart';
+import 'package:script_utility/platform/windows/registry_value_store.dart';
 
 class _Catalog extends TweakCatalogService {
   @override
@@ -34,6 +38,32 @@ class _Manager extends TweakManager {
 
   @override
   Future<bool> detectTweakState(String key) async => value;
+}
+
+class _Registry implements RegistryValueStore {
+  RawRegistryValue? value;
+
+  @override
+  Future<void> delete(
+    String path,
+    String name, {
+    RegistryView view = RegistryView.registry64,
+  }) async => value = null;
+
+  @override
+  Future<RawRegistryValue?> read(
+    String path,
+    String name, {
+    RegistryView view = RegistryView.registry64,
+  }) async => value;
+
+  @override
+  Future<void> write(
+    String path,
+    String name,
+    RawRegistryValue next, {
+    RegistryView view = RegistryView.registry64,
+  }) async => value = next;
 }
 
 class _Restore extends RestorePointService {
@@ -85,6 +115,61 @@ void main() {
       expect(restore.calls, 1);
       expect(launches, 1);
       expect(directory.listSync(), isEmpty);
+    },
+  );
+
+  test(
+    'native administrator operation applies and rolls back through one helper',
+    () async {
+      final directory = await Directory.systemTemp.createTemp('zap-helper-');
+      addTearDown(() => directory.delete(recursive: true));
+      final values = _Registry();
+      final operation = RegistryDwordOperation(
+        id: 'registry.admin.set',
+        titleKey: 'title',
+        descriptionKey: 'description',
+        destination: 'Windows',
+        path: r'HKLM\Software\ZapTweaksTest',
+        valueName: 'Value',
+        store: values,
+        privilege: OperationPrivilege.administrator,
+      );
+      final host = ElevatedHelperHost(
+        allowedDirectory: directory,
+        catalogService: _Catalog(),
+        tweakManager: _Manager(),
+        restorePointService: _Restore(),
+        operationRegistry: OperationRegistry(<OperationDefinition>[operation]),
+        operationContext: const OperationContext(
+          windowsBuild: 26100,
+          edition: 'Pro',
+        ),
+      );
+      final client = ElevatedHelperClient(
+        directory: directory,
+        secureDirectory: (_) async {},
+        launcher: (_, request, nonce, digest) =>
+            host.run(request, nonce, digest),
+      );
+      const request = OperationRequest(
+        operationId: 'registry.admin.set',
+        desiredValue: 1,
+      );
+      final snapshot = await operation.captureSnapshot(request);
+      final progress = <String>[];
+      final subscription = client.progress.listen(
+        (event) => progress.add(event.state),
+      );
+      addTearDown(subscription.cancel);
+
+      await client.applyNativeOperation(request);
+      expect(progress, containsAllInOrder(<String>['applying', 'completed']));
+      expect((await operation.inspect(request)).value, 1);
+      await client.rollbackNativeOperation(request, snapshot);
+      expect(
+        (await operation.inspect(request)).kind,
+        OperationStateKind.absent,
+      );
     },
   );
 

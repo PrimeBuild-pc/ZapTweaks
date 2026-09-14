@@ -78,10 +78,11 @@ void main() {
     );
     final operation = operations.first;
 
-    expect(operations, hasLength(18));
+    expect(operations, hasLength(19));
     expect(operation.id, 'ui_taskbar_end_task');
     expect(operation.scope, OperationScope.user);
     expect(operation.rollbackCapability, RollbackCapability.exact);
+    expect(operations.any((item) => item.id == 'power_throttling_off'), isTrue);
   });
 
   test(

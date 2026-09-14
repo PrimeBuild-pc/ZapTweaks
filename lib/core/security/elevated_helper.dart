@@ -2,10 +2,13 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:crypto/crypto.dart';
 
 import '../models/tweak_descriptor.dart';
+import '../operations/operation.dart';
+import '../operations/operation_registry.dart';
 import '../services/restore_point_service.dart';
 import '../services/tweak_catalog_service.dart';
 import '../tweak_manager.dart';
@@ -23,6 +26,13 @@ typedef HelperLauncher =
       String digest,
     );
 typedef DirectorySecurity = Future<void> Function(Directory directory);
+
+class ElevatedHelperProgress {
+  const ElevatedHelperProgress({required this.state, this.operationId});
+
+  final String state;
+  final String? operationId;
+}
 
 class ElevatedHelperResult {
   const ElevatedHelperResult({
@@ -48,12 +58,60 @@ class ElevatedHelperClient {
   final Directory _directory;
   final HelperLauncher _launcher;
   final DirectorySecurity _secureDirectory;
+  final _progress = StreamController<ElevatedHelperProgress>.broadcast();
+
+  Stream<ElevatedHelperProgress> get progress => _progress.stream;
 
   Future<ElevatedHelperResult> applySystemTweak({
     required String operationId,
     required bool desiredValue,
     required bool createRestorePoint,
   }) async {
+    final json = await _send(<String, Object?>{
+      'operationId': operationId,
+      'desiredValue': desiredValue,
+      'createRestorePoint': createRestorePoint,
+    });
+    return ElevatedHelperResult(
+      success: json['success'] == true,
+      observed: json['observed'] as bool?,
+      message: json['message'] as String?,
+    );
+  }
+
+  Future<void> applyNativeOperation(OperationRequest request) async {
+    final response = await _send(<String, Object?>{
+      'protocol': 'nativeOperation',
+      'action': 'apply',
+      'operationId': request.operationId,
+      'target': request.target,
+      'desiredValue': request.desiredValue,
+      'parameters': request.parameters,
+    });
+    if (response['success'] != true) {
+      throw StateError(response['message'] ?? 'Elevated operation failed.');
+    }
+  }
+
+  Future<void> rollbackNativeOperation(
+    OperationRequest request,
+    OperationSnapshot snapshot,
+  ) async {
+    final response = await _send(<String, Object?>{
+      'protocol': 'nativeOperation',
+      'action': 'rollback',
+      'operationId': request.operationId,
+      'target': request.target,
+      'desiredValue': request.desiredValue,
+      'parameters': request.parameters,
+      'snapshot': snapshot.toJson(),
+    });
+    if (response['success'] != true) {
+      throw StateError(response['message'] ?? 'Elevated rollback failed.');
+    }
+  }
+
+  Future<Map<String, dynamic>> _send(Map<String, Object?> requestData) async {
     await _directory.create(recursive: true);
     await _secureDirectory(_directory);
     final nonce = _nonce();
@@ -61,15 +119,39 @@ class ElevatedHelperClient {
       '${_directory.path}${Platform.pathSeparator}$nonce.json',
     );
     final response = File('${request.path}.response');
+    final events = File('${request.path}.events');
     final payload = utf8.encode(
-      jsonEncode(<String, Object?>{
-        'nonce': nonce,
-        'operationId': operationId,
-        'desiredValue': desiredValue,
-        'createRestorePoint': createRestorePoint,
-      }),
+      jsonEncode(
+        _encodeValue(<String, Object?>{'nonce': nonce, ...requestData}),
+      ),
     );
     await request.writeAsBytes(payload, flush: true);
+    var seenEvents = 0;
+    var readingEvents = false;
+    Future<void> readEvents() async {
+      if (readingEvents || !await events.exists()) return;
+      readingEvents = true;
+      try {
+        final lines = await events.readAsLines();
+        for (final line in lines.skip(seenEvents)) {
+          final event = jsonDecode(line) as Map<String, dynamic>;
+          _progress.add(
+            ElevatedHelperProgress(
+              state: event['state'] as String,
+              operationId: event['operationId'] as String?,
+            ),
+          );
+        }
+        seenEvents = lines.length;
+      } finally {
+        readingEvents = false;
+      }
+    }
+
+    final eventPoller = Timer.periodic(
+      const Duration(milliseconds: 100),
+      (_) => unawaited(readEvents()),
+    );
     try {
       final exitCode = await _launcher(
         Platform.resolvedExecutable,
@@ -77,22 +159,25 @@ class ElevatedHelperClient {
         nonce,
         sha256.convert(payload).toString(),
       );
-      if (!await response.exists()) {
-        return ElevatedHelperResult(
-          success: false,
-          message: 'Elevated helper failed with exit code $exitCode.',
-        );
+      eventPoller.cancel();
+      while (readingEvents) {
+        await Future<void>.delayed(const Duration(milliseconds: 1));
       }
-      final json =
-          jsonDecode(await response.readAsString()) as Map<String, dynamic>;
-      return ElevatedHelperResult(
-        success: json['success'] == true,
-        observed: json['observed'] as bool?,
-        message: json['message'] as String?,
+      await readEvents();
+      if (!await response.exists()) {
+        return <String, dynamic>{
+          'success': false,
+          'message': 'Elevated helper failed with exit code $exitCode.',
+        };
+      }
+      return Map<String, dynamic>.from(
+        _decodeValue(jsonDecode(await response.readAsString())) as Map,
       );
     } finally {
+      eventPoller.cancel();
       if (await request.exists()) await request.delete();
       if (await response.exists()) await response.delete();
+      if (await events.exists()) await events.delete();
     }
   }
 
@@ -160,15 +245,21 @@ class ElevatedHelperHost {
     required TweakCatalogService catalogService,
     required TweakManager tweakManager,
     required RestorePointService restorePointService,
+    OperationRegistry? operationRegistry,
+    OperationContext? operationContext,
   }) : _allowedDirectory = allowedDirectory,
        _catalogService = catalogService,
        _tweakManager = tweakManager,
-       _restorePointService = restorePointService;
+       _restorePointService = restorePointService,
+       _operationRegistry = operationRegistry,
+       _operationContext = operationContext;
 
   final Directory _allowedDirectory;
   final TweakCatalogService _catalogService;
   final TweakManager _tweakManager;
   final RestorePointService _restorePointService;
+  final OperationRegistry? _operationRegistry;
+  final OperationContext? _operationContext;
 
   Future<int> run(
     File requestFile,
@@ -193,7 +284,17 @@ class ElevatedHelperHost {
         throw StateError('Helper request integrity check failed.');
       }
       response = File('${requestFile.path}.response');
-      final json = jsonDecode(utf8.decode(payload)) as Map<String, dynamic>;
+      final events = File('${requestFile.path}.events');
+      await _writeEvent(events, 'requestAccepted');
+      final json = Map<String, dynamic>.from(
+        _decodeValue(jsonDecode(utf8.decode(payload))) as Map,
+      );
+      if (json['nonce'] != expectedNonce) {
+        throw StateError('Invalid helper request nonce.');
+      }
+      if (json['protocol'] == 'nativeOperation') {
+        return await _runNativeOperation(json, response, events);
+      }
       if (json.length != 4 ||
           json['nonce'] != expectedNonce ||
           json['operationId'] is! String ||
@@ -246,14 +347,130 @@ class ElevatedHelperHost {
     }
   }
 
+  Future<int> _runNativeOperation(
+    Map<String, dynamic> json,
+    File response,
+    File events,
+  ) async {
+    await _writeEvent(events, 'validating');
+    final registry = _operationRegistry;
+    final context = _operationContext;
+    final operationId = json['operationId'];
+    if (registry == null ||
+        context == null ||
+        operationId is! String ||
+        !registry.contains(operationId)) {
+      throw StateError('Native operation is not helper-allowlisted.');
+    }
+    final definition = registry.resolve(operationId);
+    await _writeEvent(events, 'resolved', operationId: operationId);
+    if (definition.id != operationId ||
+        definition.privilege != OperationPrivilege.administrator) {
+      throw StateError('Native operation cannot run elevated.');
+    }
+    final parameters = json['parameters'];
+    if (parameters is! Map) throw StateError('Invalid native parameters.');
+    final request = OperationRequest(
+      operationId: operationId,
+      target: json['target'] as String?,
+      desiredValue: json['desiredValue'],
+      parameters: Map<String, Object?>.from(parameters),
+    );
+    await _writeEvent(events, 'checkingSupport', operationId: operationId);
+    final support = await definition.supports(context, request);
+    await _writeEvent(events, 'supportChecked', operationId: operationId);
+    if (!support.supported) {
+      throw StateError(support.reason ?? 'Native operation is unsupported.');
+    }
+
+    final action = json['action'];
+    late OperationState observed;
+    if (action == 'apply' && json.length == 7) {
+      await _writeEvent(events, 'applying', operationId: operationId);
+      await definition.apply(request);
+      await _writeEvent(events, 'verifying', operationId: operationId);
+      observed = await definition.verify(request);
+      final expected = request.desiredValue == null
+          ? const OperationState(OperationStateKind.absent)
+          : OperationState(
+              OperationStateKind.configured,
+              value: request.desiredValue,
+            );
+      if (!observed.sameValue(expected)) {
+        throw StateError('Elevated operation verification failed.');
+      }
+    } else if (action == 'rollback' &&
+        json.length == 8 &&
+        json['snapshot'] is Map) {
+      final snapshot = OperationSnapshot.fromJson(
+        Map<String, Object?>.from(json['snapshot'] as Map),
+      );
+      await _writeEvent(events, 'rollingBack', operationId: operationId);
+      await definition.rollback(request, snapshot);
+      await _writeEvent(events, 'verifyingRollback', operationId: operationId);
+      observed = await definition.inspect(request);
+      if (!observed.sameValue(snapshot.expectedAfterRollback)) {
+        throw StateError('Elevated rollback verification failed.');
+      }
+    } else {
+      throw StateError('Invalid native helper action.');
+    }
+    await _writeEvent(events, 'completed', operationId: operationId);
+    await _writeAtomic(response, <String, Object?>{
+      'success': true,
+      'state': observed.toJson(),
+    });
+    return 0;
+  }
+
+  static Future<void> _writeEvent(
+    File file,
+    String state, {
+    String? operationId,
+  }) async {
+    file.writeAsStringSync(
+      '${jsonEncode(<String, Object?>{'state': state, if (operationId != null) 'operationId': operationId})}\n',
+      mode: FileMode.append,
+      flush: true,
+    );
+  }
+
   static Future<void> _writeAtomic(
     File file,
     Map<String, Object?> value,
   ) async {
     final temporary = File('${file.path}.tmp');
-    await temporary.writeAsString(jsonEncode(value), flush: true);
-    await temporary.rename(file.path);
+    temporary.writeAsStringSync(jsonEncode(_encodeValue(value)), flush: true);
+    temporary.renameSync(file.path);
   }
+}
+
+Object? _encodeValue(Object? value) {
+  if (value is Uint8List) {
+    return <String, Object?>{r'$type': 'bytes', 'base64': base64Encode(value)};
+  }
+  if (value is Map) {
+    return <String, Object?>{
+      for (final entry in value.entries)
+        entry.key.toString(): _encodeValue(entry.value),
+    };
+  }
+  if (value is Iterable) return value.map(_encodeValue).toList();
+  return value;
+}
+
+Object? _decodeValue(Object? value) {
+  if (value is Map) {
+    if (value[r'$type'] == 'bytes') {
+      return base64Decode(value['base64']! as String);
+    }
+    return <String, Object?>{
+      for (final entry in value.entries)
+        entry.key.toString(): _decodeValue(entry.value),
+    };
+  }
+  if (value is List) return value.map(_decodeValue).toList();
+  return value;
 }
 
 class Utf16Encoder {

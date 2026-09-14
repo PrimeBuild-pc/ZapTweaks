@@ -27,6 +27,21 @@ List<OperationDefinition> createNativeOperationCatalog(
       'https://learn.microsoft.com/windows/whats-new/whats-new-windows-11-version-23h2',
     ],
   ),
+  RegistryDwordOperation(
+    id: 'power_throttling_off',
+    titleKey: 'powerThrottlingOffTitle',
+    descriptionKey: 'powerThrottlingOffDescription',
+    destination: 'Gaming & Performance',
+    path: r'HKLM\SYSTEM\CurrentControlSet\Control\Power\PowerThrottling',
+    valueName: 'PowerThrottlingOff',
+    store: registry,
+    privilege: OperationPrivilege.administrator,
+    scope: OperationScope.machine,
+    benefitEvidence: EvidenceLevel.inferred,
+    technicalSources: const <String>[
+      'https://learn.microsoft.com/windows-server/administration/performance-tuning/role/power-server/configuring-power-management-settings',
+    ],
+  ),
   for (final app in microsoftRestoreCatalog.entries)
     AppRestoreOperation(
       id: 'restore_${app.key.toLowerCase().replaceAll('.', '_')}',
