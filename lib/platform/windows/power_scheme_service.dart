@@ -3,6 +3,32 @@ import 'dart:ffi';
 import 'package:ffi/ffi.dart';
 import 'package:win32/win32.dart';
 
+class PowerSettingValue {
+  const PowerSettingValue({required this.ac, required this.dc});
+
+  final int ac;
+  final int dc;
+}
+
+abstract interface class PowerSchemeStore {
+  String get activeSchemeId;
+
+  PowerSettingValue readSetting(
+    String schemeId,
+    String subgroupId,
+    String settingId,
+  );
+
+  void writeSetting(
+    String schemeId,
+    String subgroupId,
+    String settingId,
+    PowerSettingValue value,
+  );
+
+  void setActiveScheme(String schemeId);
+}
+
 class PowerSchemeInfo {
   const PowerSchemeInfo({
     required this.id,
@@ -56,8 +82,36 @@ typedef _PowerReadFriendlyNameDart =
       Pointer<Uint8>,
       Pointer<Uint32>,
     );
+typedef _PowerReadValueIndexNative =
+    Uint32 Function(
+      IntPtr,
+      Pointer<GUID>,
+      Pointer<GUID>,
+      Pointer<GUID>,
+      Pointer<Uint32>,
+    );
+typedef _PowerReadValueIndexDart =
+    int Function(
+      int,
+      Pointer<GUID>,
+      Pointer<GUID>,
+      Pointer<GUID>,
+      Pointer<Uint32>,
+    );
+typedef _PowerWriteValueIndexNative =
+    Uint32 Function(
+      IntPtr,
+      Pointer<GUID>,
+      Pointer<GUID>,
+      Pointer<GUID>,
+      Uint32,
+    );
+typedef _PowerWriteValueIndexDart =
+    int Function(int, Pointer<GUID>, Pointer<GUID>, Pointer<GUID>, int);
+typedef _PowerSetActiveSchemeNative = Uint32 Function(IntPtr, Pointer<GUID>);
+typedef _PowerSetActiveSchemeDart = int Function(int, Pointer<GUID>);
 
-class WindowsPowerSchemeService {
+class WindowsPowerSchemeService implements PowerSchemeStore {
   WindowsPowerSchemeService({DynamicLibrary? library})
     : _library = library ?? DynamicLibrary.open('powrprof.dll') {
     _getActiveScheme = _library
@@ -73,6 +127,26 @@ class WindowsPowerSchemeService {
           _PowerReadFriendlyNameNative,
           _PowerReadFriendlyNameDart
         >('PowerReadFriendlyName');
+    _readAcValueIndex = _library
+        .lookupFunction<_PowerReadValueIndexNative, _PowerReadValueIndexDart>(
+          'PowerReadACValueIndex',
+        );
+    _readDcValueIndex = _library
+        .lookupFunction<_PowerReadValueIndexNative, _PowerReadValueIndexDart>(
+          'PowerReadDCValueIndex',
+        );
+    _writeAcValueIndex = _library
+        .lookupFunction<_PowerWriteValueIndexNative, _PowerWriteValueIndexDart>(
+          'PowerWriteACValueIndex',
+        );
+    _writeDcValueIndex = _library
+        .lookupFunction<_PowerWriteValueIndexNative, _PowerWriteValueIndexDart>(
+          'PowerWriteDCValueIndex',
+        );
+    _setActiveScheme = _library
+        .lookupFunction<_PowerSetActiveSchemeNative, _PowerSetActiveSchemeDart>(
+          'PowerSetActiveScheme',
+        );
   }
 
   static const int _accessScheme = 16;
@@ -80,6 +154,61 @@ class WindowsPowerSchemeService {
   late final _PowerGetActiveSchemeDart _getActiveScheme;
   late final _PowerEnumerateDart _enumerate;
   late final _PowerReadFriendlyNameDart _readFriendlyName;
+  late final _PowerReadValueIndexDart _readAcValueIndex;
+  late final _PowerReadValueIndexDart _readDcValueIndex;
+  late final _PowerWriteValueIndexDart _writeAcValueIndex;
+  late final _PowerWriteValueIndexDart _writeDcValueIndex;
+  late final _PowerSetActiveSchemeDart _setActiveScheme;
+
+  @override
+  String get activeSchemeId => _activeSchemeId();
+
+  @override
+  PowerSettingValue readSetting(
+    String schemeId,
+    String subgroupId,
+    String settingId,
+  ) => using((arena) {
+    final scheme = _guid(schemeId, arena);
+    final subgroup = _guid(subgroupId, arena);
+    final setting = _guid(settingId, arena);
+    final ac = arena<Uint32>();
+    final dc = arena<Uint32>();
+    _check(
+      _readAcValueIndex(0, scheme, subgroup, setting, ac),
+      'PowerReadACValueIndex',
+    );
+    _check(
+      _readDcValueIndex(0, scheme, subgroup, setting, dc),
+      'PowerReadDCValueIndex',
+    );
+    return PowerSettingValue(ac: ac.value, dc: dc.value);
+  });
+
+  @override
+  void writeSetting(
+    String schemeId,
+    String subgroupId,
+    String settingId,
+    PowerSettingValue value,
+  ) => using((arena) {
+    final scheme = _guid(schemeId, arena);
+    final subgroup = _guid(subgroupId, arena);
+    final setting = _guid(settingId, arena);
+    _check(
+      _writeAcValueIndex(0, scheme, subgroup, setting, value.ac),
+      'PowerWriteACValueIndex',
+    );
+    _check(
+      _writeDcValueIndex(0, scheme, subgroup, setting, value.dc),
+      'PowerWriteDCValueIndex',
+    );
+  });
+
+  @override
+  void setActiveScheme(String schemeId) => using((arena) {
+    _check(_setActiveScheme(0, _guid(schemeId, arena)), 'PowerSetActiveScheme');
+  });
 
   List<PowerSchemeInfo> enumerate() {
     final active = _activeSchemeId();
@@ -155,6 +284,12 @@ class WindowsPowerSchemeService {
       calloc.free(size);
     }
   }
+
+  static Pointer<GUID> _guid(String value, Allocator allocator) =>
+      GUIDFromString(
+        value.startsWith('{') ? value : '{$value}',
+        allocator: allocator,
+      );
 
   static void _check(int result, String operation) {
     if (result != ERROR_SUCCESS) {
