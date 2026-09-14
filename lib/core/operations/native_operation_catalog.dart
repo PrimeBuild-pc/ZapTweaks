@@ -1,15 +1,22 @@
+import '../../features/apps/application/windows_optional_feature_service.dart';
 import '../../features/apps/domain/microsoft_restore_catalog.dart';
 import '../../platform/windows/registry_value_store.dart';
 import '../services/process_runner.dart';
 import 'app_restore_operation.dart';
 import 'appx_removal_operation.dart';
 import 'operation.dart';
+import 'optional_feature_operation.dart';
 import 'registry_dword_operation.dart';
+import 'winget_package_operation.dart';
 
 List<OperationDefinition> createNativeOperationCatalog(
   RegistryValueStore registry,
   ProcessRunner processRunner,
 ) => <OperationDefinition>[
+  WingetPackageOperation(processRunner: processRunner),
+  OptionalFeatureOperation(
+    WindowsOptionalFeatureService(processRunner: processRunner),
+  ),
   AppxRemovalOperation(
     id: 'app.appx.remove_current_user',
     systemScopes: false,

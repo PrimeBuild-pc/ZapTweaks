@@ -12,6 +12,7 @@ import '../core/services/process_runner.dart';
 import '../l10n/app_localizations.dart';
 import '../features/apps/presentation/apps_hub_page.dart';
 import '../features/home/presentation/pages/home_stats_page.dart';
+import '../features/setup/presentation/guided_setup_page.dart';
 import '../features/tweaks/application/tweak_controller.dart';
 import '../features/tweaks/presentation/pages/tweaks_page.dart';
 import 'app_theme.dart';
@@ -476,6 +477,10 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
 
     if (category == 'Home') {
       return _buildHomeStatsPage();
+    }
+
+    if (category == 'Guided Setup') {
+      return GuidedSetupPage(controller: widget.controller);
     }
 
     if (category == 'Apps') {

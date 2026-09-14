@@ -1,13 +1,18 @@
 import 'package:fluent_ui/fluent_ui.dart';
 
+import '../../../core/operations/operation.dart';
+import '../../../core/plans/operation_plan.dart';
 import '../../../core/security/elevated_helper.dart';
 import '../../../core/services/process_runner.dart';
 import '../../../l10n/app_localizations.dart';
 import '../application/windows_app_inventory_service.dart';
+import '../../tweaks/application/tweak_controller.dart';
 import '../domain/app_package.dart';
 
 class AppInventoryPage extends StatefulWidget {
-  const AppInventoryPage({super.key});
+  const AppInventoryPage({required this.controller, super.key});
+
+  final TweakController controller;
 
   @override
   State<AppInventoryPage> createState() => _AppInventoryPageState();
@@ -52,6 +57,88 @@ class _AppInventoryPageState extends State<AppInventoryPage> {
       _systemScopesComplete = false;
       _loading = false;
     });
+  }
+
+  Future<void> _remove(AppPackage package, AppInstallScope scope) async {
+    final strings = AppLocalizations.of(context);
+    final scopeLabel = switch (scope) {
+      AppInstallScope.currentUser => strings.currentUser,
+      AppInstallScope.allUsers => strings.allUsers,
+      AppInstallScope.provisioned => strings.provisioned,
+    };
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => ContentDialog(
+        title: Text(strings.confirmAppxRemoval),
+        content: Text(
+          strings.confirmAppxRemovalMessage(
+            package.name,
+            package.packageId,
+            scopeLabel,
+            package.reinstallable
+                ? strings.reinstallable
+                : strings.notReinstallable,
+          ),
+        ),
+        actions: <Widget>[
+          Button(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(strings.cancel),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: Text(strings.uninstall),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true) return;
+    setState(() => _loading = true);
+    try {
+      final system = scope != AppInstallScope.currentUser;
+      final plan = await widget.controller.executeNativeRequests(
+        <OperationRequest>[
+          OperationRequest(
+            operationId: system
+                ? 'app.appx.remove_system'
+                : 'app.appx.remove_current_user',
+            target: package.packageId,
+            desiredValue: null,
+            parameters: <String, Object?>{'scope': scope.name},
+          ),
+        ],
+      );
+      if (plan.status != PlanStatus.completed) {
+        throw StateError(plan.items.single.error ?? 'AppX removal failed.');
+      }
+      final remainingScopes = <AppInstallScope>{...package.scopes}
+        ..remove(scope);
+      if (mounted) {
+        setState(() {
+          _packages = <AppPackage>[
+            for (final candidate in _packages)
+              if (candidate.provider != package.provider ||
+                  candidate.packageId != package.packageId)
+                candidate
+              else if (remainingScopes.isNotEmpty)
+                AppPackage(
+                  provider: candidate.provider,
+                  packageId: candidate.packageId,
+                  name: candidate.name,
+                  version: candidate.version,
+                  publisher: candidate.publisher,
+                  scopes: remainingScopes,
+                  source: candidate.source,
+                  reinstallable: candidate.reinstallable,
+                ),
+          ];
+        });
+      }
+    } catch (error) {
+      if (mounted) setState(() => _message = error.toString());
+    } finally {
+      if (mounted) setState(() => _loading = false);
+    }
   }
 
   Future<void> _scanSystemScopes() async {
@@ -169,21 +256,45 @@ class _AppInventoryPageState extends State<AppInventoryPage> {
                           .join(', ');
                       return Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        child: Row(
                           children: <Widget>[
-                            Text(
-                              package.name,
-                              style: FluentTheme.of(
-                                context,
-                              ).typography.bodyStrong,
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(
+                                    package.name,
+                                    style: FluentTheme.of(
+                                      context,
+                                    ).typography.bodyStrong,
+                                  ),
+                                  const SizedBox(height: 3),
+                                  Text(
+                                    '${package.packageId} · ${package.provider.name} · $scopes',
+                                  ),
+                                  if (package.publisher != null)
+                                    Text(package.publisher!),
+                                ],
+                              ),
                             ),
-                            const SizedBox(height: 3),
-                            Text(
-                              '${package.packageId} · ${package.provider.name} · $scopes',
-                            ),
-                            if (package.publisher != null)
-                              Text(package.publisher!),
+                            if (package.provider == AppProvider.appx)
+                              DropDownButton(
+                                title: Text(strings.uninstall),
+                                items: <MenuFlyoutItemBase>[
+                                  for (final scope in package.scopes)
+                                    MenuFlyoutItem(
+                                      text: Text(switch (scope) {
+                                        AppInstallScope.currentUser =>
+                                          strings.currentUser,
+                                        AppInstallScope.allUsers =>
+                                          strings.allUsers,
+                                        AppInstallScope.provisioned =>
+                                          strings.provisioned,
+                                      }),
+                                      onPressed: () => _remove(package, scope),
+                                    ),
+                                ],
+                              ),
                           ],
                         ),
                       );

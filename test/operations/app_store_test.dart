@@ -1,6 +1,3 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:script_utility/core/services/process_runner.dart';
@@ -47,65 +44,33 @@ void main() {
     },
   );
 
-  test(
-    'bulk uninstall accepts only a preview and verifies final inventory',
-    () async {
-      final installed = <String>{'vendor.one', 'vendor.two'};
-      final runner = ProcessRunner(
-        processRunDelegate:
-            (executable, arguments, {runInShell = false}) async {
-              if (arguments.first == 'export') {
-                final output = arguments[arguments.indexOf('--output') + 1];
-                await File(output).writeAsString(
-                  jsonEncode(<String, Object?>{
-                    'Sources': <Object?>[
-                      <String, Object?>{
-                        'Packages': installed
-                            .map(
-                              (id) => <String, String>{'PackageIdentifier': id},
-                            )
-                            .toList(),
-                      },
-                    ],
-                  }),
-                );
-              } else if (arguments.first == 'uninstall') {
-                installed.remove(
-                  arguments[arguments.indexOf('--id') + 1].toLowerCase(),
-                );
-              }
-              return ProcessResult(1, 0, '', '');
-            },
-      );
-      final service = AppStoreService(processRunner: runner);
-      const apps = <StoreApp>[
-        StoreApp(
-          id: 'one',
-          name: 'One',
-          category: 'Test',
-          wingetId: 'Vendor.One',
-          url: null,
-          author: 'Vendor',
-          sources: <String>['test'],
-        ),
-        StoreApp(
-          id: 'three',
-          name: 'Three',
-          category: 'Test',
-          wingetId: 'Vendor.Three',
-          url: null,
-          author: 'Vendor',
-          sources: <String>['test'],
-        ),
-      ];
+  test('bulk uninstall preview accepts installed packages only', () {
+    final service = AppStoreService(
+      processRunner: ProcessRunner(mode: ProcessExecutionMode.dryRun),
+    );
+    const apps = <StoreApp>[
+      StoreApp(
+        id: 'one',
+        name: 'One',
+        category: 'Test',
+        wingetId: 'Vendor.One',
+        url: null,
+        author: 'Vendor',
+        sources: <String>['test'],
+      ),
+      StoreApp(
+        id: 'three',
+        name: 'Three',
+        category: 'Test',
+        wingetId: 'Vendor.Three',
+        url: null,
+        author: 'Vendor',
+        sources: <String>['test'],
+      ),
+    ];
 
-      final inventory = await service.installedWingetIds();
-      final preview = service.previewUninstall(apps, inventory);
-      final result = await service.uninstall(preview);
+    final preview = service.previewUninstall(apps, <String>{'vendor.one'});
 
-      expect(preview.apps.map((app) => app.id), <String>['one']);
-      expect(result.success, isTrue);
-      expect(installed, <String>{'vendor.two'});
-    },
-  );
+    expect(preview.apps.map((app) => app.id), <String>['one']);
+  });
 }

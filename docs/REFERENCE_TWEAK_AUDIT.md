@@ -28,7 +28,7 @@ WinUtil composites are treated the same way. Individual mechanisms may be migrat
 
 ## Deferred to the binding phases
 
-- Optional Windows components, startup inventory, and previewed AppX removal: Phase 3.
+- Optional Windows components, startup inventory, and previewed AppX removal: implemented in Phase 3.
 - Driver actions: Phase 4.
 - Power, NDIS/RSS, MSI/MSI-X, and affinity: Phase 5.
 - Service/task mutations, DISM/SFC, cleanup, ETW, and recovery: Phase 6.

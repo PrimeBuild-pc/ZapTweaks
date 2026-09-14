@@ -386,6 +386,158 @@ class AppLocalizationsIt extends AppLocalizations {
   String get windowsAppTools => 'Strumenti app Windows';
 
   @override
+  String get optionalFeatures => 'Funzionalità facoltative';
+
+  @override
+  String get searchOptionalFeatures => 'Cerca funzionalità facoltative';
+
+  @override
+  String get scanOptionalFeatures => 'Analizza funzionalità (UAC)';
+
+  @override
+  String get optionalFeaturesUacNotice =>
+      'L’inventario e ogni modifica passano attraverso l’helper con allowlist. La scansione non applica modifiche.';
+
+  @override
+  String get confirmOptionalFeatureChange => 'Conferma modifica funzionalità';
+
+  @override
+  String confirmOptionalFeatureChangeMessage(Object name, Object action) {
+    return 'Funzionalità: $name\nAzione: $action\n\nWindows potrebbe richiedere un riavvio. Lo stato di attivazione precedente viene acquisito prima della modifica.';
+  }
+
+  @override
+  String get enable => 'Attiva';
+
+  @override
+  String get disable => 'Disattiva';
+
+  @override
+  String get enabled => 'Attiva';
+
+  @override
+  String get disabled => 'Disattivata';
+
+  @override
+  String get enablePending => 'Attivazione in attesa di riavvio';
+
+  @override
+  String get disablePending => 'Disattivazione in attesa di riavvio';
+
+  @override
+  String get startupApps => 'App di avvio';
+
+  @override
+  String get searchStartupApps => 'Cerca app di avvio';
+
+  @override
+  String get openStartupSettings => 'Apri Impostazioni di avvio';
+
+  @override
+  String get openTaskManagerStartup => 'Apri Avvio in Gestione attività';
+
+  @override
+  String get startupInventoryNotice =>
+      'Inventario di sola lettura. Usa Impostazioni di Windows o Gestione attività per modificare una voce.';
+
+  @override
+  String get guidedSetup => 'Setup guidato';
+
+  @override
+  String get wizardInventory => 'Inventario';
+
+  @override
+  String get wizardBaseline => 'Baseline';
+
+  @override
+  String get wizardWindowsUpdate => 'Windows Update';
+
+  @override
+  String get wizardDrivers => 'Controllo driver';
+
+  @override
+  String get wizardApplications => 'Applicazioni';
+
+  @override
+  String get wizardDebloat => 'Debloat selettivo';
+
+  @override
+  String get wizardPrivacyInterface => 'Privacy e interfaccia';
+
+  @override
+  String get wizardPreview => 'Anteprima piano';
+
+  @override
+  String get wizardApply => 'Applicazione';
+
+  @override
+  String get wizardReport => 'Report finale';
+
+  @override
+  String get wizardInventoryDescription =>
+      'Legge hardware, pacchetti winget installati e dispositivi presenti prima di effettuare scelte.';
+
+  @override
+  String get runInventory => 'Esegui inventario';
+
+  @override
+  String inventorySummary(Object apps, Object devices) {
+    return 'Rilevati $apps pacchetti winget e $devices dispositivi presenti.';
+  }
+
+  @override
+  String get wizardUpdateNotice =>
+      'Controlla Windows Update prima di modificare driver e app. ZapTweaks non installa aggiornamenti automaticamente.';
+
+  @override
+  String get openWindowsUpdate => 'Apri Windows Update';
+
+  @override
+  String get updatesReviewed => 'Ho controllato Windows Update';
+
+  @override
+  String driverInventorySummary(Object devices, Object missing) {
+    return 'Dispositivi presenti: $devices\nDispositivi senza INF associato: $missing';
+  }
+
+  @override
+  String get wizardDebloatNotice =>
+      'Nessuna scelta di debloat è implicita. Qui sono selezionabili solo pacchetti AppX dell’utente corrente con fonte di ripristino verificata; le altre rimozioni restano in App → App installate con anteprima separata.';
+
+  @override
+  String get wizardPrivacyNotice =>
+      'Le impostazioni di privacy e interfaccia restano invariate, salvo le selezioni esplicite qui sotto.';
+
+  @override
+  String get noAppsSelected =>
+      'Nessuna operation selezionata. Il wizard non applicherà modifiche.';
+
+  @override
+  String planContains(Object count) {
+    return 'Il piano contiene $count operation esplicite:';
+  }
+
+  @override
+  String readyToApply(Object count) {
+    return 'Pronto ad applicare $count operation sulle app. Ogni pacchetto viene verificato al termine di winget.';
+  }
+
+  @override
+  String get noPlanReport => 'Terminato senza applicare un piano.';
+
+  @override
+  String get planStatus => 'Stato piano';
+
+  @override
+  String get applyPlan => 'Applica piano';
+
+  @override
+  String get back => 'Indietro';
+
+  @override
+  String get finish => 'Fine';
+
+  @override
   String get searchInstalledApps => 'Cerca nelle app installate';
 
   @override
@@ -407,6 +559,25 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get provisioned => 'Provisioned';
+
+  @override
+  String get confirmAppxRemoval => 'Conferma rimozione AppX';
+
+  @override
+  String confirmAppxRemovalMessage(
+    Object name,
+    Object id,
+    Object scope,
+    Object recovery,
+  ) {
+    return 'App: $name\nIdentità: $id\nScope: $scope\nRipristino: $recovery\n\nVerrà rimosso solo lo scope indicato. Questa operazione non dispone di rollback esatto.';
+  }
+
+  @override
+  String get reinstallable => 'Fonte di ripristino verificata disponibile';
+
+  @override
+  String get notReinstallable => 'Nessuna fonte di ripristino verificata';
 
   @override
   String get searchApps => 'Cerca app';

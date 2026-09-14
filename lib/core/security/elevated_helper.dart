@@ -17,6 +17,7 @@ import '../services/tweak_catalog_service.dart';
 import '../tweak_manager.dart';
 import '../../features/apps/application/windows_app_inventory_service.dart';
 import '../../features/apps/domain/app_package.dart';
+import '../../features/apps/domain/windows_optional_feature.dart';
 
 Directory defaultElevatedHelperDirectory() => Directory(
   '${Platform.environment['LOCALAPPDATA'] ?? Directory.systemTemp.path}'
@@ -110,6 +111,24 @@ class ElevatedHelperClient {
     return OperationPlan.fromJson(
       Map<String, Object?>.from(response['plan'] as Map),
     );
+  }
+
+  Future<List<WindowsOptionalFeature>> scanOptionalFeatures() async {
+    final response = await _send(<String, Object?>{
+      'protocol': 'optionalFeatureInventory',
+    });
+    if (response['success'] != true || response['features'] is! List) {
+      throw StateError(
+        response['message'] ?? 'Elevated optional feature inventory failed.',
+      );
+    }
+    return (response['features']! as List)
+        .map(
+          (row) => WindowsOptionalFeature.fromJson(
+            Map<String, dynamic>.from(row as Map),
+          ),
+        )
+        .toList(growable: false);
   }
 
   Future<AppInventoryResult> scanSystemApps() async {
@@ -302,6 +321,7 @@ class ElevatedHelperHost {
     OperationContext? operationContext,
     OperationStore? operationStore,
     Future<AppInventoryResult> Function()? systemAppInventory,
+    Future<List<WindowsOptionalFeature>> Function()? optionalFeatureInventory,
   }) : _allowedDirectory = allowedDirectory,
        _catalogService = catalogService,
        _tweakManager = tweakManager,
@@ -309,7 +329,8 @@ class ElevatedHelperHost {
        _operationRegistry = operationRegistry,
        _operationContext = operationContext,
        _operationStore = operationStore,
-       _systemAppInventory = systemAppInventory;
+       _systemAppInventory = systemAppInventory,
+       _optionalFeatureInventory = optionalFeatureInventory;
 
   final Directory _allowedDirectory;
   final TweakCatalogService _catalogService;
@@ -319,6 +340,8 @@ class ElevatedHelperHost {
   final OperationContext? _operationContext;
   final OperationStore? _operationStore;
   final Future<AppInventoryResult> Function()? _systemAppInventory;
+  final Future<List<WindowsOptionalFeature>> Function()?
+  _optionalFeatureInventory;
 
   Future<int> run(
     File requestFile,
@@ -353,6 +376,9 @@ class ElevatedHelperHost {
       }
       if (json['protocol'] == 'appInventory') {
         return await _runSystemAppInventory(json, response, events);
+      }
+      if (json['protocol'] == 'optionalFeatureInventory') {
+        return await _runOptionalFeatureInventory(json, response, events);
       }
       if (json['protocol'] == 'nativeOperation') {
         return await _runNativeOperation(json, response, events);
@@ -410,6 +436,26 @@ class ElevatedHelperHost {
       }
       return 2;
     }
+  }
+
+  Future<int> _runOptionalFeatureInventory(
+    Map<String, dynamic> json,
+    File response,
+    File events,
+  ) async {
+    if (json.length != 2 || _optionalFeatureInventory == null) {
+      throw StateError('Invalid optional feature inventory request.');
+    }
+    await _writeEvent(events, 'inventoryScanning');
+    final features = await _optionalFeatureInventory();
+    await _writeAtomic(response, <String, Object?>{
+      'success': true,
+      'features': features
+          .map((feature) => feature.toJson())
+          .toList(growable: false),
+    });
+    await _writeEvent(events, 'inventoryCompleted');
+    return 0;
   }
 
   Future<int> _runSystemAppInventory(

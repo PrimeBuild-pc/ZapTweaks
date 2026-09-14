@@ -5,6 +5,8 @@ import '../../../features/tweaks/presentation/pages/tweaks_page.dart';
 import '../../../l10n/app_localizations.dart';
 import 'app_inventory_page.dart';
 import 'app_store_page.dart';
+import 'optional_features_page.dart';
+import 'startup_apps_page.dart';
 
 class AppsHubPage extends StatefulWidget {
   const AppsHubPage({
@@ -40,12 +42,22 @@ class _AppsHubPageState extends State<AppsHubPage> {
         Tab(
           text: Text(strings.appStore),
           icon: const Icon(FluentIcons.shop),
-          body: const AppStorePage(),
+          body: AppStorePage(controller: widget.controller),
         ),
         Tab(
           text: Text(strings.appManagement),
           icon: const Icon(FluentIcons.apps_content),
-          body: const AppInventoryPage(),
+          body: AppInventoryPage(controller: widget.controller),
+        ),
+        Tab(
+          text: Text(strings.optionalFeatures),
+          icon: const Icon(FluentIcons.processing),
+          body: OptionalFeaturesPage(controller: widget.controller),
+        ),
+        Tab(
+          text: Text(strings.startupApps),
+          icon: const Icon(FluentIcons.play),
+          body: const StartupAppsPage(),
         ),
         Tab(
           text: Text(strings.windowsAppTools),

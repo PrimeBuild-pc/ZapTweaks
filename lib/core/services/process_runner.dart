@@ -101,6 +101,8 @@ class ProcessRunner {
     'netsh.exe',
     'shutdown',
     'shutdown.exe',
+    'taskmgr',
+    'taskmgr.exe',
     'powercfg',
     'powercfg.exe',
     'pnputil',

@@ -17,6 +17,7 @@ import 'package:script_utility/core/services/tweak_catalog_service.dart';
 import 'package:script_utility/core/tweak_manager.dart';
 import 'package:script_utility/features/apps/application/windows_app_inventory_service.dart';
 import 'package:script_utility/features/apps/domain/app_package.dart';
+import 'package:script_utility/features/apps/domain/windows_optional_feature.dart';
 import 'package:script_utility/platform/windows/registry_value_store.dart';
 
 class _Catalog extends TweakCatalogService {
@@ -173,6 +174,39 @@ void main() {
     expect(result.provisionedComplete, isTrue);
     expect(result.packages.single.scopes, contains(AppInstallScope.allUsers));
     expect(scans, 1);
+    expect(launches, 1);
+    expect(directory.listSync(), isEmpty);
+  });
+
+  test('optional features are collected through one helper session', () async {
+    final directory = await Directory.systemTemp.createTemp('zap-helper-');
+    addTearDown(() => directory.delete(recursive: true));
+    var launches = 0;
+    final host = ElevatedHelperHost(
+      allowedDirectory: directory,
+      catalogService: _Catalog(),
+      tweakManager: _Manager(),
+      restorePointService: _Restore(),
+      optionalFeatureInventory: () async => const <WindowsOptionalFeature>[
+        WindowsOptionalFeature(
+          name: 'Sample-Feature',
+          state: WindowsOptionalFeatureState.enabled,
+        ),
+      ],
+    );
+    final client = ElevatedHelperClient(
+      directory: directory,
+      secureDirectory: (_) async {},
+      launcher: (_, request, nonce, digest) {
+        launches++;
+        return host.run(request, nonce, digest);
+      },
+    );
+
+    final features = await client.scanOptionalFeatures();
+
+    expect(features.single.name, 'Sample-Feature');
+    expect(features.single.enabled, isTrue);
     expect(launches, 1);
     expect(directory.listSync(), isEmpty);
   });

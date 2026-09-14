@@ -792,6 +792,276 @@ abstract class AppLocalizations {
   /// **'Windows app tools'**
   String get windowsAppTools;
 
+  /// No description provided for @optionalFeatures.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional features'**
+  String get optionalFeatures;
+
+  /// No description provided for @searchOptionalFeatures.
+  ///
+  /// In en, this message translates to:
+  /// **'Search optional features'**
+  String get searchOptionalFeatures;
+
+  /// No description provided for @scanOptionalFeatures.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan features (UAC)'**
+  String get scanOptionalFeatures;
+
+  /// No description provided for @optionalFeaturesUacNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'Feature inventory and each change run through the allowlisted helper. No change occurs during scanning.'**
+  String get optionalFeaturesUacNotice;
+
+  /// No description provided for @confirmOptionalFeatureChange.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm optional feature change'**
+  String get confirmOptionalFeatureChange;
+
+  /// No description provided for @confirmOptionalFeatureChangeMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Feature: {name}\nAction: {action}\n\nWindows may require a restart. The previous enabled state is captured before the change.'**
+  String confirmOptionalFeatureChangeMessage(Object name, Object action);
+
+  /// No description provided for @enable.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable'**
+  String get enable;
+
+  /// No description provided for @disable.
+  ///
+  /// In en, this message translates to:
+  /// **'Disable'**
+  String get disable;
+
+  /// No description provided for @enabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Enabled'**
+  String get enabled;
+
+  /// No description provided for @disabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Disabled'**
+  String get disabled;
+
+  /// No description provided for @enablePending.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable pending restart'**
+  String get enablePending;
+
+  /// No description provided for @disablePending.
+  ///
+  /// In en, this message translates to:
+  /// **'Disable pending restart'**
+  String get disablePending;
+
+  /// No description provided for @startupApps.
+  ///
+  /// In en, this message translates to:
+  /// **'Startup apps'**
+  String get startupApps;
+
+  /// No description provided for @searchStartupApps.
+  ///
+  /// In en, this message translates to:
+  /// **'Search startup apps'**
+  String get searchStartupApps;
+
+  /// No description provided for @openStartupSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Startup Settings'**
+  String get openStartupSettings;
+
+  /// No description provided for @openTaskManagerStartup.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Task Manager Startup'**
+  String get openTaskManagerStartup;
+
+  /// No description provided for @startupInventoryNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'Read-only startup inventory. Use Windows Settings or Task Manager to change an entry.'**
+  String get startupInventoryNotice;
+
+  /// No description provided for @guidedSetup.
+  ///
+  /// In en, this message translates to:
+  /// **'Guided setup'**
+  String get guidedSetup;
+
+  /// No description provided for @wizardInventory.
+  ///
+  /// In en, this message translates to:
+  /// **'Inventory'**
+  String get wizardInventory;
+
+  /// No description provided for @wizardBaseline.
+  ///
+  /// In en, this message translates to:
+  /// **'Baseline'**
+  String get wizardBaseline;
+
+  /// No description provided for @wizardWindowsUpdate.
+  ///
+  /// In en, this message translates to:
+  /// **'Windows Update'**
+  String get wizardWindowsUpdate;
+
+  /// No description provided for @wizardDrivers.
+  ///
+  /// In en, this message translates to:
+  /// **'Driver check'**
+  String get wizardDrivers;
+
+  /// No description provided for @wizardApplications.
+  ///
+  /// In en, this message translates to:
+  /// **'Applications'**
+  String get wizardApplications;
+
+  /// No description provided for @wizardDebloat.
+  ///
+  /// In en, this message translates to:
+  /// **'Selective debloat'**
+  String get wizardDebloat;
+
+  /// No description provided for @wizardPrivacyInterface.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy and interface'**
+  String get wizardPrivacyInterface;
+
+  /// No description provided for @wizardPreview.
+  ///
+  /// In en, this message translates to:
+  /// **'Plan preview'**
+  String get wizardPreview;
+
+  /// No description provided for @wizardApply.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply'**
+  String get wizardApply;
+
+  /// No description provided for @wizardReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Final report'**
+  String get wizardReport;
+
+  /// No description provided for @wizardInventoryDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Read hardware, installed winget packages, and present devices before making choices.'**
+  String get wizardInventoryDescription;
+
+  /// No description provided for @runInventory.
+  ///
+  /// In en, this message translates to:
+  /// **'Run inventory'**
+  String get runInventory;
+
+  /// No description provided for @inventorySummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Detected {apps} winget packages and {devices} present devices.'**
+  String inventorySummary(Object apps, Object devices);
+
+  /// No description provided for @wizardUpdateNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'Review Windows Update before driver and app changes. ZapTweaks does not install updates automatically.'**
+  String get wizardUpdateNotice;
+
+  /// No description provided for @openWindowsUpdate.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Windows Update'**
+  String get openWindowsUpdate;
+
+  /// No description provided for @updatesReviewed.
+  ///
+  /// In en, this message translates to:
+  /// **'I reviewed Windows Update'**
+  String get updatesReviewed;
+
+  /// No description provided for @driverInventorySummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Present devices: {devices}\nDevices without a bound INF: {missing}'**
+  String driverInventorySummary(Object devices, Object missing);
+
+  /// No description provided for @wizardDebloatNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'No debloat choice is implicit. Only current-user AppX packages with a verified restore source can be selected here; other removals remain available from App → Installed apps with a separate preview.'**
+  String get wizardDebloatNotice;
+
+  /// No description provided for @wizardPrivacyNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy and interface settings remain unchanged unless selected explicitly below.'**
+  String get wizardPrivacyNotice;
+
+  /// No description provided for @noAppsSelected.
+  ///
+  /// In en, this message translates to:
+  /// **'No operations selected. The wizard will make no changes.'**
+  String get noAppsSelected;
+
+  /// No description provided for @planContains.
+  ///
+  /// In en, this message translates to:
+  /// **'The plan contains {count} explicit operation(s):'**
+  String planContains(Object count);
+
+  /// No description provided for @readyToApply.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready to apply {count} app operation(s). Each package is verified after winget completes.'**
+  String readyToApply(Object count);
+
+  /// No description provided for @noPlanReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Finished without applying a plan.'**
+  String get noPlanReport;
+
+  /// No description provided for @planStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Plan status'**
+  String get planStatus;
+
+  /// No description provided for @applyPlan.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply plan'**
+  String get applyPlan;
+
+  /// No description provided for @back.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get back;
+
+  /// No description provided for @finish.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish'**
+  String get finish;
+
   /// No description provided for @searchInstalledApps.
   ///
   /// In en, this message translates to:
@@ -833,6 +1103,35 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Provisioned'**
   String get provisioned;
+
+  /// No description provided for @confirmAppxRemoval.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm AppX removal'**
+  String get confirmAppxRemoval;
+
+  /// No description provided for @confirmAppxRemovalMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'App: {name}\nIdentity: {id}\nScope: {scope}\nRecovery: {recovery}\n\nOnly the listed scope will be removed. This operation has no exact rollback.'**
+  String confirmAppxRemovalMessage(
+    Object name,
+    Object id,
+    Object scope,
+    Object recovery,
+  );
+
+  /// No description provided for @reinstallable.
+  ///
+  /// In en, this message translates to:
+  /// **'Verified restore source available'**
+  String get reinstallable;
+
+  /// No description provided for @notReinstallable.
+  ///
+  /// In en, this message translates to:
+  /// **'No verified restore source'**
+  String get notReinstallable;
 
   /// No description provided for @searchApps.
   ///

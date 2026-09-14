@@ -385,6 +385,158 @@ class AppLocalizationsRu extends AppLocalizations {
   String get windowsAppTools => 'Windows app tools';
 
   @override
+  String get optionalFeatures => 'Optional features';
+
+  @override
+  String get searchOptionalFeatures => 'Search optional features';
+
+  @override
+  String get scanOptionalFeatures => 'Scan features (UAC)';
+
+  @override
+  String get optionalFeaturesUacNotice =>
+      'Feature inventory and each change run through the allowlisted helper. No change occurs during scanning.';
+
+  @override
+  String get confirmOptionalFeatureChange => 'Confirm optional feature change';
+
+  @override
+  String confirmOptionalFeatureChangeMessage(Object name, Object action) {
+    return 'Feature: $name\nAction: $action\n\nWindows may require a restart. The previous enabled state is captured before the change.';
+  }
+
+  @override
+  String get enable => 'Enable';
+
+  @override
+  String get disable => 'Disable';
+
+  @override
+  String get enabled => 'Enabled';
+
+  @override
+  String get disabled => 'Disabled';
+
+  @override
+  String get enablePending => 'Enable pending restart';
+
+  @override
+  String get disablePending => 'Disable pending restart';
+
+  @override
+  String get startupApps => 'Startup apps';
+
+  @override
+  String get searchStartupApps => 'Search startup apps';
+
+  @override
+  String get openStartupSettings => 'Open Startup Settings';
+
+  @override
+  String get openTaskManagerStartup => 'Open Task Manager Startup';
+
+  @override
+  String get startupInventoryNotice =>
+      'Read-only startup inventory. Use Windows Settings or Task Manager to change an entry.';
+
+  @override
+  String get guidedSetup => 'Guided setup';
+
+  @override
+  String get wizardInventory => 'Inventory';
+
+  @override
+  String get wizardBaseline => 'Baseline';
+
+  @override
+  String get wizardWindowsUpdate => 'Windows Update';
+
+  @override
+  String get wizardDrivers => 'Driver check';
+
+  @override
+  String get wizardApplications => 'Applications';
+
+  @override
+  String get wizardDebloat => 'Selective debloat';
+
+  @override
+  String get wizardPrivacyInterface => 'Privacy and interface';
+
+  @override
+  String get wizardPreview => 'Plan preview';
+
+  @override
+  String get wizardApply => 'Apply';
+
+  @override
+  String get wizardReport => 'Final report';
+
+  @override
+  String get wizardInventoryDescription =>
+      'Read hardware, installed winget packages, and present devices before making choices.';
+
+  @override
+  String get runInventory => 'Run inventory';
+
+  @override
+  String inventorySummary(Object apps, Object devices) {
+    return 'Detected $apps winget packages and $devices present devices.';
+  }
+
+  @override
+  String get wizardUpdateNotice =>
+      'Review Windows Update before driver and app changes. ZapTweaks does not install updates automatically.';
+
+  @override
+  String get openWindowsUpdate => 'Open Windows Update';
+
+  @override
+  String get updatesReviewed => 'I reviewed Windows Update';
+
+  @override
+  String driverInventorySummary(Object devices, Object missing) {
+    return 'Present devices: $devices\nDevices without a bound INF: $missing';
+  }
+
+  @override
+  String get wizardDebloatNotice =>
+      'No debloat choice is implicit. Only current-user AppX packages with a verified restore source can be selected here; other removals remain available from App → Installed apps with a separate preview.';
+
+  @override
+  String get wizardPrivacyNotice =>
+      'Privacy and interface settings remain unchanged unless selected explicitly below.';
+
+  @override
+  String get noAppsSelected =>
+      'No operations selected. The wizard will make no changes.';
+
+  @override
+  String planContains(Object count) {
+    return 'The plan contains $count explicit operation(s):';
+  }
+
+  @override
+  String readyToApply(Object count) {
+    return 'Ready to apply $count app operation(s). Each package is verified after winget completes.';
+  }
+
+  @override
+  String get noPlanReport => 'Finished without applying a plan.';
+
+  @override
+  String get planStatus => 'Plan status';
+
+  @override
+  String get applyPlan => 'Apply plan';
+
+  @override
+  String get back => 'Back';
+
+  @override
+  String get finish => 'Finish';
+
+  @override
   String get searchInstalledApps => 'Search installed apps';
 
   @override
@@ -406,6 +558,25 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get provisioned => 'Provisioned';
+
+  @override
+  String get confirmAppxRemoval => 'Confirm AppX removal';
+
+  @override
+  String confirmAppxRemovalMessage(
+    Object name,
+    Object id,
+    Object scope,
+    Object recovery,
+  ) {
+    return 'App: $name\nIdentity: $id\nScope: $scope\nRecovery: $recovery\n\nOnly the listed scope will be removed. This operation has no exact rollback.';
+  }
+
+  @override
+  String get reinstallable => 'Verified restore source available';
+
+  @override
+  String get notReinstallable => 'No verified restore source';
 
   @override
   String get searchApps => 'Search apps';

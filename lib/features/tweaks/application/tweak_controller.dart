@@ -697,6 +697,38 @@ class TweakController extends ChangeNotifier {
     }
   }
 
+  Future<OperationPlan> executeNativeRequests(
+    List<OperationRequest> requests,
+  ) async {
+    final engine = _planEngine;
+    if (engine == null || requests.isEmpty) {
+      throw StateError('Native operation engine is unavailable.');
+    }
+    final privileges = requests
+        .map(
+          (request) => engine.registry.resolve(request.operationId).privilege,
+        )
+        .toSet();
+    if (privileges.length != 1) {
+      throw StateError(
+        'User and administrator operations require separate plans.',
+      );
+    }
+    if (privileges.single == OperationPrivilege.administrator &&
+        !_processRunner.isDryRun) {
+      final helper = _elevatedHelperClient;
+      if (helper == null) throw StateError('Elevated helper is unavailable.');
+      return helper.executeNativePlan(
+        requests: requests,
+        user: Platform.environment['USERNAME'] ?? 'current-user',
+        appVersion: _appVersion,
+      );
+    }
+    final plan = await engine.plan(requests);
+    await engine.execute(plan, dryRun: _processRunner.isDryRun);
+    return plan;
+  }
+
   /// Executes a script tweak or toggles a stateful script tweak.
   Future<OperationResult> runScriptAction(
     TweakDescriptor descriptor, {

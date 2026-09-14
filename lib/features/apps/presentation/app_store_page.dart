@@ -1,13 +1,18 @@
 import 'package:fluent_ui/fluent_ui.dart';
 
+import '../../../core/operations/operation.dart';
+import '../../../core/plans/operation_plan.dart';
 import '../../../core/services/process_runner.dart';
 import '../../../l10n/app_localizations.dart';
 import '../application/app_store_catalog.dart';
 import '../application/app_store_service.dart';
+import '../../tweaks/application/tweak_controller.dart';
 import '../domain/store_app.dart';
 
 class AppStorePage extends StatefulWidget {
-  const AppStorePage({super.key});
+  const AppStorePage({required this.controller, super.key});
+
+  final TweakController controller;
 
   @override
   State<AppStorePage> createState() => _AppStorePageState();
@@ -93,7 +98,17 @@ class _AppStorePageState extends State<AppStorePage> {
       if (app.wingetId == null) {
         await _service.openSource(app);
       } else {
-        await _service.install(app);
+        final plan = await widget.controller
+            .executeNativeRequests(<OperationRequest>[
+              OperationRequest(
+                operationId: 'app.winget.set',
+                target: app.wingetId,
+                desiredValue: true,
+              ),
+            ]);
+        if (plan.status != PlanStatus.completed) {
+          throw StateError(plan.items.single.error ?? 'Installation failed.');
+        }
         _installed = await _service.installedWingetIds();
       }
       _message = null;
@@ -133,12 +148,23 @@ class _AppStorePageState extends State<AppStorePage> {
     if (confirmed != true) return;
     setState(() => _busyId = 'bulk');
     try {
-      final result = await _service.uninstall(preview);
-      _message = result.success
-          ? null
-          : result.failed.entries
-                .map((entry) => '${entry.key.name}: ${entry.value}')
-                .join('\n');
+      final plan = await widget.controller
+          .executeNativeRequests(<OperationRequest>[
+            for (final app in preview.apps)
+              OperationRequest(
+                operationId: 'app.winget.set',
+                target: app.wingetId,
+                desiredValue: false,
+              ),
+          ]);
+      if (plan.status != PlanStatus.completed) {
+        _message = plan.items
+            .where((item) => item.error != null)
+            .map((item) => '${item.request.target}: ${item.error}')
+            .join('\n');
+      } else {
+        _message = null;
+      }
       _installed = await _service.installedWingetIds();
       _selected.clear();
     } catch (error) {
