@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import '../domain/app_package.dart';
+import '../domain/microsoft_restore_catalog.dart';
 
 class AppInventoryParser {
   const AppInventoryParser();
@@ -62,7 +63,9 @@ class AppInventoryParser {
         scopes: <AppInstallScope>{...?previous?.scopes, ...scopes},
         source: 'Microsoft Store',
         reinstallable:
-            previous?.reinstallable == true || map['Reinstallable'] == true,
+            previous?.reinstallable == true ||
+            map['Reinstallable'] == true ||
+            microsoftRestoreCatalog.containsKey(id),
       );
     }
     return packages.values.toList(growable: false);

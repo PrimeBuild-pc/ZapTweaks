@@ -15,6 +15,8 @@ import 'package:script_utility/core/services/process_runner.dart';
 import 'package:script_utility/core/services/restore_point_service.dart';
 import 'package:script_utility/core/services/tweak_catalog_service.dart';
 import 'package:script_utility/core/tweak_manager.dart';
+import 'package:script_utility/features/apps/application/windows_app_inventory_service.dart';
+import 'package:script_utility/features/apps/domain/app_package.dart';
 import 'package:script_utility/platform/windows/registry_value_store.dart';
 
 class _Catalog extends TweakCatalogService {
@@ -120,6 +122,60 @@ void main() {
       expect(directory.listSync(), isEmpty);
     },
   );
+
+  test('system AppX scopes are collected through one helper session', () async {
+    final directory = await Directory.systemTemp.createTemp('zap-helper-');
+    addTearDown(() => directory.delete(recursive: true));
+    var scans = 0;
+    final host = ElevatedHelperHost(
+      allowedDirectory: directory,
+      catalogService: _Catalog(),
+      tweakManager: _Manager(),
+      restorePointService: _Restore(),
+      systemAppInventory: () async {
+        scans++;
+        return const AppInventoryResult(
+          packages: <AppPackage>[
+            AppPackage(
+              provider: AppProvider.appx,
+              packageId: 'Microsoft.Sample',
+              name: 'Sample',
+              version: '1.0',
+              publisher: 'CN=Microsoft',
+              scopes: <AppInstallScope>{
+                AppInstallScope.allUsers,
+                AppInstallScope.provisioned,
+              },
+              source: 'Microsoft Store',
+              reinstallable: false,
+            ),
+          ],
+          currentUserComplete: false,
+          allUsersComplete: true,
+          provisionedComplete: true,
+          wingetComplete: false,
+        );
+      },
+    );
+    var launches = 0;
+    final client = ElevatedHelperClient(
+      directory: directory,
+      secureDirectory: (_) async {},
+      launcher: (_, request, nonce, digest) {
+        launches++;
+        return host.run(request, nonce, digest);
+      },
+    );
+
+    final result = await client.scanSystemApps();
+
+    expect(result.allUsersComplete, isTrue);
+    expect(result.provisionedComplete, isTrue);
+    expect(result.packages.single.scopes, contains(AppInstallScope.allUsers));
+    expect(scans, 1);
+    expect(launches, 1);
+    expect(directory.listSync(), isEmpty);
+  });
 
   test(
     'native administrator operation applies and rolls back through one helper',

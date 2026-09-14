@@ -1780,7 +1780,7 @@
     {
       "index": 218,
       "id": "setup_startup_apps_7",
-      "title": "Startup Apps (7)",
+      "title": "Startup Apps Settings",
       "destination": "App",
       "disposition": "legacyToNative",
       "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
@@ -1788,7 +1788,7 @@
     {
       "index": 219,
       "id": "setup_startup_apps_8",
-      "title": "Startup Apps (8)",
+      "title": "Startup Apps in Task Manager",
       "destination": "App",
       "disposition": "legacyToNative",
       "target": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
@@ -2804,7 +2804,7 @@
     {
       "index": 345,
       "id": "tool_ctt_winutil",
-      "title": "Run CTT WinUtil",
+      "title": "CTT WinUtil by Chris Titus Tech",
       "destination": "Esperto",
       "disposition": "external",
       "target": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"

@@ -110,5 +110,34 @@
   "searchOperations": "Cerca operazioni",
   "searchResults": "Risultati della ricerca",
   "operationTaskbarEndTaskTitle": "Termina attività dalla barra",
-  "operationTaskbarEndTaskDescription": "Mostra Termina attività nei menu contestuali delle app sulla barra delle applicazioni."
+  "operationTaskbarEndTaskDescription": "Mostra Termina attività nei menu contestuali delle app sulla barra delle applicazioni.",
+  "appStore": "Store delle app",
+  "appManagement": "App installate",
+  "windowsAppTools": "Strumenti app Windows",
+  "searchInstalledApps": "Cerca nelle app installate",
+  "scanAllUsers": "Analizza tutti gli utenti (UAC)",
+  "systemScopesComplete": "Sono inclusi gli scope AppX per tutti gli utenti e provisioned.",
+  "systemScopesIncomplete": "Solo inventario utente corrente e winget. Analizza tutti gli utenti per includere gli scope AppX di sistema.",
+  "currentUser": "Utente corrente",
+  "allUsers": "Tutti gli utenti",
+  "provisioned": "Provisioned",
+  "searchApps": "Cerca app",
+  "allCategories": "Tutte le categorie",
+  "installedOnly": "Solo installate",
+  "refreshInventory": "Aggiorna inventario",
+  "install": "Installa",
+  "uninstall": "Disinstalla",
+  "uninstallSelected": "Disinstalla selezionate",
+  "openOfficialPage": "Apri pagina ufficiale",
+  "installed": "Installata",
+  "notInstalled": "Non installata",
+  "appInventoryUnavailable": "Il rilevamento delle app installate non è disponibile.",
+  "confirmBulkUninstall": "Conferma disinstallazione multipla",
+  "confirmBulkUninstallMessage": "Le seguenti app verranno disinstallate:\n\n{apps}",
+  "@confirmBulkUninstallMessage": {
+    "placeholders": {
+      "apps": {}
+    }
+  },
+  "appCatalogSources": "Catalogo unificato da revisioni bloccate di CTT WinUtil, candidati Winhance clean-room, TweakHub e fonti ufficiali richieste."
 }

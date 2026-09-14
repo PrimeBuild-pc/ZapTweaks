@@ -48,15 +48,29 @@ void main() {
         'Windows': 45,
         'System Checks': 17,
         'Services': 31,
-        'Refresh & Recovery': 23,
+        'Refresh & Recovery': 24,
         'Setup': 12,
         'Advanced': 23,
         'Privacy': 12,
         'Visuals': 14,
-        'Tools': 76,
+        'Tools': 77,
       });
     },
   );
+
+  test('startup app launchers expose their different Windows surfaces', () {
+    final byId = <String, dynamic>{
+      for (final descriptor in TweakCatalogService().buildCatalog())
+        descriptor.id: descriptor,
+    };
+
+    expect(byId['setup_startup_apps_7'].title, 'Startup Apps Settings');
+    expect(byId['setup_startup_apps_8'].title, 'Startup Apps in Task Manager');
+    expect(
+      byId['setup_startup_apps_7'].description,
+      isNot(byId['setup_startup_apps_8'].description),
+    );
+  });
 
   test('safe presets exclude security-reducing and destructive tweaks', () {
     final byId = <String, dynamic>{

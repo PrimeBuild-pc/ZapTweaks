@@ -14,8 +14,14 @@ void main() {
       manifest,
     ).adapt(TweakCatalogService().buildCatalog());
 
-    expect(adapted, hasLength(346));
-    expect(adapted.map((item) => item.id).toSet(), hasLength(346));
+    expect(adapted, hasLength(348));
+    expect(adapted.map((item) => item.id).toSet(), hasLength(348));
+    expect(
+      manifest.entries.every(
+        (entry) => adapted.any((descriptor) => descriptor.id == entry.id),
+      ),
+      isTrue,
+    );
     expect(adapted.map((item) => item.category).toSet(), <String>{
       'Guided Setup',
       'Apps',

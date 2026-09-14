@@ -29,6 +29,7 @@ import 'core/services/tweak_catalog_service.dart';
 import 'core/security/elevated_helper.dart';
 import 'core/security/elevated_operation_executor.dart';
 import 'core/tweak_manager.dart';
+import 'features/apps/application/windows_app_inventory_service.dart';
 import 'features/tweaks/application/tweak_controller.dart';
 import 'legacy/adapters/legacy_catalog_adapter.dart';
 import 'platform/windows/registry_value_store.dart';
@@ -87,6 +88,9 @@ Future<void> main(List<String> arguments) async {
             edition: 'Home/Pro',
           ),
           operationStore: operationStore,
+          systemAppInventory: WindowsAppInventoryService(
+            processRunner: processRunner,
+          ).scanSystemScopes,
         ).run(
           File(utf8.decode(base64Url.decode(arguments[1]))),
           arguments[2],

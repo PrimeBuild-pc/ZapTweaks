@@ -46,7 +46,8 @@ void main() {
         .buildCatalog()
         .map((entry) => entry.id)
         .toSet();
-    expect(catalogIds, ids.toSet());
+    expect(catalogIds, containsAll(ids));
+    expect(catalogIds, contains('recovery_repair_bad_tweaks_zoicware'));
   });
 
   test('legacy aliases are complete and acyclic', () {

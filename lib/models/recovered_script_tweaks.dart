@@ -19,8 +19,8 @@ const List<String> _scriptDefinitions = <String>[
   '!setup_convert_home_to_pro|Convert Home To Pro|Setup Scripts|interactive_scripts/3 Setup/3 Convert Home To Pro.ps1',
   '!setup_keys|Keys|Setup Scripts|interactive_scripts/3 Setup/4 Keys.ps1',
   'setup_date_language_region_time|Date Language Region Time|Setup Scripts|interactive_scripts/3 Setup/6 Date Language Region Time.ps1',
-  'setup_startup_apps_7|Startup Apps (7)|Setup Scripts|interactive_scripts/3 Setup/7 Startup Apps.ps1',
-  'setup_startup_apps_8|Startup Apps (8)|Setup Scripts|interactive_scripts/3 Setup/8 Startup Apps.ps1',
+  'setup_startup_apps_7|Startup Apps Settings|Setup Scripts|interactive_scripts/3 Setup/7 Startup Apps.ps1',
+  'setup_startup_apps_8|Startup Apps in Task Manager|Setup Scripts|interactive_scripts/3 Setup/8 Startup Apps.ps1',
   '!setup_updates_pause|Updates Pause|Setup Scripts|interactive_scripts/3 Setup/12 Updates Pause.ps1',
   'installers_menu|Installers Menu|Drivers & Installers|interactive_scripts/4 Installers/1 Installers.ps1',
   '!installers_msi_afterburner|MSI Afterburner Script Installer|Drivers & Installers|interactive_scripts/4 Installers/2 MSI Afterburner.ps1',
@@ -108,9 +108,15 @@ List<SystemTweak> createRecoveredScriptTweaks() {
         return ScriptInteractiveTweak(
           id: aggressive ? fields[0].substring(1) : fields[0],
           title: fields[1],
-          description: fields[0] == '!graphics_cpp_runtime'
-              ? 'Installs Visual C++ 2005-2022 runtimes (x86 and x64) in one action.'
-              : 'Interactive script by Fr33thy.',
+          description: switch (fields[0]) {
+            'setup_startup_apps_7' =>
+              'Opens the Windows Settings page for startup applications.',
+            'setup_startup_apps_8' =>
+              'Opens the Startup apps section in Task Manager.',
+            '!graphics_cpp_runtime' =>
+              'Installs Visual C++ 2005-2022 runtimes (x86 and x64) in one action.',
+            _ => 'Interactive script by Fr33thy.',
+          },
           category: fields[2],
           scriptSegments: fields[3].split('/'),
           actionLabel:

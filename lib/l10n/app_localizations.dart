@@ -773,6 +773,150 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Show End task in taskbar app context menus.'**
   String get operationTaskbarEndTaskDescription;
+
+  /// No description provided for @appStore.
+  ///
+  /// In en, this message translates to:
+  /// **'App store'**
+  String get appStore;
+
+  /// No description provided for @appManagement.
+  ///
+  /// In en, this message translates to:
+  /// **'Installed apps'**
+  String get appManagement;
+
+  /// No description provided for @windowsAppTools.
+  ///
+  /// In en, this message translates to:
+  /// **'Windows app tools'**
+  String get windowsAppTools;
+
+  /// No description provided for @searchInstalledApps.
+  ///
+  /// In en, this message translates to:
+  /// **'Search installed apps'**
+  String get searchInstalledApps;
+
+  /// No description provided for @scanAllUsers.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan all users (UAC)'**
+  String get scanAllUsers;
+
+  /// No description provided for @systemScopesComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'All-user and provisioned AppX scopes are included.'**
+  String get systemScopesComplete;
+
+  /// No description provided for @systemScopesIncomplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Current-user and winget inventory only. Scan all users to include system AppX scopes.'**
+  String get systemScopesIncomplete;
+
+  /// No description provided for @currentUser.
+  ///
+  /// In en, this message translates to:
+  /// **'Current user'**
+  String get currentUser;
+
+  /// No description provided for @allUsers.
+  ///
+  /// In en, this message translates to:
+  /// **'All users'**
+  String get allUsers;
+
+  /// No description provided for @provisioned.
+  ///
+  /// In en, this message translates to:
+  /// **'Provisioned'**
+  String get provisioned;
+
+  /// No description provided for @searchApps.
+  ///
+  /// In en, this message translates to:
+  /// **'Search apps'**
+  String get searchApps;
+
+  /// No description provided for @allCategories.
+  ///
+  /// In en, this message translates to:
+  /// **'All categories'**
+  String get allCategories;
+
+  /// No description provided for @installedOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Installed only'**
+  String get installedOnly;
+
+  /// No description provided for @refreshInventory.
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh inventory'**
+  String get refreshInventory;
+
+  /// No description provided for @install.
+  ///
+  /// In en, this message translates to:
+  /// **'Install'**
+  String get install;
+
+  /// No description provided for @uninstall.
+  ///
+  /// In en, this message translates to:
+  /// **'Uninstall'**
+  String get uninstall;
+
+  /// No description provided for @uninstallSelected.
+  ///
+  /// In en, this message translates to:
+  /// **'Uninstall selected'**
+  String get uninstallSelected;
+
+  /// No description provided for @openOfficialPage.
+  ///
+  /// In en, this message translates to:
+  /// **'Open official page'**
+  String get openOfficialPage;
+
+  /// No description provided for @installed.
+  ///
+  /// In en, this message translates to:
+  /// **'Installed'**
+  String get installed;
+
+  /// No description provided for @notInstalled.
+  ///
+  /// In en, this message translates to:
+  /// **'Not installed'**
+  String get notInstalled;
+
+  /// No description provided for @appInventoryUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Installed-app detection is unavailable.'**
+  String get appInventoryUnavailable;
+
+  /// No description provided for @confirmBulkUninstall.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm bulk uninstall'**
+  String get confirmBulkUninstall;
+
+  /// No description provided for @confirmBulkUninstallMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'The following apps will be uninstalled:\n\n{apps}'**
+  String confirmBulkUninstallMessage(Object apps);
+
+  /// No description provided for @appCatalogSources.
+  ///
+  /// In en, this message translates to:
+  /// **'Catalog merged from pinned CTT WinUtil, clean-room Winhance candidates, TweakHub, and requested official sources.'**
+  String get appCatalogSources;
 }
 
 class _AppLocalizationsDelegate

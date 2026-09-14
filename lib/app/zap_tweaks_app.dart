@@ -10,6 +10,7 @@ import '../core/models/operation_result.dart';
 import '../core/services/app_locale_service.dart';
 import '../core/services/process_runner.dart';
 import '../l10n/app_localizations.dart';
+import '../features/apps/presentation/apps_hub_page.dart';
 import '../features/home/presentation/pages/home_stats_page.dart';
 import '../features/tweaks/application/tweak_controller.dart';
 import '../features/tweaks/presentation/pages/tweaks_page.dart';
@@ -475,6 +476,13 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
 
     if (category == 'Home') {
       return _buildHomeStatsPage();
+    }
+
+    if (category == 'Apps') {
+      return AppsHubPage(
+        controller: widget.controller,
+        onSafetyPrompt: _showConfirmDialog,
+      );
     }
 
     if (category == TweakController.settingsCategory) {

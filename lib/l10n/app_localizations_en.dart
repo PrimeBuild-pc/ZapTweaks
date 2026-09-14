@@ -371,4 +371,82 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get operationTaskbarEndTaskDescription =>
       'Show End task in taskbar app context menus.';
+
+  @override
+  String get appStore => 'App store';
+
+  @override
+  String get appManagement => 'Installed apps';
+
+  @override
+  String get windowsAppTools => 'Windows app tools';
+
+  @override
+  String get searchInstalledApps => 'Search installed apps';
+
+  @override
+  String get scanAllUsers => 'Scan all users (UAC)';
+
+  @override
+  String get systemScopesComplete =>
+      'All-user and provisioned AppX scopes are included.';
+
+  @override
+  String get systemScopesIncomplete =>
+      'Current-user and winget inventory only. Scan all users to include system AppX scopes.';
+
+  @override
+  String get currentUser => 'Current user';
+
+  @override
+  String get allUsers => 'All users';
+
+  @override
+  String get provisioned => 'Provisioned';
+
+  @override
+  String get searchApps => 'Search apps';
+
+  @override
+  String get allCategories => 'All categories';
+
+  @override
+  String get installedOnly => 'Installed only';
+
+  @override
+  String get refreshInventory => 'Refresh inventory';
+
+  @override
+  String get install => 'Install';
+
+  @override
+  String get uninstall => 'Uninstall';
+
+  @override
+  String get uninstallSelected => 'Uninstall selected';
+
+  @override
+  String get openOfficialPage => 'Open official page';
+
+  @override
+  String get installed => 'Installed';
+
+  @override
+  String get notInstalled => 'Not installed';
+
+  @override
+  String get appInventoryUnavailable =>
+      'Installed-app detection is unavailable.';
+
+  @override
+  String get confirmBulkUninstall => 'Confirm bulk uninstall';
+
+  @override
+  String confirmBulkUninstallMessage(Object apps) {
+    return 'The following apps will be uninstalled:\n\n$apps';
+  }
+
+  @override
+  String get appCatalogSources =>
+      'Catalog merged from pinned CTT WinUtil, clean-room Winhance candidates, TweakHub, and requested official sources.';
 }

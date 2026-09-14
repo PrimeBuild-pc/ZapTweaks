@@ -375,4 +375,82 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get operationTaskbarEndTaskDescription =>
       'Mostra Termina attività nei menu contestuali delle app sulla barra delle applicazioni.';
+
+  @override
+  String get appStore => 'Store delle app';
+
+  @override
+  String get appManagement => 'App installate';
+
+  @override
+  String get windowsAppTools => 'Strumenti app Windows';
+
+  @override
+  String get searchInstalledApps => 'Cerca nelle app installate';
+
+  @override
+  String get scanAllUsers => 'Analizza tutti gli utenti (UAC)';
+
+  @override
+  String get systemScopesComplete =>
+      'Sono inclusi gli scope AppX per tutti gli utenti e provisioned.';
+
+  @override
+  String get systemScopesIncomplete =>
+      'Solo inventario utente corrente e winget. Analizza tutti gli utenti per includere gli scope AppX di sistema.';
+
+  @override
+  String get currentUser => 'Utente corrente';
+
+  @override
+  String get allUsers => 'Tutti gli utenti';
+
+  @override
+  String get provisioned => 'Provisioned';
+
+  @override
+  String get searchApps => 'Cerca app';
+
+  @override
+  String get allCategories => 'Tutte le categorie';
+
+  @override
+  String get installedOnly => 'Solo installate';
+
+  @override
+  String get refreshInventory => 'Aggiorna inventario';
+
+  @override
+  String get install => 'Installa';
+
+  @override
+  String get uninstall => 'Disinstalla';
+
+  @override
+  String get uninstallSelected => 'Disinstalla selezionate';
+
+  @override
+  String get openOfficialPage => 'Apri pagina ufficiale';
+
+  @override
+  String get installed => 'Installata';
+
+  @override
+  String get notInstalled => 'Non installata';
+
+  @override
+  String get appInventoryUnavailable =>
+      'Il rilevamento delle app installate non è disponibile.';
+
+  @override
+  String get confirmBulkUninstall => 'Conferma disinstallazione multipla';
+
+  @override
+  String confirmBulkUninstallMessage(Object apps) {
+    return 'Le seguenti app verranno disinstallate:\n\n$apps';
+  }
+
+  @override
+  String get appCatalogSources =>
+      'Catalogo unificato da revisioni bloccate di CTT WinUtil, candidati Winhance clean-room, TweakHub e fonti ufficiali richieste.';
 }

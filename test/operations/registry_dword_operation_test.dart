@@ -76,9 +76,11 @@ void main() {
       _MemoryRegistry(),
       ProcessRunner(mode: ProcessExecutionMode.dryRun),
     );
-    final operation = operations.first;
+    final operation = operations.singleWhere(
+      (item) => item.id == 'ui_taskbar_end_task',
+    );
 
-    expect(operations, hasLength(19));
+    expect(operations, hasLength(21));
     expect(operation.id, 'ui_taskbar_end_task');
     expect(operation.scope, OperationScope.user);
     expect(operation.rollbackCapability, RollbackCapability.exact);

@@ -123,7 +123,6 @@ void main() {
     // diagnostic read-out does not.
     for (final id in <String>[
       'tool_install_win11_debloat_raphire',
-      'tool_ctt_winutil',
       'tool_winsux_debloat',
       'tool_device_tweaker_script',
     ]) {
@@ -132,6 +131,8 @@ void main() {
     for (final id in <String>[
       'tool_marius_deeppoll_script',
       'tool_fix_tools_battery_report',
+      'tool_ctt_winutil',
+      'tool_windows_11_fix_tweaks_kubaam',
     ]) {
       expect(byId[id].scriptTweak.requiresSafetyPrompt, isFalse, reason: id);
     }

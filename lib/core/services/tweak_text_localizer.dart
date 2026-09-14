@@ -428,6 +428,18 @@ class TweakTextLocalizer {
   static const Map<String, Map<String, (String, String)>>
   _reviewedCopy = <String, Map<String, (String, String)>>{
     'it': <String, (String, String)>{
+      'recovery_repair_bad_tweaks_zoicware': (
+        'Ripara tweak dannosi by zoicware',
+        'Avvia la copia MIT verificata dello script interattivo RepairBadTweaks by zoicware.',
+      ),
+      'tool_ctt_winutil': (
+        'CTT WinUtil by Chris Titus Tech',
+        'Apre la pagina ufficiale delle release. ZapTweaks non esegue codice PowerShell remoto mutabile.',
+      ),
+      'tool_windows_11_fix_tweaks_kubaam': (
+        'Windows 11 Fix Tweaks by kubaam',
+        'Apre il progetto upstream bloccato per la revisione. ZapTweaks non esegue il file batch tutto-in-uno.',
+      ),
       'game_mode': (
         'Modalità gioco attiva',
         'Attiva Modalità gioco senza modificare Game Bar o Game DVR.',
@@ -538,6 +550,18 @@ class TweakTextLocalizer {
       ),
     },
     'de': <String, (String, String)>{
+      'recovery_repair_bad_tweaks_zoicware': (
+        'Fehlerhafte Tweaks reparieren by zoicware',
+        'Startet die geprüfte MIT-Kopie des interaktiven RepairBadTweaks-Skripts by zoicware.',
+      ),
+      'tool_ctt_winutil': (
+        'CTT WinUtil by Chris Titus Tech',
+        'Öffnet die offizielle Release-Seite. ZapTweaks führt keinen veränderlichen entfernten PowerShell-Code aus.',
+      ),
+      'tool_windows_11_fix_tweaks_kubaam': (
+        'Windows 11 Fix Tweaks by kubaam',
+        'Öffnet das fixierte Upstream-Projekt zur Prüfung. ZapTweaks führt die All-in-One-Batchdatei nicht aus.',
+      ),
       'game_mode': (
         'Spielmodus an',
         'Aktiviert den Windows-Spielmodus, ohne Game Bar oder Game DVR zu ändern.',
@@ -572,6 +596,18 @@ class TweakTextLocalizer {
       ),
     },
     'es': <String, (String, String)>{
+      'recovery_repair_bad_tweaks_zoicware': (
+        'Reparar tweaks dañinos by zoicware',
+        'Inicia la copia MIT verificada del script interactivo RepairBadTweaks by zoicware.',
+      ),
+      'tool_ctt_winutil': (
+        'CTT WinUtil by Chris Titus Tech',
+        'Abre la página oficial de versiones. ZapTweaks no ejecuta código PowerShell remoto mutable.',
+      ),
+      'tool_windows_11_fix_tweaks_kubaam': (
+        'Windows 11 Fix Tweaks by kubaam',
+        'Abre el proyecto upstream fijado para revisarlo. ZapTweaks no ejecuta el archivo por lotes todo en uno.',
+      ),
       'game_mode': (
         'Modo de juego activado',
         'Activa el modo de juego de Windows sin modificar Game Bar ni Game DVR.',
@@ -606,6 +642,18 @@ class TweakTextLocalizer {
       ),
     },
     'fr': <String, (String, String)>{
+      'recovery_repair_bad_tweaks_zoicware': (
+        'Réparer les mauvais tweaks by zoicware',
+        'Lance la copie MIT vérifiée du script interactif RepairBadTweaks by zoicware.',
+      ),
+      'tool_ctt_winutil': (
+        'CTT WinUtil by Chris Titus Tech',
+        'Ouvre la page officielle des versions. ZapTweaks n’exécute aucun code PowerShell distant mutable.',
+      ),
+      'tool_windows_11_fix_tweaks_kubaam': (
+        'Windows 11 Fix Tweaks by kubaam',
+        'Ouvre le projet amont épinglé pour examen. ZapTweaks n’exécute pas le fichier batch tout-en-un.',
+      ),
       'game_mode': (
         'Mode Jeu activé',
         'Active le Mode Jeu Windows sans modifier Game Bar ni Game DVR.',
@@ -640,6 +688,18 @@ class TweakTextLocalizer {
       ),
     },
     'ru': <String, (String, String)>{
+      'recovery_repair_bad_tweaks_zoicware': (
+        'Исправить опасные твики by zoicware',
+        'Запускает проверенную MIT-копию интерактивного скрипта RepairBadTweaks by zoicware.',
+      ),
+      'tool_ctt_winutil': (
+        'CTT WinUtil by Chris Titus Tech',
+        'Открывает официальную страницу выпусков. ZapTweaks не выполняет изменяемый удалённый код PowerShell.',
+      ),
+      'tool_windows_11_fix_tweaks_kubaam': (
+        'Windows 11 Fix Tweaks by kubaam',
+        'Открывает закреплённый исходный проект для проверки. ZapTweaks не запускает универсальный пакетный файл.',
+      ),
       'game_mode': (
         'Игровой режим включён',
         'Включает игровой режим Windows, не изменяя Game Bar и Game DVR.',
@@ -674,6 +734,18 @@ class TweakTextLocalizer {
       ),
     },
     'zh': <String, (String, String)>{
+      'recovery_repair_bad_tweaks_zoicware': (
+        '修复不良调整 by zoicware',
+        '启动经过验证的 MIT 版 RepairBadTweaks 交互脚本 by zoicware。',
+      ),
+      'tool_ctt_winutil': (
+        'CTT WinUtil by Chris Titus Tech',
+        '打开官方发布页面。ZapTweaks 不执行可变的远程 PowerShell 代码。',
+      ),
+      'tool_windows_11_fix_tweaks_kubaam': (
+        'Windows 11 Fix Tweaks by kubaam',
+        '打开固定版本的上游项目以供审查。ZapTweaks 不执行一体化批处理文件。',
+      ),
       'game_mode': ('开启游戏模式', '开启 Windows 游戏模式，不会修改 Game Bar 或 Game DVR。'),
       'gaming_mpo_off': ('禁用多平面叠加 (MPO)', '仅用于诊断显示闪烁或卡顿；需要重启。'),
       'gaming_amd_gpu_safe_profile': (
@@ -1556,12 +1628,12 @@ class TweakTextLocalizer {
         "Sceneggiatura interattiva di Fr33thy.",
       ),
       "setup_startup_apps_7": (
-        "App di avvio (7)",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Impostazioni app di avvio",
+        "Apre la pagina Impostazioni di Windows dedicata alle app di avvio.",
       ),
       "setup_startup_apps_8": (
-        "App di avvio (8)",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "App di avvio in Gestione attività",
+        "Apre la sezione App di avvio di Gestione attività.",
       ),
       "setup_store_settings_script": (
         "Impostazioni del negozio (variante dello script)",

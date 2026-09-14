@@ -1,0 +1,5227 @@
+{
+  "schemaVersion": 1,
+  "generatedFrom": {
+    "ctt": "a0d3c719a6611b329422e9c56ee9b792cd596146",
+    "winhance": "f23d554eb2d6400b1827bcc46b91294ffa53fbc9",
+    "tweakHub": "bdc6e185ddc062bf906d2d9950b62d252f381110"
+  },
+  "apps": [
+    {
+      "id": "app_https_antigravity_google",
+      "name": "Google Antigravity",
+      "category": "AI Tools",
+      "wingetId": null,
+      "url": "https://antigravity.google/",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_jan_jan",
+      "name": "Jan",
+      "category": "AI Tools",
+      "wingetId": "Jan.Jan",
+      "url": null,
+      "author": "Jan",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_elementlabs_lmstudio",
+      "name": "LM Studio",
+      "category": "AI Tools",
+      "wingetId": "ElementLabs.LMStudio",
+      "url": null,
+      "author": "ElementLabs",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_ollama_ollama",
+      "name": "Ollama",
+      "category": "AI Tools",
+      "wingetId": "Ollama.Ollama",
+      "url": null,
+      "author": "Ollama",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_opencode_ai",
+      "name": "OpenCode",
+      "category": "AI Tools",
+      "wingetId": null,
+      "url": "https://opencode.ai/",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_github_com_badlogic_pi_mono",
+      "name": "Pi Coding Agent",
+      "category": "AI Tools",
+      "wingetId": null,
+      "url": "https://github.com/badlogic/pi-mono",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_unsloth_ai_docs_new_studio",
+      "name": "Unsloth Studio",
+      "category": "AI Tools",
+      "wingetId": null,
+      "url": "https://unsloth.ai/docs/new/studio",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_warp_warp",
+      "name": "Warp",
+      "category": "AI Tools",
+      "wingetId": "Warp.Warp",
+      "url": null,
+      "author": "Warp",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_sourceforge_net_projects_equalizerapo",
+      "name": "Equalizer APO",
+      "category": "Audio",
+      "wingetId": null,
+      "url": "https://sourceforge.net/projects/equalizerapo/",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_sourceforge_net_projects_peace_equalizer_apo_extension",
+      "name": "Peace Equalizer",
+      "category": "Audio",
+      "wingetId": null,
+      "url": "https://sourceforge.net/projects/peace-equalizer-apo-extension/",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_steelseries_gg",
+      "name": "SteelSeries GG",
+      "category": "Audio",
+      "wingetId": "SteelSeries.GG",
+      "url": null,
+      "author": "SteelSeries",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_benchmarks_ul_com_3dmark",
+      "name": "3DMark",
+      "category": "Benchmarks & Stability",
+      "wingetId": null,
+      "url": "https://benchmarks.ul.com/3dmark",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_finalwire_aida64_extreme",
+      "name": "AIDA64 Extreme",
+      "category": "Benchmarks & Stability",
+      "wingetId": "FinalWire.AIDA64.Extreme",
+      "url": null,
+      "author": "FinalWire",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_matthiaszronek_benchmate",
+      "name": "BenchMate",
+      "category": "Benchmarks & Stability",
+      "wingetId": "MatthiasZronek.BenchMate",
+      "url": null,
+      "author": "MatthiasZronek",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_opendata_blender_org",
+      "name": "Blender Benchmark",
+      "category": "Benchmarks & Stability",
+      "wingetId": null,
+      "url": "https://opendata.blender.org/",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_cxworld_capframex",
+      "name": "CapFrameX",
+      "category": "Benchmarks & Stability",
+      "wingetId": "CXWorld.CapFrameX",
+      "url": null,
+      "author": "CXWorld",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_www_maxon_net_en_downloads_cinebench_downloads",
+      "name": "Cinebench 2024",
+      "category": "Benchmarks & Stability",
+      "wingetId": null,
+      "url": "https://www.maxon.net/en/downloads/cinebench-downloads",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_www_techpowerup_com_download_maxon_cinebench",
+      "name": "Cinebench Legacy Downloads",
+      "category": "Benchmarks & Stability",
+      "wingetId": null,
+      "url": "https://www.techpowerup.com/download/maxon-cinebench/",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_geeks3d_furmark_2",
+      "name": "FurMark 2",
+      "category": "Benchmarks & Stability",
+      "wingetId": "Geeks3D.FurMark.2",
+      "url": null,
+      "author": "Geeks3D",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_primatelabs_geekbench_6",
+      "name": "Geekbench 6",
+      "category": "Benchmarks & Stability",
+      "wingetId": "PrimateLabs.Geekbench.6",
+      "url": null,
+      "author": "PrimateLabs",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_unigine_heavenbenchmark",
+      "name": "Heaven Benchmark",
+      "category": "Benchmarks & Stability",
+      "wingetId": "Unigine.HeavenBenchmark",
+      "url": null,
+      "author": "Unigine",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_www_techpowerup_com_download_linpack_xtreme",
+      "name": "Linpack Xtreme",
+      "category": "Benchmarks & Stability",
+      "wingetId": null,
+      "url": "https://www.techpowerup.com/download/linpack-xtreme/",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_github_com_gpuzelenograd_memtest_vulkan",
+      "name": "memtest_vulkan",
+      "category": "Benchmarks & Stability",
+      "wingetId": null,
+      "url": "https://github.com/GpuZelenograd/memtest_vulkan",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_msikombustor_com_download",
+      "name": "MSI Kombustor",
+      "category": "Benchmarks & Stability",
+      "wingetId": null,
+      "url": "https://msikombustor.com/#download",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_ocbase_occt_personal",
+      "name": "OCCT",
+      "category": "Benchmarks & Stability",
+      "wingetId": "OCBase.OCCT.Personal",
+      "url": null,
+      "author": "OCBase",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_mersenne_prime95",
+      "name": "Prime95",
+      "category": "Benchmarks & Stability",
+      "wingetId": "mersenne.prime95",
+      "url": null,
+      "author": "mersenne",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_unigine_superpositionbenchmark",
+      "name": "Superposition Benchmark",
+      "category": "Benchmarks & Stability",
+      "wingetId": "Unigine.SuperpositionBenchmark",
+      "url": null,
+      "author": "Unigine",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_www_numberworld_org_y_cruncher",
+      "name": "y-cruncher",
+      "category": "Benchmarks & Stability",
+      "wingetId": null,
+      "url": "https://www.numberworld.org/y-cruncher/",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_thebrowsercompany_arc",
+      "name": "Arc Browser",
+      "category": "Browsers",
+      "wingetId": "TheBrowserCompany.Arc",
+      "url": "https://arc.net/",
+      "author": "TheBrowserCompany",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_brave_brave",
+      "name": "Brave",
+      "category": "Browsers",
+      "wingetId": "Brave.Brave",
+      "url": "https://www.brave.com",
+      "author": "Brave",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_google_chrome",
+      "name": "Chrome",
+      "category": "Browsers",
+      "wingetId": "Google.Chrome",
+      "url": "https://www.google.com/chrome/",
+      "author": "Google",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_hibbiki_chromium",
+      "name": "Chromium",
+      "category": "Browsers",
+      "wingetId": "Hibbiki.Chromium",
+      "url": "https://www.chromium.org/",
+      "author": "Hibbiki",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_duckduckgo_desktopbrowser",
+      "name": "DuckDuckGo",
+      "category": "Browsers",
+      "wingetId": "DuckDuckGo.DesktopBrowser",
+      "url": "https://duckduckgo.com/",
+      "author": "DuckDuckGo",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_microsoft_edge",
+      "name": "Edge",
+      "category": "Browsers",
+      "wingetId": "Microsoft.Edge",
+      "url": "https://www.microsoft.com/edge",
+      "author": "Microsoft",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_mozilla_firefox",
+      "name": "Firefox",
+      "category": "Browsers",
+      "wingetId": "Mozilla.Firefox",
+      "url": "https://www.mozilla.org/en-US/firefox/new/",
+      "author": "Mozilla",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_mozilla_firefox_esr",
+      "name": "Firefox ESR",
+      "category": "Browsers",
+      "wingetId": "Mozilla.Firefox.ESR",
+      "url": "https://www.mozilla.org/en-US/firefox/enterprise/",
+      "author": "Mozilla",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_ablaze_floorp",
+      "name": "Floorp",
+      "category": "Browsers",
+      "wingetId": "Ablaze.Floorp",
+      "url": "https://floorp.app/",
+      "author": "Ablaze",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_imputnet_helium",
+      "name": "Helium",
+      "category": "Browsers",
+      "wingetId": "ImputNet.Helium",
+      "url": "https://helium.computer",
+      "author": "ImputNet",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_librewolf_librewolf",
+      "name": "LibreWolf",
+      "category": "Browsers",
+      "wingetId": "LibreWolf.LibreWolf",
+      "url": "https://librewolf.net/",
+      "author": "LibreWolf",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_maxthon_maxthon",
+      "name": "Maxthon",
+      "category": "Browsers",
+      "wingetId": "Maxthon.Maxthon",
+      "url": "https://www.maxthon.com/",
+      "author": "Maxthon",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_alex313031_mercury",
+      "name": "Mercury",
+      "category": "Browsers",
+      "wingetId": "Alex313031.Mercury",
+      "url": "https://thorium.rocks/mercury",
+      "author": "Alex313031",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_microsoft_edgewebview2runtime",
+      "name": "Microsoft EdgeWebView",
+      "category": "Browsers",
+      "wingetId": "Microsoft.EdgeWebView2Runtime",
+      "url": "https://developer.microsoft.com/en-us/microsoft-edge/webview2/",
+      "author": "Microsoft",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_mullvadvpn_mullvadbrowser",
+      "name": "Mullvad Browser",
+      "category": "Browsers",
+      "wingetId": "MullvadVPN.MullvadBrowser",
+      "url": "https://mullvad.net/browser",
+      "author": "MullvadVPN",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_opera_opera",
+      "name": "Opera",
+      "category": "Browsers",
+      "wingetId": "Opera.Opera",
+      "url": "https://www.opera.com/",
+      "author": "Opera",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_opera_operagx",
+      "name": "Opera GX",
+      "category": "Browsers",
+      "wingetId": "Opera.OperaGX",
+      "url": "https://www.opera.com/gx",
+      "author": "Opera",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_moonchildproductions_palemoon",
+      "name": "Pale Moon Browser",
+      "category": "Browsers",
+      "wingetId": "MoonchildProductions.PaleMoon",
+      "url": "https://www.palemoon.org/",
+      "author": "MoonchildProductions",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_alex313031_thorium",
+      "name": "Thorium",
+      "category": "Browsers",
+      "wingetId": "Alex313031.Thorium",
+      "url": "https://thorium.rocks/",
+      "author": "Alex313031",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_torproject_torbrowser",
+      "name": "Tor Browser",
+      "category": "Browsers",
+      "wingetId": "TorProject.TorBrowser",
+      "url": "https://www.torproject.org/",
+      "author": "TorProject",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_eloston_ungoogled_chromium",
+      "name": "Ungoogled Chromium",
+      "category": "Browsers",
+      "wingetId": "eloston.ungoogled-chromium",
+      "url": "https://github.com/Eloston/ungoogled-chromium",
+      "author": "eloston",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_vivaldi_vivaldi",
+      "name": "Vivaldi",
+      "category": "Browsers",
+      "wingetId": "Vivaldi.Vivaldi",
+      "url": "https://vivaldi.com/",
+      "author": "Vivaldi",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_waterfox_waterfox",
+      "name": "Waterfox",
+      "category": "Browsers",
+      "wingetId": "Waterfox.Waterfox",
+      "url": "https://www.waterfox.net/",
+      "author": "Waterfox",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_zen_team_zen_browser",
+      "name": "Zen Browser",
+      "category": "Browsers",
+      "wingetId": "Zen-Team.Zen-Browser",
+      "url": "https://zen-browser.app/",
+      "author": "Zen-Team",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_betterbird_betterbird",
+      "name": "Betterbird",
+      "category": "Communications",
+      "wingetId": "Betterbird.Betterbird",
+      "url": "https://www.betterbird.eu/",
+      "author": "Betterbird",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_chatterinoteam_chatterino",
+      "name": "Chatterino",
+      "category": "Communications",
+      "wingetId": "ChatterinoTeam.Chatterino",
+      "url": "https://www.chatterino.com/",
+      "author": "ChatterinoTeam",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_discord_discord",
+      "name": "Discord",
+      "category": "Communications",
+      "wingetId": "Discord.Discord",
+      "url": "https://discord.com/",
+      "author": "Discord",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_spikehd_dorion",
+      "name": "Dorion",
+      "category": "Communications",
+      "wingetId": "SpikeHD.Dorion",
+      "url": "https://spikehd.dev/projects/dorion/",
+      "author": "SpikeHD",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_element_element",
+      "name": "Element",
+      "category": "Communications",
+      "wingetId": "Element.Element",
+      "url": "https://element.io/",
+      "author": "Element",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_proton_protonmail",
+      "name": "Proton Mail",
+      "category": "Communications",
+      "wingetId": "Proton.ProtonMail",
+      "url": "https://proton.me/mail",
+      "author": "Proton",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_tox_qtox",
+      "name": "QTox",
+      "category": "Communications",
+      "wingetId": "Tox.qTox",
+      "url": "https://qtox.github.io/",
+      "author": "Tox",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_openwhispersystems_signal",
+      "name": "Signal",
+      "category": "Communications",
+      "wingetId": "OpenWhisperSystems.Signal",
+      "url": "https://signal.org/",
+      "author": "OpenWhisperSystems",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_slacktechnologies_slack",
+      "name": "Slack",
+      "category": "Communications",
+      "wingetId": "SlackTechnologies.Slack",
+      "url": "https://slack.com/",
+      "author": "SlackTechnologies",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_microsoft_teams",
+      "name": "Teams",
+      "category": "Communications",
+      "wingetId": "Microsoft.Teams",
+      "url": "https://www.microsoft.com/en-us/microsoft-teams/group-chat-software",
+      "author": "Microsoft",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_teamspeaksystems_teamspeakclient",
+      "name": "TeamSpeak 3",
+      "category": "Communications",
+      "wingetId": "TeamSpeakSystems.TeamSpeakClient",
+      "url": "https://www.teamspeak.com/",
+      "author": "TeamSpeakSystems",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_teamspeaksystems_teamspeakclient_beta_6",
+      "name": "TeamSpeak 6",
+      "category": "Communications",
+      "wingetId": "TeamSpeakSystems.TeamSpeakClient.Beta.6",
+      "url": "https://www.teamspeak.com/",
+      "author": "TeamSpeakSystems",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_telegram_telegramdesktop",
+      "name": "Telegram",
+      "category": "Communications",
+      "wingetId": "Telegram.TelegramDesktop",
+      "url": "https://telegram.org/",
+      "author": "Telegram",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_mozilla_thunderbird",
+      "name": "Thunderbird",
+      "category": "Communications",
+      "wingetId": "Mozilla.Thunderbird",
+      "url": "https://www.thunderbird.net/",
+      "author": "Mozilla",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_vencord_vesktop",
+      "name": "Vesktop",
+      "category": "Communications",
+      "wingetId": "Vencord.Vesktop",
+      "url": "https://vesktop.dev",
+      "author": "Vencord",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_rakuten_viber",
+      "name": "Viber",
+      "category": "Communications",
+      "wingetId": "Rakuten.Viber",
+      "url": "https://www.viber.com/",
+      "author": "Rakuten",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_msstore_9nksqgp7f2nh",
+      "name": "WhatsApp Desktop",
+      "category": "Communications",
+      "wingetId": "msstore:9NKSQGP7F2NH",
+      "url": "https://www.whatsapp.com/download",
+      "author": "Microsoft Store",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_zoom_zoom",
+      "name": "Zoom",
+      "category": "Communications",
+      "wingetId": "Zoom.Zoom",
+      "url": "https://zoom.us/",
+      "author": "Zoom",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_https_www_amd_com_en_support_download_drivers_html",
+      "name": "AMD Chipset Drivers",
+      "category": "CPU & Memory",
+      "wingetId": null,
+      "url": "https://www.amd.com/en/support/download/drivers.html",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_www_amd_com_en_products_software_ryzen_master_html",
+      "name": "AMD Ryzen Master",
+      "category": "CPU & Memory",
+      "wingetId": null,
+      "url": "https://www.amd.com/en/products/software/ryzen-master.html",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_github_com_sp00n_corecycler",
+      "name": "CoreCycler",
+      "category": "CPU & Memory",
+      "wingetId": null,
+      "url": "https://github.com/sp00n/corecycler",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_github_com_simonvbez_cpusetsetter",
+      "name": "CPU Set Setter",
+      "category": "CPU & Memory",
+      "wingetId": null,
+      "url": "https://github.com/SimonvBez/CPUSetSetter",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_www_techpowerup_com_download_ryzen_dram_calculator",
+      "name": "DRAM Calculator for Ryzen",
+      "category": "CPU & Memory",
+      "wingetId": null,
+      "url": "https://www.techpowerup.com/download/ryzen-dram-calculator/",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_www_intel_com_content_www_us_en_download_870620_intel_application_optimization_user_interface_html",
+      "name": "Intel Application Optimization",
+      "category": "CPU & Memory",
+      "wingetId": null,
+      "url": "https://www.intel.com/content/www/us/en/download/870620/intel-application-optimization-user-interface.html",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_github_com_jjgraphix_kguix",
+      "name": "KGuiX",
+      "category": "CPU & Memory",
+      "wingetId": null,
+      "url": "https://github.com/jjgraphix/KGuiX",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_www_memtest86_com",
+      "name": "MemTest86",
+      "category": "CPU & Memory",
+      "wingetId": null,
+      "url": "https://www.memtest86.com/",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_bitsum_parkcontrol",
+      "name": "ParkControl",
+      "category": "CPU & Memory",
+      "wingetId": "BitSum.ParkControl",
+      "url": null,
+      "author": "BitSum",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_github_com_irusanov_smudebugtool",
+      "name": "Ryzen SMU Debug Tool",
+      "category": "CPU & Memory",
+      "wingetId": null,
+      "url": "https://github.com/irusanov/SMUDebugTool",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_github_com_coolcmd_testmem5_releases_download_v0_13_1_testmem5_7z",
+      "name": "TestMem5",
+      "category": "CPU & Memory",
+      "wingetId": null,
+      "url": "https://github.com/CoolCmd/TestMem5/releases/download/v0.13.1/TestMem5.7z",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_github_com_primebuild_pc_threadpilot",
+      "name": "ThreadPilot",
+      "category": "CPU & Memory",
+      "wingetId": null,
+      "url": "https://github.com/PrimeBuild-pc/ThreadPilot",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_www_techpowerup_com_download_techpowerup_throttlestop",
+      "name": "ThrottleStop",
+      "category": "CPU & Memory",
+      "wingetId": null,
+      "url": "https://www.techpowerup.com/download/techpowerup-throttlestop/",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_jamescj60_universalx86tuningutility",
+      "name": "Universal x86 Tuning Utility",
+      "category": "CPU & Memory",
+      "wingetId": "JamesCJ60.Universalx86TuningUtility",
+      "url": "https://github.com/JamesCJ60/Universal-x86-Tuning-Utility",
+      "author": "JamesCJ60",
+      "sources": [
+        "Direct request"
+      ]
+    },
+    {
+      "id": "app_https_zentimings_com",
+      "name": "ZenTimings",
+      "category": "CPU & Memory",
+      "wingetId": null,
+      "url": "https://zentimings.com/",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_www_autohotkey_com",
+      "name": "AutoHotkey v1",
+      "category": "Customization Utilities",
+      "wingetId": null,
+      "url": "https://www.autohotkey.com/",
+      "author": "Marco du Plessis",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_valinet_explorerpatcher",
+      "name": "ExplorerPatcher",
+      "category": "Customization Utilities",
+      "wingetId": "valinet.ExplorerPatcher",
+      "url": "https://github.com/valinet/ExplorerPatcher",
+      "author": "valinet",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_johnsadventures_johnsbackgroundswitcher",
+      "name": "John's Background Switcher",
+      "category": "Customization Utilities",
+      "wingetId": "johnsadventures.JohnsBackgroundSwitcher",
+      "url": "https://johnsad.ventures/software/backgroundswitcher/",
+      "author": "johnsadventures",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_rocksdanister_livelywallpaper",
+      "name": "Lively Wallpaper",
+      "category": "Customization Utilities",
+      "wingetId": "rocksdanister.LivelyWallpaper",
+      "url": "https://www.rocksdanister.com/lively/",
+      "author": "rocksdanister",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_winstep_nexus",
+      "name": "Nexus",
+      "category": "Customization Utilities",
+      "wingetId": "WinStep.Nexus",
+      "url": "https://www.winstep.net/nexus.asp",
+      "author": "WinStep",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_open_shell_open_shell_menu",
+      "name": "Open-Shell",
+      "category": "Customization Utilities",
+      "wingetId": "Open-Shell.Open-Shell-Menu",
+      "url": "https://open-shell.github.io/Open-Shell-Menu/",
+      "author": "Open-Shell",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_rainmeter_rainmeter",
+      "name": "Rainmeter",
+      "category": "Customization Utilities",
+      "wingetId": "Rainmeter.Rainmeter",
+      "url": "https://www.rainmeter.net/",
+      "author": "Rainmeter",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_startisback_startisback",
+      "name": "StartIsBack++ (Win 10)",
+      "category": "Customization Utilities",
+      "wingetId": "StartIsBack.StartIsBack",
+      "url": "https://www.startisback.com/",
+      "author": "StartIsBack",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_taiizor_sucrosewallpaperengine",
+      "name": "Sucrose Wallpaper Engine",
+      "category": "Customization Utilities",
+      "wingetId": "Taiizor.SucroseWallpaperEngine",
+      "url": "https://github.com/Taiizor/Sucrose",
+      "author": "Taiizor",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_ramensoftware_windhawk",
+      "name": "Windhawk",
+      "category": "Customization Utilities",
+      "wingetId": "RamenSoftware.Windhawk",
+      "url": "https://windhawk.net/",
+      "author": "RamenSoftware",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_amazon_corretto_21_jdk",
+      "name": "Amazon Corretto 21 (LTS)",
+      "category": "Development",
+      "wingetId": "Amazon.Corretto.21.JDK",
+      "url": "https://aws.amazon.com/corretto",
+      "author": "Amazon",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_amazon_corretto_25_jdk",
+      "name": "Amazon Corretto 25 (LTS)",
+      "category": "Development",
+      "wingetId": "Amazon.Corretto.25.JDK",
+      "url": "https://aws.amazon.com/corretto",
+      "author": "Amazon",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_amazon_corretto_8_jdk",
+      "name": "Amazon Corretto 8 (LTS)",
+      "category": "Development",
+      "wingetId": "Amazon.Corretto.8.JDK",
+      "url": "https://aws.amazon.com/corretto",
+      "author": "Amazon",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_bruno_bruno",
+      "name": "Bruno",
+      "category": "Development",
+      "wingetId": "Bruno.Bruno",
+      "url": "https://www.usebruno.com/",
+      "author": "Bruno",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_msstore_9nt1r1c2hh7j",
+      "name": "ChatGPT Desktop",
+      "category": "Development",
+      "wingetId": "msstore:9NT1R1C2HH7J",
+      "url": "https://openai.com/chatgpt/download/",
+      "author": "Microsoft Store",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_anthropic_claudecode",
+      "name": "Claude Code",
+      "category": "Development",
+      "wingetId": "Anthropic.ClaudeCode",
+      "url": "https://code.claude.com/",
+      "author": "Anthropic",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_anthropic_claude",
+      "name": "Claude Desktop",
+      "category": "Development",
+      "wingetId": "Anthropic.Claude",
+      "url": "https://claude.ai/download",
+      "author": "Anthropic",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_kitware_cmake",
+      "name": "CMake",
+      "category": "Development",
+      "wingetId": "Kitware.CMake",
+      "url": "https://cmake.org/",
+      "author": "Kitware",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_openai_codex",
+      "name": "Codex",
+      "category": "Development",
+      "wingetId": "OpenAI.Codex",
+      "url": "https://developers.openai.com/codex/cli",
+      "author": "OpenAI",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_anysphere_cursor",
+      "name": "Cursor",
+      "category": "Development",
+      "wingetId": "Anysphere.Cursor",
+      "url": "https://cursor.com/",
+      "author": "Anysphere",
+      "sources": [
+        "CTT WinUtil",
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_docker_dockerdesktop",
+      "name": "Docker Desktop",
+      "category": "Development",
+      "wingetId": "Docker.DockerDesktop",
+      "url": "https://www.docker.com/products/docker-desktop/",
+      "author": "Docker",
+      "sources": [
+        "CTT WinUtil",
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_schniz_fnm",
+      "name": "Fast Node Manager",
+      "category": "Development",
+      "wingetId": "Schniz.fnm",
+      "url": "https://github.com/Schniz/fnm",
+      "author": "Schniz",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_git_git",
+      "name": "Git",
+      "category": "Development",
+      "wingetId": "Git.Git",
+      "url": "https://git-scm.com/",
+      "author": "Git",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_gitextensionsteam_gitextensions",
+      "name": "Git Extensions",
+      "category": "Development",
+      "wingetId": "GitExtensionsTeam.GitExtensions",
+      "url": "https://gitextensions.github.io/",
+      "author": "GitExtensionsTeam",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_github_cli",
+      "name": "GitHub CLI",
+      "category": "Development",
+      "wingetId": "GitHub.cli",
+      "url": "https://cli.github.com/",
+      "author": "GitHub",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_github_githubdesktop",
+      "name": "GitHub Desktop",
+      "category": "Development",
+      "wingetId": "GitHub.GitHubDesktop",
+      "url": "https://desktop.github.com/",
+      "author": "GitHub",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_golang_go",
+      "name": "Go",
+      "category": "Development",
+      "wingetId": "GoLang.Go",
+      "url": "https://go.dev/",
+      "author": "GoLang",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_jetbrains_toolbox",
+      "name": "Jetbrains Toolbox",
+      "category": "Development",
+      "wingetId": "JetBrains.Toolbox",
+      "url": "https://www.jetbrains.com/toolbox/",
+      "author": "JetBrains",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_jesseduffield_lazygit",
+      "name": "Lazygit",
+      "category": "Development",
+      "wingetId": "JesseDuffield.lazygit",
+      "url": "https://github.com/jesseduffield/lazygit/",
+      "author": "JesseDuffield",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_rjpcomputing_luaforwindows",
+      "name": "Lua",
+      "category": "Development",
+      "wingetId": "rjpcomputing.luaforwindows",
+      "url": "https://github.com/rjpcomputing/luaforwindows",
+      "author": "rjpcomputing",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_neovim_neovim",
+      "name": "Neovim",
+      "category": "Development",
+      "wingetId": "Neovim.Neovim",
+      "url": "https://neovim.io/",
+      "author": "Neovim",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_openjs_nodejs",
+      "name": "NodeJS",
+      "category": "Development",
+      "wingetId": "OpenJS.NodeJS",
+      "url": "https://nodejs.org/",
+      "author": "OpenJS",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_openjs_nodejs_lts",
+      "name": "NodeJS LTS",
+      "category": "Development",
+      "wingetId": "OpenJS.NodeJS.LTS",
+      "url": "https://nodejs.org/",
+      "author": "OpenJS",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_jandedobbeleer_ohmyposh",
+      "name": "Oh My Posh (Prompt)",
+      "category": "Development",
+      "wingetId": "JanDeDobbeleer.OhMyPosh",
+      "url": "https://ohmyposh.dev/",
+      "author": "JanDeDobbeleer",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_pnpm_pnpm",
+      "name": "pnpm",
+      "category": "Development",
+      "wingetId": "pnpm.pnpm",
+      "url": "https://pnpm.io/",
+      "author": "pnpm",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_postman_postman",
+      "name": "Postman",
+      "category": "Development",
+      "wingetId": "Postman.Postman",
+      "url": "https://www.postman.com/downloads/",
+      "author": "Postman",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_python_python_3_14",
+      "name": "Python3",
+      "category": "Development",
+      "wingetId": "Python.Python.3.14",
+      "url": "https://www.python.org/",
+      "author": "Python",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_rubyinstallerteam_ruby_4_0",
+      "name": "Ruby",
+      "category": "Development",
+      "wingetId": "RubyInstallerTeam.Ruby.4.0",
+      "url": "https://rubyinstaller.org/",
+      "author": "RubyInstallerTeam",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_rustlang_rust_msvc",
+      "name": "Rust",
+      "category": "Development",
+      "wingetId": "Rustlang.Rust.MSVC",
+      "url": "https://www.rust-lang.org/",
+      "author": "Rustlang",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_starship_starship",
+      "name": "Starship (Shell Prompt)",
+      "category": "Development",
+      "wingetId": "Starship.Starship",
+      "url": "https://starship.rs/",
+      "author": "Starship",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_sublimehq_sublimetext_4",
+      "name": "Sublime Text",
+      "category": "Development",
+      "wingetId": "SublimeHQ.SublimeText.4",
+      "url": "https://www.sublimetext.com/",
+      "author": "SublimeHQ",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_winsiderss_systeminformer",
+      "name": "System Informer",
+      "category": "Development",
+      "wingetId": "WinsiderSS.SystemInformer",
+      "url": "https://systeminformer.com/",
+      "author": "WinsiderSS",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_unity_unityhub",
+      "name": "Unity Game Engine",
+      "category": "Development",
+      "wingetId": "Unity.UnityHub",
+      "url": "https://unity.com/",
+      "author": "Unity",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_astral_sh_uv",
+      "name": "uv",
+      "category": "Development",
+      "wingetId": "astral-sh.uv",
+      "url": "https://docs.astral.sh/uv/getting-started/installation/",
+      "author": "astral-sh",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_hashicorp_vagrant",
+      "name": "Vagrant",
+      "category": "Development",
+      "wingetId": "Hashicorp.Vagrant",
+      "url": "https://developer.hashicorp.com/vagrant",
+      "author": "Hashicorp",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_microsoft_visualstudio_2022_community",
+      "name": "Visual Studio 2022",
+      "category": "Development",
+      "wingetId": "Microsoft.VisualStudio.2022.Community",
+      "url": "https://visualstudio.microsoft.com/",
+      "author": "Microsoft",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_microsoft_visualstudio_community",
+      "name": "Visual Studio 2026",
+      "category": "Development",
+      "wingetId": "Microsoft.VisualStudio.Community",
+      "url": "https://visualstudio.microsoft.com/",
+      "author": "Microsoft",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_microsoft_visualstudiocode",
+      "name": "VS Code",
+      "category": "Development",
+      "wingetId": "Microsoft.VisualStudioCode",
+      "url": "https://code.visualstudio.com/",
+      "author": "Microsoft",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_vscodium_vscodium",
+      "name": "VS Codium",
+      "category": "Development",
+      "wingetId": "VSCodium.VSCodium",
+      "url": "https://vscodium.com/",
+      "author": "VSCodium",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_yarn_yarn",
+      "name": "Yarn",
+      "category": "Development",
+      "wingetId": "Yarn.Yarn",
+      "url": "https://yarnpkg.com/",
+      "author": "Yarn",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_zedindustries_zed",
+      "name": "Zed",
+      "category": "Development",
+      "wingetId": "ZedIndustries.Zed",
+      "url": "https://zed.dev/",
+      "author": "ZedIndustries",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_arduinosa_ide_stable",
+      "name": "Arduino IDE",
+      "category": "Development & DevOps",
+      "wingetId": "ArduinoSA.IDE.stable",
+      "url": null,
+      "author": "ArduinoSA",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_redhat_podman_desktop",
+      "name": "Podman Desktop",
+      "category": "Development & DevOps",
+      "wingetId": "RedHat.Podman-Desktop",
+      "url": null,
+      "author": "RedHat",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_eclipsefoundation_eclipse_java",
+      "name": "Eclipse IDE for Java",
+      "category": "Development Apps",
+      "wingetId": "EclipseFoundation.Eclipse.Java",
+      "url": "https://eclipseide.org/",
+      "author": "EclipseFoundation",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_meld_meld",
+      "name": "Meld",
+      "category": "Development Apps",
+      "wingetId": "Meld.Meld",
+      "url": "https://meldmerge.org/",
+      "author": "Meld",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_python_python_3_13",
+      "name": "Python 3.13",
+      "category": "Development Apps",
+      "wingetId": "Python.Python.3.13",
+      "url": "https://www.python.org/",
+      "author": "Python",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_winmerge_winmerge",
+      "name": "WinMerge",
+      "category": "Development Apps",
+      "wingetId": "WinMerge.WinMerge",
+      "url": "https://winmerge.org/",
+      "author": "WinMerge",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_adobe_acrobat_reader_64_bit",
+      "name": "Adobe Acrobat Reader",
+      "category": "Document",
+      "wingetId": "Adobe.Acrobat.Reader.64-bit",
+      "url": "https://www.adobe.com/acrobat/pdf-reader.html",
+      "author": "Adobe",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_foxit_foxitreader",
+      "name": "Foxit PDF Reader",
+      "category": "Document",
+      "wingetId": "Foxit.FoxitReader",
+      "url": "https://www.foxit.com/pdf-reader/",
+      "author": "Foxit",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_joplin_joplin",
+      "name": "Joplin",
+      "category": "Document",
+      "wingetId": "Joplin.Joplin",
+      "url": "https://joplinapp.org/",
+      "author": "Joplin",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_thedocumentfoundation_libreoffice",
+      "name": "LibreOffice",
+      "category": "Document",
+      "wingetId": "TheDocumentFoundation.LibreOffice",
+      "url": "https://www.libreoffice.org/",
+      "author": "TheDocumentFoundation",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_cyanfish_naps2",
+      "name": "NAPS2 (Scanner)",
+      "category": "Document",
+      "wingetId": "Cyanfish.NAPS2",
+      "url": "https://www.naps2.com/",
+      "author": "Cyanfish",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_obsidian_obsidian",
+      "name": "Obsidian",
+      "category": "Document",
+      "wingetId": "Obsidian.Obsidian",
+      "url": "https://obsidian.md/",
+      "author": "Obsidian",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_kde_okular",
+      "name": "Okular",
+      "category": "Document",
+      "wingetId": "KDE.Okular",
+      "url": "https://okular.kde.org/",
+      "author": "KDE",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_onlyoffice_desktopeditors",
+      "name": "ONLYOFFICE Desktop",
+      "category": "Document",
+      "wingetId": "ONLYOFFICE.DesktopEditors",
+      "url": "https://www.onlyoffice.com/desktop.aspx",
+      "author": "ONLYOFFICE",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_trackersoftware_pdf_xchangeeditor",
+      "name": "PDF-XChange Editor",
+      "category": "Document",
+      "wingetId": "TrackerSoftware.PDF-XChangeEditor",
+      "url": "https://www.pdf-xchange.com/",
+      "author": "TrackerSoftware",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_geeksoftwaregmbh_pdf24creator",
+      "name": "PDF24 Creator",
+      "category": "Document",
+      "wingetId": "geeksoftwareGmbH.PDF24Creator",
+      "url": "https://tools.pdf24.org/en/creator",
+      "author": "geeksoftwareGmbH",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_pdfgear_pdfgear",
+      "name": "PDFgear",
+      "category": "Document",
+      "wingetId": "PDFgear.PDFgear",
+      "url": "https://www.pdfgear.com/",
+      "author": "PDFgear",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_pdfsam_pdfsam",
+      "name": "PDFsam Basic",
+      "category": "Document",
+      "wingetId": "PDFsam.PDFsam",
+      "url": "https://pdfsam.org/",
+      "author": "PDFsam",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_pbek_qownnotes",
+      "name": "QOwnNotes",
+      "category": "Document",
+      "wingetId": "pbek.QOwnNotes",
+      "url": "https://www.qownnotes.org/",
+      "author": "pbek",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_automattic_simplenote",
+      "name": "Simplenote",
+      "category": "Document",
+      "wingetId": "Automattic.Simplenote",
+      "url": "https://simplenote.com/",
+      "author": "Automattic",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_sumatrapdf_sumatrapdf",
+      "name": "Sumatra PDF",
+      "category": "Document",
+      "wingetId": "SumatraPDF.SumatraPDF",
+      "url": "https://www.sumatrapdfreader.org/free-pdf-reader.html",
+      "author": "SumatraPDF",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_xournal_xournal",
+      "name": "Xournal++",
+      "category": "Document",
+      "wingetId": "Xournal++.Xournal++",
+      "url": "https://xournalpp.github.io/",
+      "author": "Xournal++",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_digitalscholar_zotero",
+      "name": "Zotero",
+      "category": "Document",
+      "wingetId": "DigitalScholar.Zotero",
+      "url": "https://www.zotero.org/",
+      "author": "DigitalScholar",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_https_www_adobe_com_acrobat_pdf_reader_html",
+      "name": "Adobe Acrobat Reader DC",
+      "category": "Document Viewers",
+      "wingetId": null,
+      "url": "https://www.adobe.com/acrobat/pdf-reader.html",
+      "author": "Marco du Plessis",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_giuspen_cherrytree",
+      "name": "CherryTree",
+      "category": "Document Viewers",
+      "wingetId": "Giuspen.Cherrytree",
+      "url": "https://www.giuspen.net/cherrytree/",
+      "author": "Giuspen",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_evernote_evernote",
+      "name": "Evernote",
+      "category": "Document Viewers",
+      "wingetId": "Evernote.Evernote",
+      "url": "https://evernote.com/",
+      "author": "Evernote",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_https_www_foxit_com_pdf_reader",
+      "name": "Foxit PDF Reader",
+      "category": "Document Viewers",
+      "wingetId": null,
+      "url": "https://www.foxit.com/pdf-reader/",
+      "author": "Marco du Plessis",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_microsoft_office",
+      "name": "Microsoft 365",
+      "category": "Document Viewers",
+      "wingetId": "Microsoft.Office",
+      "url": "https://www.microsoft.com/microsoft-365",
+      "author": "Microsoft",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_apache_openoffice",
+      "name": "OpenOffice",
+      "category": "Document Viewers",
+      "wingetId": "Apache.OpenOffice",
+      "url": "https://www.openoffice.org/",
+      "author": "Apache",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_hulubulusoftware_advancedrenamer",
+      "name": "Advanced Renamer",
+      "category": "File & Disk Management",
+      "wingetId": "HulubuluSoftware.AdvancedRenamer",
+      "url": "https://www.advancedrenamer.com/",
+      "author": "HulubuluSoftware",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_tgrmnsoftware_bulkrenameutility",
+      "name": "Bulk Rename Utility",
+      "category": "File & Disk Management",
+      "wingetId": "TGRMNSoftware.BulkRenameUtility",
+      "url": "https://www.bulkrenameutility.co.uk/",
+      "author": "TGRMNSoftware",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_wssolinfor_crystaldiskinfo",
+      "name": "Crystal Disk Info",
+      "category": "File & Disk Management",
+      "wingetId": "WsSolInfor.CrystalDiskInfo",
+      "url": "https://crystalmark.info/en/software/crystaldiskinfo/",
+      "author": "WsSolInfor",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_hibitsoftware_hibituninstaller",
+      "name": "HiBit Uninstaller",
+      "category": "File & Disk Management",
+      "wingetId": "HiBitSoftware.HiBitUninstaller",
+      "url": "https://www.hibitsoft.ir/Uninstaller.html",
+      "author": "HiBitSoftware",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_iobit_iobitunlocker",
+      "name": "IObit Unlocker",
+      "category": "File & Disk Management",
+      "wingetId": "IObit.IObitUnlocker",
+      "url": "https://www.iobit.com/en/iobit-unlocker.php",
+      "author": "IObit",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_sandisk_dashboard",
+      "name": "SanDisk Dashboard",
+      "category": "File & Disk Management",
+      "wingetId": "SanDisk.Dashboard",
+      "url": "https://support-en.sandisk.com/app/products/downloads/softwaredownloads",
+      "author": "SanDisk",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_codesector_teracopy",
+      "name": "TeraCopy",
+      "category": "File & Disk Management",
+      "wingetId": "CodeSector.TeraCopy",
+      "url": "https://www.codesector.com/teracopy",
+      "author": "CodeSector",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_windirstat_windirstat",
+      "name": "WinDirStat",
+      "category": "File & Disk Management",
+      "wingetId": "WinDirStat.WinDirStat",
+      "url": "https://windirstat.net/",
+      "author": "WinDirStat",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_https_www_mediafire_com_file_wt37sbsejk7iepm_powersettingsexplorer_zip_file",
+      "name": "Power Settings Explorer",
+      "category": "Firmware & Power",
+      "wingetId": null,
+      "url": "https://www.mediafire.com/file/wt37sbsejk7iepm/PowerSettingsExplorer.zip/file",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_github_com_ab3lkaizen_scehub",
+      "name": "SCEHUB",
+      "category": "Firmware & Power",
+      "wingetId": null,
+      "url": "https://github.com/ab3lkaizen/SCEHUB",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_github_com_loko8002_scewin_gui_better1",
+      "name": "SCEWIN GUI Better",
+      "category": "Firmware & Power",
+      "wingetId": null,
+      "url": "https://github.com/loko8002/SCEWIN-GUI-BETTER1",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_github_com_longsoft_uefitool",
+      "name": "UEFITool",
+      "category": "Firmware & Power",
+      "wingetId": null,
+      "url": "https://github.com/LongSoft/UEFITool",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_blizzard_battlenet",
+      "name": "Battle.net",
+      "category": "Games",
+      "wingetId": "Blizzard.BattleNet",
+      "url": "https://battle.net",
+      "author": "Blizzard",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_cemu_cemu",
+      "name": "Cemu",
+      "category": "Games",
+      "wingetId": "Cemu.Cemu",
+      "url": "https://cemu.info/",
+      "author": "Cemu",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_electronicarts_eadesktop",
+      "name": "EA App",
+      "category": "Games",
+      "wingetId": "ElectronicArts.EADesktop",
+      "url": "https://www.ea.com/ea-app",
+      "author": "ElectronicArts",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_es_de_emulationstation_de",
+      "name": "EmulationStation Desktop Edition",
+      "category": "Games",
+      "wingetId": "ES-DE.EmulationStation-DE",
+      "url": "https://es-de.org/",
+      "author": "ES-DE",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_epicgames_epicgameslauncher",
+      "name": "Epic Games Launcher",
+      "category": "Games",
+      "wingetId": "EpicGames.EpicGamesLauncher",
+      "url": "https://www.epicgames.com/store/en-US/",
+      "author": "EpicGames",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_nvidia_geforcenow",
+      "name": "GeForce NOW",
+      "category": "Games",
+      "wingetId": "Nvidia.GeForceNow",
+      "url": "https://www.nvidia.com/en-us/geforce-now/",
+      "author": "Nvidia",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_gog_galaxy",
+      "name": "GOG Galaxy",
+      "category": "Games",
+      "wingetId": "GOG.Galaxy",
+      "url": "https://www.gog.com/galaxy",
+      "author": "GOG",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_heroicgameslauncher_heroicgameslauncher",
+      "name": "Heroic Games Launcher",
+      "category": "Games",
+      "wingetId": "HeroicGamesLauncher.HeroicGamesLauncher",
+      "url": "https://heroicgameslauncher.com/",
+      "author": "HeroicGamesLauncher",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_itchio_itch",
+      "name": "Itch.io",
+      "category": "Games",
+      "wingetId": "ItchIo.Itch",
+      "url": "https://itch.io/",
+      "author": "ItchIo",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_modrinth_modrinthapp",
+      "name": "Modrinth App",
+      "category": "Games",
+      "wingetId": "Modrinth.ModrinthApp",
+      "url": "https://modrinth.com/app",
+      "author": "Modrinth",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_overwolf_curseforge",
+      "name": "Overwolf",
+      "category": "Games",
+      "wingetId": "Overwolf.CurseForge",
+      "url": "https://www.overwolf.com/app/overwolf-curseforge",
+      "author": "Overwolf",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_playnite_playnite",
+      "name": "Playnite",
+      "category": "Games",
+      "wingetId": "Playnite.Playnite",
+      "url": "https://playnite.link/",
+      "author": "Playnite",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_prismlauncher_prismlauncher",
+      "name": "Prism Launcher",
+      "category": "Games",
+      "wingetId": "PrismLauncher.PrismLauncher",
+      "url": "https://prismlauncher.org/",
+      "author": "PrismLauncher",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_roblox_roblox",
+      "name": "Roblox",
+      "category": "Games",
+      "wingetId": "Roblox.Roblox",
+      "url": "https://www.roblox.com/",
+      "author": "Roblox",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_valve_steam",
+      "name": "Steam",
+      "category": "Games",
+      "wingetId": "Valve.Steam",
+      "url": "https://store.steampowered.com/about/",
+      "author": "Valve",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_ubisoft_connect",
+      "name": "Ubisoft Connect",
+      "category": "Games",
+      "wingetId": "Ubisoft.Connect",
+      "url": "https://ubisoftconnect.com/",
+      "author": "Ubisoft",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_virtualdesktop_streamer",
+      "name": "Virtual Desktop Streamer",
+      "category": "Games",
+      "wingetId": "VirtualDesktop.Streamer",
+      "url": "https://www.vrdesktop.net/",
+      "author": "VirtualDesktop",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_rockstargames_launcher",
+      "name": "Rockstar Games Launcher",
+      "category": "Gaming",
+      "wingetId": "RockstarGames.Launcher",
+      "url": "https://socialclub.rockstargames.com/rockstar-games-launcher",
+      "author": "RockstarGames",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_https_github_com_artur_graniszewski_dlss_enabler",
+      "name": "DLSS Enabler",
+      "category": "Gaming & Input",
+      "wingetId": null,
+      "url": "https://github.com/artur-graniszewski/DLSS-Enabler",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_github_com_beeradmoore_dlss_swapper",
+      "name": "DLSS Swapper",
+      "category": "Gaming & Input",
+      "wingetId": null,
+      "url": "https://github.com/beeradmoore/dlss-swapper",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_dualshock_tools_github_io",
+      "name": "DualShock Calibration",
+      "category": "Gaming & Input",
+      "wingetId": null,
+      "url": "https://dualshock-tools.github.io/",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_github_com_lordofmice_hidusbf",
+      "name": "HIDUSBF",
+      "category": "Gaming & Input",
+      "wingetId": null,
+      "url": "https://github.com/LordOfMice/hidusbf",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_primebuild_lightcrosshair",
+      "name": "LightCrosshair",
+      "category": "Gaming & Input",
+      "wingetId": "PrimeBuild.LightCrosshair",
+      "url": null,
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_logitech_onboardmemorymanager",
+      "name": "Logitech Onboard Memory Manager",
+      "category": "Gaming & Input",
+      "wingetId": "Logitech.OnboardMemoryManager",
+      "url": "https://support.logi.com/hc/articles/360059641133",
+      "author": "Logitech",
+      "sources": [
+        "Direct request"
+      ]
+    },
+    {
+      "id": "app_https_github_com_optiscaler_optiscaler",
+      "name": "OptiScaler",
+      "category": "Gaming & Input",
+      "wingetId": null,
+      "url": "https://github.com/optiscaler/OptiScaler",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_github_com_agustinm28_optiscaler_client",
+      "name": "OptiScaler Client",
+      "category": "Gaming & Input",
+      "wingetId": null,
+      "url": "https://github.com/Agustinm28/Optiscaler-Client",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_github_com_rawaccelofficial_rawaccel",
+      "name": "Raw Accel",
+      "category": "Gaming & Input",
+      "wingetId": null,
+      "url": "https://github.com/RawAccelOfficial/rawaccel",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_rzr_to_pollingrate",
+      "name": "Razer Polling Rate Tester",
+      "category": "Gaming & Input",
+      "wingetId": null,
+      "url": "https://rzr.to/pollingrate",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_specialk_specialk",
+      "name": "Special K",
+      "category": "Gaming & Input",
+      "wingetId": "SpecialK.SpecialK",
+      "url": null,
+      "author": "Kaldaien",
+      "sources": [
+        "TweakHub",
+        "Direct request"
+      ]
+    },
+    {
+      "id": "app_https_github_com_nodix_tech_upscale_it",
+      "name": "Upscale It",
+      "category": "Gaming & Input",
+      "wingetId": null,
+      "url": "https://github.com/NODIX-TECH/UPSCALE-IT",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_www_techpowerup_com_download_visual_c_redistributable_runtime_package_all_in_one",
+      "name": "Visual C++ Redistributable Runtimes All-in-One",
+      "category": "Gaming & Input",
+      "wingetId": null,
+      "url": "https://www.techpowerup.com/download/visual-c-redistributable-runtime-package-all-in-one/",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_drivers_amd_com_drivers_amdcleanuputility_exe",
+      "name": "AMD Cleanup Utility",
+      "category": "GPU & Display",
+      "wingetId": null,
+      "url": "https://drivers.amd.com/drivers/amdcleanuputility.exe",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_www_techpowerup_com_download_ati_atiflash",
+      "name": "AMD VBFlash",
+      "category": "GPU & Display",
+      "wingetId": null,
+      "url": "https://www.techpowerup.com/download/ati-atiflash/",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_www_monitortests_com_forum_thread_custom_resolution_utility_cru",
+      "name": "Custom Resolution Utility",
+      "category": "GPU & Display",
+      "wingetId": null,
+      "url": "https://www.monitortests.com/forum/Thread-Custom-Resolution-Utility-CRU",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_www_igorslab_de_en_download_area_new_version_of_morepowertool_mpt_and_final_release_of_redbioseditor_rbe",
+      "name": "MoreClockTool (Free)",
+      "category": "GPU & Display",
+      "wingetId": null,
+      "url": "https://www.igorslab.de/en/download-area-new-version-of-morepowertool-mpt-and-final-release-of-redbioseditor-rbe/",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_apps_microsoft_com_detail_9n08x8c1qdqp",
+      "name": "MoreClockTool 2",
+      "category": "GPU & Display",
+      "wingetId": null,
+      "url": "https://apps.microsoft.com/detail/9N08X8C1QDQP",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_www_igorslab_de_en_morepowertool_mpt_beta_program_new_features_the_community_tests",
+      "name": "MorePowerTool",
+      "category": "GPU & Display",
+      "wingetId": null,
+      "url": "https://www.igorslab.de/en/morepowertool-mpt-beta-program-new-features-the-community-tests/",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_github_com_reddot_3nd7355_mpo_gpu_fix",
+      "name": "MPO GPU Fix",
+      "category": "GPU & Display",
+      "wingetId": null,
+      "url": "https://github.com/RedDot-3ND7355/MPO-GPU-FIX",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_www_techpowerup_com_download_nvidia_nvflash",
+      "name": "NVFlash",
+      "category": "GPU & Display",
+      "wingetId": null,
+      "url": "https://www.techpowerup.com/download/nvidia-nvflash/",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_www_nvidia_com_en_us_software_nvidia_app",
+      "name": "NVIDIA App",
+      "category": "GPU & Display",
+      "wingetId": null,
+      "url": "https://www.nvidia.com/en-us/software/nvidia-app/",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_www_nvidia_com_en_us_drivers",
+      "name": "NVIDIA Drivers",
+      "category": "GPU & Display",
+      "wingetId": null,
+      "url": "https://www.nvidia.com/en-us/drivers/",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_github_com_orbmu2k_nvidiaprofileinspector",
+      "name": "NVIDIA Profile Inspector",
+      "category": "GPU & Display",
+      "wingetId": null,
+      "url": "https://github.com/Orbmu2k/nvidiaProfileInspector",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_github_com_dumbie_radeontuner",
+      "name": "RadeonTuner",
+      "category": "GPU & Display",
+      "wingetId": null,
+      "url": "https://github.com/dumbie/RadeonTuner",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_guru3d_rtss",
+      "name": "RivaTuner Statistics Server",
+      "category": "GPU & Display",
+      "wingetId": "Guru3D.RTSS",
+      "url": null,
+      "author": "Guru3D",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_vibrancegui_com",
+      "name": "VibranceGUI",
+      "category": "GPU & Display",
+      "wingetId": null,
+      "url": "https://vibrancegui.com/",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_faststone_viewer",
+      "name": "FastStone Image Viewer",
+      "category": "Imaging",
+      "wingetId": "FastStone.Viewer",
+      "url": "https://www.faststone.org/",
+      "author": "FastStone",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_flameshot_flameshot",
+      "name": "Flameshot",
+      "category": "Imaging",
+      "wingetId": "Flameshot.Flameshot",
+      "url": "https://flameshot.org/",
+      "author": "Flameshot",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_greenshot_greenshot",
+      "name": "Greenshot",
+      "category": "Imaging",
+      "wingetId": "Greenshot.Greenshot",
+      "url": "https://getgreenshot.org/",
+      "author": "Greenshot",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_inkscape_inkscape",
+      "name": "Inkscape",
+      "category": "Imaging",
+      "wingetId": "Inkscape.Inkscape",
+      "url": "https://inkscape.org/",
+      "author": "Inkscape",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_kde_krita",
+      "name": "Krita",
+      "category": "Imaging",
+      "wingetId": "KDE.Krita",
+      "url": "https://krita.org/",
+      "author": "KDE",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_xnsoft_xnview_classic",
+      "name": "XnView",
+      "category": "Imaging",
+      "wingetId": "XnSoft.XnView.Classic",
+      "url": "https://www.xnview.com/en/xnview/",
+      "author": "XnSoft",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_xnsoft_xnviewmp",
+      "name": "XnViewMP",
+      "category": "Imaging",
+      "wingetId": "XnSoft.XnViewMP",
+      "url": "https://www.xnview.com/en/xnviewmp/",
+      "author": "XnSoft",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_emclient_emclient",
+      "name": "eM Client",
+      "category": "Messaging, Email & Calendar",
+      "wingetId": "eMClient.eMClient",
+      "url": "https://www.emclient.com/",
+      "author": "eMClient",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_pidgin_pidgin",
+      "name": "Pidgin",
+      "category": "Messaging, Email & Calendar",
+      "wingetId": "Pidgin.Pidgin",
+      "url": "https://pidgin.im/",
+      "author": "Pidgin",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_ceruleanstudios_trillian",
+      "name": "Trillian",
+      "category": "Messaging, Email & Calendar",
+      "wingetId": "CeruleanStudios.Trillian",
+      "url": "https://www.trillian.im/",
+      "author": "CeruleanStudios",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_https_www_whatsapp_com",
+      "name": "WhatsApp",
+      "category": "Messaging, Email & Calendar",
+      "wingetId": null,
+      "url": "https://www.whatsapp.com/",
+      "author": "Marco du Plessis",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_microsoft_dotnet_desktopruntime_10",
+      "name": ".NET Desktop Runtime 10",
+      "category": "Microsoft Tools",
+      "wingetId": "Microsoft.DotNet.DesktopRuntime.10",
+      "url": "https://dotnet.microsoft.com/download/dotnet/10.0",
+      "author": "Microsoft",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_microsoft_dotnet_desktopruntime_6",
+      "name": ".NET Desktop Runtime 6",
+      "category": "Microsoft Tools",
+      "wingetId": "Microsoft.DotNet.DesktopRuntime.6",
+      "url": "https://dotnet.microsoft.com/download/dotnet/6.0",
+      "author": "Microsoft",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_microsoft_dotnet_desktopruntime_8",
+      "name": ".NET Desktop Runtime 8",
+      "category": "Microsoft Tools",
+      "wingetId": "Microsoft.DotNet.DesktopRuntime.8",
+      "url": "https://dotnet.microsoft.com/download/dotnet/8.0",
+      "author": "Microsoft",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_microsoft_dotnet_desktopruntime_9",
+      "name": ".NET Desktop Runtime 9",
+      "category": "Microsoft Tools",
+      "wingetId": "Microsoft.DotNet.DesktopRuntime.9",
+      "url": "https://dotnet.microsoft.com/download/dotnet/9.0",
+      "author": "Microsoft",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_microsoft_sysinternals_autoruns",
+      "name": "Autoruns",
+      "category": "Microsoft Tools",
+      "wingetId": "Microsoft.Sysinternals.Autoruns",
+      "url": "https://learn.microsoft.com/en-us/sysinternals/downloads/autoruns",
+      "author": "Microsoft",
+      "sources": [
+        "CTT WinUtil",
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_codingwonderssoftware_dismtools_stable",
+      "name": "DISMTools",
+      "category": "Microsoft Tools",
+      "wingetId": "CodingWondersSoftware.DISMTools.Stable",
+      "url": "https://github.com/CodingWonders/DISMTools",
+      "author": "CodingWondersSoftware",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_nlitesoft_ntlite",
+      "name": "NTLite",
+      "category": "Microsoft Tools",
+      "wingetId": "Nlitesoft.NTLite",
+      "url": "https://ntlite.com",
+      "author": "Nlitesoft",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_microsoft_nuget",
+      "name": "NuGet",
+      "category": "Microsoft Tools",
+      "wingetId": "Microsoft.NuGet",
+      "url": "https://www.nuget.org/",
+      "author": "Microsoft",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_microsoft_onedrive",
+      "name": "OneDrive",
+      "category": "Microsoft Tools",
+      "wingetId": "Microsoft.OneDrive",
+      "url": "https://onedrive.live.com/",
+      "author": "Microsoft",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_microsoft_powershell",
+      "name": "PowerShell",
+      "category": "Microsoft Tools",
+      "wingetId": "Microsoft.PowerShell",
+      "url": "https://github.com/PowerShell/PowerShell",
+      "author": "Microsoft",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_microsoft_powertoys",
+      "name": "PowerToys",
+      "category": "Microsoft Tools",
+      "wingetId": "Microsoft.PowerToys",
+      "url": "https://github.com/microsoft/PowerToys",
+      "author": "Microsoft",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate",
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_microsoft_sysinternals_processexplorer",
+      "name": "Process Explorer",
+      "category": "Microsoft Tools",
+      "wingetId": "Microsoft.Sysinternals.ProcessExplorer",
+      "url": "https://learn.microsoft.com/sysinternals/downloads/process-explorer",
+      "author": "Microsoft",
+      "sources": [
+        "CTT WinUtil",
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_microsoft_sysinternals_processmonitor",
+      "name": "Process Monitor",
+      "category": "Microsoft Tools",
+      "wingetId": "Microsoft.Sysinternals.ProcessMonitor",
+      "url": "https://docs.microsoft.com/en-us/sysinternals/downloads/procmon",
+      "author": "Microsoft",
+      "sources": [
+        "CTT WinUtil",
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_microsoft_sysinternals_rdcman",
+      "name": "RDCMan",
+      "category": "Microsoft Tools",
+      "wingetId": "Microsoft.Sysinternals.RDCMan",
+      "url": "https://learn.microsoft.com/en-us/sysinternals/downloads/rdcman",
+      "author": "Microsoft",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_microsoft_sysinternals_tcpview",
+      "name": "TCPView",
+      "category": "Microsoft Tools",
+      "wingetId": "Microsoft.Sysinternals.TCPView",
+      "url": "https://docs.microsoft.com/en-us/sysinternals/downloads/tcpview",
+      "author": "Microsoft",
+      "sources": [
+        "CTT WinUtil",
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_microsoft_vcredist_2015_x86",
+      "name": "Visual C++ 2015-2022 32-bit",
+      "category": "Microsoft Tools",
+      "wingetId": "Microsoft.VCRedist.2015+.x86",
+      "url": "https://support.microsoft.com/en-us/help/2977003/the-latest-supported-visual-c-downloads",
+      "author": "Microsoft",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_microsoft_vcredist_2015_x64",
+      "name": "Visual C++ 2015-2022 64-bit",
+      "category": "Microsoft Tools",
+      "wingetId": "Microsoft.VCRedist.2015+.x64",
+      "url": "https://support.microsoft.com/en-us/help/2977003/the-latest-supported-visual-c-downloads",
+      "author": "Microsoft",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_microsoft_windowsterminal",
+      "name": "Windows Terminal",
+      "category": "Microsoft Tools",
+      "wingetId": "Microsoft.WindowsTerminal",
+      "url": "https://aka.ms/terminal",
+      "author": "Microsoft",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_https_gpuopen_com_rgp",
+      "name": "AMD Radeon GPU Profiler",
+      "category": "Monitoring & Diagnostics",
+      "wingetId": null,
+      "url": "https://gpuopen.com/rgp/",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_cuda_z_sourceforge_net",
+      "name": "CUDA-Z",
+      "category": "Monitoring & Diagnostics",
+      "wingetId": null,
+      "url": "https://cuda-z.sourceforge.net/",
+      "author": "Igor Bushin",
+      "sources": [
+        "Direct request"
+      ]
+    },
+    {
+      "id": "app_rem0o_fancontrol",
+      "name": "Fan Control",
+      "category": "Monitoring & Diagnostics",
+      "wingetId": "Rem0o.FanControl",
+      "url": null,
+      "author": "Rem0o",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_www_geeks3d_com_gpushark",
+      "name": "GPU Shark 2",
+      "category": "Monitoring & Diagnostics",
+      "wingetId": null,
+      "url": "https://www.geeks3d.com/gpushark/",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_learn_microsoft_com_windows_hardware_drivers_display_using_gpuview",
+      "name": "GPUView",
+      "category": "Monitoring & Diagnostics",
+      "wingetId": null,
+      "url": "https://learn.microsoft.com/windows-hardware/drivers/display/using-gpuview",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_www_hwinfo_com_download",
+      "name": "HWiNFO",
+      "category": "Monitoring & Diagnostics",
+      "wingetId": null,
+      "url": "https://www.hwinfo.com/download/",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_resplendence_latencymon",
+      "name": "LatencyMon",
+      "category": "Monitoring & Diagnostics",
+      "wingetId": "Resplendence.LatencyMon",
+      "url": null,
+      "author": "Resplendence",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_nvidia_frameview",
+      "name": "NVIDIA FrameView",
+      "category": "Monitoring & Diagnostics",
+      "wingetId": "Nvidia.FrameView",
+      "url": null,
+      "author": "Nvidia",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_developer_nvidia_com_nsight_systems",
+      "name": "NVIDIA Nsight Systems",
+      "category": "Monitoring & Diagnostics",
+      "wingetId": null,
+      "url": "https://developer.nvidia.com/nsight-systems",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_www_winitor_com_download",
+      "name": "PeStudio",
+      "category": "Monitoring & Diagnostics",
+      "wingetId": null,
+      "url": "https://www.winitor.com/download",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_intel_presentmon",
+      "name": "PresentMon",
+      "category": "Monitoring & Diagnostics",
+      "wingetId": "Intel.PresentMon",
+      "url": null,
+      "author": "Intel",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_microsoft_sysinternals_rammap",
+      "name": "RAMMap",
+      "category": "Monitoring & Diagnostics",
+      "wingetId": "Microsoft.Sysinternals.RAMMap",
+      "url": null,
+      "author": "Microsoft",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_learn_microsoft_com_windows_hardware_get_started_adk_install",
+      "name": "Windows Performance Toolkit (WPR, WPA & Xperf)",
+      "category": "Monitoring & Diagnostics",
+      "wingetId": null,
+      "url": "https://learn.microsoft.com/windows-hardware/get-started/adk-install",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_bytedance_capcut",
+      "name": "CapCut",
+      "category": "Multimedia (Audio & Video)",
+      "wingetId": "ByteDance.CapCut",
+      "url": "https://www.capcut.com/",
+      "author": "ByteDance",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_https_www_freac_org",
+      "name": "fre:ac - free audio converter",
+      "category": "Multimedia (Audio & Video)",
+      "wingetId": null,
+      "url": "https://www.freac.org/",
+      "author": "Marco du Plessis",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_fxsound_fxsound",
+      "name": "FxSound",
+      "category": "Multimedia (Audio & Video)",
+      "wingetId": "FxSound.FxSound",
+      "url": "https://www.fxsound.com/",
+      "author": "FxSound",
+      "sources": [
+        "Winhance candidate",
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_gomlab_gomplayer",
+      "name": "GOM Player",
+      "category": "Multimedia (Audio & Video)",
+      "wingetId": "GOMLab.GOMPlayer",
+      "url": "https://www.gomlab.com/",
+      "author": "GOMLab",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_codecguide_k_litecodecpack_mega",
+      "name": "K-Lite Codec Pack (Mega)",
+      "category": "Multimedia (Audio & Video)",
+      "wingetId": "CodecGuide.K-LiteCodecPack.Mega",
+      "url": "https://codecguide.com/",
+      "author": "CodecGuide",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_kde_kdenlive",
+      "name": "kdenlive",
+      "category": "Multimedia (Audio & Video)",
+      "wingetId": "KDE.Kdenlive",
+      "url": "https://kdenlive.org/",
+      "author": "KDE",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_ch_losslesscut",
+      "name": "LosslessCut",
+      "category": "Multimedia (Audio & Video)",
+      "wingetId": "ch.LosslessCut",
+      "url": "https://github.com/mifi/lossless-cut",
+      "author": "ch",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_mediaarea_mediainfo_gui",
+      "name": "MediaInfo",
+      "category": "Multimedia (Audio & Video)",
+      "wingetId": "MediaArea.MediaInfo.GUI",
+      "url": "https://mediaarea.net/en/MediaInfo",
+      "author": "MediaArea",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_ventismedia_mediamonkey_5",
+      "name": "MediaMonkey",
+      "category": "Multimedia (Audio & Video)",
+      "wingetId": "VentisMedia.MediaMonkey.5",
+      "url": "https://www.mediamonkey.com/",
+      "author": "VentisMedia",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_mpc_be_mpc_be",
+      "name": "MPC-BE",
+      "category": "Multimedia (Audio & Video)",
+      "wingetId": "MPC-BE.MPC-BE",
+      "url": "https://sourceforge.net/projects/mpcbe/",
+      "author": "MPC-BE",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_https_www_getmusicbee_com",
+      "name": "MusicBee",
+      "category": "Multimedia (Audio & Video)",
+      "wingetId": null,
+      "url": "https://www.getmusicbee.com/",
+      "author": "Marco du Plessis",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_daum_potplayer",
+      "name": "PotPlayer64",
+      "category": "Multimedia (Audio & Video)",
+      "wingetId": "Daum.PotPlayer",
+      "url": "https://potplayer.tv/",
+      "author": "Daum",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_meltytech_shotcut",
+      "name": "Shotcut",
+      "category": "Multimedia (Audio & Video)",
+      "wingetId": "Meltytech.Shotcut",
+      "url": "https://www.shotcut.org/",
+      "author": "Meltytech",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_smplayer_smplayer",
+      "name": "SMPlayer",
+      "category": "Multimedia (Audio & Video)",
+      "wingetId": "SMPlayer.SMPlayer",
+      "url": "https://www.smplayer.info/",
+      "author": "SMPlayer",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_spotify_spotify",
+      "name": "Spotify",
+      "category": "Multimedia (Audio & Video)",
+      "wingetId": "Spotify.Spotify",
+      "url": "https://www.spotify.com/",
+      "author": "Spotify",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_https_streamlabs_com",
+      "name": "Streamlabs OBS",
+      "category": "Multimedia (Audio & Video)",
+      "wingetId": null,
+      "url": "https://streamlabs.com/",
+      "author": "Marco du Plessis",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_irzyxa_volume2portable",
+      "name": "Volume2",
+      "category": "Multimedia (Audio & Video)",
+      "wingetId": "irzyxa.Volume2Portable",
+      "url": "https://github.com/irzyxa/Volume2",
+      "author": "irzyxa",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_aimp_aimp",
+      "name": "AIMP (Music Player)",
+      "category": "Multimedia Tools",
+      "wingetId": "AIMP.AIMP",
+      "url": "https://www.aimp.ru/",
+      "author": "AIMP",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_audacity_audacity",
+      "name": "Audacity",
+      "category": "Multimedia Tools",
+      "wingetId": "Audacity.Audacity",
+      "url": "https://www.audacityteam.org/",
+      "author": "Audacity",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_blenderfoundation_blender",
+      "name": "Blender (3D Graphics)",
+      "category": "Multimedia Tools",
+      "wingetId": "BlenderFoundation.Blender",
+      "url": "https://www.blender.org/",
+      "author": "BlenderFoundation",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_calibre_calibre",
+      "name": "Calibre",
+      "category": "Multimedia Tools",
+      "wingetId": "calibre.calibre",
+      "url": "https://calibre-ebook.com/",
+      "author": "calibre",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_file_new_project_eartrumpet",
+      "name": "EarTrumpet (Audio)",
+      "category": "Multimedia Tools",
+      "wingetId": "File-New-Project.EarTrumpet",
+      "url": "https://eartrumpet.app/",
+      "author": "File-New-Project",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_adrienallard_fileconverter",
+      "name": "File Converter",
+      "category": "Multimedia Tools",
+      "wingetId": "AdrienAllard.FileConverter",
+      "url": "https://file-converter.io/",
+      "author": "AdrienAllard",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_peterpawlowski_foobar2000",
+      "name": "foobar2000 (Music Player)",
+      "category": "Multimedia Tools",
+      "wingetId": "PeterPawlowski.foobar2000",
+      "url": "https://www.foobar2000.org/",
+      "author": "PeterPawlowski",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_gimp_gimp_3",
+      "name": "GIMP (Image Editor)",
+      "category": "Multimedia Tools",
+      "wingetId": "GIMP.GIMP.3",
+      "url": "https://www.gimp.org/",
+      "author": "GIMP",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_handbrake_handbrake",
+      "name": "HandBrake",
+      "category": "Multimedia Tools",
+      "wingetId": "HandBrake.HandBrake",
+      "url": "https://handbrake.fr/",
+      "author": "HandBrake",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_duongdieuphap_imageglass",
+      "name": "ImageGlass (Image Viewer)",
+      "category": "Multimedia Tools",
+      "wingetId": "DuongDieuPhap.ImageGlass",
+      "url": "https://imageglass.org/",
+      "author": "DuongDieuPhap",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_irfanskiljan_irfanview",
+      "name": "IrfanView",
+      "category": "Multimedia Tools",
+      "wingetId": "IrfanSkiljan.IrfanView",
+      "url": "https://irfanview.com/",
+      "author": "IrfanSkiljan",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_apple_itunes",
+      "name": "iTunes",
+      "category": "Multimedia Tools",
+      "wingetId": "Apple.iTunes",
+      "url": "https://www.apple.com/itunes/",
+      "author": "Apple",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_codecguide_k_litecodecpack_standard",
+      "name": "K-Lite Codec Standard",
+      "category": "Multimedia Tools",
+      "wingetId": "CodecGuide.K-LiteCodecPack.Standard",
+      "url": "https://www.codecguide.com/",
+      "author": "CodecGuide",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_clsid2_mpc_hc",
+      "name": "Media Player Classic - Home Cinema",
+      "category": "Multimedia Tools",
+      "wingetId": "clsid2.mpc-hc",
+      "url": "https://mpc-hc.org/",
+      "author": "clsid2",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_mpc_qt_mpc_qt",
+      "name": "mpc-qt",
+      "category": "Multimedia Tools",
+      "wingetId": "mpc-qt.mpc-qt",
+      "url": "https://mpc-qt.github.io",
+      "author": "mpc-qt",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_shinchiro_mpv",
+      "name": "mpv",
+      "category": "Multimedia Tools",
+      "wingetId": "shinchiro.mpv",
+      "url": "https://mpv.io/",
+      "author": "shinchiro",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_nomacs_nomacs",
+      "name": "nomacs",
+      "category": "Multimedia Tools",
+      "wingetId": "nomacs.nomacs",
+      "url": "https://nomacs.org/",
+      "author": "nomacs",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_notepad_notepad",
+      "name": "Notepad++",
+      "category": "Multimedia Tools",
+      "wingetId": "Notepad++.Notepad++",
+      "url": "https://notepad-plus-plus.org/",
+      "author": "Notepad++",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_obsproject_obsstudio",
+      "name": "OBS Studio",
+      "category": "Multimedia Tools",
+      "wingetId": "OBSProject.OBSStudio",
+      "url": "https://obsproject.com/",
+      "author": "OBSProject",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_dotpdn_paintdotnet",
+      "name": "Paint.NET",
+      "category": "Multimedia Tools",
+      "wingetId": "dotPDN.PaintDotNet",
+      "url": "https://www.getpaint.net/",
+      "author": "dotPDN",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_sharex_sharex",
+      "name": "ShareX (Screenshots)",
+      "category": "Multimedia Tools",
+      "wingetId": "ShareX.ShareX",
+      "url": "https://getsharex.com/",
+      "author": "ShareX",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate",
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_videolan_vlc",
+      "name": "VLC (Video Player)",
+      "category": "Multimedia Tools",
+      "wingetId": "VideoLAN.VLC",
+      "url": "https://www.videolan.org/vlc/",
+      "author": "VideoLAN",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_sordum_dnsjumper",
+      "name": "DNS Jumper",
+      "category": "Network",
+      "wingetId": "sordum.DnsJumper",
+      "url": null,
+      "author": "sordum",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_ar51an_iperf3",
+      "name": "iPerf3",
+      "category": "Network",
+      "wingetId": "ar51an.iPerf3",
+      "url": null,
+      "author": "ar51an",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_nmap_org_download_html",
+      "name": "Nmap",
+      "category": "Network",
+      "wingetId": null,
+      "url": "https://nmap.org/download.html",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_www_speedguide_net_downloads_php",
+      "name": "TCP Optimizer",
+      "category": "Network",
+      "wingetId": null,
+      "url": "https://www.speedguide.net/downloads.php",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_freefilesync_org",
+      "name": "FreeFileSync",
+      "category": "Online Storage & Backup",
+      "wingetId": null,
+      "url": "https://freefilesync.org/",
+      "author": "Marco du Plessis",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_hekasoft_backup_restore",
+      "name": "Hekasoft Backup & Restore",
+      "category": "Online Storage & Backup",
+      "wingetId": "Hekasoft.Backup-Restore",
+      "url": "https://hekasoft.com/hekasoft-backup-restore/",
+      "author": "Hekasoft",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_ipvanish_sugarsync",
+      "name": "SugarSync",
+      "category": "Online Storage & Backup",
+      "wingetId": "IPVanish.SugarSync",
+      "url": "https://www.sugarsync.com/",
+      "author": "IPVanish",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_powersoftware_anyburn",
+      "name": "AnyBurn",
+      "category": "Optical Disc Tools",
+      "wingetId": "PowerSoftware.AnyBurn",
+      "url": "http://www.anyburn.com/",
+      "author": "PowerSoftware",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_https_cdburnerxp_se",
+      "name": "CDBurnerXP",
+      "category": "Optical Disc Tools",
+      "wingetId": null,
+      "url": "https://cdburnerxp.se/",
+      "author": "Marco du Plessis",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_lightninguk_imgburn",
+      "name": "ImgBurn",
+      "category": "Optical Disc Tools",
+      "wingetId": "LIGHTNINGUK.ImgBurn",
+      "url": "https://www.imgburn.com/",
+      "author": "LIGHTNINGUK",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_guinpinsoft_makemkv",
+      "name": "MakeMKV",
+      "category": "Optical Disc Tools",
+      "wingetId": "GuinpinSoft.MakeMKV",
+      "url": "https://www.makemkv.com/",
+      "author": "GuinpinSoft",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_oliverbetz_exiftool",
+      "name": "ExifTool",
+      "category": "OSINT & Security",
+      "wingetId": "OliverBetz.ExifTool",
+      "url": null,
+      "author": "OliverBetz",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_github_com_owasp_amass_amass",
+      "name": "OWASP Amass",
+      "category": "OSINT & Security",
+      "wingetId": null,
+      "url": "https://github.com/owasp-amass/amass",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_github_com_sherlock_project_sherlock",
+      "name": "Sherlock",
+      "category": "OSINT & Security",
+      "wingetId": null,
+      "url": "https://github.com/sherlock-project/sherlock",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_github_com_smicallef_spiderfoot",
+      "name": "SpiderFoot",
+      "category": "OSINT & Security",
+      "wingetId": null,
+      "url": "https://github.com/smicallef/spiderfoot",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_piriform_ccleaner",
+      "name": "CCleaner",
+      "category": "Other Utilities",
+      "wingetId": "Piriform.CCleaner",
+      "url": "https://www.ccleaner.com/",
+      "author": "Piriform",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_iobit_uninstaller",
+      "name": "IObit Uninstaller",
+      "category": "Other Utilities",
+      "wingetId": "IObit.Uninstaller",
+      "url": "https://www.iobit.com/en/advanceduninstaller.php",
+      "author": "IObit",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_openaudible_openaudible",
+      "name": "OpenAudible",
+      "category": "Other Utilities",
+      "wingetId": "OpenAudible.OpenAudible",
+      "url": "https://openaudible.org/",
+      "author": "OpenAudible",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_marticliment_unigetui",
+      "name": "UniGetUI",
+      "category": "Other Utilities",
+      "wingetId": "MartiCliment.UniGetUI",
+      "url": "https://www.marticliment.com/unigetui/",
+      "author": "MartiCliment",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_wisecleaner_wisediskcleaner",
+      "name": "Wise Disk Cleaner",
+      "category": "Other Utilities",
+      "wingetId": "WiseCleaner.WiseDiskCleaner",
+      "url": "https://www.wisecleaner.com/wise-disk-cleaner.html",
+      "author": "WiseCleaner",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_wisecleaner_wiseregistrycleaner",
+      "name": "Wise Registry Cleaner",
+      "category": "Other Utilities",
+      "wingetId": "WiseCleaner.WiseRegistryCleaner",
+      "url": "https://www.wisecleaner.com/wise-registry-cleaner.html",
+      "author": "WiseCleaner",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_malwarebytes_malwarebytes",
+      "name": "Malwarebytes",
+      "category": "Privacy & Security",
+      "wingetId": "Malwarebytes.Malwarebytes",
+      "url": "https://www.malwarebytes.com/",
+      "author": "Malwarebytes",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_malwarebytes_adwcleaner",
+      "name": "Malwarebytes AdwCleaner",
+      "category": "Privacy & Security",
+      "wingetId": "Malwarebytes.AdwCleaner",
+      "url": "https://www.malwarebytes.com/adwcleaner",
+      "author": "Malwarebytes",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_oo_software_shutup10",
+      "name": "O&O ShutUp10++",
+      "category": "Privacy & Security",
+      "wingetId": "OO-Software.ShutUp10",
+      "url": "https://www.oo-software.com/en/shutup10",
+      "author": "OO-Software",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_onionshare_onionshare",
+      "name": "OnionShare",
+      "category": "Privacy & Security",
+      "wingetId": "OnionShare.OnionShare",
+      "url": "https://onionshare.org/",
+      "author": "OnionShare",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_https_sniffnet_net",
+      "name": "Sniffnet",
+      "category": "Privacy & Security",
+      "wingetId": null,
+      "url": "https://sniffnet.net/",
+      "author": "Marco du Plessis",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_https_teleguard_com_en",
+      "name": "TeleGuard",
+      "category": "Privacy & Security",
+      "wingetId": null,
+      "url": "https://teleguard.com/en",
+      "author": "Marco du Plessis",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_binisoft_windowsfirewallcontrol",
+      "name": "Windows Firewall Control",
+      "category": "Privacy & Security",
+      "wingetId": "BiniSoft.WindowsFirewallControl",
+      "url": "https://www.binisoft.org/wfc",
+      "author": "BiniSoft",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_famatech_advancedipscanner",
+      "name": "Advanced IP Scanner",
+      "category": "Pro Tools",
+      "wingetId": "Famatech.AdvancedIPScanner",
+      "url": "https://www.advanced-ip-scanner.com/",
+      "author": "Famatech",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_angryziber_angryipscanner",
+      "name": "Angry IP Scanner",
+      "category": "Pro Tools",
+      "wingetId": "angryziber.AngryIPScanner",
+      "url": "https://angryip.org/",
+      "author": "angryziber",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_maxon_cinebenchr23",
+      "name": "Cinebench R23",
+      "category": "Pro Tools",
+      "wingetId": "Maxon.CinebenchR23",
+      "url": "https://www.maxon.net/en/cinebench",
+      "author": "Maxon",
+      "sources": [
+        "CTT WinUtil",
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_cpuid_cpu_z",
+      "name": "CPU-Z",
+      "category": "Pro Tools",
+      "wingetId": "CPUID.CPU-Z",
+      "url": "https://www.cpuid.com/softwares/cpu-z.html",
+      "author": "CPUID",
+      "sources": [
+        "CTT WinUtil",
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_wagnardsoft_displaydriveruninstaller",
+      "name": "Display Driver Uninstaller",
+      "category": "Pro Tools",
+      "wingetId": "Wagnardsoft.DisplayDriverUninstaller",
+      "url": "https://www.wagnardsoft.com/display-driver-uninstaller-DDU-",
+      "author": "Wagnardsoft",
+      "sources": [
+        "CTT WinUtil",
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_techpowerup_gpu_z",
+      "name": "GPU-Z",
+      "category": "Pro Tools",
+      "wingetId": "TechPowerUp.GPU-Z",
+      "url": "https://www.techpowerup.com/gpuz/",
+      "author": "TechPowerUp",
+      "sources": [
+        "CTT WinUtil",
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_gerardog_gsudo",
+      "name": "gsudo",
+      "category": "Pro Tools",
+      "wingetId": "gerardog.gsudo",
+      "url": "https://github.com/gerardog/gsudo",
+      "author": "gerardog",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_realix_hwinfo",
+      "name": "HWiNFO",
+      "category": "Pro Tools",
+      "wingetId": "REALiX.HWiNFO",
+      "url": "https://www.hwinfo.com/",
+      "author": "REALiX",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_cpuid_hwmonitor",
+      "name": "HWMonitor",
+      "category": "Pro Tools",
+      "wingetId": "CPUID.HWMonitor",
+      "url": "https://www.cpuid.com/softwares/hwmonitor.html",
+      "author": "CPUID",
+      "sources": [
+        "CTT WinUtil",
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_mullvadvpn_mullvadvpn",
+      "name": "Mullvad VPN",
+      "category": "Pro Tools",
+      "wingetId": "MullvadVPN.MullvadVPN",
+      "url": "https://mullvad.net/",
+      "author": "MullvadVPN",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_insecure_nmap",
+      "name": "Nmap",
+      "category": "Pro Tools",
+      "wingetId": "Insecure.Nmap",
+      "url": "https://nmap.org/",
+      "author": "Insecure",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_openvpntechnologies_openvpnconnect",
+      "name": "OpenVPN Connect",
+      "category": "Pro Tools",
+      "wingetId": "OpenVPNTechnologies.OpenVPNConnect",
+      "url": "https://openvpn.net/",
+      "author": "OpenVPNTechnologies",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_proton_protonvpn",
+      "name": "Proton VPN",
+      "category": "Pro Tools",
+      "wingetId": "Proton.ProtonVPN",
+      "url": "https://protonvpn.com/",
+      "author": "Proton",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_putty_putty",
+      "name": "PuTTY",
+      "category": "Pro Tools",
+      "wingetId": "PuTTY.PuTTY",
+      "url": "https://www.chiark.greenend.org.uk/~sgtatham/putty/",
+      "author": "PuTTY",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_henry_simplewall",
+      "name": "Simplewall",
+      "category": "Pro Tools",
+      "wingetId": "Henry++.simplewall",
+      "url": "https://github.com/henrypp/simplewall",
+      "author": "Henry++",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_ventoy_ventoy",
+      "name": "Ventoy",
+      "category": "Pro Tools",
+      "wingetId": "Ventoy.Ventoy",
+      "url": "https://www.ventoy.net/",
+      "author": "Ventoy",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate",
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_winscp_winscp",
+      "name": "WinSCP",
+      "category": "Pro Tools",
+      "wingetId": "WinSCP.WinSCP",
+      "url": "https://winscp.net/",
+      "author": "WinSCP",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate",
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_wireguard_wireguard",
+      "name": "WireGuard",
+      "category": "Pro Tools",
+      "wingetId": "WireGuard.WireGuard",
+      "url": "https://www.wireguard.com/",
+      "author": "WireGuard",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_wiresharkfoundation_wireshark",
+      "name": "Wireshark",
+      "category": "Pro Tools",
+      "wingetId": "WiresharkFoundation.Wireshark",
+      "url": "https://www.wireshark.org/",
+      "author": "WiresharkFoundation",
+      "sources": [
+        "CTT WinUtil",
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_www_autopsy_com_download",
+      "name": "Autopsy",
+      "category": "Recovery & Forensics",
+      "wingetId": null,
+      "url": "https://www.autopsy.com/download/",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_cgsecurity_testdisk",
+      "name": "TestDisk & PhotoRec",
+      "category": "Recovery & Forensics",
+      "wingetId": "CGSecurity.TestDisk",
+      "url": null,
+      "author": "CGSecurity",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_9n26s50ln705",
+      "name": "Windows File Recovery",
+      "category": "Recovery & Forensics",
+      "wingetId": "9N26S50LN705",
+      "url": null,
+      "author": "Microsoft Store",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_google_chromeremotedesktophost",
+      "name": "Chrome Remote Desktop",
+      "category": "Remote Access",
+      "wingetId": "Google.ChromeRemoteDesktopHost",
+      "url": "https://remotedesktop.google.com/",
+      "author": "Google",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_input_leap_input_leap",
+      "name": "InputLeap",
+      "category": "Remote Access",
+      "wingetId": "input-leap.input-leap",
+      "url": "https://github.com/input-leap/input-leap",
+      "author": "input-leap",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_parsec_parsecvdd",
+      "name": "Parsec Virtual Display Driver",
+      "category": "Remote Access",
+      "wingetId": "Parsec.ParsecVDD",
+      "url": "https://parsec.app/",
+      "author": "Parsec",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_parsec_parsecvud",
+      "name": "Parsec Virtual USB Driver",
+      "category": "Remote Access",
+      "wingetId": "Parsec.ParsecVUD",
+      "url": "https://parsec.app/",
+      "author": "Parsec",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_realvnc_vncserver",
+      "name": "RealVNC Server",
+      "category": "Remote Access",
+      "wingetId": "RealVNC.VNCServer",
+      "url": "https://www.realvnc.com/",
+      "author": "RealVNC",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_realvnc_vncviewer",
+      "name": "RealVNC Viewer",
+      "category": "Remote Access",
+      "wingetId": "RealVNC.VNCViewer",
+      "url": "https://www.realvnc.com/",
+      "author": "RealVNC",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_rustdesk_rustdesk",
+      "name": "RustDesk",
+      "category": "Remote Access",
+      "wingetId": "RustDesk.RustDesk",
+      "url": "https://rustdesk.com/",
+      "author": "RustDesk",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_ducfabulous_ultraviewer",
+      "name": "UltraViewer",
+      "category": "Remote Access",
+      "wingetId": "DucFabulous.UltraViewer",
+      "url": "https://www.ultraviewer.net/",
+      "author": "DucFabulous",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_microsoft_dotnet_framework_developerpack_4",
+      "name": ".NET Framework 4.8.1",
+      "category": "Runtimes & Dependencies",
+      "wingetId": "Microsoft.DotNet.Framework.DeveloperPack_4",
+      "url": "https://dotnet.microsoft.com/download/dotnet-framework",
+      "author": "Microsoft",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_microsoft_directx",
+      "name": "DirectX Runtime",
+      "category": "Runtimes & Dependencies",
+      "wingetId": "Microsoft.DirectX",
+      "url": "https://www.microsoft.com/en-us/download/details.aspx?id=35",
+      "author": "Microsoft",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_oracle_javaruntimeenvironment",
+      "name": "Java Runtime Environment",
+      "category": "Runtimes & Dependencies",
+      "wingetId": "Oracle.JavaRuntimeEnvironment",
+      "url": "https://www.oracle.com/java/technologies/downloads/",
+      "author": "Oracle",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_microsoft_dotnet_runtime_3_1",
+      "name": "Microsoft .NET Runtime 3.1",
+      "category": "Runtimes & Dependencies",
+      "wingetId": "Microsoft.DotNet.Runtime.3_1",
+      "url": "https://dotnet.microsoft.com/",
+      "author": "Microsoft",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_microsoft_dotnet_runtime_5",
+      "name": "Microsoft .NET Runtime 5.0",
+      "category": "Runtimes & Dependencies",
+      "wingetId": "Microsoft.DotNet.Runtime.5",
+      "url": "https://dotnet.microsoft.com/",
+      "author": "Microsoft",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_microsoft_dotnet_runtime_6",
+      "name": "Microsoft .NET Runtime 6.0",
+      "category": "Runtimes & Dependencies",
+      "wingetId": "Microsoft.DotNet.Runtime.6",
+      "url": "https://dotnet.microsoft.com/",
+      "author": "Microsoft",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_microsoft_dotnet_runtime_7",
+      "name": "Microsoft .NET Runtime 7.0",
+      "category": "Runtimes & Dependencies",
+      "wingetId": "Microsoft.DotNet.Runtime.7",
+      "url": "https://dotnet.microsoft.com/",
+      "author": "Microsoft",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_microsoft_dotnet_runtime_8",
+      "name": "Microsoft .NET Runtime 8.0",
+      "category": "Runtimes & Dependencies",
+      "wingetId": "Microsoft.DotNet.Runtime.8",
+      "url": "https://dotnet.microsoft.com/",
+      "author": "Microsoft",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_microsoft_vcredist_2005_x64",
+      "name": "Visual C++ 2005 (x64)",
+      "category": "Runtimes & Dependencies",
+      "wingetId": "Microsoft.VCRedist.2005.x64",
+      "url": "https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist",
+      "author": "Microsoft",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_microsoft_vcredist_2005_x86",
+      "name": "Visual C++ 2005 (x86)",
+      "category": "Runtimes & Dependencies",
+      "wingetId": "Microsoft.VCRedist.2005.x86",
+      "url": "https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist",
+      "author": "Microsoft",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_microsoft_vcredist_2008_x64",
+      "name": "Visual C++ 2008 (x64)",
+      "category": "Runtimes & Dependencies",
+      "wingetId": "Microsoft.VCRedist.2008.x64",
+      "url": "https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist",
+      "author": "Microsoft",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_microsoft_vcredist_2008_x86",
+      "name": "Visual C++ 2008 (x86)",
+      "category": "Runtimes & Dependencies",
+      "wingetId": "Microsoft.VCRedist.2008.x86",
+      "url": "https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist",
+      "author": "Microsoft",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_microsoft_vcredist_2010_x64",
+      "name": "Visual C++ 2010 (x64)",
+      "category": "Runtimes & Dependencies",
+      "wingetId": "Microsoft.VCRedist.2010.x64",
+      "url": "https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist",
+      "author": "Microsoft",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_microsoft_vcredist_2010_x86",
+      "name": "Visual C++ 2010 (x86)",
+      "category": "Runtimes & Dependencies",
+      "wingetId": "Microsoft.VCRedist.2010.x86",
+      "url": "https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist",
+      "author": "Microsoft",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_microsoft_vcredist_2012_x64",
+      "name": "Visual C++ 2012 (x64)",
+      "category": "Runtimes & Dependencies",
+      "wingetId": "Microsoft.VCRedist.2012.x64",
+      "url": "https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist",
+      "author": "Microsoft",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_microsoft_vcredist_2012_x86",
+      "name": "Visual C++ 2012 (x86)",
+      "category": "Runtimes & Dependencies",
+      "wingetId": "Microsoft.VCRedist.2012.x86",
+      "url": "https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist",
+      "author": "Microsoft",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_microsoft_vcredist_2013_x64",
+      "name": "Visual C++ 2013 (x64)",
+      "category": "Runtimes & Dependencies",
+      "wingetId": "Microsoft.VCRedist.2013.x64",
+      "url": "https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist",
+      "author": "Microsoft",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_microsoft_vcredist_2013_x86",
+      "name": "Visual C++ 2013 (x86)",
+      "category": "Runtimes & Dependencies",
+      "wingetId": "Microsoft.VCRedist.2013.x86",
+      "url": "https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist",
+      "author": "Microsoft",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_microsoft_vcredist_2015_arm64",
+      "name": "Visual C++ 2022 (ARM64)",
+      "category": "Runtimes & Dependencies",
+      "wingetId": "Microsoft.VCRedist.2015+.arm64",
+      "url": "https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist",
+      "author": "Microsoft",
+      "sources": [
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_jellyfin_jellyfinmediaplayer",
+      "name": "Jellyfin Media Player",
+      "category": "Selfhosted Tools",
+      "wingetId": "Jellyfin.JellyfinMediaPlayer",
+      "url": "https://jellyfin.org/",
+      "author": "Jellyfin",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_jellyfin_server",
+      "name": "Jellyfin Server",
+      "category": "Selfhosted Tools",
+      "wingetId": "Jellyfin.Server",
+      "url": "https://jellyfin.org/",
+      "author": "Jellyfin",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_xbmcfoundation_kodi",
+      "name": "Kodi Media Center",
+      "category": "Selfhosted Tools",
+      "wingetId": "XBMCFoundation.Kodi",
+      "url": "https://kodi.tv/",
+      "author": "XBMCFoundation",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_localsend_localsend",
+      "name": "LocalSend",
+      "category": "Selfhosted Tools",
+      "wingetId": "LocalSend.LocalSend",
+      "url": "https://localsend.org/",
+      "author": "LocalSend",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_moonlightgamestreamingproject_moonlight",
+      "name": "Moonlight/GameStream Client",
+      "category": "Selfhosted Tools",
+      "wingetId": "MoonlightGameStreamingProject.Moonlight",
+      "url": "https://moonlight-stream.org/",
+      "author": "MoonlightGameStreamingProject",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_netbird_netbird",
+      "name": "NetBird",
+      "category": "Selfhosted Tools",
+      "wingetId": "Netbird.Netbird",
+      "url": "https://netbird.io/",
+      "author": "Netbird",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_nextcloud_nextclouddesktop",
+      "name": "Nextcloud Desktop",
+      "category": "Selfhosted Tools",
+      "wingetId": "Nextcloud.NextcloudDesktop",
+      "url": "https://nextcloud.com/install/#install-clients",
+      "author": "Nextcloud",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_plex_plex",
+      "name": "Plex Desktop",
+      "category": "Selfhosted Tools",
+      "wingetId": "Plex.Plex",
+      "url": "https://www.plex.tv",
+      "author": "Plex",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_plex_plexmediaserver",
+      "name": "Plex Media Server",
+      "category": "Selfhosted Tools",
+      "wingetId": "Plex.PlexMediaServer",
+      "url": "https://www.plex.tv/your-media/",
+      "author": "Plex",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_lizardbyte_sunshine",
+      "name": "Sunshine/GameStream Server",
+      "category": "Selfhosted Tools",
+      "wingetId": "LizardByte.Sunshine",
+      "url": "https://app.lizardbyte.dev/Sunshine/",
+      "author": "LizardByte",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_iridiumio_compactgui",
+      "name": "CompactGUI",
+      "category": "Storage & USB",
+      "wingetId": "IridiumIO.CompactGUI",
+      "url": null,
+      "author": "IridiumIO",
+      "sources": [
+        "TweakHub",
+        "Direct request"
+      ]
+    },
+    {
+      "id": "app_microsoft_diskspd",
+      "name": "DiskSpd",
+      "category": "Storage & USB",
+      "wingetId": "Microsoft.DiskSpd",
+      "url": null,
+      "author": "Microsoft",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_tools_mariusheier_com",
+      "name": "USB Latency Analyzer",
+      "category": "Storage & USB",
+      "wingetId": null,
+      "url": "https://tools.mariusheier.com/",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_nirsoft_usbdeview",
+      "name": "USBDeview",
+      "category": "Storage & USB",
+      "wingetId": "NirSoft.USBDeview",
+      "url": null,
+      "author": "NirSoft",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_amelabs_net",
+      "name": "AME Wizard",
+      "category": "System Utilities",
+      "wingetId": null,
+      "url": "https://amelabs.net/",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_github_com_builtbybel_cleanmgrplus",
+      "name": "Cleanmgr+",
+      "category": "System Utilities",
+      "wingetId": null,
+      "url": "https://github.com/builtbybel/CleanmgrPlus",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_www_majorgeeks_com_files_details_device_cleanup_tool_html",
+      "name": "Device Cleanup Tool",
+      "category": "System Utilities",
+      "wingetId": null,
+      "url": "https://www.majorgeeks.com/files/details/device_cleanup_tool.html",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_chuyuteam_dism",
+      "name": "DISM++",
+      "category": "System Utilities",
+      "wingetId": "ChuyuTeam.DISM++",
+      "url": null,
+      "author": "ChuyuTeam",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_lostindark_driverstoreexplorer",
+      "name": "Driver Store Explorer",
+      "category": "System Utilities",
+      "wingetId": "lostindark.DriverStoreExplorer",
+      "url": null,
+      "author": "lostindark",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_github_com_fancywm_fancywm",
+      "name": "FancyWM",
+      "category": "System Utilities",
+      "wingetId": null,
+      "url": "https://github.com/FancyWM/fancywm",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_github_com_flow_launcher_flow_launcher",
+      "name": "Flow Launcher",
+      "category": "System Utilities",
+      "wingetId": null,
+      "url": "https://github.com/Flow-Launcher/Flow.Launcher",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_github_com_marticliment_unigetui",
+      "name": "UniGetUI",
+      "category": "System Utilities",
+      "wingetId": null,
+      "url": "https://github.com/marticliment/UniGetUI",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_peterstrick_vivetool_gui",
+      "name": "ViVeTool GUI",
+      "category": "System Utilities",
+      "wingetId": "PeterStrick.ViVeTool-GUI",
+      "url": null,
+      "author": "PeterStrick",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_memstechtips_winhance",
+      "name": "Winhance",
+      "category": "System Utilities",
+      "wingetId": "memstechtips.Winhance",
+      "url": null,
+      "author": "memstechtips",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_apps_microsoft_com_detail_9p8ltpgcbzxd",
+      "name": "Wintoys",
+      "category": "System Utilities",
+      "wingetId": null,
+      "url": "https://apps.microsoft.com/detail/9P8LTPGCBZXD",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_github_com_christitustech_winutil",
+      "name": "WinUtil",
+      "category": "System Utilities",
+      "wingetId": null,
+      "url": "https://github.com/ChrisTitusTech/winutil",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_www_wagnardsoft_com_wtools",
+      "name": "WTools",
+      "category": "System Utilities",
+      "wingetId": null,
+      "url": "https://www.wagnardsoft.com/wtools",
+      "author": "Wagnardsoft",
+      "sources": [
+        "Direct request"
+      ]
+    },
+    {
+      "id": "app_https_github_com_primebuild_pc_zaptweaks",
+      "name": "ZapTweaks",
+      "category": "System Utilities",
+      "wingetId": null,
+      "url": "https://github.com/PrimeBuild-pc/ZapTweaks",
+      "author": "PrimeBuild",
+      "sources": [
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_agilebits_1password",
+      "name": "1Password",
+      "category": "Utilities",
+      "wingetId": "AgileBits.1Password",
+      "url": "https://1password.com/",
+      "author": "AgileBits",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_7zip_7zip",
+      "name": "7-Zip",
+      "category": "Utilities",
+      "wingetId": "7zip.7zip",
+      "url": "https://www.7-zip.org/",
+      "author": "7zip",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_anydesk_anydesk",
+      "name": "AnyDesk",
+      "category": "Utilities",
+      "wingetId": "AnyDesk.AnyDesk",
+      "url": "https://anydesk.com/",
+      "author": "AnyDesk",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_autohotkey_autohotkey",
+      "name": "AutoHotkey",
+      "category": "Utilities",
+      "wingetId": "AutoHotkey.AutoHotkey",
+      "url": "https://www.autohotkey.com/",
+      "author": "AutoHotkey",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_bitwarden_bitwarden",
+      "name": "Bitwarden",
+      "category": "Utilities",
+      "wingetId": "Bitwarden.Bitwarden",
+      "url": "https://bitwarden.com/",
+      "author": "Bitwarden",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_blur009_blurautoclicker",
+      "name": "BlurAutoClicker",
+      "category": "Utilities",
+      "wingetId": "Blur009.BlurAutoClicker",
+      "url": "https://blur009.vercel.app/projects/blur-autoclicker/",
+      "author": "Blur009",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_klocman_bulkcrapuninstaller",
+      "name": "Bulk Crap Uninstaller",
+      "category": "Utilities",
+      "wingetId": "Klocman.BulkCrapUninstaller",
+      "url": "https://www.bcuninstaller.com/",
+      "author": "Klocman",
+      "sources": [
+        "CTT WinUtil",
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_cloudflare_warp",
+      "name": "Cloudflare WARP",
+      "category": "Utilities",
+      "wingetId": "Cloudflare.Warp",
+      "url": "https://one.one.one.one",
+      "author": "Cloudflare",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_crystaldewworld_crystaldiskinfo",
+      "name": "Crystal Disk Info",
+      "category": "Utilities",
+      "wingetId": "CrystalDewWorld.CrystalDiskInfo",
+      "url": "https://crystalmark.info/en/software/crystaldiskinfo/",
+      "author": "CrystalDewWorld",
+      "sources": [
+        "CTT WinUtil",
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_crystaldewworld_crystaldiskmark",
+      "name": "Crystal Disk Mark",
+      "category": "Utilities",
+      "wingetId": "CrystalDewWorld.CrystalDiskMark",
+      "url": "https://crystalmark.info/en/software/crystaldiskmark/",
+      "author": "CrystalDewWorld",
+      "sources": [
+        "CTT WinUtil",
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_deskflow_deskflow",
+      "name": "Deskflow",
+      "category": "Utilities",
+      "wingetId": "Deskflow.Deskflow",
+      "url": "https://github.com/deskflow/deskflow",
+      "author": "Deskflow",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_dropbox_dropbox",
+      "name": "Dropbox",
+      "category": "Utilities",
+      "wingetId": "Dropbox.Dropbox",
+      "url": "https://www.dropbox.com/desktop",
+      "author": "Dropbox",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_ente_io_auth_desktop",
+      "name": "Ente Auth",
+      "category": "Utilities",
+      "wingetId": "ente-io.auth-desktop",
+      "url": "https://ente.io/auth/",
+      "author": "ente-io",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_voidtools_everything",
+      "name": "Everything",
+      "category": "Utilities",
+      "wingetId": "voidtools.Everything",
+      "url": "https://www.voidtools.com/",
+      "author": "voidtools",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate",
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_flux_flux",
+      "name": "F.lux",
+      "category": "Utilities",
+      "wingetId": "flux.flux",
+      "url": "https://justgetflux.com/",
+      "author": "flux",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_filescommunity_files",
+      "name": "Files",
+      "category": "Utilities",
+      "wingetId": "FilesCommunity.Files",
+      "url": "https://files.community",
+      "author": "FilesCommunity",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_glzr_io_glazewm",
+      "name": "GlazeWM",
+      "category": "Utilities",
+      "wingetId": "glzr-io.glazewm",
+      "url": "https://github.com/glzr-io/glazewm",
+      "author": "glzr-io",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_google_googledrive",
+      "name": "Google Drive",
+      "category": "Utilities",
+      "wingetId": "Google.GoogleDrive",
+      "url": "https://www.google.com/drive/",
+      "author": "Google",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_hugo_hugo_extended",
+      "name": "Hugo",
+      "category": "Utilities",
+      "wingetId": "Hugo.Hugo.Extended",
+      "url": "https://gohugo.io",
+      "author": "Hugo",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_mhnexus_hxd",
+      "name": "HxD Hex Editor",
+      "category": "Utilities",
+      "wingetId": "MHNexus.HxD",
+      "url": "https://mh-nexus.de/en/hxd/",
+      "author": "MHNexus",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_tonec_internetdownloadmanager",
+      "name": "Internet Download Manager",
+      "category": "Utilities",
+      "wingetId": "Tonec.InternetDownloadManager",
+      "url": "https://www.internetdownloadmanager.com/",
+      "author": "Tonec",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_sylikc_jpegview",
+      "name": "JPEG View",
+      "category": "Utilities",
+      "wingetId": "sylikc.JPEGView",
+      "url": "https://github.com/sylikc/jpegview",
+      "author": "sylikc",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_keepassxcteam_keepassxc",
+      "name": "KeePassXC",
+      "category": "Utilities",
+      "wingetId": "KeePassXCTeam.KeePassXC",
+      "url": "https://keepassxc.org/",
+      "author": "KeePassXCTeam",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_minitool_partitionwizard_free",
+      "name": "MiniTool Partition Wizard",
+      "category": "Utilities",
+      "wingetId": "MiniTool.PartitionWizard.Free",
+      "url": "https://www.partitionwizard.com/",
+      "author": "MiniTool",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_rcmaehl_msedgeredirect",
+      "name": "MSEdgeRedirect",
+      "category": "Utilities",
+      "wingetId": "rcmaehl.MSEdgeRedirect",
+      "url": "https://github.com/rcmaehl/MSEdgeRedirect",
+      "author": "rcmaehl",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_guru3d_afterburner",
+      "name": "MSI Afterburner",
+      "category": "Utilities",
+      "wingetId": "Guru3D.Afterburner",
+      "url": "https://www.msi.com/Landing/afterburner",
+      "author": "Guru3D",
+      "sources": [
+        "CTT WinUtil",
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_m2team_nanazip",
+      "name": "NanaZip",
+      "category": "Utilities",
+      "wingetId": "M2Team.NanaZip",
+      "url": "https://nanazip.org",
+      "author": "M2Team",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_nilesoft_shell",
+      "name": "Nilesoft Shell",
+      "category": "Utilities",
+      "wingetId": "Nilesoft.Shell",
+      "url": "https://nilesoft.org/",
+      "author": "Nilesoft",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_techpowerup_nvcleanstall",
+      "name": "NVCleanstall",
+      "category": "Utilities",
+      "wingetId": "TechPowerUp.NVCleanstall",
+      "url": "https://www.techpowerup.com/nvcleanstall/",
+      "author": "TechPowerUp",
+      "sources": [
+        "CTT WinUtil",
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_xm4ddy_ofgb",
+      "name": "OFGB (Oh Frick Go Back)",
+      "category": "Utilities",
+      "wingetId": "xM4ddy.OFGB",
+      "url": "https://github.com/xM4ddy/OFGB",
+      "author": "xM4ddy",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_opautoclicker_opautoclicker",
+      "name": "OPAutoClicker",
+      "category": "Utilities",
+      "wingetId": "OPAutoClicker.OPAutoClicker",
+      "url": "https://www.opautoclicker.com",
+      "author": "OPAutoClicker",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_openrgb_openrgb",
+      "name": "OpenRGB",
+      "category": "Utilities",
+      "wingetId": "OpenRGB.OpenRGB",
+      "url": "https://openrgb.org/",
+      "author": "OpenRGB",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate",
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_oracle_virtualbox",
+      "name": "Oracle VirtualBox",
+      "category": "Utilities",
+      "wingetId": "Oracle.VirtualBox",
+      "url": "https://www.virtualbox.org/",
+      "author": "Oracle",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_parsec_parsec",
+      "name": "Parsec",
+      "category": "Utilities",
+      "wingetId": "Parsec.Parsec",
+      "url": "https://parsec.app/",
+      "author": "Parsec",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_giorgiotani_peazip",
+      "name": "PeaZip",
+      "category": "Utilities",
+      "wingetId": "Giorgiotani.Peazip",
+      "url": "https://peazip.github.io/",
+      "author": "Giorgiotani",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_fleex255_policyplus",
+      "name": "Policy Plus",
+      "category": "Utilities",
+      "wingetId": "Fleex255.PolicyPlus",
+      "url": "https://github.com/Fleex255/PolicyPlus",
+      "author": "Fleex255",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_bitsum_processlasso",
+      "name": "Process Lasso",
+      "category": "Utilities",
+      "wingetId": "BitSum.ProcessLasso",
+      "url": "https://bitsum.com/",
+      "author": "BitSum",
+      "sources": [
+        "CTT WinUtil",
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_proton_protonauthenticator",
+      "name": "Proton Authenticator",
+      "category": "Utilities",
+      "wingetId": "Proton.ProtonAuthenticator",
+      "url": "https://proton.me/authenticator",
+      "author": "Proton",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_proton_protondrive",
+      "name": "Proton Drive",
+      "category": "Utilities",
+      "wingetId": "Proton.ProtonDrive",
+      "url": "https://proton.me/drive",
+      "author": "Proton",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_proton_protonpass",
+      "name": "Proton Pass",
+      "category": "Utilities",
+      "wingetId": "Proton.ProtonPass",
+      "url": "https://proton.me/pass",
+      "author": "Proton",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_qbittorrent_qbittorrent",
+      "name": "qBittorrent",
+      "category": "Utilities",
+      "wingetId": "qBittorrent.qBittorrent",
+      "url": "https://www.qbittorrent.org/",
+      "author": "qBittorrent",
+      "sources": [
+        "CTT WinUtil",
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_revouninstaller_revouninstaller",
+      "name": "Revo Uninstaller",
+      "category": "Utilities",
+      "wingetId": "RevoUninstaller.RevoUninstaller",
+      "url": "https://www.revouninstaller.com/",
+      "author": "RevoUninstaller",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_rufus_rufus",
+      "name": "Rufus Imager",
+      "category": "Utilities",
+      "wingetId": "Rufus.Rufus",
+      "url": "https://rufus.ie/",
+      "author": "Rufus",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate",
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_whirlwindfx_signalrgb",
+      "name": "SignalRGB",
+      "category": "Utilities",
+      "wingetId": "WhirlwindFX.SignalRgb",
+      "url": "https://www.signalrgb.com/",
+      "author": "WhirlwindFX",
+      "sources": [
+        "CTT WinUtil",
+        "TweakHub"
+      ]
+    },
+    {
+      "id": "app_glenndelahoy_snappydriverinstallerorigin",
+      "name": "Snappy Driver Installer Origin",
+      "category": "Utilities",
+      "wingetId": "GlennDelahoy.SnappyDriverInstallerOrigin",
+      "url": "https://www.glenn.delahoy.com/snappy-driver-installer-origin/",
+      "author": "Glenn Delahoy",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate",
+        "TweakHub",
+        "Direct request"
+      ]
+    },
+    {
+      "id": "app_startisback_startallback",
+      "name": "StartAllBack",
+      "category": "Utilities",
+      "wingetId": "StartIsBack.StartAllBack",
+      "url": "https://www.startallback.com/",
+      "author": "StartIsBack",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_tailscale_tailscale",
+      "name": "Tailscale",
+      "category": "Utilities",
+      "wingetId": "Tailscale.Tailscale",
+      "url": "https://tailscale.com/",
+      "author": "Tailscale",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_teamviewer_teamviewer",
+      "name": "TeamViewer",
+      "category": "Utilities",
+      "wingetId": "TeamViewer.TeamViewer",
+      "url": "https://www.teamviewer.com/",
+      "author": "TeamViewer",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_glavsoft_tightvnc",
+      "name": "TightVNC",
+      "category": "Utilities",
+      "wingetId": "GlavSoft.TightVNC",
+      "url": "https://www.tightvnc.com/",
+      "author": "GlavSoft",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_ghisler_totalcommander",
+      "name": "Total Commander",
+      "category": "Utilities",
+      "wingetId": "Ghisler.TotalCommander",
+      "url": "https://www.ghisler.com/",
+      "author": "Ghisler",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_charlesmilette_translucenttb",
+      "name": "TranslucentTB",
+      "category": "Utilities",
+      "wingetId": "CharlesMilette.TranslucentTB",
+      "url": "https://translucenttb.github.io",
+      "author": "CharlesMilette",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_jamsoftware_treesize_free",
+      "name": "TreeSize Free",
+      "category": "Utilities",
+      "wingetId": "JAMSoftware.TreeSize.Free",
+      "url": "https://www.jam-software.com/treesize_free/",
+      "author": "JAMSoftware",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_devolutions_unigetui",
+      "name": "UniGetUI",
+      "category": "Utilities",
+      "wingetId": "Devolutions.UniGetUI",
+      "url": "https://devolutions.net/unigetui/",
+      "author": "Devolutions",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_rarlab_winrar",
+      "name": "WinRAR",
+      "category": "Utilities",
+      "wingetId": "RARLab.WinRAR",
+      "url": "https://www.win-rar.com/",
+      "author": "RARLab",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate"
+      ]
+    },
+    {
+      "id": "app_wisecleaner_wiseprogramuninstaller",
+      "name": "Wise Program Uninstaller (WiseCleaner)",
+      "category": "Utilities",
+      "wingetId": "WiseCleaner.WiseProgramUninstaller",
+      "url": "https://www.wisecleaner.com/wise-program-uninstaller.html",
+      "author": "WiseCleaner",
+      "sources": [
+        "CTT WinUtil"
+      ]
+    },
+    {
+      "id": "app_antibodysoftware_wiztree",
+      "name": "WizTree",
+      "category": "Utilities",
+      "wingetId": "AntibodySoftware.WizTree",
+      "url": "https://wiztreefree.com/",
+      "author": "AntibodySoftware",
+      "sources": [
+        "CTT WinUtil",
+        "Winhance candidate",
+        "TweakHub"
+      ]
+    }
+  ]
+}

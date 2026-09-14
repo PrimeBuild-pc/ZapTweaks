@@ -15,6 +15,8 @@ import '../plans/plan_engine.dart';
 import '../services/restore_point_service.dart';
 import '../services/tweak_catalog_service.dart';
 import '../tweak_manager.dart';
+import '../../features/apps/application/windows_app_inventory_service.dart';
+import '../../features/apps/domain/app_package.dart';
 
 Directory defaultElevatedHelperDirectory() => Directory(
   '${Platform.environment['LOCALAPPDATA'] ?? Directory.systemTemp.path}'
@@ -107,6 +109,26 @@ class ElevatedHelperClient {
     }
     return OperationPlan.fromJson(
       Map<String, Object?>.from(response['plan'] as Map),
+    );
+  }
+
+  Future<AppInventoryResult> scanSystemApps() async {
+    final response = await _send(<String, Object?>{'protocol': 'appInventory'});
+    if (response['success'] != true || response['result'] is! Map) {
+      throw StateError(response['message'] ?? 'Elevated app inventory failed.');
+    }
+    final result = Map<String, dynamic>.from(response['result'] as Map);
+    return AppInventoryResult(
+      packages: (result['packages']! as List)
+          .map(
+            (row) => AppPackage.fromJson(Map<String, dynamic>.from(row as Map)),
+          )
+          .toList(growable: false),
+      currentUserComplete: result['currentUserComplete']! as bool,
+      allUsersComplete: result['allUsersComplete']! as bool,
+      provisionedComplete: result['provisionedComplete']! as bool,
+      wingetComplete: result['wingetComplete']! as bool,
+      message: result['message'] as String?,
     );
   }
 
@@ -279,13 +301,15 @@ class ElevatedHelperHost {
     OperationRegistry? operationRegistry,
     OperationContext? operationContext,
     OperationStore? operationStore,
+    Future<AppInventoryResult> Function()? systemAppInventory,
   }) : _allowedDirectory = allowedDirectory,
        _catalogService = catalogService,
        _tweakManager = tweakManager,
        _restorePointService = restorePointService,
        _operationRegistry = operationRegistry,
        _operationContext = operationContext,
-       _operationStore = operationStore;
+       _operationStore = operationStore,
+       _systemAppInventory = systemAppInventory;
 
   final Directory _allowedDirectory;
   final TweakCatalogService _catalogService;
@@ -294,6 +318,7 @@ class ElevatedHelperHost {
   final OperationRegistry? _operationRegistry;
   final OperationContext? _operationContext;
   final OperationStore? _operationStore;
+  final Future<AppInventoryResult> Function()? _systemAppInventory;
 
   Future<int> run(
     File requestFile,
@@ -325,6 +350,9 @@ class ElevatedHelperHost {
       );
       if (json['nonce'] != expectedNonce) {
         throw StateError('Invalid helper request nonce.');
+      }
+      if (json['protocol'] == 'appInventory') {
+        return await _runSystemAppInventory(json, response, events);
       }
       if (json['protocol'] == 'nativeOperation') {
         return await _runNativeOperation(json, response, events);
@@ -382,6 +410,34 @@ class ElevatedHelperHost {
       }
       return 2;
     }
+  }
+
+  Future<int> _runSystemAppInventory(
+    Map<String, dynamic> json,
+    File response,
+    File events,
+  ) async {
+    if (json.length != 2 || _systemAppInventory == null) {
+      throw StateError('Invalid app inventory request.');
+    }
+    await _writeEvent(events, 'inventoryScanning');
+    final result = await _systemAppInventory();
+    await _writeAtomic(response, <String, Object?>{
+      'success': result.allUsersComplete && result.provisionedComplete,
+      'message': result.message,
+      'result': <String, Object?>{
+        'packages': result.packages
+            .map((package) => package.toJson())
+            .toList(growable: false),
+        'currentUserComplete': result.currentUserComplete,
+        'allUsersComplete': result.allUsersComplete,
+        'provisionedComplete': result.provisionedComplete,
+        'wingetComplete': result.wingetComplete,
+        'message': result.message,
+      },
+    });
+    await _writeEvent(events, 'inventoryCompleted');
+    return result.allUsersComplete && result.provisionedComplete ? 0 : 1;
   }
 
   Future<int> _runNativePlan(

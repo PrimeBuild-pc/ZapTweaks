@@ -145,5 +145,34 @@
   "searchOperations": "Search operations",
   "searchResults": "Search results",
   "operationTaskbarEndTaskTitle": "Taskbar End task",
-  "operationTaskbarEndTaskDescription": "Show End task in taskbar app context menus."
+  "operationTaskbarEndTaskDescription": "Show End task in taskbar app context menus.",
+  "appStore": "App store",
+  "appManagement": "Installed apps",
+  "windowsAppTools": "Windows app tools",
+  "searchInstalledApps": "Search installed apps",
+  "scanAllUsers": "Scan all users (UAC)",
+  "systemScopesComplete": "All-user and provisioned AppX scopes are included.",
+  "systemScopesIncomplete": "Current-user and winget inventory only. Scan all users to include system AppX scopes.",
+  "currentUser": "Current user",
+  "allUsers": "All users",
+  "provisioned": "Provisioned",
+  "searchApps": "Search apps",
+  "allCategories": "All categories",
+  "installedOnly": "Installed only",
+  "refreshInventory": "Refresh inventory",
+  "install": "Install",
+  "uninstall": "Uninstall",
+  "uninstallSelected": "Uninstall selected",
+  "openOfficialPage": "Open official page",
+  "installed": "Installed",
+  "notInstalled": "Not installed",
+  "appInventoryUnavailable": "Installed-app detection is unavailable.",
+  "confirmBulkUninstall": "Confirm bulk uninstall",
+  "confirmBulkUninstallMessage": "The following apps will be uninstalled:\n\n{apps}",
+  "@confirmBulkUninstallMessage": {
+    "placeholders": {
+      "apps": {}
+    }
+  },
+  "appCatalogSources": "Catalog merged from pinned CTT WinUtil, clean-room Winhance candidates, TweakHub, and requested official sources."
 }

@@ -2,6 +2,7 @@ import '../../features/apps/domain/microsoft_restore_catalog.dart';
 import '../../platform/windows/registry_value_store.dart';
 import '../services/process_runner.dart';
 import 'app_restore_operation.dart';
+import 'appx_removal_operation.dart';
 import 'operation.dart';
 import 'registry_dword_operation.dart';
 
@@ -9,6 +10,16 @@ List<OperationDefinition> createNativeOperationCatalog(
   RegistryValueStore registry,
   ProcessRunner processRunner,
 ) => <OperationDefinition>[
+  AppxRemovalOperation(
+    id: 'app.appx.remove_current_user',
+    systemScopes: false,
+    processRunner: processRunner,
+  ),
+  AppxRemovalOperation(
+    id: 'app.appx.remove_system',
+    systemScopes: true,
+    processRunner: processRunner,
+  ),
   RegistryDwordOperation(
     id: 'ui_taskbar_end_task',
     titleKey: 'operationTaskbarEndTaskTitle',

@@ -23,6 +23,11 @@ class LegacyCatalogAdapter {
     'Esperto': 'Expert',
   };
 
+  static const Map<String, String> _additionalDestinations = <String, String>{
+    'Refresh & Recovery': 'Diagnostics & Recovery',
+    'Tools': 'Expert',
+  };
+
   final LegacyCatalogManifest manifest;
 
   List<TweakDescriptor> adapt(List<TweakDescriptor> legacyCatalog) {
@@ -32,7 +37,12 @@ class LegacyCatalogAdapter {
     final adapted = legacyCatalog
         .map((descriptor) {
           final entry = entries[descriptor.id];
-          if (entry == null) return descriptor;
+          if (entry == null) {
+            final destination = _additionalDestinations[descriptor.category];
+            return destination == null
+                ? descriptor
+                : descriptor.copyWith(category: destination);
+          }
           return descriptor.copyWith(
             category: _destinations[entry.destination] ?? entry.destination,
             migrationDisposition: entry.disposition,

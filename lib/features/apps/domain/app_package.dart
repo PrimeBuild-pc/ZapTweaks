@@ -22,6 +22,30 @@ class AppPackage {
   final Set<AppInstallScope> scopes;
   final String source;
   final bool reinstallable;
+
+  Map<String, Object?> toJson() => <String, Object?>{
+    'provider': provider.name,
+    'packageId': packageId,
+    'name': name,
+    'version': version,
+    'publisher': publisher,
+    'scopes': scopes.map((scope) => scope.name).toList(growable: false),
+    'source': source,
+    'reinstallable': reinstallable,
+  };
+
+  factory AppPackage.fromJson(Map<String, dynamic> json) => AppPackage(
+    provider: AppProvider.values.byName(json['provider']! as String),
+    packageId: json['packageId']! as String,
+    name: json['name']! as String,
+    version: json['version'] as String?,
+    publisher: json['publisher'] as String?,
+    scopes: (json['scopes']! as List)
+        .map((scope) => AppInstallScope.values.byName(scope as String))
+        .toSet(),
+    source: json['source']! as String,
+    reinstallable: json['reinstallable']! as bool,
+  );
 }
 
 class AppRemovalPreview {

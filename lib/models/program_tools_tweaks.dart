@@ -4,6 +4,21 @@ import 'system_tweak.dart';
 List<SystemTweak> createProgramToolTweaks() {
   return <SystemTweak>[
     // Core launcher actions (non-executable resources)
+    ScriptInteractiveTweak(
+      id: 'recovery_repair_bad_tweaks_zoicware',
+      title: 'Repair Bad Tweaks by zoicware',
+      description:
+          'Runs the pinned MIT-licensed RepairBadTweaks script by zoicware to detect and interactively restore known harmful tweak values.',
+      category: 'Refresh & Recovery',
+      scriptSegments: <String>[
+        'external_scripts',
+        'RepairBadTweaks',
+        'RepairTweaks.ps1',
+      ],
+      isAggressive: true,
+      warningMessage:
+          'This third-party recovery script can change boot, service, device and Registry settings. Review every detected repair before confirming.',
+    ),
     BatchScriptTweak(
       id: 'tool_winscript_batch',
       title: 'WinScript Batch Utility',
@@ -219,17 +234,24 @@ List<SystemTweak> createProgramToolTweaks() {
       warningMessage:
           'This action executes a remote PowerShell command from debloat.raphi.re and can change system configuration. Continue only if you trust the source.',
     ),
-    PowerShellTerminalCommandTweak(
-      id: 'tool_ctt_winutil',
-      title: 'Run CTT WinUtil',
+    ExternalUrlLauncherTweak(
+      id: 'tool_windows_11_fix_tweaks_kubaam',
+      title: 'Windows 11 Fix Tweaks by kubaam',
       description:
-          'Opens Chris Titus Tech WinUtil for common Windows setup, repair, and baseline optimization tasks.',
+          'Opens the pinned upstream project for review. Its all-in-one batch file is not executed by ZapTweaks.',
       category: 'Drivers & Installers',
-      command: 'irm https://christitus.com/win | iex',
-      actionLabel: 'Run WinUtil',
-      isAggressive: true,
-      warningMessage:
-          'This action runs the official remote WinUtil script from christitus.com. Review its choices before applying changes.',
+      url:
+          'https://github.com/kubaam/Windows-11-Fix-Tweaks/tree/8da4fe0251f3c46aec6434e38e7a92f06307313a',
+      actionLabel: 'Open source',
+    ),
+    ExternalUrlLauncherTweak(
+      id: 'tool_ctt_winutil',
+      title: 'CTT WinUtil by Chris Titus Tech',
+      description:
+          'Opens the official WinUtil releases page. ZapTweaks never executes mutable remote PowerShell code.',
+      category: 'Drivers & Installers',
+      url: 'https://github.com/ChrisTitusTech/winutil/releases',
+      actionLabel: 'Open releases',
     ),
     PowerShellTerminalCommandTweak(
       id: 'tool_install_winhance',
