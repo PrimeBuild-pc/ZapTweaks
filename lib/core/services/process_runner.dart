@@ -103,6 +103,8 @@ class ProcessRunner {
     'shutdown.exe',
     'powercfg',
     'powercfg.exe',
+    'pnputil',
+    'pnputil.exe',
     'sc',
     'sc.exe',
     'fsutil',

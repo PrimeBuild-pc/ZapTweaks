@@ -191,7 +191,7 @@ void main() {
       expect(result.stderr.toLowerCase(), contains('outside trusted roots'));
     });
   });
-  test('winget is an allowed system executable', () async {
+  test('winget and pnputil are allowed system executables', () async {
     var invoked = 0;
 
     final runner = ProcessRunner(
@@ -207,18 +207,18 @@ void main() {
           },
     );
 
-    final result = await runner.run('winget', <String>[
+    final winget = await runner.run('winget', <String>[
       'install',
       '--exact',
       '--id',
       'Microsoft.Sysinternals.Suite',
     ]);
+    final pnputil = await runner.run('pnputil.exe', const <String>[
+      '/enum-drivers',
+    ]);
 
-    expect(
-      invoked,
-      1,
-      reason: 'blocking winget breaks every app restore and winget install',
-    );
-    expect(result.success, isTrue);
+    expect(invoked, 2);
+    expect(winget.success, isTrue);
+    expect(pnputil.success, isTrue);
   });
 }
