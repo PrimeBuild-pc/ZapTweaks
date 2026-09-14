@@ -62,6 +62,47 @@ ConvertTo-Json -Compress -Depth 3 -InputObject $packages
     }
   }
 
+  Future<AppInventoryResult> scanSystemScopes() async {
+    try {
+      final output = await _processRunner.runPowerShellForOutput(r'''
+$installed = @(Get-AppxPackage -AllUsers -ErrorAction Stop | ForEach-Object {
+  [pscustomobject]@{
+    Name = $_.Name
+    DisplayName = $_.Name
+    Version = $_.Version.ToString()
+    Publisher = $_.Publisher
+    CurrentUser = $false
+    AllUsers = $true
+    Provisioned = $false
+    Reinstallable = $false
+  }
+})
+$provisioned = @(Get-AppxProvisionedPackage -Online -ErrorAction Stop | ForEach-Object {
+  [pscustomobject]@{
+    Name = $_.DisplayName
+    DisplayName = $_.DisplayName
+    Version = $_.Version.ToString()
+    Publisher = $null
+    CurrentUser = $false
+    AllUsers = $false
+    Provisioned = $true
+    Reinstallable = $false
+  }
+})
+ConvertTo-Json -Compress -Depth 3 -InputObject @($installed + $provisioned)
+''');
+      return AppInventoryResult(
+        packages: _parser.parseAppx(output.isEmpty ? '[]' : output),
+        currentUserComplete: false,
+        allUsersComplete: true,
+        provisionedComplete: true,
+        wingetComplete: false,
+      );
+    } catch (error) {
+      return _failure(error);
+    }
+  }
+
   Future<AppInventoryResult> scanWinget() async {
     final suffix = Random.secure().nextInt(0x7fffffff).toRadixString(16);
     final export = File(

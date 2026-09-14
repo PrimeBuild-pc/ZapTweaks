@@ -7,7 +7,7 @@ This ledger tracks `docs/NEW PLAN.md`. A phase is complete only when its gate is
 | 0 — Baseline | Complete | `assets/catalog/legacy_catalog.json`; 346-ID, uniqueness, destination, disposition and alias tests | — |
 | 1 — Shell | Complete | Final navigation, global search, opt-in Expert mode, legacy adapter, external tools retained, no startup UAC, opaque bulk presets hidden | — |
 | 2 — Foundations | In progress | Typed operation contract/state/evidence, registry, deterministic Plan Engine, typed snapshots, SQLite v1 journal/reboot tables, conflict-aware privileged rollback, helper allowlist, nonce/hash-bound typed request files, ACL-restricted IPC directory, temporary `runas` helper mode, structured progress stream and native apply/verify/rollback across the elevation boundary; `ui_taskbar_end_task` and `power_throttling_off` now use the Plan Engine and typed Win32 Registry I/O | Route one complete multi-item `OperationPlan` per helper launch instead of one helper call per elevated item |
-| 3 — Setup and Apps | In progress | Provider/scope-aware AppX/winget JSON inventory with explicit incomplete-scope reporting and temporary-file cleanup; removal preview model; 17 Microsoft restore operations use verified fixed Store/winget IDs, explicit sources and the Plan Engine | Wizard, elevated all-user/provisioned inventory, optional components, startup and previewed removal operations |
+| 3 — Setup and Apps | In progress | Provider/scope-aware AppX/winget JSON inventory with current-user plus elevated all-user/provisioned collectors, explicit incomplete-scope reporting and temporary-file cleanup; removal preview model; 17 Microsoft restore operations use verified fixed Store/winget IDs, explicit sources and the Plan Engine | Wizard, route system-scope inventory through one helper session, optional components, startup and previewed removal operations |
 | 4 — Drivers | In progress | Driver identity/rollback model, expiring policy model, HTTPS/hash/publisher verifier, locale-independent Driver Store inventory via PnPUtil XML with normalized hardware-ID correlation and deterministic temporary-file cleanup | SetupAPI device correlation, verified install/export rollback and reboot continuation |
 | 5 — Gaming and hardware | In progress | Topology-aware RSS, MSI limit and non-truncating affinity validators; native PowrProf scheme enumeration, active-scheme detection, AC/DC value I/O and an exact-snapshot power-setting operation | Migrate fixed catalog entries to PowrProf, VM mutation validation, SetupAPI/IRQ and NDIS platform implementations |
 | 6 — Windows and diagnostics | In progress | Cleanup preview scanner, deterministic diagnostic-session lifecycle, and native SCM inspection of live state, start type, delayed start, account, PID and dependencies | SCM mutations, Task Scheduler, ETW collectors, repair and recovery UI |
@@ -16,7 +16,7 @@ This ledger tracks `docs/NEW PLAN.md`. A phase is complete only when its gate is
 
 ## Last local verification
 
-- `flutter test -j 1`: 130 tests passed.
+- `flutter test -j 1`: 131 tests passed.
 - `flutter analyze`: no issues.
 - `flutter build windows --debug` and `--release`: succeeded.
 - The main executable starts as `asInvoker`; real UAC helper smoke tests

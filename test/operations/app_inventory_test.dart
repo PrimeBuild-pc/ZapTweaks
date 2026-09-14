@@ -69,6 +69,32 @@ void main() {
   });
 
   test(
+    'elevated scan reports complete all-user and provisioned scopes',
+    () async {
+      final runner = ProcessRunner(
+        processRunDelegate:
+            (executable, arguments, {runInShell = false}) async =>
+                ProcessResult(1, 0, '''[
+              {"Name":"Microsoft.Sample","AllUsers":true},
+              {"Name":"Microsoft.Sample","Provisioned":true}
+            ]''', ''),
+      );
+
+      final result = await WindowsAppInventoryService(
+        processRunner: runner,
+      ).scanSystemScopes();
+
+      expect(result.currentUserComplete, isFalse);
+      expect(result.allUsersComplete, isTrue);
+      expect(result.provisionedComplete, isTrue);
+      expect(result.packages.single.scopes, <AppInstallScope>{
+        AppInstallScope.allUsers,
+        AppInstallScope.provisioned,
+      });
+    },
+  );
+
+  test(
     'winget inventory uses JSON export and removes its temporary file',
     () async {
       String? exportPath;
