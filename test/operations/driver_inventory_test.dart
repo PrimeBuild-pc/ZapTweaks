@@ -13,6 +13,10 @@ const _fixture = '''<?xml version="1.0" encoding="utf-8"?>
     <ProviderName>Vendor Inc.</ProviderName>
     <DriverVersion>01/02/2026 3.4.5.6</DriverVersion>
     <SignerName>Microsoft Windows Hardware Compatibility Publisher</SignerName>
+    <DeviceIds>
+      <DeviceID>pci\\ven_1234&amp;dev_abcd</DeviceID>
+      <DeviceID>PCI\\VEN_1234&amp;DEV_ABCD</DeviceID>
+    </DeviceIds>
   </Driver>
 </PnpUtil>''';
 
@@ -25,6 +29,7 @@ void main() {
     expect(package.version, '01/02/2026 3.4.5.6');
     expect(package.publisher, 'Vendor Inc.');
     expect(package.signed, isTrue);
+    expect(package.hardwareIds, <String>{r'PCI\VEN_1234&DEV_ABCD'});
   });
 
   test('driver inventory deletes its temporary XML output', () async {

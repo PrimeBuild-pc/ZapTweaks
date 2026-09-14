@@ -22,7 +22,11 @@ class DriverInventoryParser {
             infName: value('OriginalName'),
             version: value('DriverVersion'),
             publisher: value('ProviderName'),
-            hardwareIds: const <String>{},
+            hardwareIds: driver
+                .findAllElements('DeviceID')
+                .map((element) => element.innerText.trim().toUpperCase())
+                .where((id) => id.isNotEmpty)
+                .toSet(),
             signed: signer.isNotEmpty,
           );
         })
