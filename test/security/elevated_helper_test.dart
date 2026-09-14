@@ -1,12 +1,15 @@
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:sqlite3/sqlite3.dart';
 
 import 'package:script_utility/core/models/restore_point_result.dart';
 import 'package:script_utility/core/models/tweak_descriptor.dart';
 import 'package:script_utility/core/operations/operation.dart';
 import 'package:script_utility/core/operations/operation_registry.dart';
 import 'package:script_utility/core/operations/registry_dword_operation.dart';
+import 'package:script_utility/core/persistence/operation_store.dart';
+import 'package:script_utility/core/plans/operation_plan.dart';
 import 'package:script_utility/core/security/elevated_helper.dart';
 import 'package:script_utility/core/services/process_runner.dart';
 import 'package:script_utility/core/services/restore_point_service.dart';
@@ -172,6 +175,64 @@ void main() {
       );
     },
   );
+
+  test('one helper launch executes and journals a multi-item plan', () async {
+    final directory = await Directory.systemTemp.createTemp('zap-helper-');
+    addTearDown(() => directory.delete(recursive: true));
+    final values = _Registry();
+    RegistryDwordOperation operation(String id, String name) =>
+        RegistryDwordOperation(
+          id: id,
+          titleKey: 'title',
+          descriptionKey: 'description',
+          destination: 'Windows',
+          path: r'HKLM\Software\ZapTweaksTest',
+          valueName: name,
+          store: values,
+          privilege: OperationPrivilege.administrator,
+        );
+    final operations = <OperationDefinition>[
+      operation('registry.admin.first', 'First'),
+      operation('registry.admin.second', 'Second'),
+    ];
+    final database = sqlite3.openInMemory();
+    addTearDown(database.close);
+    final host = ElevatedHelperHost(
+      allowedDirectory: directory,
+      catalogService: _Catalog(),
+      tweakManager: _Manager(),
+      restorePointService: _Restore(),
+      operationRegistry: OperationRegistry(operations),
+      operationContext: const OperationContext(
+        windowsBuild: 26100,
+        edition: 'Pro',
+      ),
+      operationStore: OperationStore(database),
+    );
+    var launches = 0;
+    final client = ElevatedHelperClient(
+      directory: directory,
+      secureDirectory: (_) async {},
+      launcher: (_, request, nonce, digest) {
+        launches++;
+        return host.run(request, nonce, digest);
+      },
+    );
+
+    final plan = await client.executeNativePlan(
+      requests: const <OperationRequest>[
+        OperationRequest(operationId: 'registry.admin.first', desiredValue: 1),
+        OperationRequest(operationId: 'registry.admin.second', desiredValue: 1),
+      ],
+      user: 'test-user',
+      appVersion: 'test',
+    );
+
+    expect(launches, 1);
+    expect(plan.status, PlanStatus.completed);
+    expect(plan.items.every((item) => item.snapshot != null), isTrue);
+    expect(database.select('SELECT * FROM plans'), hasLength(1));
+  });
 
   test('helper refuses request files outside its private directory', () async {
     final directory = await Directory.systemTemp.createTemp('zap-helper-');

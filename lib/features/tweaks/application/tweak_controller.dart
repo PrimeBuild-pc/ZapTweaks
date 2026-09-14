@@ -789,15 +789,29 @@ class TweakController extends ChangeNotifier {
     final desired = target ?? !tweak.isApplied;
     _markBusy(descriptor.id);
     try {
-      final plan = await engine.plan(<OperationRequest>[
-        OperationRequest(
-          operationId: descriptor.id,
-          desiredValue: desired
-              ? _nativeToggleEnabledValues[descriptor.id]
-              : null,
-        ),
-      ]);
-      await engine.execute(plan, dryRun: _processRunner.isDryRun);
+      final request = OperationRequest(
+        operationId: descriptor.id,
+        desiredValue: desired
+            ? _nativeToggleEnabledValues[descriptor.id]
+            : null,
+      );
+      final definition = engine.registry.resolve(descriptor.id);
+      final helper = _elevatedHelperClient;
+      final plan =
+          definition.privilege == OperationPrivilege.administrator &&
+              helper != null &&
+              !_processRunner.isDryRun
+          ? await helper.executeNativePlan(
+              requests: <OperationRequest>[request],
+              user: engine.user,
+              appVersion: engine.appVersion,
+            )
+          : await engine.plan(<OperationRequest>[request]);
+      if (definition.privilege != OperationPrivilege.administrator ||
+          helper == null ||
+          _processRunner.isDryRun) {
+        await engine.execute(plan, dryRun: _processRunner.isDryRun);
+      }
       if (plan.status == PlanStatus.dryRunComplete) {
         return const OperationResult(
           success: true,

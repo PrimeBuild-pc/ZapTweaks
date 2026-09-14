@@ -34,6 +34,19 @@ import 'legacy/adapters/legacy_catalog_adapter.dart';
 import 'platform/windows/registry_value_store.dart';
 import 'platform/windows/windows_version.dart';
 
+Future<OperationStore> _openOperationStore() async {
+  final directory = Directory(
+    path.join(
+      Platform.environment['LOCALAPPDATA'] ?? Directory.systemTemp.path,
+      'ZapTweaks',
+    ),
+  );
+  await directory.create(recursive: true);
+  return OperationStore(
+    sqlite3.open(path.join(directory.path, 'operations.db')),
+  );
+}
+
 Future<void> _initWindowIfNeeded() async {
   if (!Platform.isWindows) {
     return;
@@ -51,6 +64,7 @@ Future<void> main(List<String> arguments) async {
   if (arguments.length == 4 && arguments.first == '--zaptweaks-helper') {
     final processRunner = ProcessRunner();
     ProcessRunner.configureShared(processRunner);
+    final operationStore = await _openOperationStore();
     final exitCode =
         await ElevatedHelperHost(
           allowedDirectory: defaultElevatedHelperDirectory(),
@@ -72,6 +86,7 @@ Future<void> main(List<String> arguments) async {
             windowsBuild: windowsBuildNumber(),
             edition: 'Home/Pro',
           ),
+          operationStore: operationStore,
         ).run(
           File(utf8.decode(base64Url.decode(arguments[1]))),
           arguments[2],
@@ -90,16 +105,7 @@ Future<void> main(List<String> arguments) async {
   final legacyCatalogAdapter = await LegacyCatalogAdapter.load();
   final processRunner = ProcessRunner();
   ProcessRunner.configureShared(processRunner);
-  final dataDirectory = Directory(
-    path.join(
-      Platform.environment['LOCALAPPDATA'] ?? Directory.systemTemp.path,
-      'ZapTweaks',
-    ),
-  );
-  await dataDirectory.create(recursive: true);
-  final operationStore = OperationStore(
-    sqlite3.open(path.join(dataDirectory.path, 'operations.db')),
-  );
+  final operationStore = await _openOperationStore();
   operationStore.markRunningPlansInterrupted();
   final operationRegistry = OperationRegistry(
     createNativeOperationCatalog(

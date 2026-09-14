@@ -9,6 +9,9 @@ import 'package:crypto/crypto.dart';
 import '../models/tweak_descriptor.dart';
 import '../operations/operation.dart';
 import '../operations/operation_registry.dart';
+import '../persistence/operation_store.dart';
+import '../plans/operation_plan.dart';
+import '../plans/plan_engine.dart';
 import '../services/restore_point_service.dart';
 import '../services/tweak_catalog_service.dart';
 import '../tweak_manager.dart';
@@ -76,6 +79,34 @@ class ElevatedHelperClient {
       success: json['success'] == true,
       observed: json['observed'] as bool?,
       message: json['message'] as String?,
+    );
+  }
+
+  Future<OperationPlan> executeNativePlan({
+    required List<OperationRequest> requests,
+    required String user,
+    required String appVersion,
+  }) async {
+    final response = await _send(<String, Object?>{
+      'protocol': 'nativePlan',
+      'user': user,
+      'appVersion': appVersion,
+      'requests': requests
+          .map(
+            (request) => <String, Object?>{
+              'operationId': request.operationId,
+              'target': request.target,
+              'desiredValue': request.desiredValue,
+              'parameters': request.parameters,
+            },
+          )
+          .toList(growable: false),
+    });
+    if (response['success'] != true || response['plan'] is! Map) {
+      throw StateError(response['message'] ?? 'Elevated plan failed.');
+    }
+    return OperationPlan.fromJson(
+      Map<String, Object?>.from(response['plan'] as Map),
     );
   }
 
@@ -247,12 +278,14 @@ class ElevatedHelperHost {
     required RestorePointService restorePointService,
     OperationRegistry? operationRegistry,
     OperationContext? operationContext,
+    OperationStore? operationStore,
   }) : _allowedDirectory = allowedDirectory,
        _catalogService = catalogService,
        _tweakManager = tweakManager,
        _restorePointService = restorePointService,
        _operationRegistry = operationRegistry,
-       _operationContext = operationContext;
+       _operationContext = operationContext,
+       _operationStore = operationStore;
 
   final Directory _allowedDirectory;
   final TweakCatalogService _catalogService;
@@ -260,6 +293,7 @@ class ElevatedHelperHost {
   final RestorePointService _restorePointService;
   final OperationRegistry? _operationRegistry;
   final OperationContext? _operationContext;
+  final OperationStore? _operationStore;
 
   Future<int> run(
     File requestFile,
@@ -294,6 +328,9 @@ class ElevatedHelperHost {
       }
       if (json['protocol'] == 'nativeOperation') {
         return await _runNativeOperation(json, response, events);
+      }
+      if (json['protocol'] == 'nativePlan') {
+        return await _runNativePlan(json, response, events);
       }
       if (json.length != 4 ||
           json['nonce'] != expectedNonce ||
@@ -345,6 +382,68 @@ class ElevatedHelperHost {
       }
       return 2;
     }
+  }
+
+  Future<int> _runNativePlan(
+    Map<String, dynamic> json,
+    File response,
+    File events,
+  ) async {
+    final registry = _operationRegistry;
+    final context = _operationContext;
+    final rows = json['requests'];
+    if (registry == null ||
+        context == null ||
+        json.length != 5 ||
+        json['user'] is! String ||
+        json['appVersion'] is! String ||
+        rows is! List ||
+        rows.isEmpty) {
+      throw StateError('Invalid native plan request.');
+    }
+    final requests = rows
+        .map((row) {
+          if (row is! Map ||
+              row.length != 4 ||
+              row['operationId'] is! String ||
+              row['parameters'] is! Map) {
+            throw StateError('Invalid native plan item.');
+          }
+          final id = row['operationId']! as String;
+          if (!registry.contains(id)) {
+            throw StateError('Native operation is not helper-allowlisted.');
+          }
+          final definition = registry.resolve(id);
+          if (definition.id != id ||
+              definition.privilege != OperationPrivilege.administrator) {
+            throw StateError('Native plan contains a non-elevated operation.');
+          }
+          return OperationRequest(
+            operationId: id,
+            target: row['target'] as String?,
+            desiredValue: row['desiredValue'],
+            parameters: Map<String, Object?>.from(row['parameters']! as Map),
+          );
+        })
+        .toList(growable: false);
+    await _writeEvent(events, 'planning');
+    final engine = PlanEngine(
+      registry: registry,
+      context: context,
+      user: json['user']! as String,
+      appVersion: json['appVersion']! as String,
+      store: _operationStore,
+      elevatedExecutor: const DirectOperationExecutor(),
+    );
+    final plan = await engine.plan(requests);
+    await _writeEvent(events, 'executingPlan');
+    await engine.execute(plan);
+    await _writeEvent(events, 'completedPlan');
+    await _writeAtomic(response, <String, Object?>{
+      'success': true,
+      'plan': plan.toJson(),
+    });
+    return 0;
   }
 
   Future<int> _runNativeOperation(
