@@ -1128,6 +1128,24 @@ abstract class AppLocalizations {
   /// **'Operation completed'**
   String get operationCompleted;
 
+  /// No description provided for @captureEtwTrace.
+  ///
+  /// In en, this message translates to:
+  /// **'Capture performance trace'**
+  String get captureEtwTrace;
+
+  /// No description provided for @captureEtwTraceDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Records a bounded 15-second Windows Performance Recorder trace on demand. No monitor remains active.'**
+  String get captureEtwTraceDescription;
+
+  /// No description provided for @etwTraceSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Trace saved to {path}'**
+  String etwTraceSaved(Object path);
+
   /// No description provided for @driverInventory.
   ///
   /// In en, this message translates to:

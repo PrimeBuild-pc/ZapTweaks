@@ -19,26 +19,32 @@ class _RecoveryPageState extends State<RecoveryPage> {
   String? _message;
   bool _success = false;
 
-  Future<void> _run(String id) async {
+  Future<void> _run(
+    String id, {
+    bool confirm = true,
+    Map<String, Object?> parameters = const <String, Object?>{},
+  }) async {
     final strings = AppLocalizations.of(context);
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (context) => ContentDialog(
-        title: Text(strings.confirmSystemRepair),
-        content: Text(strings.systemRepairWarning),
-        actions: <Widget>[
-          Button(
-            onPressed: () => Navigator.pop(context, false),
-            child: Text(strings.cancel),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: Text(strings.continueAction),
-          ),
-        ],
-      ),
-    );
-    if (confirmed != true) return;
+    if (confirm) {
+      final confirmed = await showDialog<bool>(
+        context: context,
+        builder: (context) => ContentDialog(
+          title: Text(strings.confirmSystemRepair),
+          content: Text(strings.systemRepairWarning),
+          actions: <Widget>[
+            Button(
+              onPressed: () => Navigator.pop(context, false),
+              child: Text(strings.cancel),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: Text(strings.continueAction),
+            ),
+          ],
+        ),
+      );
+      if (confirmed != true) return;
+    }
     setState(() {
       _busy = id;
       _message = null;
@@ -46,12 +52,20 @@ class _RecoveryPageState extends State<RecoveryPage> {
     try {
       final plan = await widget.controller.executeNativeRequests(
         <OperationRequest>[
-          OperationRequest(operationId: id, desiredValue: true),
+          OperationRequest(
+            operationId: id,
+            desiredValue: true,
+            parameters: parameters,
+          ),
         ],
       );
       _success = plan.status == PlanStatus.completed;
       _message = _success
-          ? strings.systemRepairVerified
+          ? id == 'diagnostics.etw.capture'
+                ? strings.etwTraceSaved(
+                    plan.items.single.written?.value?.toString() ?? '',
+                  )
+                : strings.systemRepairVerified
           : plan.items.single.error ?? strings.operationFailed;
     } catch (error) {
       _success = false;
@@ -90,11 +104,27 @@ class _RecoveryPageState extends State<RecoveryPage> {
           strings.repairSystemFilesDescription,
           'recovery.sfc.scan_now',
         ),
+        const SizedBox(height: 12),
+        _repairCard(
+          strings.captureEtwTrace,
+          strings.captureEtwTraceDescription,
+          'diagnostics.etw.capture',
+          onRun: () => _run(
+            'diagnostics.etw.capture',
+            confirm: false,
+            parameters: const <String, Object?>{'durationSeconds': 15},
+          ),
+        ),
       ],
     );
   }
 
-  Widget _repairCard(String title, String description, String id) => Card(
+  Widget _repairCard(
+    String title,
+    String description,
+    String id, {
+    VoidCallback? onRun,
+  }) => Card(
     child: Padding(
       padding: const EdgeInsets.all(16),
       child: Row(
@@ -116,7 +146,7 @@ class _RecoveryPageState extends State<RecoveryPage> {
           _busy == id
               ? const ProgressRing()
               : FilledButton(
-                  onPressed: _busy == null ? () => _run(id) : null,
+                  onPressed: _busy == null ? onRun ?? () => _run(id) : null,
                   child: Text(AppLocalizations.of(context).runRepair),
                 ),
         ],

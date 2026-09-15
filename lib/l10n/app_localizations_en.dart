@@ -571,6 +571,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get operationCompleted => 'Operation completed';
 
   @override
+  String get captureEtwTrace => 'Capture performance trace';
+
+  @override
+  String get captureEtwTraceDescription =>
+      'Records a bounded 15-second Windows Performance Recorder trace on demand. No monitor remains active.';
+
+  @override
+  String etwTraceSaved(Object path) {
+    return 'Trace saved to $path';
+  }
+
+  @override
   String get driverInventory => 'Driver Store inventory';
 
   @override
