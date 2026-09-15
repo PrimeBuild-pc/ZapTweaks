@@ -10,6 +10,7 @@ import '../../platform/windows/processor_topology.dart';
 import '../../platform/windows/registry_value_store.dart';
 import '../../platform/windows/rss_service.dart';
 import '../../platform/windows/service_control_manager.dart';
+import '../../platform/windows/scheduled_task_service.dart';
 import '../services/process_runner.dart';
 import 'app_restore_operation.dart';
 import 'appx_removal_operation.dart';
@@ -24,12 +25,17 @@ import 'power_setting_operation.dart';
 import 'registry_dword_operation.dart';
 import 'rss_configuration_operation.dart';
 import 'service_start_operation.dart';
+import 'scheduled_task_operation.dart';
 import 'winget_package_operation.dart';
 
 List<OperationDefinition> createNativeOperationCatalog(
   RegistryValueStore registry,
   ProcessRunner processRunner,
 ) => <OperationDefinition>[
+  ScheduledTaskOperation(
+    store: WindowsScheduledTaskService(processRunner: processRunner),
+    allowedTasks: const <String>{r'\Microsoft\Windows\Defrag\ScheduledDefrag'},
+  ),
   ServiceStartOperation(
     store: const ServiceControlManager(),
     allowedServices: const <String>{
