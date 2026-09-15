@@ -113,10 +113,20 @@ class TweakController extends ChangeNotifier {
   static const Set<String> _interactionLockingTweaks = <String>{
     'network_low_latency_bandwidth_profile',
   };
-  static const Map<String, int> _nativeToggleEnabledValues = <String, int>{
-    'ui_taskbar_end_task': 1,
-    'power_throttling_off': 1,
-  };
+  static const Map<String, Object> _nativeToggleEnabledValues =
+      <String, Object>{
+        'ui_taskbar_end_task': 1,
+        'power_throttling_off': 1,
+        'power_processor_boost_mode': <String, int>{'ac': 2, 'dc': 2},
+        'power_max_processor_state': <String, int>{'ac': 100, 'dc': 100},
+      };
+  static const Map<String, Object?> _nativeToggleDisabledValues =
+      <String, Object?>{
+        'ui_taskbar_end_task': null,
+        'power_throttling_off': null,
+        'power_processor_boost_mode': <String, int>{'ac': 1, 'dc': 1},
+        'power_max_processor_state': <String, int>{'ac': 99, 'dc': 99},
+      };
 
   bool _isLoading = true;
   bool _isAdmin = false;
@@ -839,7 +849,7 @@ class TweakController extends ChangeNotifier {
         operationId: descriptor.id,
         desiredValue: desired
             ? _nativeToggleEnabledValues[descriptor.id]
-            : null,
+            : _nativeToggleDisabledValues[descriptor.id],
       );
       final definition = engine.registry.resolve(descriptor.id);
       final helper = _elevatedHelperClient;

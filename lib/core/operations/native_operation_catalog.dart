@@ -5,6 +5,7 @@ import '../../features/drivers/application/driver_update_policy_store.dart';
 import '../../features/drivers/application/local_driver_package_service.dart';
 import '../../features/drivers/application/setupapi_device_inventory_service.dart';
 import '../../features/drivers/application/windows_driver_inventory_service.dart';
+import '../../platform/windows/power_scheme_service.dart';
 import '../../platform/windows/registry_value_store.dart';
 import '../services/process_runner.dart';
 import 'app_restore_operation.dart';
@@ -14,6 +15,7 @@ import 'driver_store_remove_operation.dart';
 import 'driver_update_policy_operation.dart';
 import 'operation.dart';
 import 'optional_feature_operation.dart';
+import 'power_setting_operation.dart';
 import 'registry_dword_operation.dart';
 import 'winget_package_operation.dart';
 
@@ -48,6 +50,7 @@ List<OperationDefinition> createNativeOperationCatalog(
     inventory: WindowsDriverInventoryService(processRunner: processRunner),
     deviceInventory: const SetupApiDeviceInventoryService().scanPresent,
   ),
+  ..._createPowerOperations(),
   WingetPackageOperation(processRunner: processRunner),
   OptionalFeatureOperation(
     WindowsOptionalFeatureService(processRunner: processRunner),
@@ -103,3 +106,34 @@ List<OperationDefinition> createNativeOperationCatalog(
       processRunner: processRunner,
     ),
 ];
+
+List<OperationDefinition> _createPowerOperations() {
+  final store = WindowsPowerSchemeService();
+  const subgroup = '54533251-82be-4824-96c1-47b60b740d00';
+  return <OperationDefinition>[
+    PowerSettingOperation(
+      id: 'power_processor_boost_mode',
+      titleKey: 'powerProcessorBoostModeTitle',
+      descriptionKey: 'powerProcessorBoostModeDescription',
+      destination: 'Gaming & Performance',
+      subgroupId: subgroup,
+      settingId: 'be337238-0d82-4146-a960-4f3749d470c7',
+      store: store,
+      technicalSources: const <String>[
+        'https://learn.microsoft.com/windows-hardware/customize/power-settings/options-for-perf-state-engine-perfboostmode',
+      ],
+    ),
+    PowerSettingOperation(
+      id: 'power_max_processor_state',
+      titleKey: 'powerMaxProcessorStateTitle',
+      descriptionKey: 'powerMaxProcessorStateDescription',
+      destination: 'Gaming & Performance',
+      subgroupId: subgroup,
+      settingId: 'bc5038f7-23e0-4960-96da-33abaf5935ec',
+      store: store,
+      technicalSources: const <String>[
+        'https://learn.microsoft.com/windows-hardware/customize/power-settings/options-for-perf-state-engine-maxperformance',
+      ],
+    ),
+  ];
+}

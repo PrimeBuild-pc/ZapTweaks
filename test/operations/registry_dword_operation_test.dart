@@ -80,11 +80,19 @@ void main() {
       (item) => item.id == 'ui_taskbar_end_task',
     );
 
-    expect(operations, hasLength(26));
+    expect(operations, hasLength(28));
     expect(operation.id, 'ui_taskbar_end_task');
     expect(operation.scope, OperationScope.user);
     expect(operation.rollbackCapability, RollbackCapability.exact);
     expect(operations.any((item) => item.id == 'power_throttling_off'), isTrue);
+    expect(
+      operations.any((item) => item.id == 'power_processor_boost_mode'),
+      isTrue,
+    );
+    expect(
+      operations.any((item) => item.id == 'power_max_processor_state'),
+      isTrue,
+    );
   });
 
   test(
