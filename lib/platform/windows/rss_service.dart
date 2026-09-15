@@ -148,16 +148,37 @@ class WindowsRssService implements RssStore {
     if (!profiles.contains(value.profile)) {
       throw StateError('Unsupported RSS profile.');
     }
-    final error = HardwareCapabilityValidators.validateRss(
-      value,
-      capabilities(await inspect(adapterName)),
-    );
-    if (error != null) throw StateError(error);
-    final enabled = value.enabled ? r'$true' : r'$false';
-    await _processRunner.runPowerShellForOutput('''
+    var current = await inspect(adapterName);
+    final enabling = !current.configuration.enabled && value.enabled;
+    if (enabling) {
+      await _processRunner.runPowerShellForOutput('''
+\$n=[Text.Encoding]::UTF8.GetString([Convert]::FromBase64String('$name'))
+Set-NetAdapterRss -Name \$n -Enabled \$true -ErrorAction Stop
+'OK'
+''');
+      current = await inspect(adapterName);
+    }
+    try {
+      final error = HardwareCapabilityValidators.validateRss(
+        value,
+        capabilities(current),
+      );
+      if (error != null) throw StateError(error);
+      final enabled = value.enabled ? r'$true' : r'$false';
+      await _processRunner.runPowerShellForOutput('''
 \$n=[Text.Encoding]::UTF8.GetString([Convert]::FromBase64String('$name'))
 Set-NetAdapterRss -Name \$n -Enabled $enabled -Profile ${value.profile} -BaseProcessorGroup ${value.baseProcessor.group} -BaseProcessorNumber ${value.baseProcessor.number} -MaxProcessorGroup ${value.maximumProcessor.group} -MaxProcessorNumber ${value.maximumProcessor.number} -MaxProcessors ${value.processorCount} -NumberOfReceiveQueues ${value.queueCount} -ErrorAction Stop
 'OK'
 ''');
+    } catch (_) {
+      if (enabling) {
+        await _processRunner.runPowerShellForOutput('''
+\$n=[Text.Encoding]::UTF8.GetString([Convert]::FromBase64String('$name'))
+Set-NetAdapterRss -Name \$n -Enabled \$false -ErrorAction Stop
+'OK'
+''');
+      }
+      rethrow;
+    }
   }
 }
