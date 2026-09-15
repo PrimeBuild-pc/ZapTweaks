@@ -627,6 +627,16 @@ class AppLocalizationsIt extends AppLocalizations {
       'Non sono state trovate differenze nei valori AC/DC.';
 
   @override
+  String get importPowerPlan => 'Importa .pow';
+
+  @override
+  String get importPowerPlanDescription =>
+      'Importa un piano locale dopo staging limitato e verificato tramite hash.';
+
+  @override
+  String get exportActivePowerPlan => 'Esporta piano attivo';
+
+  @override
   String get firmwareTemperatures => 'Zone termiche firmware';
 
   @override

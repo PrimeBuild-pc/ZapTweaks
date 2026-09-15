@@ -6,6 +6,7 @@ import '../../features/drivers/application/local_driver_package_service.dart';
 import '../../features/drivers/application/setupapi_device_inventory_service.dart';
 import '../../features/drivers/application/windows_driver_inventory_service.dart';
 import '../../platform/windows/etw_trace_collector.dart';
+import '../../platform/windows/power_plan_file_service.dart';
 import '../../platform/windows/power_scheme_service.dart';
 import '../../platform/windows/processor_topology.dart';
 import '../../platform/windows/registry_value_store.dart';
@@ -24,6 +25,7 @@ import 'driver_update_policy_operation.dart';
 import 'etw_trace_operation.dart';
 import 'operation.dart';
 import 'optional_feature_operation.dart';
+import 'power_plan_import_operation.dart';
 import 'power_scheme_activation_operation.dart';
 import 'power_setting_operation.dart';
 import 'registry_dword_operation.dart';
@@ -37,6 +39,13 @@ List<OperationDefinition> createNativeOperationCatalog(
   RegistryValueStore registry,
   ProcessRunner processRunner,
 ) => <OperationDefinition>[
+  PowerPlanImportOperation(
+    files: PowerPlanFileService(
+      processRunner: processRunner,
+      schemes: WindowsPowerSchemeService(),
+    ),
+    schemes: WindowsPowerSchemeService(),
+  ),
   PowerSchemeActivationOperation(store: WindowsPowerSchemeService()),
   EtwTraceOperation(collector: EtwTraceCollector(processRunner: processRunner)),
   SystemRepairOperation(

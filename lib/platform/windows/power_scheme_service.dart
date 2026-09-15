@@ -51,6 +51,10 @@ abstract interface class PowerSchemeInventory {
   List<PowerSchemeInfo> enumerate();
 }
 
+abstract interface class PowerSchemeManagement implements PowerSchemeInventory {
+  void deleteScheme(String schemeId);
+}
+
 class PowerSchemeInfo {
   const PowerSchemeInfo({
     required this.id,
@@ -158,7 +162,7 @@ typedef _PowerWriteFriendlyNameDart =
     );
 
 class WindowsPowerSchemeService
-    implements PowerSchemeStore, PowerSchemeInventory {
+    implements PowerSchemeStore, PowerSchemeManagement {
   WindowsPowerSchemeService({DynamicLibrary? library})
     : _library = library ?? DynamicLibrary.open('powrprof.dll') {
     _getActiveScheme = _library
@@ -317,6 +321,7 @@ class WindowsPowerSchemeService
     );
   });
 
+  @override
   void deleteScheme(String schemeId) {
     if (schemeId.toLowerCase() == activeSchemeId) {
       throw StateError('The active power scheme cannot be deleted.');

@@ -1218,6 +1218,24 @@ abstract class AppLocalizations {
   /// **'No AC/DC value differences were found.'**
   String get noPowerDifferences;
 
+  /// No description provided for @importPowerPlan.
+  ///
+  /// In en, this message translates to:
+  /// **'Import .pow'**
+  String get importPowerPlan;
+
+  /// No description provided for @importPowerPlanDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Imports one locally selected power plan after bounded, hash-verified staging.'**
+  String get importPowerPlanDescription;
+
+  /// No description provided for @exportActivePowerPlan.
+  ///
+  /// In en, this message translates to:
+  /// **'Export active plan'**
+  String get exportActivePowerPlan;
+
   /// No description provided for @firmwareTemperatures.
   ///
   /// In en, this message translates to:

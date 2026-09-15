@@ -626,6 +626,16 @@ class AppLocalizationsDe extends AppLocalizations {
   String get noPowerDifferences => 'No AC/DC value differences were found.';
 
   @override
+  String get importPowerPlan => 'Import .pow';
+
+  @override
+  String get importPowerPlanDescription =>
+      'Imports one locally selected power plan after bounded, hash-verified staging.';
+
+  @override
+  String get exportActivePowerPlan => 'Export active plan';
+
+  @override
   String get firmwareTemperatures => 'Firmware thermal zones';
 
   @override

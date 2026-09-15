@@ -1,9 +1,15 @@
+import 'dart:io';
+
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:win32/win32.dart';
 
 import '../../../core/operations/operation.dart';
 import '../../../core/plans/operation_plan.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../../core/services/process_runner.dart';
+import '../../../platform/windows/power_plan_file_service.dart';
 import '../../../platform/windows/power_scheme_service.dart';
+import '../../../platform/windows/windows_file_dialog.dart';
 import '../../tweaks/application/tweak_controller.dart';
 
 class PowerPlansPage extends StatefulWidget {
@@ -119,6 +125,51 @@ class _PowerPlansPageState extends State<PowerPlansPage> {
     }
   }
 
+  Future<void> _import() async {
+    final path = const WindowsFileDialog().openPowerPlan();
+    if (path == null) return;
+    final id = Guid.generate().toString().toLowerCase();
+    setState(() => _busy = true);
+    try {
+      final plan = await widget.controller.executeNativeRequests(
+        <OperationRequest>[
+          OperationRequest(
+            operationId: 'power.scheme.import',
+            desiredValue: id,
+            parameters: <String, Object?>{'sourcePath': path},
+          ),
+        ],
+      );
+      if (plan.status != PlanStatus.completed) {
+        throw StateError(
+          plan.items.single.error ?? 'Power plan import failed.',
+        );
+      }
+      await _load();
+    } catch (error) {
+      if (mounted) setState(() => _error = error.toString());
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  Future<void> _exportActive() async {
+    final path = const WindowsFileDialog().savePowerPlan();
+    if (path == null) return;
+    setState(() => _busy = true);
+    try {
+      final schemes = WindowsPowerSchemeService();
+      await PowerPlanFileService(
+        processRunner: ProcessRunner.shared,
+        schemes: schemes,
+      ).exportScheme(schemes.activeSchemeId, File(path));
+    } catch (error) {
+      if (mounted) setState(() => _error = error.toString());
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final strings = AppLocalizations.of(context);
@@ -133,6 +184,20 @@ class _PowerPlansPageState extends State<PowerPlansPage> {
     return ListView(
       padding: const EdgeInsets.all(24),
       children: <Widget>[
+        Row(
+          children: <Widget>[
+            Button(
+              onPressed: _busy ? null : _import,
+              child: Text(strings.importPowerPlan),
+            ),
+            const SizedBox(width: 8),
+            Button(
+              onPressed: _busy || _schemes.isEmpty ? null : _exportActive,
+              child: Text(strings.exportActivePowerPlan),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
         TextBox(
           placeholder: strings.searchPowerPlans,
           prefix: const Padding(

@@ -30,7 +30,11 @@ class PowerPlanFileService {
     return destination;
   }
 
-  Future<String> importScheme(File source, Directory stagingDirectory) async {
+  Future<String> importScheme(
+    File source,
+    Directory stagingDirectory, {
+    String? schemeId,
+  }) async {
     _requirePow(source.path);
     if (!await source.exists() ||
         await source.length() == 0 ||
@@ -51,6 +55,7 @@ class PowerPlanFileService {
       final result = await processRunner.run('powercfg.exe', <String>[
         '/import',
         frozen.absolute.path,
+        if (schemeId != null) schemeId,
       ]);
       if (!result.success) {
         throw StateError('Power plan import failed: ${result.details}');
@@ -59,8 +64,9 @@ class PowerPlanFileService {
           .enumerate()
           .where((scheme) => !before.contains(scheme.id))
           .toList(growable: false);
-      if (added.length != 1) {
-        throw StateError('Power plan import did not add exactly one scheme.');
+      if (added.length != 1 ||
+          (schemeId != null && added.single.id != schemeId.toLowerCase())) {
+        throw StateError('Power plan import did not add the expected scheme.');
       }
       return added.single.id;
     } finally {
