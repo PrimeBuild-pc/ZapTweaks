@@ -603,7 +603,7 @@ abstract class AppLocalizations {
   /// No description provided for @powerPlans.
   ///
   /// In en, this message translates to:
-  /// **'Bundled Power Plans'**
+  /// **'Power plans'**
   String get powerPlans;
 
   /// No description provided for @powerPlansDescription.
@@ -1175,6 +1175,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Capture now'**
   String get captureNow;
+
+  /// No description provided for @tweaks.
+  ///
+  /// In en, this message translates to:
+  /// **'Tweaks'**
+  String get tweaks;
+
+  /// No description provided for @searchPowerPlans.
+  ///
+  /// In en, this message translates to:
+  /// **'Search power plans'**
+  String get searchPowerPlans;
+
+  /// No description provided for @activePowerPlan.
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get activePowerPlan;
+
+  /// No description provided for @activate.
+  ///
+  /// In en, this message translates to:
+  /// **'Activate'**
+  String get activate;
 
   /// No description provided for @firmwareTemperatures.
   ///

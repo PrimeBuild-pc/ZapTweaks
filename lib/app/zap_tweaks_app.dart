@@ -13,6 +13,7 @@ import '../l10n/app_localizations.dart';
 import '../features/apps/presentation/apps_hub_page.dart';
 import '../features/diagnostics/presentation/diagnostics_hub_page.dart';
 import '../features/drivers/presentation/drivers_hub_page.dart';
+import '../features/power/presentation/gaming_hub_page.dart';
 import '../features/home/presentation/pages/home_stats_page.dart';
 import '../features/setup/presentation/guided_setup_page.dart';
 import '../features/tweaks/application/tweak_controller.dart';
@@ -494,6 +495,13 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
 
     if (category == 'Drivers') {
       return DriversHubPage(controller: widget.controller);
+    }
+
+    if (category == 'Gaming & Performance') {
+      return GamingHubPage(
+        controller: widget.controller,
+        onSafetyPrompt: _showConfirmDialog,
+      );
     }
 
     if (category == 'Diagnostics & Recovery') {

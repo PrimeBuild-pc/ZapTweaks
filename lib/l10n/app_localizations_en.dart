@@ -282,7 +282,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get unavailable => 'Unavailable';
 
   @override
-  String get powerPlans => 'Bundled Power Plans';
+  String get powerPlans => 'Power plans';
 
   @override
   String get powerPlansDescription =>
@@ -599,6 +599,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get captureNow => 'Capture now';
+
+  @override
+  String get tweaks => 'Tweaks';
+
+  @override
+  String get searchPowerPlans => 'Search power plans';
+
+  @override
+  String get activePowerPlan => 'Active';
+
+  @override
+  String get activate => 'Activate';
 
   @override
   String get firmwareTemperatures => 'Firmware thermal zones';

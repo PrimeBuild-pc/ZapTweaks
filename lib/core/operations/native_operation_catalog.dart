@@ -24,6 +24,7 @@ import 'driver_update_policy_operation.dart';
 import 'etw_trace_operation.dart';
 import 'operation.dart';
 import 'optional_feature_operation.dart';
+import 'power_scheme_activation_operation.dart';
 import 'power_setting_operation.dart';
 import 'registry_dword_operation.dart';
 import 'rss_configuration_operation.dart';
@@ -36,6 +37,7 @@ List<OperationDefinition> createNativeOperationCatalog(
   RegistryValueStore registry,
   ProcessRunner processRunner,
 ) => <OperationDefinition>[
+  PowerSchemeActivationOperation(store: WindowsPowerSchemeService()),
   EtwTraceOperation(collector: EtwTraceCollector(processRunner: processRunner)),
   SystemRepairOperation(
     kind: SystemRepairKind.componentStore,

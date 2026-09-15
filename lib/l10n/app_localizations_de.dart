@@ -605,6 +605,18 @@ class AppLocalizationsDe extends AppLocalizations {
   String get captureNow => 'Capture now';
 
   @override
+  String get tweaks => 'Tweaks';
+
+  @override
+  String get searchPowerPlans => 'Search power plans';
+
+  @override
+  String get activePowerPlan => 'Active';
+
+  @override
+  String get activate => 'Activate';
+
+  @override
   String get firmwareTemperatures => 'Firmware thermal zones';
 
   @override

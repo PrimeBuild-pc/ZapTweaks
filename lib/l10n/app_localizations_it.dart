@@ -285,7 +285,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get unavailable => 'Non disponibile';
 
   @override
-  String get powerPlans => 'Piani di alimentazione in bundle';
+  String get powerPlans => 'Piani di alimentazione';
 
   @override
   String get powerPlansDescription =>
@@ -603,6 +603,18 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get captureNow => 'Acquisisci ora';
+
+  @override
+  String get tweaks => 'Ottimizzazioni';
+
+  @override
+  String get searchPowerPlans => 'Cerca piani di alimentazione';
+
+  @override
+  String get activePowerPlan => 'Attivo';
+
+  @override
+  String get activate => 'Attiva';
 
   @override
   String get firmwareTemperatures => 'Zone termiche firmware';

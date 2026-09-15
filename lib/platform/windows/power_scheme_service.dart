@@ -110,6 +110,30 @@ typedef _PowerWriteValueIndexDart =
     int Function(int, Pointer<GUID>, Pointer<GUID>, Pointer<GUID>, int);
 typedef _PowerSetActiveSchemeNative = Uint32 Function(IntPtr, Pointer<GUID>);
 typedef _PowerSetActiveSchemeDart = int Function(int, Pointer<GUID>);
+typedef _PowerDuplicateSchemeNative =
+    Uint32 Function(IntPtr, Pointer<GUID>, Pointer<Pointer<GUID>>);
+typedef _PowerDuplicateSchemeDart =
+    int Function(int, Pointer<GUID>, Pointer<Pointer<GUID>>);
+typedef _PowerDeleteSchemeNative = Uint32 Function(IntPtr, Pointer<GUID>);
+typedef _PowerDeleteSchemeDart = int Function(int, Pointer<GUID>);
+typedef _PowerWriteFriendlyNameNative =
+    Uint32 Function(
+      IntPtr,
+      Pointer<GUID>,
+      Pointer<GUID>,
+      Pointer<GUID>,
+      Pointer<Uint8>,
+      Uint32,
+    );
+typedef _PowerWriteFriendlyNameDart =
+    int Function(
+      int,
+      Pointer<GUID>,
+      Pointer<GUID>,
+      Pointer<GUID>,
+      Pointer<Uint8>,
+      int,
+    );
 
 class WindowsPowerSchemeService implements PowerSchemeStore {
   WindowsPowerSchemeService({DynamicLibrary? library})
@@ -147,6 +171,19 @@ class WindowsPowerSchemeService implements PowerSchemeStore {
         .lookupFunction<_PowerSetActiveSchemeNative, _PowerSetActiveSchemeDart>(
           'PowerSetActiveScheme',
         );
+    _duplicateScheme = _library
+        .lookupFunction<_PowerDuplicateSchemeNative, _PowerDuplicateSchemeDart>(
+          'PowerDuplicateScheme',
+        );
+    _deleteScheme = _library
+        .lookupFunction<_PowerDeleteSchemeNative, _PowerDeleteSchemeDart>(
+          'PowerDeleteScheme',
+        );
+    _writeFriendlyName = _library
+        .lookupFunction<
+          _PowerWriteFriendlyNameNative,
+          _PowerWriteFriendlyNameDart
+        >('PowerWriteFriendlyName');
   }
 
   static const int _accessScheme = 16;
@@ -159,6 +196,9 @@ class WindowsPowerSchemeService implements PowerSchemeStore {
   late final _PowerWriteValueIndexDart _writeAcValueIndex;
   late final _PowerWriteValueIndexDart _writeDcValueIndex;
   late final _PowerSetActiveSchemeDart _setActiveScheme;
+  late final _PowerDuplicateSchemeDart _duplicateScheme;
+  late final _PowerDeleteSchemeDart _deleteScheme;
+  late final _PowerWriteFriendlyNameDart _writeFriendlyName;
 
   @override
   String get activeSchemeId => _activeSchemeId();
@@ -209,6 +249,51 @@ class WindowsPowerSchemeService implements PowerSchemeStore {
   void setActiveScheme(String schemeId) => using((arena) {
     _check(_setActiveScheme(0, _guid(schemeId, arena)), 'PowerSetActiveScheme');
   });
+
+  String duplicateScheme(String schemeId, String name) => using((arena) {
+    final duplicated = arena<Pointer<GUID>>();
+    _check(
+      _duplicateScheme(0, _guid(schemeId, arena), duplicated),
+      'PowerDuplicateScheme',
+    );
+    try {
+      final id = duplicated.value.ref.toString().toLowerCase();
+      renameScheme(id, name);
+      return id;
+    } finally {
+      LocalFree(duplicated.value.cast());
+    }
+  });
+
+  void renameScheme(String schemeId, String name) => using((arena) {
+    final trimmed = name.trim();
+    if (trimmed.isEmpty ||
+        trimmed.length > 128 ||
+        trimmed.runes.any((rune) => rune < 32)) {
+      throw ArgumentError('Invalid power scheme name.');
+    }
+    final value = trimmed.toNativeUtf16(allocator: arena);
+    _check(
+      _writeFriendlyName(
+        0,
+        _guid(schemeId, arena),
+        nullptr,
+        nullptr,
+        value.cast<Uint8>(),
+        (trimmed.codeUnits.length + 1) * sizeOf<Uint16>(),
+      ),
+      'PowerWriteFriendlyName',
+    );
+  });
+
+  void deleteScheme(String schemeId) {
+    if (schemeId.toLowerCase() == activeSchemeId) {
+      throw StateError('The active power scheme cannot be deleted.');
+    }
+    using((arena) {
+      _check(_deleteScheme(0, _guid(schemeId, arena)), 'PowerDeleteScheme');
+    });
+  }
 
   List<PowerSchemeInfo> enumerate() {
     final active = _activeSchemeId();
