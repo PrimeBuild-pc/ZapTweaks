@@ -11,6 +11,7 @@ import '../../platform/windows/rss_service.dart';
 import '../services/process_runner.dart';
 import 'app_restore_operation.dart';
 import 'appx_removal_operation.dart';
+import 'device_msi_operation.dart';
 import 'driver_package_install_operation.dart';
 import 'driver_store_remove_operation.dart';
 import 'driver_update_policy_operation.dart';
@@ -25,6 +26,11 @@ List<OperationDefinition> createNativeOperationCatalog(
   RegistryValueStore registry,
   ProcessRunner processRunner,
 ) => <OperationDefinition>[
+  DeviceMsiOperation(
+    registry: registry,
+    inventory:
+        const SetupApiDeviceInventoryService().scanPciInterruptCapabilities,
+  ),
   RssConfigurationOperation(WindowsRssService(processRunner: processRunner)),
   DriverUpdatePolicyOperation(
     registry: registry,

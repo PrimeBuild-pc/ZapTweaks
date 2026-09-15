@@ -23,4 +23,19 @@ void main() {
       isTrue,
     );
   });
+
+  test('SetupAPI exposes documented PCI interrupt limits', () {
+    final capabilities = const SetupApiDeviceInventoryService()
+        .scanPciInterruptCapabilities();
+
+    expect(capabilities, isNotEmpty);
+    expect(
+      capabilities.every(
+        (item) =>
+            item.messageMaximum >= 0 &&
+            (item.lineBased || item.msi || item.msiX),
+      ),
+      isTrue,
+    );
+  });
 }

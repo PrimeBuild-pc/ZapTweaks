@@ -1,3 +1,19 @@
+class PciInterruptCapability {
+  const PciInterruptCapability({
+    required this.device,
+    required this.lineBased,
+    required this.msi,
+    required this.msiX,
+    required this.messageMaximum,
+  });
+
+  final DeviceIdentity device;
+  final bool lineBased;
+  final bool msi;
+  final bool msiX;
+  final int messageMaximum;
+}
+
 class DeviceIdentity {
   const DeviceIdentity({
     required this.instanceId,
