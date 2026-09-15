@@ -28,6 +28,7 @@ import 'optional_feature_operation.dart';
 import 'power_plan_import_operation.dart';
 import 'power_scheme_activation_operation.dart';
 import 'power_scheme_delete_operation.dart';
+import 'power_scheme_duplicate_operation.dart';
 import 'power_scheme_rename_operation.dart';
 import 'power_setting_operation.dart';
 import 'registry_dword_operation.dart';
@@ -50,6 +51,7 @@ List<OperationDefinition> createNativeOperationCatalog(
   ),
   PowerSchemeActivationOperation(store: WindowsPowerSchemeService()),
   PowerSchemeRenameOperation(schemes: WindowsPowerSchemeService()),
+  PowerSchemeDuplicateOperation(schemes: WindowsPowerSchemeService()),
   PowerSchemeDeleteOperation(
     files: PowerPlanFileService(
       processRunner: processRunner,

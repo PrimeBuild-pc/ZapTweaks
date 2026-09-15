@@ -1254,6 +1254,24 @@ abstract class AppLocalizations {
   /// **'Rename'**
   String get rename;
 
+  /// No description provided for @duplicate.
+  ///
+  /// In en, this message translates to:
+  /// **'Duplicate'**
+  String get duplicate;
+
+  /// No description provided for @duplicatePowerPlan.
+  ///
+  /// In en, this message translates to:
+  /// **'Duplicate power plan'**
+  String get duplicatePowerPlan;
+
+  /// No description provided for @duplicatePowerPlanDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Creates and verifies a PowrProf copy. Rollback is best effort because Windows assigns its GUID during creation.'**
+  String get duplicatePowerPlanDescription;
+
   /// No description provided for @delete.
   ///
   /// In en, this message translates to:

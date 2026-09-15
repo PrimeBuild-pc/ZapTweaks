@@ -20,6 +20,9 @@ class _Schemes implements PowerSchemeManagement {
         ]
       : const <PowerSchemeInfo>[];
   @override
+  String duplicateScheme(String schemeId, String name) =>
+      throw UnimplementedError();
+  @override
   void deleteScheme(String schemeId) => exists = false;
   @override
   void renameScheme(String schemeId, String name) {}

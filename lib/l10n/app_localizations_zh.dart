@@ -631,6 +631,16 @@ class AppLocalizationsZh extends AppLocalizations {
   String get rename => 'Rename';
 
   @override
+  String get duplicate => 'Duplicate';
+
+  @override
+  String get duplicatePowerPlan => 'Duplicate power plan';
+
+  @override
+  String get duplicatePowerPlanDescription =>
+      'Creates and verifies a PowrProf copy. Rollback is best effort because Windows assigns its GUID during creation.';
+
+  @override
   String get delete => 'Delete';
 
   @override

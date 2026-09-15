@@ -647,6 +647,16 @@ class AppLocalizationsIt extends AppLocalizations {
   String get rename => 'Rinomina';
 
   @override
+  String get duplicate => 'Duplica';
+
+  @override
+  String get duplicatePowerPlan => 'Duplica piano di alimentazione';
+
+  @override
+  String get duplicatePowerPlanDescription =>
+      'Crea e verifica una copia PowrProf. Il rollback è best effort perché Windows assegna il GUID durante la creazione.';
+
+  @override
   String get delete => 'Elimina';
 
   @override

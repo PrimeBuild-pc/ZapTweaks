@@ -199,6 +199,51 @@ class _PowerPlansPageState extends State<PowerPlansPage> {
     }
   }
 
+  Future<void> _duplicate(PowerSchemeInfo scheme) async {
+    final strings = AppLocalizations.of(context);
+    final controller = TextEditingController(text: '${scheme.name} - Copy');
+    final name = await showDialog<String>(
+      context: context,
+      builder: (context) => ContentDialog(
+        title: Text(strings.duplicatePowerPlan),
+        content: TextBox(controller: controller, maxLength: 128),
+        actions: <Widget>[
+          Button(
+            onPressed: () => Navigator.pop(context),
+            child: Text(strings.cancel),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, controller.text),
+            child: Text(strings.duplicate),
+          ),
+        ],
+      ),
+    );
+    controller.dispose();
+    if (name == null || name.trim().isEmpty) return;
+    setState(() => _busy = true);
+    try {
+      final plan = await widget.controller
+          .executeNativeRequests(<OperationRequest>[
+            OperationRequest(
+              operationId: 'power.scheme.duplicate',
+              target: scheme.id,
+              desiredValue: name.trim(),
+            ),
+          ]);
+      if (plan.status != PlanStatus.completed) {
+        throw StateError(
+          plan.items.single.error ?? 'Power scheme duplication failed.',
+        );
+      }
+      await _load();
+    } catch (error) {
+      if (mounted) setState(() => _error = error.toString());
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
   Future<void> _delete(PowerSchemeInfo scheme) async {
     final strings = AppLocalizations.of(context);
     final confirmed = await showDialog<bool>(
@@ -330,6 +375,11 @@ class _PowerPlansPageState extends State<PowerPlansPage> {
                       Button(
                         onPressed: _busy ? null : () => _rename(scheme),
                         child: Text(strings.rename),
+                      ),
+                      const SizedBox(width: 8),
+                      Button(
+                        onPressed: _busy ? null : () => _duplicate(scheme),
+                        child: Text(strings.duplicate),
                       ),
                       const SizedBox(width: 8),
                       if (!scheme.active) ...<Widget>[

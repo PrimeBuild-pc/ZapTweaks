@@ -52,6 +52,7 @@ abstract interface class PowerSchemeInventory {
 }
 
 abstract interface class PowerSchemeManagement implements PowerSchemeInventory {
+  String duplicateScheme(String schemeId, String name);
   void renameScheme(String schemeId, String name);
   void deleteScheme(String schemeId);
 }
@@ -286,6 +287,7 @@ class WindowsPowerSchemeService
     _check(_setActiveScheme(0, _guid(schemeId, arena)), 'PowerSetActiveScheme');
   });
 
+  @override
   String duplicateScheme(String schemeId, String name) => using((arena) {
     final duplicated = arena<Pointer<GUID>>();
     _check(
