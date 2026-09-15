@@ -578,6 +578,36 @@ class AppLocalizationsIt extends AppLocalizations {
   String get driverTools => 'Flussi assistiti';
 
   @override
+  String get temporaryDriverUpdatesPause =>
+      'Escludi temporaneamente i driver dagli aggiornamenti qualitativi di Windows';
+
+  @override
+  String get temporaryDriverUpdatesPauseDescription =>
+      'Usa la policy documentata di Windows Update per 7 o 30 giorni. ZapTweaks registra il valore precedente esatto e mostra un promemoria alla scadenza; il ripristino richiede la tua conferma.';
+
+  @override
+  String get driverUpdatePauseActive =>
+      'Sospensione aggiornamenti driver attiva';
+
+  @override
+  String get driverUpdatePauseExpired =>
+      'Sospensione scaduta — ripristina la policy precedente';
+
+  @override
+  String driverUpdatePauseUntil(Object date) {
+    return 'Scadenza prevista: $date';
+  }
+
+  @override
+  String get pauseSevenDays => 'Sospendi per 7 giorni';
+
+  @override
+  String get pauseThirtyDays => 'Sospendi per 30 giorni';
+
+  @override
+  String get restoreDriverUpdates => 'Ripristina policy precedente';
+
+  @override
   String get assistedDriverFlows => 'Flussi driver verificati e assistiti';
 
   @override

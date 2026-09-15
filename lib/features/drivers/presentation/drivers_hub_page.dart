@@ -33,7 +33,7 @@ class _DriversHubPageState extends State<DriversHubPage> {
         Tab(
           text: Text(strings.driverTools),
           icon: const Icon(FluentIcons.toolbox),
-          body: const DriverAssistedPage(),
+          body: DriverAssistedPage(controller: widget.controller),
         ),
       ],
     );

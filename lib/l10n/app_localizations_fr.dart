@@ -579,6 +579,35 @@ class AppLocalizationsFr extends AppLocalizations {
   String get driverTools => 'Assisted flows';
 
   @override
+  String get temporaryDriverUpdatesPause =>
+      'Temporarily exclude drivers from Windows quality updates';
+
+  @override
+  String get temporaryDriverUpdatesPauseDescription =>
+      'Uses the documented Windows Update policy for 7 or 30 days. ZapTweaks records the exact previous value and shows a reminder when the pause expires; restoration requires your confirmation.';
+
+  @override
+  String get driverUpdatePauseActive => 'Driver update pause active';
+
+  @override
+  String get driverUpdatePauseExpired =>
+      'Driver update pause expired — restore the previous policy';
+
+  @override
+  String driverUpdatePauseUntil(Object date) {
+    return 'Scheduled expiration: $date';
+  }
+
+  @override
+  String get pauseSevenDays => 'Pause for 7 days';
+
+  @override
+  String get pauseThirtyDays => 'Pause for 30 days';
+
+  @override
+  String get restoreDriverUpdates => 'Restore previous policy';
+
+  @override
   String get assistedDriverFlows => 'Verified and assisted driver flows';
 
   @override

@@ -1126,6 +1126,54 @@ abstract class AppLocalizations {
   /// **'Assisted flows'**
   String get driverTools;
 
+  /// No description provided for @temporaryDriverUpdatesPause.
+  ///
+  /// In en, this message translates to:
+  /// **'Temporarily exclude drivers from Windows quality updates'**
+  String get temporaryDriverUpdatesPause;
+
+  /// No description provided for @temporaryDriverUpdatesPauseDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Uses the documented Windows Update policy for 7 or 30 days. ZapTweaks records the exact previous value and shows a reminder when the pause expires; restoration requires your confirmation.'**
+  String get temporaryDriverUpdatesPauseDescription;
+
+  /// No description provided for @driverUpdatePauseActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Driver update pause active'**
+  String get driverUpdatePauseActive;
+
+  /// No description provided for @driverUpdatePauseExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'Driver update pause expired — restore the previous policy'**
+  String get driverUpdatePauseExpired;
+
+  /// No description provided for @driverUpdatePauseUntil.
+  ///
+  /// In en, this message translates to:
+  /// **'Scheduled expiration: {date}'**
+  String driverUpdatePauseUntil(Object date);
+
+  /// No description provided for @pauseSevenDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Pause for 7 days'**
+  String get pauseSevenDays;
+
+  /// No description provided for @pauseThirtyDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Pause for 30 days'**
+  String get pauseThirtyDays;
+
+  /// No description provided for @restoreDriverUpdates.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore previous policy'**
+  String get restoreDriverUpdates;
+
   /// No description provided for @assistedDriverFlows.
   ///
   /// In en, this message translates to:

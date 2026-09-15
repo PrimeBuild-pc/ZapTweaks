@@ -1,10 +1,16 @@
 import 'package:fluent_ui/fluent_ui.dart';
 
+import '../../../core/operations/operation.dart';
+import '../../../core/plans/operation_plan.dart';
 import '../../../core/services/process_runner.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../tweaks/application/tweak_controller.dart';
+import '../application/driver_update_policy_store.dart';
 
 class DriverAssistedPage extends StatelessWidget {
-  const DriverAssistedPage({super.key});
+  const DriverAssistedPage({required this.controller, super.key});
+
+  final TweakController controller;
 
   Future<void> _open(BuildContext context, String target) async {
     final result = await ProcessRunner.shared.launch('explorer.exe', <String>[
@@ -60,6 +66,8 @@ class DriverAssistedPage extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.fromLTRB(24, 16, 24, 24),
       children: <Widget>[
+        _DriverUpdatePolicyCard(controller: controller),
+        const SizedBox(height: 12),
         InfoBar(
           title: Text(strings.assistedDriverFlows),
           content: Text(strings.assistedDriverFlowsDescription),
@@ -97,6 +105,143 @@ class DriverAssistedPage extends StatelessWidget {
           const SizedBox(height: 10),
         ],
       ],
+    );
+  }
+}
+
+class _DriverUpdatePolicyCard extends StatefulWidget {
+  const _DriverUpdatePolicyCard({required this.controller});
+
+  final TweakController controller;
+
+  @override
+  State<_DriverUpdatePolicyCard> createState() =>
+      _DriverUpdatePolicyCardState();
+}
+
+class _DriverUpdatePolicyCardState extends State<_DriverUpdatePolicyCard> {
+  final _store = DriverUpdatePolicyStore();
+  DriverUpdatePolicyRecord? _record;
+  bool _busy = true;
+  String? _error;
+
+  @override
+  void initState() {
+    super.initState();
+    _refresh();
+  }
+
+  Future<void> _refresh() async {
+    try {
+      final record = await _store.read();
+      if (mounted) setState(() => _record = record);
+    } catch (error) {
+      if (mounted) setState(() => _error = error.toString());
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  Future<void> _execute(OperationRequest request) async {
+    setState(() {
+      _busy = true;
+      _error = null;
+    });
+    try {
+      final plan = await widget.controller.executeNativeRequests(
+        <OperationRequest>[request],
+      );
+      if (plan.status != PlanStatus.completed) {
+        throw StateError(plan.items.single.error ?? 'Driver policy failed.');
+      }
+      await _refresh();
+    } catch (error) {
+      if (mounted) setState(() => _error = error.toString());
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  Future<void> _pause(int days) => _execute(
+    OperationRequest(
+      operationId: 'toggle_automatic_driver_updates_off',
+      desiredValue: 1,
+      parameters: <String, Object?>{
+        'expiresAt': DateTime.now()
+            .toUtc()
+            .add(Duration(days: days))
+            .toIso8601String(),
+      },
+    ),
+  );
+
+  Future<void> _resume() => _execute(
+    OperationRequest(
+      operationId: 'toggle_automatic_driver_updates_off',
+      desiredValue: _record!.previousValue,
+    ),
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    final strings = AppLocalizations.of(context);
+    final record = _record;
+    final expired = record?.isExpired(DateTime.now().toUtc()) ?? false;
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              strings.temporaryDriverUpdatesPause,
+              style: FluentTheme.of(context).typography.bodyStrong,
+            ),
+            const SizedBox(height: 4),
+            Text(strings.temporaryDriverUpdatesPauseDescription),
+            if (record != null) ...<Widget>[
+              const SizedBox(height: 8),
+              InfoBar(
+                title: Text(
+                  expired
+                      ? strings.driverUpdatePauseExpired
+                      : strings.driverUpdatePauseActive,
+                ),
+                content: Text(
+                  strings.driverUpdatePauseUntil(
+                    record.expiresAt.toLocal().toString(),
+                  ),
+                ),
+                severity: expired
+                    ? InfoBarSeverity.warning
+                    : InfoBarSeverity.info,
+              ),
+            ],
+            if (_error != null) ...<Widget>[
+              const SizedBox(height: 8),
+              Text(_error!),
+            ],
+            const SizedBox(height: 10),
+            Wrap(
+              spacing: 8,
+              children: <Widget>[
+                Button(
+                  onPressed: _busy || record != null ? null : () => _pause(7),
+                  child: Text(strings.pauseSevenDays),
+                ),
+                Button(
+                  onPressed: _busy || record != null ? null : () => _pause(30),
+                  child: Text(strings.pauseThirtyDays),
+                ),
+                FilledButton(
+                  onPressed: _busy || record == null ? null : _resume,
+                  child: Text(strings.restoreDriverUpdates),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

@@ -8,7 +8,7 @@ This ledger tracks `docs/NEW PLAN.md`. A phase is complete only when its gate is
 | 1 — Shell | Complete | Final navigation, global search, opt-in Expert mode, legacy adapter, external tools retained, no startup UAC, opaque bulk presets hidden | — |
 | 2 — Foundations | Complete | Typed operation contract/state/evidence and registry; deterministic Plan Engine; typed snapshots; SQLite journal/reboot continuation; conflict-aware rollback; nonce/hash-bound, ACL-restricted and allowlisted temporary `runas` helper; one complete elevated multi-item plan per launch with structured progress and helper-side journal; registry/service/power/device lifecycle gate covered | — |
 | 3 — Setup and Apps | Complete | Ten-step explicit wizard with inventory, hardware baseline, Windows Update review, SetupAPI driver check, app selection, restorable current-user AppX debloat, interface choice, readable operation preview, Plan Engine execution and final report; provider/scope-aware AppX/winget inventory with one-session elevated all-user/provisioned collection; 464-entry deduplicated app store from pinned CTT/TweakHub, clean-room Winhance candidates and official sources; typed/journaled winget install and previewed multi-uninstall with read-back; AppX removal only after scope/reinstallability preview; optional-feature inventory plus snapshot/apply/verify/rollback; startup inventory with distinct Settings and Task Manager routes; 17 verified Microsoft restore identities | — |
-| 4 — Drivers | In progress | Driver identity/rollback model and expiring policy model; locale-independent Driver Store inventory via PnPUtil XML; SetupAPI correlation by bound INF then unique hardware identity; signed unbound third-party removal with preview, ACL-protected SHA-256 export and best-effort rollback; local INF install is bound to a selected device and approved INF/catalog hashes plus the Authenticode publisher, then rechecked in the Driver Store; AMD/NVIDIA/Intel flows open only official sources; reboot continuations are reverified only after a detected Windows reboot | Implement the visible, expiring Windows Update driver policy/reminder and validate local install/removal in an existing VM |
+| 4 — Drivers | In progress | Driver identity/rollback model; locale-independent Driver Store inventory via PnPUtil XML; SetupAPI correlation by bound INF then unique hardware identity; signed unbound third-party removal with preview, ACL-protected SHA-256 export and best-effort rollback; local INF install is bound to a selected device and approved INF/catalog hashes plus the Authenticode publisher, then rechecked in the Driver Store; AMD/NVIDIA/Intel flows open only official sources; reboot continuations are reverified only after a detected Windows reboot; the documented Windows Update driver exclusion can be paused for 7/30 days with an expiry reminder and exact previous-value restoration | Validate local install/removal in an existing VM |
 | 5 — Gaming and hardware | In progress | Topology-aware RSS, MSI limit and non-truncating affinity validators; native PowrProf scheme enumeration, active-scheme detection, AC/DC value I/O and an exact-snapshot power-setting operation | Migrate fixed catalog entries to PowrProf, VM mutation validation, SetupAPI/IRQ and NDIS platform implementations |
 | 6 — Windows and diagnostics | In progress | Cleanup preview scanner, deterministic diagnostic-session lifecycle, and native SCM inspection of live state, start type, delayed start, account, PID and dependencies | SCM mutations, Task Scheduler, ETW collectors, repair and recovery UI |
 | 7 — Legacy closure | Not started | — | Replace native-bound scripts, validate aliases, classify composites and move optional payloads on-demand |
@@ -16,7 +16,7 @@ This ledger tracks `docs/NEW PLAN.md`. A phase is complete only when its gate is
 
 ## Last local verification
 
-- `flutter test -j 1`: 156 tests passed.
+- `flutter test -j 1`: 158 tests passed.
 - `flutter analyze`: no issues.
 - `flutter build windows --debug` and `--release`: succeeded.
 - The main executable starts as `asInvoker`; real UAC helper smoke tests
@@ -28,9 +28,9 @@ This ledger tracks `docs/NEW PLAN.md`. A phase is complete only when its gate is
 - Existing Hyper-V VM `D:\VmLab\NeuroTune-W11` passed a real helper mutation
   and read-back for `network_ecn_disabled`, plus typed Win32 Registry
   inspect/snapshot/apply/verify/rollback round trips preserving raw DWORD bytes.
-  The latest round trip exercised `power_throttling_off` through the native
-  elevated multi-item plan protocol, persisted its helper-side journal, then
-  rolled back from the returned typed snapshot; original state was restored,
-  payloads were removed,
-  and the VM was shut down.
+  The latest round trips exercised `power_throttling_off` through the native
+  elevated multi-item plan protocol and the temporary Windows Update driver
+  exclusion through its typed operation. Both were read back and restored from
+  typed snapshots; original state was restored, payloads were removed, and the
+  VM was shut down.
   No VM or checkpoint was created.
