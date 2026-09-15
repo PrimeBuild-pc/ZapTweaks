@@ -15,6 +15,8 @@ class _Schemes implements PowerSchemeManagement {
       PowerSchemeInfo(id: imported!, name: 'Imported', active: false),
   ];
   @override
+  void renameScheme(String schemeId, String name) {}
+  @override
   void deleteScheme(String schemeId) => imported = null;
 }
 

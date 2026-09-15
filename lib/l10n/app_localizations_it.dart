@@ -637,6 +637,16 @@ class AppLocalizationsIt extends AppLocalizations {
   String get exportActivePowerPlan => 'Esporta piano attivo';
 
   @override
+  String get renamePowerPlan => 'Rinomina piano di alimentazione';
+
+  @override
+  String get renamePowerPlanDescription =>
+      'Modifica solo il nome visualizzato del piano selezionato e conserva quello originale per il rollback.';
+
+  @override
+  String get rename => 'Rinomina';
+
+  @override
   String get firmwareTemperatures => 'Zone termiche firmware';
 
   @override

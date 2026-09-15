@@ -632,6 +632,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get exportActivePowerPlan => 'Export active plan';
 
   @override
+  String get renamePowerPlan => 'Rename power plan';
+
+  @override
+  String get renamePowerPlanDescription =>
+      'Changes only the selected plan\'s display name and preserves the original name for rollback.';
+
+  @override
+  String get rename => 'Rename';
+
+  @override
   String get firmwareTemperatures => 'Firmware thermal zones';
 
   @override

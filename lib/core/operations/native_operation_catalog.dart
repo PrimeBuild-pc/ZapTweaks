@@ -27,6 +27,7 @@ import 'operation.dart';
 import 'optional_feature_operation.dart';
 import 'power_plan_import_operation.dart';
 import 'power_scheme_activation_operation.dart';
+import 'power_scheme_rename_operation.dart';
 import 'power_setting_operation.dart';
 import 'registry_dword_operation.dart';
 import 'rss_configuration_operation.dart';
@@ -47,6 +48,7 @@ List<OperationDefinition> createNativeOperationCatalog(
     schemes: WindowsPowerSchemeService(),
   ),
   PowerSchemeActivationOperation(store: WindowsPowerSchemeService()),
+  PowerSchemeRenameOperation(schemes: WindowsPowerSchemeService()),
   EtwTraceOperation(collector: EtwTraceCollector(processRunner: processRunner)),
   SystemRepairOperation(
     kind: SystemRepairKind.componentStore,

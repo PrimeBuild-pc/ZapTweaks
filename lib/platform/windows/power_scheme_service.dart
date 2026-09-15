@@ -52,6 +52,7 @@ abstract interface class PowerSchemeInventory {
 }
 
 abstract interface class PowerSchemeManagement implements PowerSchemeInventory {
+  void renameScheme(String schemeId, String name);
   void deleteScheme(String schemeId);
 }
 
@@ -300,6 +301,7 @@ class WindowsPowerSchemeService
     }
   });
 
+  @override
   void renameScheme(String schemeId, String name) => using((arena) {
     final trimmed = name.trim();
     if (trimmed.isEmpty ||

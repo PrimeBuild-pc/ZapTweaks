@@ -153,6 +153,52 @@ class _PowerPlansPageState extends State<PowerPlansPage> {
     }
   }
 
+  Future<void> _rename(PowerSchemeInfo scheme) async {
+    final controller = TextEditingController(text: scheme.name);
+    final name = await showDialog<String>(
+      context: context,
+      builder: (context) => ContentDialog(
+        title: Text(AppLocalizations.of(context).renamePowerPlan),
+        content: TextBox(controller: controller, maxLength: 128),
+        actions: <Widget>[
+          Button(
+            onPressed: () => Navigator.pop(context),
+            child: Text(AppLocalizations.of(context).cancel),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, controller.text),
+            child: Text(AppLocalizations.of(context).rename),
+          ),
+        ],
+      ),
+    );
+    controller.dispose();
+    if (name == null || name.trim().isEmpty || name.trim() == scheme.name) {
+      return;
+    }
+    setState(() => _busy = true);
+    try {
+      final plan = await widget.controller
+          .executeNativeRequests(<OperationRequest>[
+            OperationRequest(
+              operationId: 'power.scheme.rename',
+              target: scheme.id,
+              desiredValue: name.trim(),
+            ),
+          ]);
+      if (plan.status != PlanStatus.completed) {
+        throw StateError(
+          plan.items.single.error ?? 'Power scheme rename failed.',
+        );
+      }
+      await _load();
+    } catch (error) {
+      if (mounted) setState(() => _error = error.toString());
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
   Future<void> _exportActive() async {
     final path = const WindowsFileDialog().savePowerPlan();
     if (path == null) return;
@@ -236,6 +282,11 @@ class _PowerPlansPageState extends State<PowerPlansPage> {
                       Button(
                         onPressed: _busy ? null : () => _showSettings(scheme),
                         child: Text(strings.details),
+                      ),
+                      const SizedBox(width: 8),
+                      Button(
+                        onPressed: _busy ? null : () => _rename(scheme),
+                        child: Text(strings.rename),
                       ),
                       const SizedBox(width: 8),
                       if (!scheme.active) ...<Widget>[

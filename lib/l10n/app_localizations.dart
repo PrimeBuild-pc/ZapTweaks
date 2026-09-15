@@ -1236,6 +1236,24 @@ abstract class AppLocalizations {
   /// **'Export active plan'**
   String get exportActivePowerPlan;
 
+  /// No description provided for @renamePowerPlan.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename power plan'**
+  String get renamePowerPlan;
+
+  /// No description provided for @renamePowerPlanDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Changes only the selected plan\'s display name and preserves the original name for rollback.'**
+  String get renamePowerPlanDescription;
+
+  /// No description provided for @rename.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename'**
+  String get rename;
+
   /// No description provided for @firmwareTemperatures.
   ///
   /// In en, this message translates to:
