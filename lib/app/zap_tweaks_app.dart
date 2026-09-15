@@ -11,6 +11,7 @@ import '../core/services/app_locale_service.dart';
 import '../core/services/process_runner.dart';
 import '../l10n/app_localizations.dart';
 import '../features/apps/presentation/apps_hub_page.dart';
+import '../features/diagnostics/presentation/diagnostics_hub_page.dart';
 import '../features/drivers/presentation/drivers_hub_page.dart';
 import '../features/home/presentation/pages/home_stats_page.dart';
 import '../features/setup/presentation/guided_setup_page.dart';
@@ -493,6 +494,13 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
 
     if (category == 'Drivers') {
       return DriversHubPage(controller: widget.controller);
+    }
+
+    if (category == 'Diagnostics & Recovery') {
+      return DiagnosticsHubPage(
+        controller: widget.controller,
+        onSafetyPrompt: _showConfirmDialog,
+      );
     }
 
     if (category == TweakController.settingsCategory) {

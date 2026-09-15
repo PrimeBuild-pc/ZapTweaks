@@ -281,11 +281,26 @@ class ElevatedHelperClient {
   ) async {
     String quote(String value) => value.replaceAll("'", "''");
     final encodedPath = base64Url.encode(utf8.encode(request.path));
+    final payload =
+        jsonDecode(await request.readAsString()) as Map<String, dynamic>;
+    final operations =
+        (payload['requests'] as List<dynamic>?) ?? const <dynamic>[];
+    final isRepair = operations.any(
+      (item) => (item as Map<String, dynamic>)['operationId']
+          .toString()
+          .startsWith('recovery.'),
+    );
+    // ponytail: repairs get a larger but finite ceiling; split per command if
+    // progress-aware cancellation becomes necessary.
+    final timeout = isRepair
+        ? const Duration(hours: 2)
+        : const Duration(minutes: 5);
     final script =
         "\$p=Start-Process -FilePath '${quote(executable)}' "
         "-Verb RunAs -PassThru -ArgumentList @("
         "'--zaptweaks-helper','$encodedPath','$nonce','$digest'); "
-        r"if(-not $p.WaitForExit(300000)){Stop-Process -Id $p.Id -Force;exit 124}; "
+        'if(-not \$p.WaitForExit(${timeout.inMilliseconds}))'
+        '{Stop-Process -Id \$p.Id -Force;exit 124}; '
         r'exit $p.ExitCode';
     final encoded = base64.encode(const Utf16Encoder().convert(script));
     final process = await Process.start('powershell.exe', <String>[
@@ -295,7 +310,9 @@ class ElevatedHelperClient {
       encoded,
     ]);
     try {
-      return await process.exitCode.timeout(const Duration(minutes: 6));
+      return await process.exitCode.timeout(
+        timeout + const Duration(minutes: 1),
+      );
     } on TimeoutException {
       process.kill();
       return 124;

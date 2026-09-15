@@ -538,6 +538,43 @@ class AppLocalizationsIt extends AppLocalizations {
   String get finish => 'Fine';
 
   @override
+  String get recovery => 'Ripristino';
+
+  @override
+  String get diagnosticTools => 'Strumenti diagnostici';
+
+  @override
+  String get repairComponentStore => 'Ripara l\'archivio componenti di Windows';
+
+  @override
+  String get repairComponentStoreDescription =>
+      'Esegue DISM RestoreHealth e poi una verifica ScanHealth separata. Può richiedere molto tempo.';
+
+  @override
+  String get repairSystemFiles => 'Ripara i file di sistema protetti';
+
+  @override
+  String get repairSystemFilesDescription =>
+      'Esegue scansione e riparazione SFC, seguite da una verifica separata.';
+
+  @override
+  String get confirmSystemRepair => 'Conferma riparazione Windows';
+
+  @override
+  String get systemRepairWarning =>
+      'La riparazione può sostituire componenti Windows danneggiati e non può essere annullata da ZapTweaks. Non spegnere il PC durante l\'esecuzione.';
+
+  @override
+  String get systemRepairVerified =>
+      'Riparazione completata e verifica superata.';
+
+  @override
+  String get runRepair => 'Esegui riparazione';
+
+  @override
+  String get operationCompleted => 'Operazione completata';
+
+  @override
   String get driverInventory => 'Inventario Driver Store';
 
   @override

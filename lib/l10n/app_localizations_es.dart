@@ -537,6 +537,43 @@ class AppLocalizationsEs extends AppLocalizations {
   String get finish => 'Finish';
 
   @override
+  String get recovery => 'Recovery';
+
+  @override
+  String get diagnosticTools => 'Diagnostic tools';
+
+  @override
+  String get repairComponentStore => 'Repair Windows component store';
+
+  @override
+  String get repairComponentStoreDescription =>
+      'Runs DISM RestoreHealth, then a separate ScanHealth verification. This can take a long time.';
+
+  @override
+  String get repairSystemFiles => 'Repair protected system files';
+
+  @override
+  String get repairSystemFilesDescription =>
+      'Runs SFC scan and repair, then a separate verification pass.';
+
+  @override
+  String get confirmSystemRepair => 'Confirm Windows repair';
+
+  @override
+  String get systemRepairWarning =>
+      'The repair may replace corrupted Windows components and cannot be rolled back by ZapTweaks. Do not turn off the PC while it runs.';
+
+  @override
+  String get systemRepairVerified =>
+      'Repair completed and the verification pass succeeded.';
+
+  @override
+  String get runRepair => 'Run repair';
+
+  @override
+  String get operationCompleted => 'Operation completed';
+
+  @override
   String get driverInventory => 'Driver Store inventory';
 
   @override

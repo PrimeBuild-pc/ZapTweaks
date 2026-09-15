@@ -1062,6 +1062,72 @@ abstract class AppLocalizations {
   /// **'Finish'**
   String get finish;
 
+  /// No description provided for @recovery.
+  ///
+  /// In en, this message translates to:
+  /// **'Recovery'**
+  String get recovery;
+
+  /// No description provided for @diagnosticTools.
+  ///
+  /// In en, this message translates to:
+  /// **'Diagnostic tools'**
+  String get diagnosticTools;
+
+  /// No description provided for @repairComponentStore.
+  ///
+  /// In en, this message translates to:
+  /// **'Repair Windows component store'**
+  String get repairComponentStore;
+
+  /// No description provided for @repairComponentStoreDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Runs DISM RestoreHealth, then a separate ScanHealth verification. This can take a long time.'**
+  String get repairComponentStoreDescription;
+
+  /// No description provided for @repairSystemFiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Repair protected system files'**
+  String get repairSystemFiles;
+
+  /// No description provided for @repairSystemFilesDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Runs SFC scan and repair, then a separate verification pass.'**
+  String get repairSystemFilesDescription;
+
+  /// No description provided for @confirmSystemRepair.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Windows repair'**
+  String get confirmSystemRepair;
+
+  /// No description provided for @systemRepairWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'The repair may replace corrupted Windows components and cannot be rolled back by ZapTweaks. Do not turn off the PC while it runs.'**
+  String get systemRepairWarning;
+
+  /// No description provided for @systemRepairVerified.
+  ///
+  /// In en, this message translates to:
+  /// **'Repair completed and the verification pass succeeded.'**
+  String get systemRepairVerified;
+
+  /// No description provided for @runRepair.
+  ///
+  /// In en, this message translates to:
+  /// **'Run repair'**
+  String get runRepair;
+
+  /// No description provided for @operationCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Operation completed'**
+  String get operationCompleted;
+
   /// No description provided for @driverInventory.
   ///
   /// In en, this message translates to:
