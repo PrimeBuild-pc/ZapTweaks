@@ -190,6 +190,13 @@ class OperationStore {
     return rows.isEmpty ? null : _readPlan(rows.single);
   }
 
+  List<OperationPlan> loadRebootContinuations() => database
+      .select('''SELECT p.* FROM plans p
+           INNER JOIN reboot_continuations r ON r.plan_id = p.id
+           ORDER BY r.created_at''')
+      .map(_readPlan)
+      .toList(growable: false);
+
   OperationPlan _readPlan(Row row) {
     final id = row['id'] as String;
     final itemRows = database.select(

@@ -1068,11 +1068,141 @@ abstract class AppLocalizations {
   /// **'Driver Store inventory'**
   String get driverInventory;
 
+  /// No description provided for @installLocalDriver.
+  ///
+  /// In en, this message translates to:
+  /// **'Install a local driver package'**
+  String get installLocalDriver;
+
+  /// No description provided for @installLocalDriverDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify a local INF, its signed catalog, and hardware compatibility before installation.'**
+  String get installLocalDriverDescription;
+
+  /// No description provided for @selectDevice.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a present device'**
+  String get selectDevice;
+
+  /// No description provided for @localInfPath.
+  ///
+  /// In en, this message translates to:
+  /// **'Absolute path to the local .inf file'**
+  String get localInfPath;
+
+  /// No description provided for @verifyDriverPackage.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify package'**
+  String get verifyDriverPackage;
+
+  /// No description provided for @verifiedDriverPublisher.
+  ///
+  /// In en, this message translates to:
+  /// **'Verified publisher: {publisher}\nINF SHA-256: {sha256}'**
+  String verifiedDriverPublisher(Object publisher, Object sha256);
+
+  /// No description provided for @confirmLocalDriverInstall.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm local driver installation'**
+  String get confirmLocalDriverInstall;
+
+  /// No description provided for @confirmLocalDriverInstallMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Device: {device}\nSigned publisher: {publisher}\nINF SHA-256: {sha256}\n\nWindows may change the active driver and require a restart. Rollback is best effort.'**
+  String confirmLocalDriverInstallMessage(
+    Object device,
+    Object publisher,
+    Object sha256,
+  );
+
   /// No description provided for @driverTools.
   ///
   /// In en, this message translates to:
-  /// **'Driver tools'**
+  /// **'Assisted flows'**
   String get driverTools;
+
+  /// No description provided for @assistedDriverFlows.
+  ///
+  /// In en, this message translates to:
+  /// **'Verified and assisted driver flows'**
+  String get assistedDriverFlows;
+
+  /// No description provided for @assistedDriverFlowsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'ZapTweaks opens only vendor-owned sources and Windows surfaces. It does not run mutable remote scripts, flash firmware, or silently remove driver components.'**
+  String get assistedDriverFlowsDescription;
+
+  /// No description provided for @amdDriverFlow.
+  ///
+  /// In en, this message translates to:
+  /// **'AMD drivers and software'**
+  String get amdDriverFlow;
+
+  /// No description provided for @amdDriverFlowDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Open AMD\'s official driver selector. Verify the detected product before downloading.'**
+  String get amdDriverFlowDescription;
+
+  /// No description provided for @nvidiaDriverFlow.
+  ///
+  /// In en, this message translates to:
+  /// **'NVIDIA drivers'**
+  String get nvidiaDriverFlow;
+
+  /// No description provided for @nvidiaDriverFlowDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Open NVIDIA\'s official manual driver search. Clean installation remains an explicit vendor-installer choice.'**
+  String get nvidiaDriverFlowDescription;
+
+  /// No description provided for @intelDriverFlow.
+  ///
+  /// In en, this message translates to:
+  /// **'Intel Driver & Support Assistant'**
+  String get intelDriverFlow;
+
+  /// No description provided for @intelDriverFlowDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Intel\'s official detection and support flow.'**
+  String get intelDriverFlowDescription;
+
+  /// No description provided for @windowsOptionalDrivers.
+  ///
+  /// In en, this message translates to:
+  /// **'Windows optional driver updates'**
+  String get windowsOptionalDrivers;
+
+  /// No description provided for @windowsOptionalDriversDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Review optional driver updates in Windows Settings; nothing is selected automatically.'**
+  String get windowsOptionalDriversDescription;
+
+  /// No description provided for @deviceManager.
+  ///
+  /// In en, this message translates to:
+  /// **'Device Manager'**
+  String get deviceManager;
+
+  /// No description provided for @deviceManagerDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Inspect devices, status codes, active drivers, and manual rollback options.'**
+  String get deviceManagerDescription;
+
+  /// No description provided for @openOfficialSource.
+  ///
+  /// In en, this message translates to:
+  /// **'Open official source'**
+  String get openOfficialSource;
 
   /// No description provided for @searchDrivers.
   ///

@@ -20,6 +20,7 @@ class _MemoryOperation extends OperationDefinition {
     this.operationPrivilege = OperationPrivilege.user,
     this.declaredRestartImpact = RestartImpact.none,
     this.forcedInspectKind,
+    this.operationDomain,
   });
 
   @override
@@ -33,6 +34,7 @@ class _MemoryOperation extends OperationDefinition {
   final OperationPrivilege operationPrivilege;
   final RestartImpact declaredRestartImpact;
   final OperationStateKind? forcedInspectKind;
+  final String? operationDomain;
   @override
   List<String> get legacyAliases => const <String>[];
 
@@ -120,7 +122,7 @@ class _MemoryOperation extends OperationDefinition {
   String get destination => 'Expert';
 
   @override
-  String get domain => scope.name;
+  String get domain => operationDomain ?? scope.name;
 
   @override
   EvidenceLevel get mechanismEvidence => EvidenceLevel.documented;
@@ -305,6 +307,40 @@ void main() {
 
       expect(plan.status, PlanStatus.completed);
       expect(plan.restartRequired, isTrue);
+    },
+  );
+
+  test(
+    'driver continuation is verified from the journal after restart',
+    () async {
+      final database = sqlite3.openInMemory();
+      addTearDown(database.close);
+      final store = OperationStore(database);
+      final values = <String, Object?>{};
+      final operation = _MemoryOperation(
+        'driver.install',
+        OperationScope.driver,
+        values,
+        declaredRestartImpact: RestartImpact.reboot,
+        operationDomain: 'drivers',
+      );
+      final engine = PlanEngine(
+        registry: OperationRegistry(<OperationDefinition>[operation]),
+        context: const OperationContext(windowsBuild: 26100, edition: 'Pro'),
+        user: 'tester',
+        appVersion: '1.0.0',
+        store: store,
+      );
+      final plan = await engine.plan(const <OperationRequest>[
+        OperationRequest(operationId: 'driver.install', desiredValue: true),
+      ]);
+      await engine.execute(plan);
+
+      expect(store.loadRebootContinuations(), hasLength(1));
+      final reconciled = await engine.reconcileAfterRestart(domain: 'drivers');
+
+      expect(reconciled.single.restartRequired, isFalse);
+      expect(store.loadRebootContinuations(), isEmpty);
     },
   );
 

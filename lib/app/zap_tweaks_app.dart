@@ -492,10 +492,7 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
     }
 
     if (category == 'Drivers') {
-      return DriversHubPage(
-        controller: widget.controller,
-        onSafetyPrompt: _showConfirmDialog,
-      );
+      return DriversHubPage(controller: widget.controller);
     }
 
     if (category == TweakController.settingsCategory) {

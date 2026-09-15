@@ -541,7 +541,87 @@ class AppLocalizationsIt extends AppLocalizations {
   String get driverInventory => 'Inventario Driver Store';
 
   @override
-  String get driverTools => 'Strumenti driver';
+  String get installLocalDriver => 'Installa un pacchetto driver locale';
+
+  @override
+  String get installLocalDriverDescription =>
+      'Verifica un INF locale, il catalogo firmato e la compatibilità hardware prima dell\'installazione.';
+
+  @override
+  String get selectDevice => 'Seleziona un dispositivo presente';
+
+  @override
+  String get localInfPath => 'Percorso assoluto del file .inf locale';
+
+  @override
+  String get verifyDriverPackage => 'Verifica pacchetto';
+
+  @override
+  String verifiedDriverPublisher(Object publisher, Object sha256) {
+    return 'Autore verificato: $publisher\nSHA-256 INF: $sha256';
+  }
+
+  @override
+  String get confirmLocalDriverInstall =>
+      'Conferma installazione driver locale';
+
+  @override
+  String confirmLocalDriverInstallMessage(
+    Object device,
+    Object publisher,
+    Object sha256,
+  ) {
+    return 'Dispositivo: $device\nAutore firmato: $publisher\nSHA-256 INF: $sha256\n\nWindows potrebbe cambiare il driver attivo e richiedere un riavvio. Il rollback è best effort.';
+  }
+
+  @override
+  String get driverTools => 'Flussi assistiti';
+
+  @override
+  String get assistedDriverFlows => 'Flussi driver verificati e assistiti';
+
+  @override
+  String get assistedDriverFlowsDescription =>
+      'ZapTweaks apre solo fonti dei produttori e superfici Windows. Non esegue script remoti mutabili, non aggiorna firmware e non rimuove componenti driver di nascosto.';
+
+  @override
+  String get amdDriverFlow => 'Driver e software AMD';
+
+  @override
+  String get amdDriverFlowDescription =>
+      'Apre il selettore driver ufficiale AMD. Verifica il prodotto rilevato prima del download.';
+
+  @override
+  String get nvidiaDriverFlow => 'Driver NVIDIA';
+
+  @override
+  String get nvidiaDriverFlowDescription =>
+      'Apre la ricerca manuale ufficiale NVIDIA. L\'installazione pulita resta una scelta esplicita nell\'installer del produttore.';
+
+  @override
+  String get intelDriverFlow => 'Intel Driver & Support Assistant';
+
+  @override
+  String get intelDriverFlowDescription =>
+      'Apre il flusso ufficiale Intel di rilevamento e supporto.';
+
+  @override
+  String get windowsOptionalDrivers =>
+      'Aggiornamenti driver facoltativi di Windows';
+
+  @override
+  String get windowsOptionalDriversDescription =>
+      'Rivedi gli aggiornamenti driver facoltativi nelle Impostazioni di Windows; nulla viene selezionato automaticamente.';
+
+  @override
+  String get deviceManager => 'Gestione dispositivi';
+
+  @override
+  String get deviceManagerDescription =>
+      'Ispeziona dispositivi, codici di stato, driver attivi e opzioni di rollback manuale.';
+
+  @override
+  String get openOfficialSource => 'Apri fonte ufficiale';
 
   @override
   String get searchDrivers => 'Cerca nel Driver Store';

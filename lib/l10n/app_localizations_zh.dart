@@ -526,7 +526,85 @@ class AppLocalizationsZh extends AppLocalizations {
   String get driverInventory => 'Driver Store inventory';
 
   @override
-  String get driverTools => 'Driver tools';
+  String get installLocalDriver => 'Install a local driver package';
+
+  @override
+  String get installLocalDriverDescription =>
+      'Verify a local INF, its signed catalog, and hardware compatibility before installation.';
+
+  @override
+  String get selectDevice => 'Select a present device';
+
+  @override
+  String get localInfPath => 'Absolute path to the local .inf file';
+
+  @override
+  String get verifyDriverPackage => 'Verify package';
+
+  @override
+  String verifiedDriverPublisher(Object publisher, Object sha256) {
+    return 'Verified publisher: $publisher\nINF SHA-256: $sha256';
+  }
+
+  @override
+  String get confirmLocalDriverInstall => 'Confirm local driver installation';
+
+  @override
+  String confirmLocalDriverInstallMessage(
+    Object device,
+    Object publisher,
+    Object sha256,
+  ) {
+    return 'Device: $device\nSigned publisher: $publisher\nINF SHA-256: $sha256\n\nWindows may change the active driver and require a restart. Rollback is best effort.';
+  }
+
+  @override
+  String get driverTools => 'Assisted flows';
+
+  @override
+  String get assistedDriverFlows => 'Verified and assisted driver flows';
+
+  @override
+  String get assistedDriverFlowsDescription =>
+      'ZapTweaks opens only vendor-owned sources and Windows surfaces. It does not run mutable remote scripts, flash firmware, or silently remove driver components.';
+
+  @override
+  String get amdDriverFlow => 'AMD drivers and software';
+
+  @override
+  String get amdDriverFlowDescription =>
+      'Open AMD\'s official driver selector. Verify the detected product before downloading.';
+
+  @override
+  String get nvidiaDriverFlow => 'NVIDIA drivers';
+
+  @override
+  String get nvidiaDriverFlowDescription =>
+      'Open NVIDIA\'s official manual driver search. Clean installation remains an explicit vendor-installer choice.';
+
+  @override
+  String get intelDriverFlow => 'Intel Driver & Support Assistant';
+
+  @override
+  String get intelDriverFlowDescription =>
+      'Open Intel\'s official detection and support flow.';
+
+  @override
+  String get windowsOptionalDrivers => 'Windows optional driver updates';
+
+  @override
+  String get windowsOptionalDriversDescription =>
+      'Review optional driver updates in Windows Settings; nothing is selected automatically.';
+
+  @override
+  String get deviceManager => 'Device Manager';
+
+  @override
+  String get deviceManagerDescription =>
+      'Inspect devices, status codes, active drivers, and manual rollback options.';
+
+  @override
+  String get openOfficialSource => 'Open official source';
 
   @override
   String get searchDrivers => 'Search Driver Store';

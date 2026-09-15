@@ -31,6 +31,7 @@ import '../../../core/services/tweak_catalog_service.dart';
 import '../../../core/tweak_manager.dart';
 import '../../../legacy/adapters/legacy_catalog_adapter.dart';
 import '../../../models/system_tweak.dart';
+import '../../../platform/windows/system_uptime.dart';
 
 class TweakController extends ChangeNotifier {
   TweakController({
@@ -365,6 +366,19 @@ class TweakController extends ChangeNotifier {
           store: _operationStore,
           elevatedExecutor: _elevatedOperationExecutor,
         );
+        try {
+          await _planEngine!.reconcileAfterRestart(
+            domain: 'drivers',
+            rebootedSince: windowsRebootedSince,
+          );
+        } catch (error) {
+          unawaited(
+            _loggingService.logError(
+              'Driver post-restart verification failed: $error',
+              source: 'TweakController',
+            ),
+          );
+        }
       }
       final detectedStates = futures[2] as Map<String, bool>;
       unawaited(

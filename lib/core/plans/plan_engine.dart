@@ -233,6 +233,55 @@ class PlanEngine {
     return plan;
   }
 
+  Future<List<OperationPlan>> reconcileAfterRestart({
+    String? domain,
+    bool Function(DateTime createdAt)? rebootedSince,
+  }) async {
+    final plans = store?.loadRebootContinuations() ?? const <OperationPlan>[];
+    for (final plan in plans) {
+      if (rebootedSince != null && !rebootedSince(plan.createdAt)) continue;
+      var failed = false;
+      var checked = false;
+      var unresolvedOtherDomain = false;
+      for (final item in plan.items) {
+        final definition = registry.resolve(item.operationId);
+        if (definition.restartImpact != RestartImpact.reboot) continue;
+        if (domain != null && definition.domain != domain) {
+          unresolvedOtherDomain = true;
+          continue;
+        }
+        checked = true;
+        final observed = await definition.verify(item.request);
+        item.written = observed;
+        final matches =
+            (observed.kind == OperationStateKind.configured &&
+                _valuesEqual(observed.value, item.request.desiredValue)) ||
+            (observed.kind == OperationStateKind.absent &&
+                item.request.desiredValue == null);
+        if (matches) {
+          item
+            ..status = PlanItemStatus.verified
+            ..error = null;
+        } else {
+          item
+            ..status = PlanItemStatus.failed
+            ..error = 'Post-restart verification failed.';
+          failed = true;
+        }
+      }
+      if (!checked) continue;
+      if (failed) {
+        plan.status = PlanStatus.rollbackRequired;
+      } else if (!unresolvedOtherDomain) {
+        plan
+          ..status = PlanStatus.completed
+          ..restartRequired = false;
+      }
+      store?.save(plan);
+    }
+    return plans;
+  }
+
   Future<OperationPlan> rollback(
     OperationPlan plan, {
     bool overwriteConflicts = false,
