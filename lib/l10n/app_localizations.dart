@@ -1062,6 +1062,77 @@ abstract class AppLocalizations {
   /// **'Finish'**
   String get finish;
 
+  /// No description provided for @driverInventory.
+  ///
+  /// In en, this message translates to:
+  /// **'Driver Store inventory'**
+  String get driverInventory;
+
+  /// No description provided for @driverTools.
+  ///
+  /// In en, this message translates to:
+  /// **'Driver tools'**
+  String get driverTools;
+
+  /// No description provided for @searchDrivers.
+  ///
+  /// In en, this message translates to:
+  /// **'Search Driver Store'**
+  String get searchDrivers;
+
+  /// No description provided for @driverStoreSafetyNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'Only signed, unbound third-party packages can be removed here. ZapTweaks exports and hashes the package first; restoration is best effort because Windows may assign a different published name.'**
+  String get driverStoreSafetyNotice;
+
+  /// No description provided for @signed.
+  ///
+  /// In en, this message translates to:
+  /// **'Signed'**
+  String get signed;
+
+  /// No description provided for @unsigned.
+  ///
+  /// In en, this message translates to:
+  /// **'Unsigned'**
+  String get unsigned;
+
+  /// No description provided for @driverInUse.
+  ///
+  /// In en, this message translates to:
+  /// **'In use'**
+  String get driverInUse;
+
+  /// No description provided for @driverUnbound.
+  ///
+  /// In en, this message translates to:
+  /// **'Unbound'**
+  String get driverUnbound;
+
+  /// No description provided for @exportAndRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Export and remove'**
+  String get exportAndRemove;
+
+  /// No description provided for @confirmDriverRemoval.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Driver Store removal'**
+  String get confirmDriverRemoval;
+
+  /// No description provided for @confirmDriverRemovalMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Published name: {published}\nOriginal INF: {inf}\nPublisher: {publisher}\nVersion: {version}\n\nZapTweaks will export and hash the package before removal. A restart may be required; restoration is best effort.'**
+  String confirmDriverRemovalMessage(
+    Object published,
+    Object inf,
+    Object publisher,
+    Object version,
+  );
+
   /// No description provided for @searchInstalledApps.
   ///
   /// In en, this message translates to:

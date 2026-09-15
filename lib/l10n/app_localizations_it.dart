@@ -538,6 +538,47 @@ class AppLocalizationsIt extends AppLocalizations {
   String get finish => 'Fine';
 
   @override
+  String get driverInventory => 'Inventario Driver Store';
+
+  @override
+  String get driverTools => 'Strumenti driver';
+
+  @override
+  String get searchDrivers => 'Cerca nel Driver Store';
+
+  @override
+  String get driverStoreSafetyNotice =>
+      'Qui si possono rimuovere solo pacchetti di terze parti firmati e non associati. ZapTweaks esporta e verifica gli hash prima della rimozione; il ripristino è best effort perché Windows può assegnare un nome pubblicato diverso.';
+
+  @override
+  String get signed => 'Firmato';
+
+  @override
+  String get unsigned => 'Non firmato';
+
+  @override
+  String get driverInUse => 'In uso';
+
+  @override
+  String get driverUnbound => 'Non associato';
+
+  @override
+  String get exportAndRemove => 'Esporta e rimuovi';
+
+  @override
+  String get confirmDriverRemoval => 'Conferma rimozione dal Driver Store';
+
+  @override
+  String confirmDriverRemovalMessage(
+    Object published,
+    Object inf,
+    Object publisher,
+    Object version,
+  ) {
+    return 'Nome pubblicato: $published\nINF originale: $inf\nAutore: $publisher\nVersione: $version\n\nZapTweaks esporterà il pacchetto e ne verificherà gli hash prima della rimozione. Potrebbe essere necessario un riavvio; il ripristino è best effort.';
+  }
+
+  @override
   String get searchInstalledApps => 'Cerca nelle app installate';
 
   @override

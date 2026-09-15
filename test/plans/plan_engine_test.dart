@@ -18,6 +18,7 @@ class _MemoryOperation extends OperationDefinition {
     this.restartPending = false,
     this.restartPendingValue,
     this.operationPrivilege = OperationPrivilege.user,
+    this.declaredRestartImpact = RestartImpact.none,
     this.forcedInspectKind,
   });
 
@@ -30,6 +31,7 @@ class _MemoryOperation extends OperationDefinition {
   final bool restartPending;
   final Object? restartPendingValue;
   final OperationPrivilege operationPrivilege;
+  final RestartImpact declaredRestartImpact;
   final OperationStateKind? forcedInspectKind;
   @override
   List<String> get legacyAliases => const <String>[];
@@ -127,7 +129,7 @@ class _MemoryOperation extends OperationDefinition {
   OperationPrivilege get privilege => operationPrivilege;
 
   @override
-  RestartImpact get restartImpact => RestartImpact.none;
+  RestartImpact get restartImpact => declaredRestartImpact;
 
   @override
   OperationRisk get risk => OperationRisk.low;
@@ -278,6 +280,33 @@ void main() {
     expect(plan.status, PlanStatus.completed);
     expect(plan.items.single.written?.kind, OperationStateKind.absent);
   });
+
+  test(
+    'declared reboot impact persists continuation after verification',
+    () async {
+      final values = <String, Object?>{};
+      final operation = _MemoryOperation(
+        'driver.remove',
+        OperationScope.driver,
+        values,
+        declaredRestartImpact: RestartImpact.reboot,
+      );
+      final engine = PlanEngine(
+        registry: OperationRegistry(<OperationDefinition>[operation]),
+        context: const OperationContext(windowsBuild: 26100, edition: 'Pro'),
+        user: 'tester',
+        appVersion: '1.0.0',
+      );
+      final plan = await engine.plan(const <OperationRequest>[
+        OperationRequest(operationId: 'driver.remove', desiredValue: true),
+      ]);
+
+      await engine.execute(plan);
+
+      expect(plan.status, PlanStatus.completed);
+      expect(plan.restartRequired, isTrue);
+    },
+  );
 
   test('pending restart must preserve the requested value', () async {
     final values = <String, Object?>{};

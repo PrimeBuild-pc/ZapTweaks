@@ -187,6 +187,9 @@ class PlanEngine {
               (observed.kind == OperationStateKind.absent &&
                   item.request.desiredValue == null)) {
             item.status = PlanItemStatus.verified;
+            if (definition.restartImpact == RestartImpact.reboot) {
+              plan.restartRequired = true;
+            }
           } else {
             throw StateError(
               '${definition.id} verification returned '

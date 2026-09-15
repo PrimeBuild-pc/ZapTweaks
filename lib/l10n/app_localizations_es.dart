@@ -537,6 +537,47 @@ class AppLocalizationsEs extends AppLocalizations {
   String get finish => 'Finish';
 
   @override
+  String get driverInventory => 'Driver Store inventory';
+
+  @override
+  String get driverTools => 'Driver tools';
+
+  @override
+  String get searchDrivers => 'Search Driver Store';
+
+  @override
+  String get driverStoreSafetyNotice =>
+      'Only signed, unbound third-party packages can be removed here. ZapTweaks exports and hashes the package first; restoration is best effort because Windows may assign a different published name.';
+
+  @override
+  String get signed => 'Signed';
+
+  @override
+  String get unsigned => 'Unsigned';
+
+  @override
+  String get driverInUse => 'In use';
+
+  @override
+  String get driverUnbound => 'Unbound';
+
+  @override
+  String get exportAndRemove => 'Export and remove';
+
+  @override
+  String get confirmDriverRemoval => 'Confirm Driver Store removal';
+
+  @override
+  String confirmDriverRemovalMessage(
+    Object published,
+    Object inf,
+    Object publisher,
+    Object version,
+  ) {
+    return 'Published name: $published\nOriginal INF: $inf\nPublisher: $publisher\nVersion: $version\n\nZapTweaks will export and hash the package before removal. A restart may be required; restoration is best effort.';
+  }
+
+  @override
   String get searchInstalledApps => 'Search installed apps';
 
   @override
