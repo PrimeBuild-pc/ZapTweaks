@@ -3,6 +3,42 @@ import 'dart:ffi';
 import 'package:ffi/ffi.dart';
 import 'package:win32/win32.dart';
 
+typedef _ChangeServiceConfigNative =
+    Int32 Function(
+      IntPtr,
+      Uint32,
+      Uint32,
+      Uint32,
+      Pointer<Utf16>,
+      Pointer<Utf16>,
+      Pointer<Uint32>,
+      Pointer<Utf16>,
+      Pointer<Utf16>,
+      Pointer<Utf16>,
+      Pointer<Utf16>,
+    );
+typedef _ChangeServiceConfigDart =
+    int Function(
+      int,
+      int,
+      int,
+      int,
+      Pointer<Utf16>,
+      Pointer<Utf16>,
+      Pointer<Uint32>,
+      Pointer<Utf16>,
+      Pointer<Utf16>,
+      Pointer<Utf16>,
+      Pointer<Utf16>,
+    );
+
+final _ChangeServiceConfigDart _changeServiceConfig =
+    DynamicLibrary.open(
+      'advapi32.dll',
+    ).lookupFunction<_ChangeServiceConfigNative, _ChangeServiceConfigDart>(
+      'ChangeServiceConfigW',
+    );
+
 class WindowsServiceInfo {
   const WindowsServiceInfo({
     required this.name,
@@ -25,11 +61,23 @@ class WindowsServiceInfo {
   final int processId;
 }
 
-class ServiceControlManager {
+abstract interface class ServiceConfigurationStore {
+  WindowsServiceInfo inspect(String name);
+  void configureStart(
+    String name, {
+    required int startType,
+    required bool delayedAutoStart,
+  });
+}
+
+class ServiceControlManager implements ServiceConfigurationStore {
   const ServiceControlManager();
 
   static const int _serviceQueryConfig = 1;
+  static const int _serviceChangeConfig = 2;
+  static const int _serviceNoChange = 0xffffffff;
 
+  @override
   WindowsServiceInfo inspect(String name) {
     if (!RegExp(r'^[A-Za-z0-9_.-]{1,256}$').hasMatch(name)) {
       throw ArgumentError.value(name, 'name', 'Invalid service name.');
@@ -79,6 +127,66 @@ class ServiceControlManager {
       }
     } finally {
       calloc.free(namePointer);
+      CloseServiceHandle(manager);
+    }
+  }
+
+  @override
+  void configureStart(
+    String name, {
+    required int startType,
+    required bool delayedAutoStart,
+  }) {
+    if (!RegExp(r'^[A-Za-z0-9_.-]{1,256}$').hasMatch(name) ||
+        !const <int>{
+          SERVICE_AUTO_START,
+          SERVICE_DEMAND_START,
+          SERVICE_DISABLED,
+        }.contains(startType)) {
+      throw ArgumentError('Invalid service startup configuration.');
+    }
+    final manager = OpenSCManager(nullptr, nullptr, SC_MANAGER_CONNECT);
+    if (manager == 0) _throwLastError('OpenSCManager');
+    final pointer = name.toNativeUtf16();
+    try {
+      final service = OpenService(manager, pointer, _serviceChangeConfig);
+      if (service == 0) _throwLastError('OpenService $name');
+      try {
+        if (_changeServiceConfig(
+              service,
+              _serviceNoChange,
+              startType,
+              _serviceNoChange,
+              nullptr,
+              nullptr,
+              nullptr,
+              nullptr,
+              nullptr,
+              nullptr,
+              nullptr,
+            ) ==
+            FALSE) {
+          _throwLastError('ChangeServiceConfig $name');
+        }
+        final delayed = calloc<SERVICE_DELAYED_AUTO_START_INFO>()
+          ..ref.fDelayedAutostart = delayedAutoStart ? TRUE : FALSE;
+        try {
+          if (ChangeServiceConfig2(
+                service,
+                SERVICE_CONFIG_DELAYED_AUTO_START_INFO,
+                delayed.cast(),
+              ) ==
+              FALSE) {
+            _throwLastError('ChangeServiceConfig2 $name');
+          }
+        } finally {
+          calloc.free(delayed);
+        }
+      } finally {
+        CloseServiceHandle(service);
+      }
+    } finally {
+      calloc.free(pointer);
       CloseServiceHandle(manager);
     }
   }
