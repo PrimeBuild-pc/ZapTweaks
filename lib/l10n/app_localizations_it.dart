@@ -617,6 +617,16 @@ class AppLocalizationsIt extends AppLocalizations {
   String get activate => 'Attiva';
 
   @override
+  String get details => 'Dettagli';
+
+  @override
+  String get compare => 'Confronta';
+
+  @override
+  String get noPowerDifferences =>
+      'Non sono state trovate differenze nei valori AC/DC.';
+
+  @override
   String get firmwareTemperatures => 'Zone termiche firmware';
 
   @override

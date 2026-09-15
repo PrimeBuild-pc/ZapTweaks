@@ -29,6 +29,24 @@ abstract interface class PowerSchemeStore {
   void setActiveScheme(String schemeId);
 }
 
+class PowerSettingInfo {
+  const PowerSettingInfo({
+    required this.subgroupId,
+    required this.subgroupName,
+    required this.settingId,
+    required this.name,
+    required this.description,
+    required this.value,
+  });
+
+  final String subgroupId;
+  final String subgroupName;
+  final String settingId;
+  final String name;
+  final String description;
+  final PowerSettingValue value;
+}
+
 class PowerSchemeInfo {
   const PowerSchemeInfo({
     required this.id,
@@ -151,6 +169,11 @@ class WindowsPowerSchemeService implements PowerSchemeStore {
           _PowerReadFriendlyNameNative,
           _PowerReadFriendlyNameDart
         >('PowerReadFriendlyName');
+    _readDescription = _library
+        .lookupFunction<
+          _PowerReadFriendlyNameNative,
+          _PowerReadFriendlyNameDart
+        >('PowerReadDescription');
     _readAcValueIndex = _library
         .lookupFunction<_PowerReadValueIndexNative, _PowerReadValueIndexDart>(
           'PowerReadACValueIndex',
@@ -187,10 +210,13 @@ class WindowsPowerSchemeService implements PowerSchemeStore {
   }
 
   static const int _accessScheme = 16;
+  static const int _accessSubgroup = 17;
+  static const int _accessIndividualSetting = 18;
   final DynamicLibrary _library;
   late final _PowerGetActiveSchemeDart _getActiveScheme;
   late final _PowerEnumerateDart _enumerate;
   late final _PowerReadFriendlyNameDart _readFriendlyName;
+  late final _PowerReadFriendlyNameDart _readDescription;
   late final _PowerReadValueIndexDart _readAcValueIndex;
   late final _PowerReadValueIndexDart _readDcValueIndex;
   late final _PowerWriteValueIndexDart _writeAcValueIndex;
@@ -329,6 +355,82 @@ class WindowsPowerSchemeService implements PowerSchemeStore {
     return schemes;
   }
 
+  List<PowerSettingInfo> enumerateSettings(String schemeId) => using((arena) {
+    final scheme = _guid(schemeId, arena);
+    final settings = <PowerSettingInfo>[];
+    for (final subgroupId in _enumerateIds(scheme, nullptr, _accessSubgroup)) {
+      final subgroup = _guid(subgroupId, arena);
+      final subgroupName = _readText(
+        _readFriendlyName,
+        scheme,
+        subgroup,
+        nullptr,
+        optional: true,
+      );
+      for (final settingId in _enumerateIds(
+        scheme,
+        subgroup,
+        _accessIndividualSetting,
+      )) {
+        final setting = _guid(settingId, arena);
+        final settingName = _readText(
+          _readFriendlyName,
+          scheme,
+          subgroup,
+          setting,
+          optional: true,
+        );
+        settings.add(
+          PowerSettingInfo(
+            subgroupId: subgroupId,
+            subgroupName: subgroupName.isEmpty ? subgroupId : subgroupName,
+            settingId: settingId,
+            name: settingName.isEmpty ? settingId : settingName,
+            description: _readText(
+              _readDescription,
+              scheme,
+              subgroup,
+              setting,
+              optional: true,
+            ),
+            value: readSetting(schemeId, subgroupId, settingId),
+          ),
+        );
+      }
+    }
+    return settings;
+  });
+
+  List<String> _enumerateIds(
+    Pointer<GUID> scheme,
+    Pointer<GUID> subgroup,
+    int access,
+  ) {
+    final ids = <String>[];
+    for (var index = 0; ; index++) {
+      final guid = calloc<GUID>();
+      final size = calloc<Uint32>()..value = sizeOf<GUID>();
+      try {
+        final result = _enumerate(
+          0,
+          scheme,
+          subgroup,
+          access,
+          index,
+          guid.cast<Uint8>(),
+          size,
+        );
+        if (result == ERROR_NO_MORE_ITEMS) break;
+        _check(result, 'PowerEnumerate');
+        ids.add(guid.ref.toString().toLowerCase());
+      } finally {
+        calloc.free(guid);
+        calloc.free(size);
+      }
+    }
+    return ids;
+  }
+
   String _activeSchemeId() {
     final pointer = calloc<Pointer<GUID>>();
     try {
@@ -343,23 +445,26 @@ class WindowsPowerSchemeService implements PowerSchemeStore {
     }
   }
 
-  String _friendlyName(Pointer<GUID> scheme) {
+  String _friendlyName(Pointer<GUID> scheme) =>
+      _readText(_readFriendlyName, scheme, nullptr, nullptr);
+
+  String _readText(
+    _PowerReadFriendlyNameDart reader,
+    Pointer<GUID> scheme,
+    Pointer<GUID> subgroup,
+    Pointer<GUID> setting, {
+    bool optional = false,
+  }) {
     final size = calloc<Uint32>();
     try {
-      final first = _readFriendlyName(
-        0,
-        scheme,
-        nullptr,
-        nullptr,
-        nullptr,
-        size,
-      );
-      if (first != ERROR_MORE_DATA) _check(first, 'PowerReadFriendlyName size');
+      final first = reader(0, scheme, subgroup, setting, nullptr, size);
+      if (optional && first == ERROR_FILE_NOT_FOUND) return '';
+      if (first != ERROR_MORE_DATA) _check(first, 'PowrProf text size');
       final buffer = calloc<Uint8>(size.value);
       try {
         _check(
-          _readFriendlyName(0, scheme, nullptr, nullptr, buffer, size),
-          'PowerReadFriendlyName',
+          reader(0, scheme, subgroup, setting, buffer, size),
+          'PowrProf text',
         );
         return buffer.cast<Utf16>().toDartString();
       } finally {

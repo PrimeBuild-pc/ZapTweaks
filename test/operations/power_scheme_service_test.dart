@@ -16,6 +16,24 @@ void main() {
     expect(schemes.every((scheme) => scheme.name.isNotEmpty), isTrue);
   });
 
+  test(
+    'PowrProf enumerates setting metadata without unhiding Windows UI entries',
+    () {
+      if (!Platform.isWindows) return;
+
+      final service = WindowsPowerSchemeService();
+      final settings = service.enumerateSettings(service.activeSchemeId);
+
+      expect(settings, isNotEmpty);
+      expect(
+        settings.every((setting) => setting.subgroupId.isNotEmpty),
+        isTrue,
+      );
+      expect(settings.every((setting) => setting.settingId.isNotEmpty), isTrue);
+      expect(settings.every((setting) => setting.name.isNotEmpty), isTrue);
+    },
+  );
+
   test('PowrProf reads AC and DC values from the active scheme', () {
     if (!Platform.isWindows) return;
 

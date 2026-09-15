@@ -18,6 +18,8 @@ class _PowerPlansPageState extends State<PowerPlansPage> {
   String _query = '';
   String? _error;
   bool _busy = true;
+  List<PowerSettingInfo>? _settings;
+  String? _settingsTitle;
 
   @override
   void initState() {
@@ -56,6 +58,60 @@ class _PowerPlansPageState extends State<PowerPlansPage> {
         );
       }
       await _load();
+    } catch (error) {
+      if (mounted) setState(() => _error = error.toString());
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  Future<void> _showSettings(PowerSchemeInfo scheme) async {
+    setState(() => _busy = true);
+    try {
+      final settings = await Future<List<PowerSettingInfo>>(
+        () => WindowsPowerSchemeService().enumerateSettings(scheme.id),
+      );
+      if (mounted) {
+        setState(() {
+          _settings = settings;
+          _settingsTitle = scheme.name;
+        });
+      }
+    } catch (error) {
+      if (mounted) setState(() => _error = error.toString());
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  Future<void> _compare(PowerSchemeInfo scheme) async {
+    final active = _schemes.singleWhere((item) => item.active);
+    setState(() => _busy = true);
+    try {
+      final service = WindowsPowerSchemeService();
+      final left = await Future<List<PowerSettingInfo>>(
+        () => service.enumerateSettings(active.id),
+      );
+      final right = await Future<List<PowerSettingInfo>>(
+        () => service.enumerateSettings(scheme.id),
+      );
+      final rightById = <String, PowerSettingInfo>{
+        for (final setting in right) setting.settingId: setting,
+      };
+      final differences = left
+          .where((setting) {
+            final other = rightById[setting.settingId];
+            return other == null ||
+                other.value.ac != setting.value.ac ||
+                other.value.dc != setting.value.dc;
+          })
+          .toList(growable: false);
+      if (mounted) {
+        setState(() {
+          _settings = differences;
+          _settingsTitle = '${active.name} ↔ ${scheme.name}';
+        });
+      }
     } catch (error) {
       if (mounted) setState(() => _error = error.toString());
     } finally {
@@ -109,16 +165,51 @@ class _PowerPlansPageState extends State<PowerPlansPage> {
                         ? FluentIcons.radio_btn_on
                         : FluentIcons.radio_btn_off,
                   ),
-                  trailing: scheme.active
-                      ? Text(strings.activePowerPlan)
-                      : Button(
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Button(
+                        onPressed: _busy ? null : () => _showSettings(scheme),
+                        child: Text(strings.details),
+                      ),
+                      const SizedBox(width: 8),
+                      if (!scheme.active) ...<Widget>[
+                        Button(
+                          onPressed: _busy ? null : () => _compare(scheme),
+                          child: Text(strings.compare),
+                        ),
+                        const SizedBox(width: 8),
+                        Button(
                           onPressed: _busy ? null : () => _activate(scheme.id),
                           child: Text(strings.activate),
                         ),
+                      ] else
+                        Text(strings.activePowerPlan),
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
+        if (_settings != null) ...<Widget>[
+          const SizedBox(height: 16),
+          Text(
+            _settingsTitle!,
+            style: FluentTheme.of(context).typography.subtitle,
+          ),
+          const SizedBox(height: 8),
+          if (_settings!.isEmpty)
+            Text(strings.noPowerDifferences)
+          else
+            ..._settings!.map(
+              (setting) => ListTile(
+                title: Text(setting.name),
+                subtitle: Text(
+                  '${setting.subgroupName} · AC ${setting.value.ac} · DC ${setting.value.dc}\n${setting.description}',
+                ),
+              ),
+            ),
+        ],
       ],
     );
   }

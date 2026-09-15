@@ -1200,6 +1200,24 @@ abstract class AppLocalizations {
   /// **'Activate'**
   String get activate;
 
+  /// No description provided for @details.
+  ///
+  /// In en, this message translates to:
+  /// **'Details'**
+  String get details;
+
+  /// No description provided for @compare.
+  ///
+  /// In en, this message translates to:
+  /// **'Compare'**
+  String get compare;
+
+  /// No description provided for @noPowerDifferences.
+  ///
+  /// In en, this message translates to:
+  /// **'No AC/DC value differences were found.'**
+  String get noPowerDifferences;
+
   /// No description provided for @firmwareTemperatures.
   ///
   /// In en, this message translates to:
