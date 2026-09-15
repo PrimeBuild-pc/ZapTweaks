@@ -21,8 +21,9 @@ This ledger tracks `docs/NEW PLAN.md`. A phase is complete only when its gate is
 - `flutter build windows --debug` and `--release`: succeeded.
 - The main executable starts as `asInvoker`; real UAC helper smoke tests
   rejected unknown operations without mutation and returned typed failures.
-  Requests are now SHA-256-bound to the approved payload and helper waits have
-  a five-minute termination ceiling.
+  Requests are now SHA-256-bound to the approved payload. Helper waits have a
+  five-minute termination ceiling, except explicitly identified DISM/SFC repair
+  plans, which have a finite two-hour ceiling.
 - The `1280x820` app window was observed centered on the primary display after
   startup with a secondary display using negative bounds.
 - Existing Hyper-V VM `D:\VmLab\NeuroTune-W11` passed a real helper mutation
@@ -33,6 +34,7 @@ This ledger tracks `docs/NEW PLAN.md`. A phase is complete only when its gate is
   `power_throttling_off` through the native
   elevated multi-item plan protocol, the temporary Windows Update driver
   exclusion, and PowrProf maximum processor state AC/DC mutation. Each was read
-  back and restored from a typed snapshot; original state was restored,
-  payloads were removed, and the VM was shut down.
+  back and restored from a typed snapshot. A real five-second WPR smoke capture
+  also produced a non-empty 15,728,640-byte ETL, then removed the trace and
+  payload. Original state was restored and the VM was shut down.
   No VM or checkpoint was created.
