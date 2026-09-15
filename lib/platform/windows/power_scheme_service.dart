@@ -47,6 +47,10 @@ class PowerSettingInfo {
   final PowerSettingValue value;
 }
 
+abstract interface class PowerSchemeInventory {
+  List<PowerSchemeInfo> enumerate();
+}
+
 class PowerSchemeInfo {
   const PowerSchemeInfo({
     required this.id,
@@ -153,7 +157,8 @@ typedef _PowerWriteFriendlyNameDart =
       int,
     );
 
-class WindowsPowerSchemeService implements PowerSchemeStore {
+class WindowsPowerSchemeService
+    implements PowerSchemeStore, PowerSchemeInventory {
   WindowsPowerSchemeService({DynamicLibrary? library})
     : _library = library ?? DynamicLibrary.open('powrprof.dll') {
     _getActiveScheme = _library
@@ -321,6 +326,7 @@ class WindowsPowerSchemeService implements PowerSchemeStore {
     });
   }
 
+  @override
   List<PowerSchemeInfo> enumerate() {
     final active = _activeSchemeId();
     final schemes = <PowerSchemeInfo>[];
