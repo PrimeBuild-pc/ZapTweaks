@@ -119,6 +119,10 @@ class ProcessRunner {
     'winget.exe',
     'wpr',
     'wpr.exe',
+    'dism',
+    'dism.exe',
+    'sfc',
+    'sfc.exe',
   };
 
   ProcessExecutionMode get mode => _mode;
