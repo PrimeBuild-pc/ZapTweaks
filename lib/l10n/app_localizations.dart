@@ -1146,6 +1146,54 @@ abstract class AppLocalizations {
   /// **'Trace saved to {path}'**
   String etwTraceSaved(Object path);
 
+  /// No description provided for @hardwareMonitor.
+  ///
+  /// In en, this message translates to:
+  /// **'Hardware monitor'**
+  String get hardwareMonitor;
+
+  /// No description provided for @dedicatedVramUsage.
+  ///
+  /// In en, this message translates to:
+  /// **'Dedicated GPU memory in use'**
+  String get dedicatedVramUsage;
+
+  /// No description provided for @dedicatedVramUsageDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Takes one Windows GPU performance-counter snapshot. Nothing keeps running afterward.'**
+  String get dedicatedVramUsageDescription;
+
+  /// No description provided for @vramUsageValue.
+  ///
+  /// In en, this message translates to:
+  /// **'{megabytes} MB'**
+  String vramUsageValue(Object megabytes);
+
+  /// No description provided for @captureNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Capture now'**
+  String get captureNow;
+
+  /// No description provided for @firmwareTemperatures.
+  ///
+  /// In en, this message translates to:
+  /// **'Firmware thermal zones'**
+  String get firmwareTemperatures;
+
+  /// No description provided for @firmwareTemperaturesDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Reads ACPI thermal zones once. Availability and sensor meaning depend on the PC firmware; values are not labeled as CPU or GPU temperatures.'**
+  String get firmwareTemperaturesDescription;
+
+  /// No description provided for @noThermalSensors.
+  ///
+  /// In en, this message translates to:
+  /// **'No ACPI thermal zones were exposed by this PC.'**
+  String get noThermalSensors;
+
   /// No description provided for @driverInventory.
   ///
   /// In en, this message translates to:

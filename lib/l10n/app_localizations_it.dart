@@ -587,6 +587,34 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
+  String get hardwareMonitor => 'Monitor hardware';
+
+  @override
+  String get dedicatedVramUsage => 'Memoria GPU dedicata in uso';
+
+  @override
+  String get dedicatedVramUsageDescription =>
+      'Acquisisce una singola lettura dai contatori prestazioni GPU di Windows. Al termine non resta attivo nulla.';
+
+  @override
+  String vramUsageValue(Object megabytes) {
+    return '$megabytes MB';
+  }
+
+  @override
+  String get captureNow => 'Acquisisci ora';
+
+  @override
+  String get firmwareTemperatures => 'Zone termiche firmware';
+
+  @override
+  String get firmwareTemperaturesDescription =>
+      'Legge una volta le zone termiche ACPI. Disponibilità e significato dei sensori dipendono dal firmware; i valori non sono indicati come temperature CPU o GPU.';
+
+  @override
+  String get noThermalSensors => 'Questo PC non espone zone termiche ACPI.';
+
+  @override
   String get driverInventory => 'Inventario Driver Store';
 
   @override

@@ -586,6 +586,35 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String get hardwareMonitor => 'Hardware monitor';
+
+  @override
+  String get dedicatedVramUsage => 'Dedicated GPU memory in use';
+
+  @override
+  String get dedicatedVramUsageDescription =>
+      'Takes one Windows GPU performance-counter snapshot. Nothing keeps running afterward.';
+
+  @override
+  String vramUsageValue(Object megabytes) {
+    return '$megabytes MB';
+  }
+
+  @override
+  String get captureNow => 'Capture now';
+
+  @override
+  String get firmwareTemperatures => 'Firmware thermal zones';
+
+  @override
+  String get firmwareTemperaturesDescription =>
+      'Reads ACPI thermal zones once. Availability and sensor meaning depend on the PC firmware; values are not labeled as CPU or GPU temperatures.';
+
+  @override
+  String get noThermalSensors =>
+      'No ACPI thermal zones were exposed by this PC.';
+
+  @override
   String get driverInventory => 'Driver Store inventory';
 
   @override

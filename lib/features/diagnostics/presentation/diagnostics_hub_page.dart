@@ -3,6 +3,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../tweaks/application/tweak_controller.dart';
 import '../../tweaks/presentation/pages/tweaks_page.dart';
+import 'hardware_monitor_page.dart';
 import 'recovery_page.dart';
 
 class DiagnosticsHubPage extends StatefulWidget {
@@ -40,6 +41,11 @@ class _DiagnosticsHubPageState extends State<DiagnosticsHubPage> {
           text: Text(strings.recovery),
           icon: const Icon(FluentIcons.repair),
           body: RecoveryPage(controller: widget.controller),
+        ),
+        Tab(
+          text: Text(strings.hardwareMonitor),
+          icon: const Icon(FluentIcons.speed_high),
+          body: const HardwareMonitorPage(),
         ),
         Tab(
           text: Text(strings.diagnosticTools),
