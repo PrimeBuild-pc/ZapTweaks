@@ -6,11 +6,13 @@ import '../../features/drivers/application/local_driver_package_service.dart';
 import '../../features/drivers/application/setupapi_device_inventory_service.dart';
 import '../../features/drivers/application/windows_driver_inventory_service.dart';
 import '../../platform/windows/power_scheme_service.dart';
+import '../../platform/windows/processor_topology.dart';
 import '../../platform/windows/registry_value_store.dart';
 import '../../platform/windows/rss_service.dart';
 import '../services/process_runner.dart';
 import 'app_restore_operation.dart';
 import 'appx_removal_operation.dart';
+import 'device_interrupt_affinity_operation.dart';
 import 'device_msi_operation.dart';
 import 'driver_package_install_operation.dart';
 import 'driver_store_remove_operation.dart';
@@ -26,6 +28,12 @@ List<OperationDefinition> createNativeOperationCatalog(
   RegistryValueStore registry,
   ProcessRunner processRunner,
 ) => <OperationDefinition>[
+  DeviceInterruptAffinityOperation(
+    registry: registry,
+    inventory:
+        const SetupApiDeviceInventoryService().scanPciInterruptCapabilities,
+    topology: ProcessorTopology.inspect,
+  ),
   DeviceMsiOperation(
     registry: registry,
     inventory:
