@@ -1254,6 +1254,30 @@ abstract class AppLocalizations {
   /// **'Rename'**
   String get rename;
 
+  /// No description provided for @delete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get delete;
+
+  /// No description provided for @deletePowerPlan.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete power plan'**
+  String get deletePowerPlan;
+
+  /// No description provided for @deletePowerPlanDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Exports the selected inactive plan before deleting it and preserves the backup for exact rollback.'**
+  String get deletePowerPlanDescription;
+
+  /// No description provided for @deletePowerPlanWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete {name}? ZapTweaks will export a recovery copy first.'**
+  String deletePowerPlanWarning(Object name);
+
   /// No description provided for @firmwareTemperatures.
   ///
   /// In en, this message translates to:

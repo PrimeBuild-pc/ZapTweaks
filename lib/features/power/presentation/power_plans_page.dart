@@ -199,6 +199,49 @@ class _PowerPlansPageState extends State<PowerPlansPage> {
     }
   }
 
+  Future<void> _delete(PowerSchemeInfo scheme) async {
+    final strings = AppLocalizations.of(context);
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => ContentDialog(
+        title: Text(strings.deletePowerPlan),
+        content: Text(strings.deletePowerPlanWarning(scheme.name)),
+        actions: <Widget>[
+          Button(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(strings.cancel),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: Text(strings.delete),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true) return;
+    setState(() => _busy = true);
+    try {
+      final plan = await widget.controller
+          .executeNativeRequests(<OperationRequest>[
+            OperationRequest(
+              operationId: 'power.scheme.delete',
+              target: scheme.id,
+              desiredValue: null,
+            ),
+          ]);
+      if (plan.status != PlanStatus.completed) {
+        throw StateError(
+          plan.items.single.error ?? 'Power scheme deletion failed.',
+        );
+      }
+      await _load();
+    } catch (error) {
+      if (mounted) setState(() => _error = error.toString());
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
   Future<void> _exportActive() async {
     final path = const WindowsFileDialog().savePowerPlan();
     if (path == null) return;
@@ -298,6 +341,11 @@ class _PowerPlansPageState extends State<PowerPlansPage> {
                         Button(
                           onPressed: _busy ? null : () => _activate(scheme.id),
                           child: Text(strings.activate),
+                        ),
+                        const SizedBox(width: 8),
+                        Button(
+                          onPressed: _busy ? null : () => _delete(scheme),
+                          child: Text(strings.delete),
                         ),
                       ] else
                         Text(strings.activePowerPlan),

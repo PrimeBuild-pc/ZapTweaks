@@ -645,6 +645,21 @@ class AppLocalizationsEs extends AppLocalizations {
   String get rename => 'Rename';
 
   @override
+  String get delete => 'Delete';
+
+  @override
+  String get deletePowerPlan => 'Delete power plan';
+
+  @override
+  String get deletePowerPlanDescription =>
+      'Exports the selected inactive plan before deleting it and preserves the backup for exact rollback.';
+
+  @override
+  String deletePowerPlanWarning(Object name) {
+    return 'Delete $name? ZapTweaks will export a recovery copy first.';
+  }
+
+  @override
   String get firmwareTemperatures => 'Firmware thermal zones';
 
   @override

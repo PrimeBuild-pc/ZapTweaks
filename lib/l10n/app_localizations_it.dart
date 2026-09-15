@@ -647,6 +647,21 @@ class AppLocalizationsIt extends AppLocalizations {
   String get rename => 'Rinomina';
 
   @override
+  String get delete => 'Elimina';
+
+  @override
+  String get deletePowerPlan => 'Elimina piano di alimentazione';
+
+  @override
+  String get deletePowerPlanDescription =>
+      'Esporta il piano inattivo selezionato prima di eliminarlo e conserva il backup per il rollback esatto.';
+
+  @override
+  String deletePowerPlanWarning(Object name) {
+    return 'Eliminare $name? ZapTweaks esporterà prima una copia di ripristino.';
+  }
+
+  @override
   String get firmwareTemperatures => 'Zone termiche firmware';
 
   @override
