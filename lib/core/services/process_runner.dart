@@ -117,6 +117,8 @@ class ProcessRunner {
     'bcdedit.exe',
     'winget',
     'winget.exe',
+    'wpr',
+    'wpr.exe',
   };
 
   ProcessExecutionMode get mode => _mode;
