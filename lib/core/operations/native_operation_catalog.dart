@@ -7,6 +7,7 @@ import '../../features/drivers/application/setupapi_device_inventory_service.dar
 import '../../features/drivers/application/windows_driver_inventory_service.dart';
 import '../../platform/windows/power_scheme_service.dart';
 import '../../platform/windows/registry_value_store.dart';
+import '../../platform/windows/rss_service.dart';
 import '../services/process_runner.dart';
 import 'app_restore_operation.dart';
 import 'appx_removal_operation.dart';
@@ -17,12 +18,14 @@ import 'operation.dart';
 import 'optional_feature_operation.dart';
 import 'power_setting_operation.dart';
 import 'registry_dword_operation.dart';
+import 'rss_configuration_operation.dart';
 import 'winget_package_operation.dart';
 
 List<OperationDefinition> createNativeOperationCatalog(
   RegistryValueStore registry,
   ProcessRunner processRunner,
 ) => <OperationDefinition>[
+  RssConfigurationOperation(WindowsRssService(processRunner: processRunner)),
   DriverUpdatePolicyOperation(
     registry: registry,
     policyStore: DriverUpdatePolicyStore(),
