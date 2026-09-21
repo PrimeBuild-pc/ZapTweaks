@@ -515,7 +515,7 @@ class TweakController extends ChangeNotifier {
   }
 
   bool isDescriptorAvailable(TweakDescriptor descriptor) {
-    if (descriptor.isRejected) return false;
+    if (descriptor.isRejected || descriptor.isBlockedLegacyScript) return false;
     if (_isDescriptorEnabled(descriptor)) {
       return true;
     }
@@ -554,6 +554,9 @@ class TweakController extends ChangeNotifier {
   String availabilityHint(TweakDescriptor descriptor) {
     if (descriptor.isRejected) {
       return 'Documented for compatibility, but intentionally not automated.';
+    }
+    if (descriptor.isBlockedLegacyScript) {
+      return 'Legacy interactive script execution is blocked; use its native or assisted replacement.';
     }
     if (descriptor.requiredCpuVendor != null &&
         !_hardwareProfile.supportsCpu(descriptor.requiredCpuVendor)) {

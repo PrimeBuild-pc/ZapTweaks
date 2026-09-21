@@ -72,6 +72,7 @@ flutter:
   assets:
     - assets/icons/
     - assets/catalog/legacy_catalog.json
+    - assets/catalog/legacy_script_classification.json
     - assets/catalog/app_catalog.json
 
   # To add custom fonts to your application, add a fonts section here,

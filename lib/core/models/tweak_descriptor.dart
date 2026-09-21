@@ -43,6 +43,9 @@ class TweakDescriptor {
   bool get isScriptAction => scriptTweak != null && !scriptTweak!.hasState;
   bool get isAlias => migrationDisposition == 'alias';
   bool get isRejected => migrationDisposition == 'rejected';
+  bool get isBlockedLegacyScript =>
+      scriptTweak?.type == TweakUiType.interactiveScript &&
+      migrationDisposition != 'external';
 
   TweakDescriptor copyWith({
     String? category,
