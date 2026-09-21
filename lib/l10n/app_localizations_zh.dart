@@ -641,6 +641,17 @@ class AppLocalizationsZh extends AppLocalizations {
       'Creates and verifies a PowrProf copy. Rollback is best effort because Windows assigns its GUID during creation.';
 
   @override
+  String get apply => 'Apply';
+
+  @override
+  String get edit => 'Edit';
+
+  @override
+  String powerValueRange(int maximum) {
+    return 'Values must be between 0 and $maximum.';
+  }
+
+  @override
   String get delete => 'Delete';
 
   @override

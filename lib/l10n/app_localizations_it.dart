@@ -657,6 +657,17 @@ class AppLocalizationsIt extends AppLocalizations {
       'Crea e verifica una copia PowrProf. Il rollback è best effort perché Windows assegna il GUID durante la creazione.';
 
   @override
+  String get apply => 'Applica';
+
+  @override
+  String get edit => 'Modifica';
+
+  @override
+  String powerValueRange(int maximum) {
+    return 'I valori devono essere compresi tra 0 e $maximum.';
+  }
+
+  @override
   String get delete => 'Elimina';
 
   @override

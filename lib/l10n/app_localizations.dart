@@ -1272,6 +1272,24 @@ abstract class AppLocalizations {
   /// **'Creates and verifies a PowrProf copy. Rollback is best effort because Windows assigns its GUID during creation.'**
   String get duplicatePowerPlanDescription;
 
+  /// No description provided for @apply.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply'**
+  String get apply;
+
+  /// No description provided for @edit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get edit;
+
+  /// No description provided for @powerValueRange.
+  ///
+  /// In en, this message translates to:
+  /// **'Values must be between 0 and {maximum}.'**
+  String powerValueRange(int maximum);
+
   /// No description provided for @delete.
   ///
   /// In en, this message translates to:

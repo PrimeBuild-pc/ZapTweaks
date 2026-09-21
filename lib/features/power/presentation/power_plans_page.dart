@@ -26,6 +26,7 @@ class _PowerPlansPageState extends State<PowerPlansPage> {
   bool _busy = true;
   List<PowerSettingInfo>? _settings;
   String? _settingsTitle;
+  String? _settingsSchemeId;
 
   @override
   void initState() {
@@ -81,6 +82,7 @@ class _PowerPlansPageState extends State<PowerPlansPage> {
         setState(() {
           _settings = settings;
           _settingsTitle = scheme.name;
+          _settingsSchemeId = scheme.id;
         });
       }
     } catch (error) {
@@ -116,8 +118,87 @@ class _PowerPlansPageState extends State<PowerPlansPage> {
         setState(() {
           _settings = differences;
           _settingsTitle = '${active.name} ↔ ${scheme.name}';
+          _settingsSchemeId = null;
         });
       }
+    } catch (error) {
+      if (mounted) setState(() => _error = error.toString());
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  Future<void> _editSetting(PowerSettingInfo setting) async {
+    final strings = AppLocalizations.of(context);
+    final ac = TextEditingController(text: setting.value.ac.toString());
+    final dc = TextEditingController(text: setting.value.dc.toString());
+    final values = await showDialog<List<int>>(
+      context: context,
+      builder: (context) => ContentDialog(
+        title: Text(setting.name),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            const Text('AC'),
+            TextBox(controller: ac),
+            const SizedBox(height: 8),
+            const Text('DC'),
+            TextBox(controller: dc),
+          ],
+        ),
+        actions: <Widget>[
+          Button(
+            onPressed: () => Navigator.pop(context),
+            child: Text(strings.cancel),
+          ),
+          FilledButton(
+            onPressed: () {
+              final parsedAc = int.tryParse(ac.text);
+              final parsedDc = int.tryParse(dc.text);
+              if (parsedAc != null && parsedDc != null) {
+                Navigator.pop(context, <int>[parsedAc, parsedDc]);
+              }
+            },
+            child: Text(strings.apply),
+          ),
+        ],
+      ),
+    );
+    ac.dispose();
+    dc.dispose();
+    if (values == null || _settingsSchemeId == null) {
+      return;
+    }
+    final operation =
+        setting.settingId == 'be337238-0d82-4146-a960-4f3749d470c7'
+        ? 'power_processor_boost_mode'
+        : 'power_max_processor_state';
+    final max = operation == 'power_max_processor_state' ? 100 : 6;
+    if (values.any((value) => value < 0 || value > max)) {
+      setState(() => _error = strings.powerValueRange(max));
+      return;
+    }
+    setState(() => _busy = true);
+    try {
+      final plan = await widget.controller.executeNativeRequests(
+        <OperationRequest>[
+          OperationRequest(
+            operationId: operation,
+            target: _settingsSchemeId,
+            desiredValue: <String, int>{'ac': values[0], 'dc': values[1]},
+          ),
+        ],
+      );
+      if (plan.status != PlanStatus.completed) {
+        throw StateError(
+          plan.items.single.error ?? 'Power setting update failed.',
+        );
+      }
+      final scheme = _schemes.singleWhere(
+        (item) => item.id == _settingsSchemeId,
+      );
+      await _showSettings(scheme);
     } catch (error) {
       if (mounted) setState(() => _error = error.toString());
     } finally {
@@ -421,6 +502,17 @@ class _PowerPlansPageState extends State<PowerPlansPage> {
                 subtitle: Text(
                   '${setting.subgroupName} · AC ${setting.value.ac} · DC ${setting.value.dc}\n${setting.description}',
                 ),
+                trailing:
+                    _settingsSchemeId != null &&
+                        const <String>{
+                          'be337238-0d82-4146-a960-4f3749d470c7',
+                          'bc5038f7-23e0-4960-96da-33abaf5935ec',
+                        }.contains(setting.settingId)
+                    ? Button(
+                        onPressed: _busy ? null : () => _editSetting(setting),
+                        child: Text(strings.edit),
+                      )
+                    : null,
               ),
             ),
         ],
