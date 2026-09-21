@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  test('all recovered scripts have one closed execution classification', () {
+  test('all legacy interactive entries have one closed execution classification', () {
     final root =
         jsonDecode(
               File(
@@ -31,8 +31,18 @@ void main() {
       );
     }
     expect(
-      entries.every((entry) => File(entry['resource']! as String).existsSync()),
+      entries
+          .where((entry) => entry['resource'] is String)
+          .every((entry) => File(entry['resource']! as String).existsSync()),
       isTrue,
+    );
+    expect(
+      entries.where(
+        (entry) =>
+            entry['classification'] != 'externalTool' &&
+            entry['classification'] != 'rejected',
+      ),
+      hasLength(expected['actionableNonExternal']! as int),
     );
     expect(
       entries

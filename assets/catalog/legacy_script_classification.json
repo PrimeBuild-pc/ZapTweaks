@@ -1,12 +1,13 @@
 {
   "schemaVersion": 1,
   "invariants": {
-    "total": 90,
+    "total": 100,
+    "actionableNonExternal": 95,
     "aliases": 23,
     "composites": 14,
     "rejected": 1,
     "externalTools": 4,
-    "procedures": 48
+    "procedures": 58
   },
   "entries": [
     {
@@ -728,6 +729,86 @@
       "classification": "procedure",
       "executionPolicy": "assistedOnly",
       "replacement": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "id": "check_space_check",
+      "title": "Space Check",
+      "resource": "resources/interactive_scripts/1 Check/1 Space Check.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": null
+    },
+    {
+      "id": "check_ram_check",
+      "title": "RAM Check",
+      "resource": "resources/interactive_scripts/1 Check/2 Ram Check.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": null
+    },
+    {
+      "id": "check_gpu_check",
+      "title": "GPU Check",
+      "resource": "resources/interactive_scripts/1 Check/3 Gpu Check.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": null
+    },
+    {
+      "id": "check_bios_update",
+      "title": "BIOS Update Search",
+      "resource": "resources/interactive_scripts/1 Check/4 Bios Update.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": null
+    },
+    {
+      "id": "check_bios_settings",
+      "title": "BIOS Settings Guide",
+      "resource": "resources/interactive_scripts/1 Check/5 Bios Settings.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": null
+    },
+    {
+      "id": "check_cpu_test",
+      "title": "CPU Test",
+      "resource": "resources/interactive_scripts/1 Check/6 Cpu Test.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": null
+    },
+    {
+      "id": "check_ram_test",
+      "title": "RAM Test",
+      "resource": "resources/interactive_scripts/1 Check/7 Ram Test.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": null
+    },
+    {
+      "id": "check_gpu_test",
+      "title": "GPU Test",
+      "resource": "resources/interactive_scripts/1 Check/8 Gpu Test.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": null
+    },
+    {
+      "id": "hardware_controller_overclock_script",
+      "title": "Controller Overclock",
+      "resource": "resources/interactive_scripts/7 Hardware/4 Controller Overclock.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": null
+    },
+    {
+      "id": "network_itr_interactive_config",
+      "title": "NIC ITR Interactive Config",
+      "sourceFile": "lib/models/networking_tweaks.dart",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": "device-specific native NDIS advanced-property operation"
     }
   ]
 }
