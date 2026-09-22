@@ -6,16 +6,27 @@ import 'driver_assisted_page.dart';
 import 'driver_inventory_page.dart';
 
 class DriversHubPage extends StatefulWidget {
-  const DriversHubPage({required this.controller, super.key});
+  const DriversHubPage({
+    required this.controller,
+    this.initialIndex = 0,
+    super.key,
+  });
 
   final TweakController controller;
+  final int initialIndex;
 
   @override
   State<DriversHubPage> createState() => _DriversHubPageState();
 }
 
 class _DriversHubPageState extends State<DriversHubPage> {
-  int _index = 0;
+  late int _index;
+
+  @override
+  void initState() {
+    super.initState();
+    _index = widget.initialIndex.clamp(0, 1);
+  }
 
   @override
   Widget build(BuildContext context) {

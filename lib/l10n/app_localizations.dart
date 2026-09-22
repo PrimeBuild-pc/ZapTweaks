@@ -633,7 +633,7 @@ abstract class AppLocalizations {
   /// No description provided for @powerPlans.
   ///
   /// In en, this message translates to:
-  /// **'Power plans'**
+  /// **'Power Settings Explorer'**
   String get powerPlans;
 
   /// No description provided for @powerPlansDescription.
@@ -791,6 +791,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Search results'**
   String get searchResults;
+
+  /// No description provided for @searchSections.
+  ///
+  /// In en, this message translates to:
+  /// **'Sections and integrated tools'**
+  String get searchSections;
+
+  /// No description provided for @searchApps.
+  ///
+  /// In en, this message translates to:
+  /// **'Search apps'**
+  String get searchApps;
+
+  /// No description provided for @searchCatalog.
+  ///
+  /// In en, this message translates to:
+  /// **'Operations and external tools'**
+  String get searchCatalog;
+
+  /// No description provided for @searchOpenResult.
+  ///
+  /// In en, this message translates to:
+  /// **'Open'**
+  String get searchOpenResult;
+
+  /// No description provided for @searchExpertRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable Expert mode to open'**
+  String get searchExpertRequired;
+
+  /// No description provided for @noSearchResults.
+  ///
+  /// In en, this message translates to:
+  /// **'No matching sections, apps, operations, or tools.'**
+  String get noSearchResults;
 
   /// No description provided for @operationTaskbarEndTaskTitle.
   ///
@@ -1317,7 +1353,7 @@ abstract class AppLocalizations {
   /// No description provided for @interruptConfiguration.
   ///
   /// In en, this message translates to:
-  /// **'Interrupts'**
+  /// **'MSI Utility v3 & Interrupt Affinity'**
   String get interruptConfiguration;
 
   /// No description provided for @interruptConfigurationDescription.
@@ -1546,6 +1582,30 @@ abstract class AppLocalizations {
   /// **'Uses the documented Windows Update policy for 7 or 30 days. ZapTweaks records the exact previous value and shows a reminder when the pause expires; restoration requires your confirmation.'**
   String get temporaryDriverUpdatesPauseDescription;
 
+  /// No description provided for @driverUpdatePolicy.
+  ///
+  /// In en, this message translates to:
+  /// **'Windows Update driver policy'**
+  String get driverUpdatePolicy;
+
+  /// No description provided for @driverUpdatePolicyDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Exclude device drivers from Windows quality updates for 7 days, 30 days, or until you explicitly restore the exact previous policy.'**
+  String get driverUpdatePolicyDescription;
+
+  /// No description provided for @disableUntilRestored.
+  ///
+  /// In en, this message translates to:
+  /// **'Disable until restored'**
+  String get disableUntilRestored;
+
+  /// No description provided for @driverUpdatePausePermanent.
+  ///
+  /// In en, this message translates to:
+  /// **'Driver updates remain excluded until you restore the previous policy.'**
+  String get driverUpdatePausePermanent;
+
   /// No description provided for @driverUpdatePauseActive.
   ///
   /// In en, this message translates to:
@@ -1659,6 +1719,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Open official source'**
   String get openOfficialSource;
+
+  /// No description provided for @openWindowsPanel.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Windows panel'**
+  String get openWindowsPanel;
 
   /// No description provided for @searchDrivers.
   ///
@@ -1789,12 +1855,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No verified restore source'**
   String get notReinstallable;
-
-  /// No description provided for @searchApps.
-  ///
-  /// In en, this message translates to:
-  /// **'Search apps'**
-  String get searchApps;
 
   /// No description provided for @allCategories.
   ///

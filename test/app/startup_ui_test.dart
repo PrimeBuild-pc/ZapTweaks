@@ -237,6 +237,50 @@ void main() {
     await tester.pump(const Duration(milliseconds: 150));
   });
 
+  testWidgets(
+    'global search finds and opens integrated tools by partial typo',
+    (tester) async {
+      final controller = await _buildController();
+      await controller.initialize();
+      await _pumpApp(tester, controller);
+
+      await tester.enterText(find.byType(TextBox).first, 'powre settings');
+      await tester.pumpAndSettle();
+
+      expect(find.text('Power Settings Explorer'), findsOneWidget);
+      await tester.tap(find.text('Open').first);
+      await tester.pumpAndSettle();
+      expect(controller.selectedCategory, 'Gaming & Performance');
+      expect(controller.navigationTab, 0);
+      expect(controller.searchQuery, isEmpty);
+
+      await tester.pumpWidget(const SizedBox.shrink());
+      controller.dispose();
+      await tester.pump(const Duration(milliseconds: 150));
+    },
+  );
+
+  testWidgets('app search deep links preserve the matched app name', (
+    tester,
+  ) async {
+    final controller = await _buildController();
+    await controller.initialize();
+    controller.navigateTo('Apps', searchTerm: 'Firefox');
+    await _pumpApp(tester, controller);
+
+    expect(controller.selectedCategory, 'Apps');
+    expect(
+      tester
+          .widgetList<TextBox>(find.byType(TextBox))
+          .any((box) => box.controller?.text == 'Firefox'),
+      isTrue,
+    );
+
+    await tester.pumpWidget(const SizedBox.shrink());
+    controller.dispose();
+    await tester.pump(const Duration(milliseconds: 150));
+  });
+
   test('Expert navigation is opt-in and persisted', () async {
     final controller = await _buildController();
     addTearDown(controller.dispose);

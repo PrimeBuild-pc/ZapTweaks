@@ -187,6 +187,11 @@ class _InterruptConfigurationPageState
     return ListView(
       padding: const EdgeInsets.all(24),
       children: <Widget>[
+        Text(
+          strings.interruptConfiguration,
+          style: FluentTheme.of(context).typography.title,
+        ),
+        const SizedBox(height: 6),
         Text(strings.interruptConfigurationDescription),
         if (_message != null) ...<Widget>[
           const SizedBox(height: 12),

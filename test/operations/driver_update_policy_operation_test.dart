@@ -101,6 +101,46 @@ void main() {
     },
   );
 
+  test(
+    'persistent driver policy remains disabled until explicit restore',
+    () async {
+      final directory = await Directory.systemTemp.createTemp(
+        'zap-driver-policy-',
+      );
+      addTearDown(() => directory.delete(recursive: true));
+      final registry = _Registry();
+      final marker = DriverUpdatePolicyStore(
+        path: p.join(directory.path, 'policy.json'),
+      );
+      final operation = DriverUpdatePolicyOperation(
+        registry: registry,
+        policyStore: marker,
+      );
+      const disable = OperationRequest(
+        operationId: 'toggle_automatic_driver_updates_off',
+        desiredValue: 1,
+        parameters: <String, Object?>{'permanent': true},
+      );
+
+      await operation.apply(disable);
+
+      expect(_dword(registry.value), 1);
+      expect((await marker.read())!.isPermanent, isTrue);
+      expect(
+        (await operation.verify(disable)).kind,
+        OperationStateKind.configured,
+      );
+
+      const restore = OperationRequest(
+        operationId: 'toggle_automatic_driver_updates_off',
+        desiredValue: null,
+      );
+      await operation.apply(restore);
+      expect(registry.value, isNull);
+      expect(await marker.read(), isNull);
+    },
+  );
+
   test('pause rejects expiration beyond the bounded window', () async {
     final directory = await Directory.systemTemp.createTemp(
       'zap-driver-policy-',

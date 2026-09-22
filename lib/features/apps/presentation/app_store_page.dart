@@ -10,9 +10,10 @@ import '../../tweaks/application/tweak_controller.dart';
 import '../domain/store_app.dart';
 
 class AppStorePage extends StatefulWidget {
-  const AppStorePage({required this.controller, super.key});
+  const AppStorePage({required this.controller, this.initialQuery, super.key});
 
   final TweakController controller;
+  final String? initialQuery;
 
   @override
   State<AppStorePage> createState() => _AppStorePageState();
@@ -20,6 +21,7 @@ class AppStorePage extends StatefulWidget {
 
 class _AppStorePageState extends State<AppStorePage> {
   late final AppStoreService _service;
+  late final TextEditingController _searchController;
   List<StoreApp> _apps = const <StoreApp>[];
   Set<String> _installed = const <String>{};
   final _selected = <String>{};
@@ -33,8 +35,16 @@ class _AppStorePageState extends State<AppStorePage> {
   @override
   void initState() {
     super.initState();
+    _query = widget.initialQuery ?? '';
+    _searchController = TextEditingController(text: _query);
     _service = AppStoreService(processRunner: ProcessRunner.shared);
     _load();
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 
   Future<void> _load() async {
@@ -195,6 +205,7 @@ class _AppStorePageState extends State<AppStorePage> {
               SizedBox(
                 width: 300,
                 child: TextBox(
+                  controller: _searchController,
                   placeholder: strings.searchApps,
                   onChanged: (value) => setState(() => _query = value),
                 ),

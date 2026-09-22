@@ -10,10 +10,12 @@ class DiagnosticsHubPage extends StatefulWidget {
   const DiagnosticsHubPage({
     required this.controller,
     required this.onSafetyPrompt,
+    this.initialIndex = 0,
     super.key,
   });
 
   final TweakController controller;
+  final int initialIndex;
   final Future<bool> Function(
     String title,
     String message, {
@@ -27,7 +29,13 @@ class DiagnosticsHubPage extends StatefulWidget {
 }
 
 class _DiagnosticsHubPageState extends State<DiagnosticsHubPage> {
-  int _index = 0;
+  late int _index;
+
+  @override
+  void initState() {
+    super.initState();
+    _index = widget.initialIndex.clamp(0, 2);
+  }
 
   @override
   Widget build(BuildContext context) {

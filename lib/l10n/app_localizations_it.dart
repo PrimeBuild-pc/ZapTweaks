@@ -301,7 +301,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get unavailable => 'Non disponibile';
 
   @override
-  String get powerPlans => 'Piani di alimentazione';
+  String get powerPlans => 'Power Settings Explorer';
 
   @override
   String get powerPlansDescription =>
@@ -384,6 +384,25 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get searchResults => 'Risultati della ricerca';
+
+  @override
+  String get searchSections => 'Sezioni e strumenti integrati';
+
+  @override
+  String get searchApps => 'Cerca app';
+
+  @override
+  String get searchCatalog => 'Operazioni e strumenti esterni';
+
+  @override
+  String get searchOpenResult => 'Apri';
+
+  @override
+  String get searchExpertRequired => 'Abilita la modalità Esperto per aprire';
+
+  @override
+  String get noSearchResults =>
+      'Nessuna sezione, app, operazione o strumento corrispondente';
 
   @override
   String get operationTaskbarEndTaskTitle => 'Termina attività dalla barra';
@@ -684,7 +703,7 @@ class AppLocalizationsIt extends AppLocalizations {
       'Sostituire tutti i piani correnti con quelli predefiniti di Windows? ZapTweaks esporterà prima ogni piano per il rollback esatto.';
 
   @override
-  String get interruptConfiguration => 'Interrupt';
+  String get interruptConfiguration => 'MSI Utility v3 e affinità interrupt';
 
   @override
   String get interruptConfigurationDescription =>
@@ -824,6 +843,20 @@ class AppLocalizationsIt extends AppLocalizations {
       'Usa la policy documentata di Windows Update per 7 o 30 giorni. ZapTweaks registra il valore precedente esatto e mostra un promemoria alla scadenza; il ripristino richiede la tua conferma.';
 
   @override
+  String get driverUpdatePolicy => 'Policy driver di Windows Update';
+
+  @override
+  String get driverUpdatePolicyDescription =>
+      'Esclude i driver dei dispositivi dagli aggiornamenti qualitativi di Windows per 7 giorni, 30 giorni o finché non ripristini esplicitamente la policy precedente esatta.';
+
+  @override
+  String get disableUntilRestored => 'Disabilita fino al ripristino';
+
+  @override
+  String get driverUpdatePausePermanent =>
+      'Gli aggiornamenti driver restano esclusi finché non ripristini la policy precedente.';
+
+  @override
   String get driverUpdatePauseActive =>
       'Sospensione aggiornamenti driver attiva';
 
@@ -890,6 +923,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get openOfficialSource => 'Apri fonte ufficiale';
+
+  @override
+  String get openWindowsPanel => 'Apri pannello Windows';
 
   @override
   String get searchDrivers => 'Cerca nel Driver Store';
@@ -967,9 +1003,6 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get notReinstallable => 'Nessuna fonte di ripristino verificata';
-
-  @override
-  String get searchApps => 'Cerca app';
 
   @override
   String get allCategories => 'Tutte le categorie';

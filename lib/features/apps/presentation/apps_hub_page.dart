@@ -12,10 +12,14 @@ class AppsHubPage extends StatefulWidget {
   const AppsHubPage({
     required this.controller,
     required this.onSafetyPrompt,
+    this.initialIndex = 0,
+    this.initialSearchTerm,
     super.key,
   });
 
   final TweakController controller;
+  final int initialIndex;
+  final String? initialSearchTerm;
   final Future<bool> Function(
     String title,
     String message, {
@@ -29,7 +33,13 @@ class AppsHubPage extends StatefulWidget {
 }
 
 class _AppsHubPageState extends State<AppsHubPage> {
-  int _index = 0;
+  late int _index;
+
+  @override
+  void initState() {
+    super.initState();
+    _index = widget.initialIndex.clamp(0, 4);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +52,10 @@ class _AppsHubPageState extends State<AppsHubPage> {
         Tab(
           text: Text(strings.appStore),
           icon: const Icon(FluentIcons.shop),
-          body: AppStorePage(controller: widget.controller),
+          body: AppStorePage(
+            controller: widget.controller,
+            initialQuery: widget.initialSearchTerm,
+          ),
         ),
         Tab(
           text: Text(strings.appManagement),

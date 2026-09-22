@@ -14,6 +14,222 @@ List<SystemTweak> createProgramToolTweaks() {
           'https://github.com/zoicware/RepairBadTweaks/tree/0afa349ba7dca7a44eb8a5e64de1a38ae12f71a5',
       actionLabel: 'Open Pinned Source',
     ),
+    ExternalUrlLauncherTweak(
+      id: 'tool_zoicware_suite',
+      title: 'ZOICWARE',
+      description:
+          'Opens the official MIT-licensed Windows 11 performance and quality-of-life utility project.',
+      category: 'Drivers & Installers',
+      url: 'https://github.com/zoicware/ZOICWARE',
+      actionLabel: 'Open Official Project',
+    ),
+    ExternalUrlLauncherTweak(
+      id: 'tool_zoicware_defender_pro_tools',
+      title: 'DefenderProTools by zoicware',
+      description:
+          'Opens the official MIT-licensed project for explicit Windows Defender controls. Nothing is downloaded or executed automatically.',
+      category: 'Drivers & Installers',
+      url: 'https://github.com/zoicware/DefenderProTools',
+      actionLabel: 'Open Official Project',
+    ),
+    ExternalUrlLauncherTweak(
+      id: 'tool_zoicware_remove_windows_ai',
+      title: 'RemoveWindowsAI by zoicware',
+      description:
+          'Opens the official MIT-licensed project for reviewing removal of Copilot, Recall, and related components.',
+      category: 'Drivers & Installers',
+      url: 'https://github.com/zoicware/RemoveWindowsAI',
+      actionLabel: 'Open Official Project',
+    ),
+    ExternalUrlLauncherTweak(
+      id: 'tool_zoicware_zscripts',
+      title: 'zScripts by zoicware',
+      description:
+          'Opens the official miscellaneous PowerShell scripts repository. No license is declared, so ZapTweaks does not copy or execute its code.',
+      category: 'Drivers & Installers',
+      url: 'https://github.com/zoicware/zScripts',
+      actionLabel: 'Open Official Project',
+    ),
+    ExternalUrlLauncherTweak(
+      id: 'tool_zoicware_pbo_tuner_2',
+      title: 'PBOTuner2 by zoicware',
+      description:
+          'Opens the official Ryzen PBO undervolt automation project. Firmware tuning remains external and requires independent stability testing.',
+      category: 'Drivers & Installers',
+      url: 'https://github.com/zoicware/PBOTuner2',
+      actionLabel: 'Open Official Project',
+    ),
+    ExternalUrlLauncherTweak(
+      id: 'tool_zoicware_remove_cbs_apps',
+      title: 'RemoveCBSApps by zoicware',
+      description:
+          'Opens the official MIT-licensed project for Get Started, Windows Backup, and Cross Device Resume controls.',
+      category: 'Drivers & Installers',
+      url: 'https://github.com/zoicware/RemoveCBSApps',
+      actionLabel: 'Open Official Project',
+    ),
+    ExternalUrlLauncherTweak(
+      id: 'tool_zoicware_power_plan_settings_editor',
+      title: 'PowerPlanSettingsEditor by zoicware',
+      description:
+          'Opens the official MIT-licensed editor. ZapTweaks also provides its own integrated Power Settings Explorer.',
+      category: 'Drivers & Installers',
+      url: 'https://github.com/zoicware/PowerPlanSettingsEditor',
+      actionLabel: 'Open Official Project',
+    ),
+    ExternalUrlLauncherTweak(
+      id: 'tool_zoicware_ultimate_disk_cleanup',
+      title: 'UltimateDiskCleanup by zoicware',
+      description:
+          'Opens the official Windows Disk Cleanup project with hidden options. Review targets before deleting data.',
+      category: 'Drivers & Installers',
+      url: 'https://github.com/zoicware/UltimateDiskCleanup',
+      actionLabel: 'Open Official Project',
+    ),
+    ExternalUrlLauncherTweak(
+      id: 'tool_zoicware_service_manager_plus',
+      title: 'ServiceManagerPlus by zoicware',
+      description:
+          'Opens the official MIT-licensed advanced Windows service manager project.',
+      category: 'Drivers & Installers',
+      url: 'https://github.com/zoicware/ServiceManagerPlus',
+      actionLabel: 'Open Official Project',
+    ),
+    ExternalUrlLauncherTweak(
+      id: 'tool_zoicware_windows_device_remover',
+      title: 'WindowsDeviceRemover by zoicware',
+      description:
+          'Opens the official MIT-licensed device and driver removal project. ZapTweaks keeps driver removal capability-gated.',
+      category: 'Drivers & Installers',
+      url: 'https://github.com/zoicware/WindowsDeviceRemover',
+      actionLabel: 'Open Official Project',
+    ),
+    ExternalUrlLauncherTweak(
+      id: 'tool_zoicware_windows_update_manager',
+      title: 'WindowsUpdateManager by zoicware',
+      description:
+          'Opens the official advanced Windows Update manager project; its code is not bundled because no license is declared.',
+      category: 'Drivers & Installers',
+      url: 'https://github.com/zoicware/WindowsUpdateManager',
+      actionLabel: 'Open Official Project',
+    ),
+    ExternalUrlLauncherTweak(
+      id: 'tool_zoicware_dynamic_min_services',
+      title: 'DynamicMinServices by zoicware',
+      description:
+          'Opens the official experimental service-reduction project. No license is declared and no code is bundled.',
+      category: 'Drivers & Installers',
+      url: 'https://github.com/zoicware/DynamicMinServices',
+      actionLabel: 'Open Official Project',
+    ),
+    ExternalUrlLauncherTweak(
+      id: 'tool_zoicware_zturbo',
+      title: 'zTurbo by zoicware',
+      description:
+          'Opens the official parallel optimization script project. No license is declared and no code is bundled.',
+      category: 'Drivers & Installers',
+      url: 'https://github.com/zoicware/zTurbo',
+      actionLabel: 'Open Official Project',
+    ),
+    ExternalUrlLauncherTweak(
+      id: 'tool_zoicware_override_edid',
+      title: 'OverrideEDID by zoicware',
+      description:
+          'Opens the official project for reviewing EDID extension-block changes related to app startup stutter.',
+      category: 'Drivers & Installers',
+      url: 'https://github.com/zoicware/OverrideEDID',
+      actionLabel: 'Open Official Project',
+    ),
+    ExternalUrlLauncherTweak(
+      id: 'tool_zoicware_hosts_builder',
+      title: 'HostsBuilder by zoicware',
+      description:
+          'Opens the official custom Windows hosts-file builder project. No license is declared and no code is bundled.',
+      category: 'Drivers & Installers',
+      url: 'https://github.com/zoicware/HostsBuilder',
+      actionLabel: 'Open Official Project',
+    ),
+    ExternalUrlLauncherTweak(
+      id: 'tool_zoicware_remove_apps_policy_editor',
+      title: 'RemoveAppsPolicyEditor by zoicware',
+      description:
+          'Opens the official MIT-licensed Windows 11 RemoveDefaultMicrosoftStorePackages policy editor.',
+      category: 'Drivers & Installers',
+      url: 'https://github.com/zoicware/RemoveAppsPolicyEditor',
+      actionLabel: 'Open Official Project',
+    ),
+    ExternalUrlLauncherTweak(
+      id: 'tool_zoicware_tweak_fth',
+      title: 'TweakFTH by zoicware',
+      description:
+          'Opens the official MIT-licensed Fault Tolerant Heap management project.',
+      category: 'Drivers & Installers',
+      url: 'https://github.com/zoicware/TweakFTH',
+      actionLabel: 'Open Official Project',
+    ),
+    ExternalUrlLauncherTweak(
+      id: 'tool_benchmate',
+      title: 'BenchMate',
+      description:
+          'Opens the official benchmark validation suite download page. The application is not bundled.',
+      category: 'Drivers & Installers',
+      url: 'https://benchmate.org/',
+      actionLabel: 'Open Official Download',
+    ),
+    ExternalUrlLauncherTweak(
+      id: 'tool_linpack_xtreme',
+      title: 'Linpack Xtreme',
+      description:
+          'Opens the publisher download page hosted by TechPowerUp for CPU and memory stress testing.',
+      category: 'Drivers & Installers',
+      url: 'https://www.techpowerup.com/download/linpack-xtreme/',
+      actionLabel: 'Open Publisher Download',
+    ),
+    ExternalUrlLauncherTweak(
+      id: 'tool_occt',
+      title: 'OCCT',
+      description:
+          'Opens the official stability and stress-testing download page. The application is not bundled.',
+      category: 'Drivers & Installers',
+      url: 'https://www.ocbase.com/download',
+      actionLabel: 'Open Official Download',
+    ),
+    ExternalUrlLauncherTweak(
+      id: 'tool_y_cruncher',
+      title: 'y-cruncher',
+      description:
+          'Opens the official CPU and memory benchmark and stress-test page.',
+      category: 'Drivers & Installers',
+      url: 'https://www.numberworld.org/y-cruncher/',
+      actionLabel: 'Open Official Download',
+    ),
+    ExternalUrlLauncherTweak(
+      id: 'tool_cinebench_2024',
+      title: 'Cinebench 2024',
+      description:
+          'Opens Maxon’s official CPU and GPU benchmark download page.',
+      category: 'Drivers & Installers',
+      url: 'https://www.maxon.net/en/downloads/cinebench-2024-downloads',
+      actionLabel: 'Open Official Download',
+    ),
+    ExternalUrlLauncherTweak(
+      id: 'tool_memtest86',
+      title: 'MemTest86',
+      description:
+          'Opens PassMark’s official bootable memory-test download page.',
+      category: 'Drivers & Installers',
+      url: 'https://www.memtest86.com/download.htm',
+      actionLabel: 'Open Official Download',
+    ),
+    ExternalUrlLauncherTweak(
+      id: 'tool_corecycler',
+      title: 'CoreCycler',
+      description:
+          'Opens the official project for per-core Ryzen stability testing after PBO or Curve Optimizer changes.',
+      category: 'Drivers & Installers',
+      url: 'https://github.com/sp00n/corecycler',
+      actionLabel: 'Open Official Project',
+    ),
     BatchScriptTweak(
       id: 'tool_winscript_batch',
       title: 'WinScript Batch Utility',
@@ -328,7 +544,7 @@ List<SystemTweak> createProgramToolTweaks() {
     ),
     ExternalUrlLauncherTweak(
       id: 'tool_interrupt_affinity_policy',
-      title: 'Interrupt Affinity Policy guidance',
+      title: 'Interrupt Affinity Tool (integrated replacement)',
       description:
           'Opens the authoritative download or documentation page; the binary is not bundled.',
       category: 'Drivers & Installers',
@@ -550,7 +766,7 @@ List<SystemTweak> createProgramToolTweaks() {
     ),
     ExternalUrlLauncherTweak(
       id: 'tool_msi_util_folder',
-      title: 'MSI Utility',
+      title: 'MSI Utility v3',
       description:
           'Opens the authoritative download or documentation page; the binary is not bundled.',
       category: 'Drivers & Installers',

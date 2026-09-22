@@ -9,18 +9,23 @@ class DriverUpdatePolicyRecord {
     required this.previousValue,
   });
 
-  final DateTime expiresAt;
+  final DateTime? expiresAt;
   final int? previousValue;
 
-  bool isExpired(DateTime now) => !now.isBefore(expiresAt);
+  bool get isPermanent => expiresAt == null;
+
+  bool isExpired(DateTime now) =>
+      expiresAt != null && !now.isBefore(expiresAt!);
 
   Map<String, Object?> toJson() => <String, Object?>{
-    'expiresAt': expiresAt.toUtc().toIso8601String(),
+    if (expiresAt != null) 'expiresAt': expiresAt!.toUtc().toIso8601String(),
     'previousValue': previousValue,
   };
 
   factory DriverUpdatePolicyRecord.fromJson(Map<String, dynamic> json) {
-    final expiresAt = DateTime.parse(json['expiresAt']! as String).toUtc();
+    final expiresAt = json['expiresAt'] == null
+        ? null
+        : DateTime.parse(json['expiresAt']! as String).toUtc();
     final previous = json['previousValue'];
     if (previous != null && previous != 0 && previous != 1) {
       throw const FormatException('Invalid previous driver policy value.');

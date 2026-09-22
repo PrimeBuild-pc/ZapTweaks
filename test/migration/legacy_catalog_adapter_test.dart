@@ -16,8 +16,8 @@ void main() {
       manifest,
     ).adapt(TweakCatalogService().buildCatalog());
 
-    expect(adapted, hasLength(348));
-    expect(adapted.map((item) => item.id).toSet(), hasLength(348));
+    expect(adapted, hasLength(372));
+    expect(adapted.map((item) => item.id).toSet(), hasLength(372));
     expect(
       manifest.entries.every(
         (entry) => adapted.any((descriptor) => descriptor.id == entry.id),

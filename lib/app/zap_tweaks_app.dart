@@ -19,6 +19,7 @@ import '../features/setup/presentation/guided_setup_page.dart';
 import '../features/tweaks/application/tweak_controller.dart';
 import '../features/tweaks/presentation/pages/tweaks_page.dart';
 import 'app_theme.dart';
+import 'search_results_page.dart';
 import 'settings_page.dart';
 import 'widgets/windows_title_bar.dart';
 
@@ -40,12 +41,16 @@ class ZapTweaksApp extends StatefulWidget {
 
 class _ZapTweaksAppState extends State<ZapTweaksApp> {
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
+  late final TextEditingController _searchController;
   Color _systemAccentColor = const Color(0xFF0078D4);
   StreamSubscription<dynamic>? _accentSubscription;
 
   @override
   void initState() {
     super.initState();
+    _searchController = TextEditingController(
+      text: widget.controller.searchQuery,
+    );
     _initializeSystemAccent();
     if (widget.autoInitializeController) {
       widget.controller.initialize();
@@ -55,6 +60,7 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
 
   @override
   void dispose() {
+    _searchController.dispose();
     _accentSubscription?.cancel();
     widget.controller.removeListener(_onControllerUpdate);
     super.dispose();
@@ -101,7 +107,11 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
   }
 
   void _onControllerUpdate() {
-    if (mounted) setState(() {});
+    if (!mounted) return;
+    if (_searchController.text != widget.controller.searchQuery) {
+      _searchController.text = widget.controller.searchQuery;
+    }
+    setState(() {});
   }
 
   @override
@@ -164,6 +174,7 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
                     size: const NavigationPaneSize(openWidth: 240),
                     displayMode: PaneDisplayMode.auto,
                     autoSuggestBox: TextBox(
+                      controller: _searchController,
                       placeholder: strings.searchOperations,
                       prefix: const Padding(
                         padding: EdgeInsets.only(left: 10),
@@ -478,15 +489,10 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
       return _buildLoadingView(context);
     }
 
-    final strings = AppLocalizations.of(context);
     if (widget.controller.searchQuery.trim().isNotEmpty) {
-      return TweaksPage(
+      return SearchResultsPage(
         controller: widget.controller,
-        category: strings.searchResults,
-        descriptors: widget.controller.searchTweaks(
-          widget.controller.searchQuery,
-        ),
-        onSafetyPrompt: _showConfirmDialog,
+        query: widget.controller.searchQuery,
       );
     }
 
@@ -501,17 +507,23 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
     if (category == 'Apps') {
       return AppsHubPage(
         controller: widget.controller,
+        initialIndex: widget.controller.navigationTab,
+        initialSearchTerm: widget.controller.navigationSearchTerm,
         onSafetyPrompt: _showConfirmDialog,
       );
     }
 
     if (category == 'Drivers') {
-      return DriversHubPage(controller: widget.controller);
+      return DriversHubPage(
+        controller: widget.controller,
+        initialIndex: widget.controller.navigationTab,
+      );
     }
 
     if (category == 'Gaming & Performance') {
       return GamingHubPage(
         controller: widget.controller,
+        initialIndex: widget.controller.navigationTab,
         onSafetyPrompt: _showConfirmDialog,
       );
     }
@@ -519,6 +531,7 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
     if (category == 'Diagnostics & Recovery') {
       return DiagnosticsHubPage(
         controller: widget.controller,
+        initialIndex: widget.controller.navigationTab,
         onSafetyPrompt: _showConfirmDialog,
       );
     }

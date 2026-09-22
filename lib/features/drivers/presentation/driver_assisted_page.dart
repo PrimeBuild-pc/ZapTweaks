@@ -13,9 +13,9 @@ class DriverAssistedPage extends StatelessWidget {
   final TweakController controller;
 
   Future<void> _open(BuildContext context, String target) async {
-    final result = await ProcessRunner.shared.launch('explorer.exe', <String>[
-      target,
-    ]);
+    final result = target.toLowerCase().endsWith('.msc')
+        ? await ProcessRunner.shared.launch('mmc.exe', <String>[target])
+        : await ProcessRunner.shared.launch('explorer.exe', <String>[target]);
     if (!result.success && context.mounted) {
       await showDialog<void>(
         context: context,
@@ -36,33 +36,40 @@ class DriverAssistedPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final strings = AppLocalizations.of(context);
-    final flows = <({String title, String description, String target})>[
-      (
-        title: strings.amdDriverFlow,
-        description: strings.amdDriverFlowDescription,
-        target: 'https://www.amd.com/en/support/download/drivers.html',
-      ),
-      (
-        title: strings.nvidiaDriverFlow,
-        description: strings.nvidiaDriverFlowDescription,
-        target: 'https://www.nvidia.com/Download/index.aspx',
-      ),
-      (
-        title: strings.intelDriverFlow,
-        description: strings.intelDriverFlowDescription,
-        target: 'https://www.intel.com/content/www/us/en/support/detect.html',
-      ),
-      (
-        title: strings.windowsOptionalDrivers,
-        description: strings.windowsOptionalDriversDescription,
-        target: 'ms-settings:windowsupdate-optionalupdates',
-      ),
-      (
-        title: strings.deviceManager,
-        description: strings.deviceManagerDescription,
-        target: 'devmgmt.msc',
-      ),
-    ];
+    final flows =
+        <({String title, String description, String target, String action})>[
+          (
+            title: strings.amdDriverFlow,
+            description: strings.amdDriverFlowDescription,
+            target: 'https://www.amd.com/en/support/download/drivers.html',
+            action: strings.openOfficialSource,
+          ),
+          (
+            title: strings.nvidiaDriverFlow,
+            description: strings.nvidiaDriverFlowDescription,
+            target: 'https://www.nvidia.com/Download/index.aspx',
+            action: strings.openOfficialSource,
+          ),
+          (
+            title: strings.intelDriverFlow,
+            description: strings.intelDriverFlowDescription,
+            target:
+                'https://www.intel.com/content/www/us/en/support/detect.html',
+            action: strings.openOfficialSource,
+          ),
+          (
+            title: strings.windowsOptionalDrivers,
+            description: strings.windowsOptionalDriversDescription,
+            target: 'ms-settings:windowsupdate-optionalupdates',
+            action: strings.openWindowsPanel,
+          ),
+          (
+            title: strings.deviceManager,
+            description: strings.deviceManagerDescription,
+            target: 'devmgmt.msc',
+            action: strings.openWindowsPanel,
+          ),
+        ];
     return ListView(
       padding: const EdgeInsets.fromLTRB(24, 16, 24, 24),
       children: <Widget>[
@@ -96,7 +103,7 @@ class DriverAssistedPage extends StatelessWidget {
                   const SizedBox(width: 16),
                   Button(
                     onPressed: () => _open(context, flow.target),
-                    child: Text(strings.openOfficialSource),
+                    child: Text(flow.action),
                   ),
                 ],
               ),
@@ -175,6 +182,14 @@ class _DriverUpdatePolicyCardState extends State<_DriverUpdatePolicyCard> {
     ),
   );
 
+  Future<void> _disablePermanently() => _execute(
+    const OperationRequest(
+      operationId: 'toggle_automatic_driver_updates_off',
+      desiredValue: 1,
+      parameters: <String, Object?>{'permanent': true},
+    ),
+  );
+
   Future<void> _resume() => _execute(
     OperationRequest(
       operationId: 'toggle_automatic_driver_updates_off',
@@ -194,11 +209,11 @@ class _DriverUpdatePolicyCardState extends State<_DriverUpdatePolicyCard> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              strings.temporaryDriverUpdatesPause,
+              strings.driverUpdatePolicy,
               style: FluentTheme.of(context).typography.bodyStrong,
             ),
             const SizedBox(height: 4),
-            Text(strings.temporaryDriverUpdatesPauseDescription),
+            Text(strings.driverUpdatePolicyDescription),
             if (record != null) ...<Widget>[
               const SizedBox(height: 8),
               InfoBar(
@@ -208,9 +223,11 @@ class _DriverUpdatePolicyCardState extends State<_DriverUpdatePolicyCard> {
                       : strings.driverUpdatePauseActive,
                 ),
                 content: Text(
-                  strings.driverUpdatePauseUntil(
-                    record.expiresAt.toLocal().toString(),
-                  ),
+                  record.isPermanent
+                      ? strings.driverUpdatePausePermanent
+                      : strings.driverUpdatePauseUntil(
+                          record.expiresAt!.toLocal().toString(),
+                        ),
                 ),
                 severity: expired
                     ? InfoBarSeverity.warning
@@ -232,6 +249,12 @@ class _DriverUpdatePolicyCardState extends State<_DriverUpdatePolicyCard> {
                 Button(
                   onPressed: _busy || record != null ? null : () => _pause(30),
                   child: Text(strings.pauseThirtyDays),
+                ),
+                Button(
+                  onPressed: _busy || record != null
+                      ? null
+                      : _disablePermanently,
+                  child: Text(strings.disableUntilRestored),
                 ),
                 FilledButton(
                   onPressed: _busy || record == null ? null : _resume,

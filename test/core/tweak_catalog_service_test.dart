@@ -53,10 +53,37 @@ void main() {
         'Advanced': 23,
         'Privacy': 12,
         'Visuals': 14,
-        'Tools': 77,
+        'Tools': 101,
       });
     },
   );
+
+  test('zoicware and stress tools use authoritative HTTPS links only', () {
+    final byId = <String, dynamic>{
+      for (final item in TweakCatalogService().buildCatalog()) item.id: item,
+    };
+    const ids = <String>{
+      'tool_zoicware_suite',
+      'tool_zoicware_defender_pro_tools',
+      'tool_zoicware_remove_windows_ai',
+      'tool_zoicware_pbo_tuner_2',
+      'tool_zoicware_remove_cbs_apps',
+      'tool_zoicware_ultimate_disk_cleanup',
+      'tool_benchmate',
+      'tool_linpack_xtreme',
+      'tool_occt',
+      'tool_y_cruncher',
+      'tool_cinebench_2024',
+      'tool_memtest86',
+      'tool_corecycler',
+    };
+
+    for (final id in ids) {
+      final tool = byId[id].scriptTweak as ExternalUrlLauncherTweak;
+      expect(Uri.parse(tool.url).scheme, 'https', reason: id);
+    }
+    expect(byId, isNot(contains('tool_zoicware_iso_tweaker')));
+  });
 
   test('startup app launchers expose their different Windows surfaces', () {
     final byId = <String, dynamic>{

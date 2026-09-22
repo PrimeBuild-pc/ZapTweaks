@@ -15,38 +15,53 @@ Future<void> main() async {
     registry: const WindowsRegistryValueStore(),
     policyStore: marker,
   );
-  final request = OperationRequest(
-    operationId: operation.id,
-    desiredValue: 1,
-    parameters: <String, Object?>{
-      'expiresAt': DateTime.now()
-          .toUtc()
-          .add(const Duration(days: 7))
-          .toIso8601String(),
-    },
-  );
-  final support = await operation.supports(
-    const OperationContext(windowsBuild: 26100, edition: 'Pro'),
-    request,
-  );
-  if (!support.supported) {
-    throw StateError(support.reason ?? 'Unsupported driver policy operation.');
-  }
-  final snapshot = await operation.captureSnapshot(request);
-  try {
-    await operation.apply(request);
-    final applied = await operation.verify(request);
-    if (applied.kind != OperationStateKind.configured || applied.value != 1) {
-      throw StateError('Apply verification failed: ${applied.toJson()}');
+  final requests = <OperationRequest>[
+    OperationRequest(
+      operationId: operation.id,
+      desiredValue: 1,
+      parameters: <String, Object?>{
+        'expiresAt': DateTime.now()
+            .toUtc()
+            .add(const Duration(days: 7))
+            .toIso8601String(),
+      },
+    ),
+    OperationRequest(
+      operationId: operation.id,
+      desiredValue: 1,
+      parameters: const <String, Object?>{'permanent': true},
+    ),
+  ];
+
+  for (final request in requests) {
+    final support = await operation.supports(
+      const OperationContext(windowsBuild: 26100, edition: 'Pro'),
+      request,
+    );
+    if (!support.supported) {
+      throw StateError(
+        support.reason ?? 'Unsupported driver policy operation.',
+      );
     }
-    stdout.writeln('APPLIED=${applied.toJson()}');
-  } finally {
-    await operation.rollback(request, snapshot);
-    final restored = await operation.inspect(request);
-    if (!restored.sameValue(snapshot.expectedAfterRollback)) {
-      throw StateError('Rollback verification failed: ${restored.toJson()}');
+    final snapshot = await operation.captureSnapshot(request);
+    try {
+      await operation.apply(request);
+      final applied = await operation.verify(request);
+      if (applied.kind != OperationStateKind.configured || applied.value != 1) {
+        throw StateError('Apply verification failed: ${applied.toJson()}');
+      }
+      final record = await marker.read();
+      stdout.writeln(
+        'APPLIED=${record!.isPermanent ? 'persistent' : 'temporary'}:${applied.toJson()}',
+      );
+    } finally {
+      await operation.rollback(request, snapshot);
+      final restored = await operation.inspect(request);
+      if (!restored.sameValue(snapshot.expectedAfterRollback)) {
+        throw StateError('Rollback verification failed: ${restored.toJson()}');
+      }
+      await marker.clear();
+      stdout.writeln('RESTORED=${restored.toJson()}');
     }
-    await marker.clear();
-    stdout.writeln('RESTORED=${restored.toJson()}');
   }
 }

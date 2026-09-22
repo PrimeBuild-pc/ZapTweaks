@@ -27,8 +27,11 @@ class DriverUpdatePolicyOperation implements OperationDefinition {
       throw StateError('Invalid driver update policy request.');
     }
     if (request.desiredValue == 1) {
-      if (request.parameters.length != 1 ||
-          request.parameters['expiresAt'] is! String) {
+      if (request.parameters.length != 1) {
+        throw StateError('Choose a temporary or persistent policy.');
+      }
+      if (request.parameters['permanent'] == true) return null;
+      if (request.parameters['expiresAt'] is! String) {
         throw StateError('A policy expiration is required.');
       }
       final expiry = DateTime.parse(
@@ -137,7 +140,7 @@ class DriverUpdatePolicyOperation implements OperationDefinition {
       final previous = _dword(await _raw());
       await registry.write(path, valueName, _value(1));
       await policyStore.write(
-        DriverUpdatePolicyRecord(expiresAt: expiry!, previousValue: previous),
+        DriverUpdatePolicyRecord(expiresAt: expiry, previousValue: previous),
       );
       return;
     }
@@ -158,7 +161,7 @@ class DriverUpdatePolicyOperation implements OperationDefinition {
       if (record == null || record.isExpired(now().toUtc())) {
         return const OperationState(
           OperationStateKind.drifted,
-          message: 'The temporary driver policy marker is missing or expired.',
+          message: 'The driver policy marker is missing or expired.',
         );
       }
     }
@@ -206,9 +209,9 @@ class DriverUpdatePolicyOperation implements OperationDefinition {
     'refresh_updates_drivers_block',
   ];
   @override
-  String get titleKey => 'temporaryDriverUpdatesPause';
+  String get titleKey => 'driverUpdatePolicy';
   @override
-  String get descriptionKey => 'temporaryDriverUpdatesPauseDescription';
+  String get descriptionKey => 'driverUpdatePolicyDescription';
   @override
   String get domain => 'drivers';
   @override

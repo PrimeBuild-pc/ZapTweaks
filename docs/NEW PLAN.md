@@ -134,7 +134,7 @@ Un elemento alias non deve generare una seconda card identica, ma deve rimanere 
 
 ## 4. Navigazione definitiva
 
-La shell principale deve contenere nove destinazioni. Ogni funzione ha una sola destinazione canonica; ricerca globale e collegamenti contestuali possono raggiungerla da altre pagine.
+La shell principale deve contenere nove destinazioni. Ogni funzione ha una sola destinazione canonica; ricerca globale e collegamenti contestuali possono raggiungerla da altre pagine. La ricerca deve indicizzare nomi, descrizioni, ID, categorie e raccolte dei tweak, tutte le app dello store, i tool esterni e le sezioni integrate; deve accettare frammenti e piccoli errori di digitazione e portare alla destinazione canonica.
 
 ### 4.1 Home
 
@@ -193,7 +193,7 @@ Il catalogo normalizza i riferimenti di WinUtil e Winhance senza creare duplicat
 - selezione di pacchetti locali;
 - verifica Authenticode, hash, versione e publisher;
 - Driver Store, esportazione e rimozione controllata;
-- blocco temporaneo degli aggiornamenti driver tramite Windows Update;
+- blocco degli aggiornamenti driver tramite Windows Update, temporaneo con scadenza oppure persistente fino a ripristino esplicito dello snapshot;
 - scadenza e promemoria della policy temporanea;
 - verifica dopo installazione e riavvio.
 
@@ -624,7 +624,7 @@ Usare Task Scheduler API o interfacce di sistema stabili. Snapshot dell’XML pr
 
 ### 11.5 Driver
 
-Usare SetupAPI, Configuration Manager, DISM e `pnputil` dove appropriato. Non analizzare output localizzato quando esiste un’API. Prima dell’installazione verificare Authenticode e corrispondenza hardware ID. La sospensione degli aggiornamenti driver ha scadenza e promemoria. Firmware e BIOS restano manuali.
+Usare SetupAPI, Configuration Manager, DISM e `pnputil` dove appropriato. Non analizzare output localizzato quando esiste un’API. Prima dell’installazione verificare Authenticode e corrispondenza hardware ID. La sospensione temporanea degli aggiornamenti driver ha scadenza e promemoria; il blocco persistente richiede un’azione esplicita, conserva il valore precedente e rimane visibile fino al ripristino. Firmware e BIOS restano manuali.
 
 ### 11.6 Power plan
 
@@ -807,10 +807,10 @@ La Fase 8 può introdurre un profilo `Gaming competitivo raccomandato` soltanto 
 ### Fase 1 — Nuova shell
 
 - implementare la navigazione definitiva;
-- ricerca globale;
-- modalità Esperto;
-- adapter legacy;
-- tutti i comportamenti attuali ancora raggiungibili.
+- [x] ricerca globale su sezioni, app, operation e tool, con frammenti e tolleranza ai piccoli errori;
+- [x] modalità Esperto;
+- [x] adapter legacy;
+- [x] tutti i comportamenti attuali ancora raggiungibili.
 
 **Gate:** nessuna regressione di accessibilità ai 346 ID e ai tool esterni.
 
@@ -842,11 +842,11 @@ La Fase 8 può introdurre un profilo `Gaming competitivo raccomandato` soltanto 
 
 - inventario;
 - AMD/NVIDIA/Intel;
-- flussi assistiti;
-- pacchetti locali;
-- Driver Store;
-- firma e verifica;
-- Windows Update driver temporaneo.
+- [x] flussi assistiti e accessi rapidi Windows verificati, incluso Device Manager via MMC;
+- [x] pacchetti locali;
+- [x] Driver Store;
+- [x] firma e verifica;
+- [x] Windows Update driver temporaneo e persistente con ripristino esatto.
 
 **Gate:** nessun pacchetto non verificato viene eseguito; policy temporanee hanno scadenza; esito verificato dopo reboot.
 
@@ -855,8 +855,9 @@ La Fase 8 può introdurre un profilo `Gaming competitivo raccomandato` soltanto 
 - PowrProf;
 - CPU, grafica, rete, input e storage;
 - controllo RSS tipizzato e topology-aware, senza preset o fallback registry;
-- MSI e interrupt affinity;
-- topologia CPU;
+- [x] MSI Utility v3 integrato e interrupt affinity migliorato;
+- [x] Power Settings Explorer integrato tramite PowrProf;
+- [x] topologia CPU;
 - verifica hardware-specifica.
 
 **Gate:** nessun valore fuori range, nessuna maschera troncata, nessun setting incompatibile applicabile.
@@ -881,7 +882,8 @@ La Fase 8 può introdurre un profilo `Gaming competitivo raccomandato` soltanto 
 - spostare payload opzionali on-demand;
 - ridurre gli attuali 535 MB di `resources/`;
 - completare EN/IT;
-- mantenere tool esterni.
+- [x] mantenere tool esterni e indicizzarli nella ricerca globale;
+- [x] aggiungere fonti ufficiali zoicware, benchmark, overclock e stress test senza bundling o esecuzione remota mutabile.
 
 **Gate:** zero azioni non classificate, zero command path remoto mutabile, zero ID legacy irrisolti.
 

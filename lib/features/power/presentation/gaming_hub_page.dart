@@ -10,9 +10,11 @@ class GamingHubPage extends StatefulWidget {
   const GamingHubPage({
     required this.controller,
     required this.onSafetyPrompt,
+    this.initialIndex = 0,
     super.key,
   });
   final TweakController controller;
+  final int initialIndex;
   final Future<bool> Function(
     String title,
     String message, {
@@ -25,7 +27,14 @@ class GamingHubPage extends StatefulWidget {
 }
 
 class _GamingHubPageState extends State<GamingHubPage> {
-  int _index = 0;
+  late int _index;
+
+  @override
+  void initState() {
+    super.initState();
+    _index = widget.initialIndex.clamp(0, 2);
+  }
+
   @override
   Widget build(BuildContext context) {
     final strings = AppLocalizations.of(context);

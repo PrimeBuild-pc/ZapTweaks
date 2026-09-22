@@ -388,6 +388,25 @@ class AppLocalizationsFr extends AppLocalizations {
   String get searchResults => 'Search results';
 
   @override
+  String get searchSections => 'Sections and integrated tools';
+
+  @override
+  String get searchApps => 'Search apps';
+
+  @override
+  String get searchCatalog => 'Operations and external tools';
+
+  @override
+  String get searchOpenResult => 'Open';
+
+  @override
+  String get searchExpertRequired => 'Enable Expert mode to open';
+
+  @override
+  String get noSearchResults =>
+      'No matching sections, apps, operations, or tools.';
+
+  @override
   String get operationTaskbarEndTaskTitle => 'Taskbar End task';
 
   @override
@@ -684,7 +703,7 @@ class AppLocalizationsFr extends AppLocalizations {
       'Replace all current power schemes with Windows defaults? ZapTweaks will first export every scheme for exact rollback.';
 
   @override
-  String get interruptConfiguration => 'Interrupts';
+  String get interruptConfiguration => 'MSI Utility v3 & Interrupt Affinity';
 
   @override
   String get interruptConfigurationDescription =>
@@ -824,6 +843,20 @@ class AppLocalizationsFr extends AppLocalizations {
       'Uses the documented Windows Update policy for 7 or 30 days. ZapTweaks records the exact previous value and shows a reminder when the pause expires; restoration requires your confirmation.';
 
   @override
+  String get driverUpdatePolicy => 'Windows Update driver policy';
+
+  @override
+  String get driverUpdatePolicyDescription =>
+      'Exclude device drivers from Windows quality updates for 7 days, 30 days, or until you explicitly restore the exact previous policy.';
+
+  @override
+  String get disableUntilRestored => 'Disable until restored';
+
+  @override
+  String get driverUpdatePausePermanent =>
+      'Driver updates remain excluded until you restore the previous policy.';
+
+  @override
   String get driverUpdatePauseActive => 'Driver update pause active';
 
   @override
@@ -888,6 +921,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get openOfficialSource => 'Open official source';
+
+  @override
+  String get openWindowsPanel => 'Open Windows panel';
 
   @override
   String get searchDrivers => 'Search Driver Store';
@@ -965,9 +1001,6 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get notReinstallable => 'No verified restore source';
-
-  @override
-  String get searchApps => 'Search apps';
 
   @override
   String get allCategories => 'All categories';

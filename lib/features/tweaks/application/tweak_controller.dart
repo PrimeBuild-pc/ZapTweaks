@@ -18,6 +18,7 @@ import '../../../core/persistence/operation_store.dart';
 import '../../../core/plans/operation_plan.dart';
 import '../../../core/plans/plan_engine.dart';
 import '../../../core/security/elevated_helper.dart';
+import '../../../core/search/search_matcher.dart';
 import '../../../core/services/app_locale_service.dart';
 import '../../../core/services/hardware_detection_service.dart';
 import '../../../core/services/logging_service.dart';
@@ -141,6 +142,8 @@ class TweakController extends ChangeNotifier {
   bool _expertModeEnabled = false;
   String _themeMode = 'system';
   String _searchQuery = '';
+  int _navigationTab = 0;
+  String? _navigationSearchTerm;
   String _localeCode = AppLocaleService.systemCode();
   bool _isCheckingForUpdates = false;
   UpdateInfo? _availableUpdate;
@@ -193,6 +196,8 @@ class TweakController extends ChangeNotifier {
   bool get expertModeEnabled => _expertModeEnabled;
   String get themeMode => _themeMode;
   String get searchQuery => _searchQuery;
+  int get navigationTab => _navigationTab;
+  String? get navigationSearchTerm => _navigationSearchTerm;
   String get localeCode => _localeCode;
   bool get isCheckingForUpdates => _isCheckingForUpdates;
   bool get isUpdateAvailable => _availableUpdate != null;
@@ -255,21 +260,26 @@ class TweakController extends ChangeNotifier {
         .toList(growable: false);
   }
 
-  List<TweakDescriptor> searchTweaks(String query) {
-    final normalized = query.trim().toLowerCase();
-    if (normalized.isEmpty) return const <TweakDescriptor>[];
+  List<TweakDescriptor> searchTweaks(
+    String query, {
+    bool includeExpert = false,
+  }) {
+    if (query.trim().isEmpty) return const <TweakDescriptor>[];
 
     final byId = <String, TweakDescriptor>{
       for (final descriptor in _catalog) descriptor.id: descriptor,
     };
     final results = <String, TweakDescriptor>{};
     for (final descriptor in _catalog) {
-      if (!_expertModeEnabled && descriptor.category == 'Expert') continue;
+      if (!includeExpert &&
+          !_expertModeEnabled &&
+          descriptor.category == 'Expert') {
+        continue;
+      }
       final haystack =
-          '${descriptor.id} ${descriptor.title} '
-                  '${descriptor.description}'
-              .toLowerCase();
-      if (!haystack.contains(normalized)) continue;
+          '${descriptor.id} ${descriptor.title} ${descriptor.description} '
+          '${descriptor.category} ${descriptor.collection}';
+      if (!SearchMatcher.matches(query, haystack)) continue;
       final resolved = descriptor.aliasTarget == null
           ? descriptor
           : (byId[descriptor.aliasTarget!] ?? descriptor);
@@ -466,9 +476,21 @@ class TweakController extends ChangeNotifier {
   }
 
   void selectCategory(String category) {
-    if (!categories.contains(category) || _selectedCategory == category) return;
+    navigateTo(category);
+  }
+
+  void navigateTo(String category, {int tab = 0, String? searchTerm}) {
+    if (!categories.contains(category)) return;
+    if (_selectedCategory == category &&
+        _searchQuery.isEmpty &&
+        _navigationTab == tab &&
+        _navigationSearchTerm == searchTerm) {
+      return;
+    }
     _selectedCategory = category;
     _searchQuery = '';
+    _navigationTab = tab;
+    _navigationSearchTerm = searchTerm;
     notifyListeners();
   }
 

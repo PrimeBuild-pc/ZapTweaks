@@ -113,6 +113,8 @@ class ProcessRunner {
     'fsutil.exe',
     'explorer',
     'explorer.exe',
+    'mmc',
+    'mmc.exe',
     'bcdedit',
     'bcdedit.exe',
     'winget',
