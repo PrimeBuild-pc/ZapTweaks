@@ -23,7 +23,6 @@ import '../../../core/services/hardware_detection_service.dart';
 import '../../../core/services/logging_service.dart';
 import '../../../core/services/metrics_sampling_service.dart';
 import '../../../core/services/permission_service.dart';
-import '../../../core/services/power_plan_service.dart';
 import '../../../core/services/process_runner.dart';
 import '../../../core/services/safety_gate_service.dart';
 import '../../../core/services/system_action_service.dart';
@@ -46,7 +45,6 @@ class TweakController extends ChangeNotifier {
     required ProcessRunner processRunner,
     required String appVersion,
     LoggingService? loggingService,
-    PowerPlanService? powerPlanService,
     Future<LegacyCatalogAdapter> Function()? legacyCatalogAdapterLoader,
     ElevatedHelperClient? elevatedHelperClient,
     OperationRegistry? operationRegistry,
@@ -61,12 +59,6 @@ class TweakController extends ChangeNotifier {
        _metricsSamplingService = metricsSamplingService,
        _preferences = preferences,
        _processRunner = processRunner,
-       _powerPlanService =
-           powerPlanService ??
-           PowerPlanService(
-             preferences: preferences,
-             processRunner: processRunner,
-           ),
        _appVersion = appVersion,
        _loggingService = loggingService ?? LoggingService.instance,
        _legacyCatalogAdapterLoader =
@@ -86,7 +78,6 @@ class TweakController extends ChangeNotifier {
   final MetricsSamplingService _metricsSamplingService;
   final SharedPreferences _preferences;
   final ProcessRunner _processRunner;
-  final PowerPlanService _powerPlanService;
   final String _appVersion;
   final LoggingService _loggingService;
   final Future<LegacyCatalogAdapter> Function() _legacyCatalogAdapterLoader;
@@ -215,27 +206,6 @@ class TweakController extends ChangeNotifier {
   List<double> get memoryHistory => _memoryHistory;
   List<double> get gpuHistory => _gpuHistory;
   List<double> get vramHistory => _vramHistory;
-
-  Future<List<PowerPlan>> availablePowerPlans() =>
-      _powerPlanService.availablePlans();
-
-  Future<OperationResult> importAndActivatePowerPlan(PowerPlan plan) async {
-    try {
-      await _powerPlanService.importAndActivate(plan);
-      return const OperationResult(success: true);
-    } catch (error) {
-      return OperationResult(success: false, message: error.toString());
-    }
-  }
-
-  Future<OperationResult> restorePreviousPowerPlan() async {
-    try {
-      await _powerPlanService.restorePreviousPlan();
-      return const OperationResult(success: true);
-    } catch (error) {
-      return OperationResult(success: false, message: error.toString());
-    }
-  }
 
   /// Returns true when a category includes at least one toggle-capable tweak.
   bool categoryHasToggleableItems(String category, {bool systemOnly = false}) {

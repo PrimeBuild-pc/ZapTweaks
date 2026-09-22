@@ -3,6 +3,17 @@ import 'system_tweak.dart';
 
 // Format: [!]<id>|<title>|<source category>|<resource path>.
 // A leading ! marks actions that require the aggressive safety gate.
+const Map<String, String> _externalToolUrls = <String, String>{
+  'installers_menu':
+      'https://learn.microsoft.com/windows/package-manager/winget/',
+  'installers_msi_afterburner':
+      'https://www.msi.com/Landing/afterburner/graphics-cards',
+  'installers_more_clock_tool':
+      'https://www.igorslab.de/en/download-area-new-version-of-morepowertool-mpt-and-final-release-of-redbioseditor-rbe/',
+  'installers_cru_sre':
+      'https://www.monitortests.com/forum/Thread-Custom-Resolution-Utility-CRU',
+};
+
 const List<String> _scriptDefinitions = <String>[
   '!setup_memory_compression_script|Memory Compression (Script Variant)|Setup Scripts|interactive_scripts/3 Setup/2 Memory Compression.ps1',
   '!setup_activation_script|Activation (Script Variant)|Setup Scripts|interactive_scripts/3 Setup/5 Activation.ps1',
@@ -105,8 +116,21 @@ List<SystemTweak> createRecoveredScriptTweaks() {
         }
 
         final aggressive = fields[0].startsWith('!');
+        final id = aggressive ? fields[0].substring(1) : fields[0];
+        final externalUrl = _externalToolUrls[id];
+        if (externalUrl != null) {
+          return ExternalUrlLauncherTweak(
+            id: id,
+            title: fields[1],
+            description:
+                'Opens the official page; the legacy installer script is not bundled.',
+            category: fields[2],
+            url: externalUrl,
+            actionLabel: 'Open Official Page',
+          );
+        }
         return ScriptInteractiveTweak(
-          id: aggressive ? fields[0].substring(1) : fields[0],
+          id: id,
           title: fields[1],
           description: switch (fields[0]) {
             'setup_startup_apps_7' =>

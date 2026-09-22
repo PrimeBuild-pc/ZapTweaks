@@ -1,3 +1,4 @@
+import '../../models/action_tweaks.dart';
 import '../../models/system_tweak.dart';
 
 class TweakDescriptor {
@@ -44,8 +45,13 @@ class TweakDescriptor {
   bool get isAlias => migrationDisposition == 'alias';
   bool get isRejected => migrationDisposition == 'rejected';
   bool get isBlockedLegacyScript =>
-      scriptTweak?.type == TweakUiType.interactiveScript &&
-      migrationDisposition != 'external';
+      scriptTweak is ScriptInteractiveTweak ||
+      scriptTweak is BatchScriptTweak ||
+      scriptTweak is RegistryImportTweak ||
+      scriptTweak is NvidiaProfileImportTweak ||
+      scriptTweak is ExecutableLauncherTweak ||
+      scriptTweak is DirectoryLauncherTweak ||
+      scriptTweak is ExplorerSelectFileTweak;
 
   TweakDescriptor copyWith({
     String? category,

@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:script_utility/core/services/tweak_catalog_service.dart';
 import 'package:script_utility/legacy/adapters/legacy_catalog_adapter.dart';
 import 'package:script_utility/legacy/catalog/legacy_catalog_manifest.dart';
+import 'package:script_utility/models/action_tweaks.dart';
 import 'package:script_utility/models/system_tweak.dart';
 
 void main() {
@@ -41,7 +42,14 @@ void main() {
       (item) => item.migrationDisposition == 'external',
     );
     expect(external.every((item) => item.category == 'Expert'), isTrue);
-    expect(external.every((item) => !item.isBlockedLegacyScript), isTrue);
+    expect(
+      external.every(
+        (item) =>
+            item.isBlockedLegacyScript ||
+            item.scriptTweak is ExternalUrlLauncherTweak,
+      ),
+      isTrue,
+    );
     expect(
       adapted
           .where(

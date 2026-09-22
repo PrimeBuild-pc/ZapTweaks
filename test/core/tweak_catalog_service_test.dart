@@ -181,9 +181,10 @@ void main() {
 
     expect(tweaks, hasLength(90));
     expect(tweaks.map((item) => item.id).toSet(), hasLength(90));
-    expect(tweaks, everyElement(isA<ScriptInteractiveTweak>()));
+    expect(tweaks.whereType<ScriptInteractiveTweak>(), hasLength(86));
+    expect(tweaks.whereType<ExternalUrlLauncherTweak>(), hasLength(4));
     expect(
-      tweaks.cast<ScriptInteractiveTweak>(),
+      tweaks.whereType<ScriptInteractiveTweak>(),
       everyElement(
         predicate<ScriptInteractiveTweak>(
           (item) => item.scriptSegments.length >= 3,

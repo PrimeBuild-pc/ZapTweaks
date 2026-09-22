@@ -1,7 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:script_utility/core/services/tweak_catalog_service.dart';
-import 'package:script_utility/core/services/process_runner.dart';
 import 'package:script_utility/models/action_tweaks.dart';
 
 void main() {
@@ -62,34 +61,11 @@ void main() {
       (item) => item.id == 'recovery_repair_bad_tweaks_zoicware',
     );
     expect(repair.title, contains('by zoicware'));
-    expect(repair.scriptTweak, isA<ScriptInteractiveTweak>());
+    expect(repair.scriptTweak, isA<ExternalUrlLauncherTweak>());
 
-    final profileImport =
-        catalog
-                .singleWhere(
-                  (item) =>
-                      item.id == 'tool_nvidia_profile_inspector_nip_profile',
-                )
-                .scriptTweak
-            as NvidiaProfileImportTweak;
-    final profiles = profileImport.availableProfiles();
-    expect(profiles, hasLength(16));
-    expect(
-      profiles.map((profile) => profile.name),
-      containsAll(<String>[
-        'nvidia-performance-settings',
-        'FortniteDX12_2025Profile_by_Jackpot',
-        'NovaOS',
-      ]),
+    final profileImport = catalog.singleWhere(
+      (item) => item.id == 'tool_nvidia_profile_inspector_nip_profile',
     );
-
-    profileImport.selectProfile(profiles.first);
-    ProcessRunner.configureShared(
-      ProcessRunner(
-        mode: ProcessExecutionMode.dryRun,
-        dryRunDelay: Duration.zero,
-      ),
-    );
-    await profileImport.onApply();
+    expect(profileImport.scriptTweak, isA<ExternalUrlLauncherTweak>());
   });
 }

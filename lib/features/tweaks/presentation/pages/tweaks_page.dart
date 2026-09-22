@@ -5,7 +5,6 @@ import '../../../../core/services/tweak_text_localizer.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../models/action_tweaks.dart';
 import '../../application/tweak_controller.dart';
-import '../widgets/power_plan_picker.dart';
 import '../widgets/tweak_switch_tile.dart';
 
 class TweaksPage extends StatefulWidget {
@@ -60,10 +59,6 @@ class _TweaksPageState extends State<TweaksPage> {
     return ListView(
       padding: const EdgeInsets.all(16),
       children: <Widget>[
-        if (widget.category == 'Gaming & Performance') ...<Widget>[
-          PowerPlanPicker(controller: widget.controller),
-          const SizedBox(height: 12),
-        ],
         if (widget.controller.needsRestart && !_bannerDismissed)
           InfoBar(
             title: Text(strings.restartRequired),
