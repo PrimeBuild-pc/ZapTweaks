@@ -87,6 +87,7 @@ void main() {
     for (final id in <String>[
       'tool_gpuz',
       'tool_winslopr_releases',
+      'tool_winsux_debloat',
       'restore_microsoft_windowsstore',
       'shortcut_device_manager',
     ]) {
@@ -119,11 +120,10 @@ void main() {
       expect(byId[id].scriptTweak.requiresSafetyPrompt, isTrue, reason: id);
     }
 
-    // Scripted hand-offs follow the aggressive flag: a debloat run asks, a
-    // diagnostic read-out does not.
+    // Scripted hand-offs follow the aggressive flag; official source/page
+    // links never ask for a restore point.
     for (final id in <String>[
       'tool_install_win11_debloat_raphire',
-      'tool_winsux_debloat',
       'tool_device_tweaker_script',
     ]) {
       expect(byId[id].scriptTweak.requiresSafetyPrompt, isTrue, reason: id);

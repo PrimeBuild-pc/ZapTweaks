@@ -124,16 +124,14 @@ List<SystemTweak> createProgramToolTweaks() {
       url: "https://tools.mariusheier.com/",
       actionLabel: 'Open',
     ),
-    PowerShellTerminalCommandTweak(
+    ExternalUrlLauncherTweak(
       id: "tool_marius_deeppoll_script",
-      title: "DeepPoll USB Polling Analyzer (Script)",
+      title: "DeepPoll USB Polling Analyzer",
       description:
-          "Runs DeepPoll in an elevated PowerShell window: USB polling rate analysis with microsecond precision via kernel ETW tracing.",
+          "Opens the official DeepPoll page; ZapTweaks never executes its mutable remote script.",
       category: 'Drivers & Installers',
-      command: "irm https://tools.mariusheier.com/deeppoll.ps1 | iex",
-      actionLabel: 'Run Tool',
-      warningMessage:
-          "This action executes a remote PowerShell command from tools.mariusheier.com. Continue only if you trust the source.",
+      url: "https://tools.mariusheier.com/deeppoll.html",
+      actionLabel: 'Open Official Page',
     ),
     ExternalUrlLauncherTweak(
       id: "tool_marius_deeppoll_web",
@@ -144,16 +142,14 @@ List<SystemTweak> createProgramToolTweaks() {
       url: "https://tools.mariusheier.com/deeppoll.html",
       actionLabel: 'Open',
     ),
-    PowerShellTerminalCommandTweak(
+    ExternalUrlLauncherTweak(
       id: "tool_marius_deeplog_script",
-      title: "DeepLog Input Recorder (Script)",
+      title: "DeepLog Input Recorder",
       description:
-          "Runs DeepLog in an elevated PowerShell window: records 30 seconds of controller input with a system snapshot for diagnostics.",
+          "Opens the official DeepLog page; ZapTweaks never executes its mutable remote script.",
       category: 'Drivers & Installers',
-      command: "irm https://tools.mariusheier.com/deeplog.ps1 | iex",
-      actionLabel: 'Run Tool',
-      warningMessage:
-          "This action executes a remote PowerShell command from tools.mariusheier.com. Continue only if you trust the source.",
+      url: "https://tools.mariusheier.com/deeplog.html",
+      actionLabel: 'Open Official Page',
     ),
     ExternalUrlLauncherTweak(
       id: "tool_marius_deeplog_web",
@@ -164,16 +160,14 @@ List<SystemTweak> createProgramToolTweaks() {
       url: "https://tools.mariusheier.com/deeplog.html",
       actionLabel: 'Open',
     ),
-    PowerShellTerminalCommandTweak(
+    ExternalUrlLauncherTweak(
       id: "tool_marius_rig_script",
-      title: "Rig Profiles Hardware Report (Script)",
+      title: "Rig Profiles Hardware Report",
       description:
-          "Runs the Rig Profiles diagnostic script that collects and submits a hardware profile and compatibility information.",
+          "Opens the official Rig Profiles page; ZapTweaks never executes its mutable remote script.",
       category: 'Drivers & Installers',
-      command: "irm https://tools.mariusheier.com/rig.ps1 | iex",
-      actionLabel: 'Run Tool',
-      warningMessage:
-          "This action executes a remote PowerShell command from tools.mariusheier.com. Continue only if you trust the source.",
+      url: "https://tools.mariusheier.com/rig.html",
+      actionLabel: 'Open Official Page',
     ),
     ExternalUrlLauncherTweak(
       id: "tool_marius_rig_web",
@@ -184,16 +178,14 @@ List<SystemTweak> createProgramToolTweaks() {
       url: "https://tools.mariusheier.com/rig.html",
       actionLabel: 'Open',
     ),
-    PowerShellTerminalCommandTweak(
+    ExternalUrlLauncherTweak(
       id: "tool_marius_cpudirect_script",
-      title: "CPU Direct USB Port Check (Script)",
+      title: "CPU Direct USB Port Check",
       description:
-          "Runs CPU Direct in an elevated PowerShell window: checks whether USB devices sit on CPU-direct or chipset ports and detects hubs.",
+          "Opens the official CPU Direct page; ZapTweaks never executes its mutable remote script.",
       category: 'Drivers & Installers',
-      command: "irm https://tools.mariusheier.com/cpudirect.ps1 | iex",
-      actionLabel: 'Run Tool',
-      warningMessage:
-          "This action executes a remote PowerShell command from tools.mariusheier.com. Continue only if you trust the source.",
+      url: "https://tools.mariusheier.com/cpudirect.html",
+      actionLabel: 'Open Official Page',
     ),
     ExternalUrlLauncherTweak(
       id: "tool_marius_cpudirect_web",
@@ -274,21 +266,14 @@ List<SystemTweak> createProgramToolTweaks() {
       actionLabel: 'Install',
       isAggressive: true,
     ),
-    PowerShellTerminalCommandTweak(
+    ExternalUrlLauncherTweak(
       id: 'tool_winsux_debloat',
       title: 'WinSux by Fr33hty',
       description:
-          'Runs Fr33hty\'s remote WinSux debloat command. Invasive action with no in-app revert.',
+          'Opens the official WinSux source. ZapTweaks never executes its mutable remote script.',
       category: 'Privacy & Bloatware',
-      command:
-          'iwr https://github.com/FR33THYFR33THY/WinSux/raw/refs/heads/main/WinSux.ps1 -useb | iex',
-      actionLabel: 'Run WinSux',
-      isAggressive: true,
-      warningMessage:
-          'This action executes a remote PowerShell command from '
-          'github.com/FR33THYFR33THY and applies invasive debloat changes. '
-          'There is no in-app revert for this action. Continue only if you '
-          'fully trust the source.',
+      url: 'https://github.com/FR33THYFR33THY/WinSux',
+      actionLabel: 'Open Official Source',
     ),
 
     // Existing bundled tools
