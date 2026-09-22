@@ -118,7 +118,19 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
       locale: AppLocaleService.localeFor(widget.controller.localeCode),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      theme: buildZapTweaksTheme(accentColor: _systemAccentColor),
+      theme: buildZapTweaksTheme(
+        accentColor: _systemAccentColor,
+        brightness: Brightness.light,
+      ),
+      darkTheme: buildZapTweaksTheme(
+        accentColor: _systemAccentColor,
+        brightness: Brightness.dark,
+      ),
+      themeMode: switch (widget.controller.themeMode) {
+        'light' => ThemeMode.light,
+        'dark' => ThemeMode.dark,
+        _ => ThemeMode.system,
+      },
       navigatorKey: _navigatorKey,
       home: Builder(
         builder: (context) {
@@ -629,7 +641,7 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
 
   Widget _buildFallbackTitleBar() {
     return SizedBox(
-      height: 46,
+      height: 60,
       child: Row(
         children: <Widget>[
           const SizedBox(width: 12),
@@ -646,10 +658,7 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
             ),
           ),
           const Spacer(),
-          IconButton(
-            icon: const Icon(FluentIcons.info),
-            onPressed: _showAboutDialog,
-          ),
+          IconButton(icon: Icon(FluentIcons.info), onPressed: _showAboutDialog),
           const SizedBox(width: 8),
         ],
       ),

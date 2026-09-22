@@ -42,8 +42,8 @@ Each candidate is measured as A/B/A (baseline, candidate, rollback) on the same 
 | Intel GPU | Yes | Not exposed by existing VMs |
 | Battery / AC | Both | Existing VMs expose AC only |
 | MSI, MSI-X, Line-Based PCI | All | Existing VM exposes no allowlisted mutable device |
-| English / Italian | Both | Key parity automated; UI matrix pending |
-| Light / dark, multiple scaling values | All | Matrix pending |
+| English / Italian | Both | Key parity automated; Italian render exercised with the same shell |
+| Light / dark, multiple scaling values | All | Persisted system/light/dark modes; automated light/dark render at 150% and 1024×720, broader physical-device matrix pending |
 
 ## Approval package
 

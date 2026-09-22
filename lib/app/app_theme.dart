@@ -1,14 +1,22 @@
 import 'package:fluent_ui/fluent_ui.dart';
 
-FluentThemeData buildZapTweaksTheme({required Color accentColor}) {
+FluentThemeData buildZapTweaksTheme({
+  required Color accentColor,
+  Brightness brightness = Brightness.dark,
+}) {
   final swatch = _buildAccentSwatch(accentColor);
+  final dark = brightness == Brightness.dark;
 
   return FluentThemeData(
-    brightness: Brightness.dark,
+    brightness: brightness,
     accentColor: AccentColor.swatch(swatch),
-    scaffoldBackgroundColor: const Color(0xFF202020),
-    cardColor: const Color(0xFF2A2A2A),
-    micaBackgroundColor: const Color(0xFF1E1E1E),
+    scaffoldBackgroundColor: dark
+        ? const Color(0xFF202020)
+        : const Color(0xFFF5F5F5),
+    cardColor: dark ? const Color(0xFF2A2A2A) : Colors.white,
+    micaBackgroundColor: dark
+        ? const Color(0xFF1E1E1E)
+        : const Color(0xFFF3F3F3),
     visualDensity: VisualDensity.standard,
   );
 }

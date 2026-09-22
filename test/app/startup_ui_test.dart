@@ -98,9 +98,10 @@ Future<TweakController> _buildController({UpdateInfo? update}) async {
 
 Future<NavigationView> _pumpApp(
   WidgetTester tester,
-  TweakController controller,
-) async {
-  await tester.binding.setSurfaceSize(const Size(1280, 820));
+  TweakController controller, {
+  Size size = const Size(1280, 820),
+}) async {
+  await tester.binding.setSurfaceSize(size);
   addTearDown(() => tester.binding.setSurfaceSize(null));
   await tester.pumpWidget(
     ZapTweaksApp(
@@ -194,6 +195,42 @@ void main() {
 
     expect(controller.isUpdateAvailable, isTrue);
     expect(navigation.pane!.footerItems, hasLength(1));
+
+    await tester.pumpWidget(const SizedBox.shrink());
+    controller.dispose();
+    await tester.pump(const Duration(milliseconds: 150));
+  });
+
+  testWidgets('Italian light and dark themes render at scaled laptop size', (
+    tester,
+  ) async {
+    SharedPreferences.setMockInitialValues(<String, Object>{
+      'executionMode': 'dryRun',
+      'automaticUpdateChecks': false,
+      'localeCode': 'it',
+      'themeMode': 'light',
+    });
+    tester.view.devicePixelRatio = 1.5;
+    addTearDown(tester.view.resetDevicePixelRatio);
+    final controller = await _buildController();
+    await controller.initialize();
+
+    await _pumpApp(tester, controller, size: const Size(1024, 720));
+    expect(controller.localeCode, 'it');
+    expect(controller.themeMode, 'light');
+    expect(
+      FluentTheme.of(tester.element(find.byType(NavigationView))).brightness,
+      Brightness.light,
+    );
+    expect(tester.takeException(), isNull);
+
+    await controller.setThemeMode('dark');
+    await tester.pumpAndSettle();
+    expect(
+      FluentTheme.of(tester.element(find.byType(NavigationView))).brightness,
+      Brightness.dark,
+    );
+    expect(tester.takeException(), isNull);
 
     await tester.pumpWidget(const SizedBox.shrink());
     controller.dispose();

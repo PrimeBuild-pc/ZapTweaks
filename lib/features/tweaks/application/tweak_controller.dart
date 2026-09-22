@@ -100,6 +100,7 @@ class TweakController extends ChangeNotifier {
   static const String _localeCodeKey = AppLocaleService.preferenceKey;
   static const String _startWithWindowsKey = 'startWithWindows';
   static const String _expertModeKey = 'expertMode';
+  static const String _themeModeKey = 'themeMode';
   static const int _maxMetricsPoints = 40;
   static const Set<String> _interactionLockingTweaks = <String>{
     'network_low_latency_bandwidth_profile',
@@ -138,6 +139,7 @@ class TweakController extends ChangeNotifier {
   bool _automaticUpdateChecksEnabled = true;
   bool _startWithWindows = false;
   bool _expertModeEnabled = false;
+  String _themeMode = 'system';
   String _searchQuery = '';
   String _localeCode = AppLocaleService.systemCode();
   bool _isCheckingForUpdates = false;
@@ -189,6 +191,7 @@ class TweakController extends ChangeNotifier {
   bool get automaticUpdateChecksEnabled => _automaticUpdateChecksEnabled;
   bool get startWithWindows => _startWithWindows;
   bool get expertModeEnabled => _expertModeEnabled;
+  String get themeMode => _themeMode;
   String get searchQuery => _searchQuery;
   String get localeCode => _localeCode;
   bool get isCheckingForUpdates => _isCheckingForUpdates;
@@ -290,6 +293,7 @@ class TweakController extends ChangeNotifier {
           _preferences.getBool(_automaticUpdateChecksKey) ?? true;
       _startWithWindows = _preferences.getBool(_startWithWindowsKey) ?? false;
       _expertModeEnabled = _preferences.getBool(_expertModeKey) ?? false;
+      _themeMode = _normalizedThemeMode(_preferences.getString(_themeModeKey));
       _localeCode = AppLocaleService.normalize(
         _preferences.getString(_localeCodeKey) ?? AppLocaleService.systemCode(),
       );
@@ -483,6 +487,19 @@ class TweakController extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+  Future<void> setThemeMode(String value) async {
+    final normalized = _normalizedThemeMode(value);
+    if (_themeMode == normalized) return;
+    _themeMode = normalized;
+    await _preferences.setString(_themeModeKey, normalized);
+    notifyListeners();
+  }
+
+  static String _normalizedThemeMode(String? value) =>
+      const <String>{'system', 'light', 'dark'}.contains(value)
+      ? value!
+      : 'system';
 
   bool isDescriptorAvailable(TweakDescriptor descriptor) {
     if (descriptor.isRejected || descriptor.isBlockedLegacyScript) return false;
@@ -1140,6 +1157,7 @@ class TweakController extends ChangeNotifier {
       _automaticUpdateChecksEnabled = true;
       _startWithWindows = false;
       _expertModeEnabled = false;
+      _themeMode = 'system';
       _searchQuery = '';
       _localeCode = AppLocaleService.systemCode();
       _needsRestart = false;
@@ -1218,6 +1236,7 @@ class TweakController extends ChangeNotifier {
       _automaticUpdateChecksEnabled =
           _preferences.getBool(_automaticUpdateChecksKey) ?? true;
       _expertModeEnabled = _preferences.getBool(_expertModeKey) ?? false;
+      _themeMode = _normalizedThemeMode(_preferences.getString(_themeModeKey));
       _localeCode = AppLocaleService.normalize(
         _preferences.getString(_localeCodeKey),
       );

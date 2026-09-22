@@ -18,6 +18,22 @@ class AppLocalizationsZh extends AppLocalizations {
   String get languageDescription => '选择 ZapTweaks 使用的语言。';
 
   @override
+  String get appearance => 'Appearance';
+
+  @override
+  String get appearanceDescription =>
+      'Follow Windows or use a fixed light or dark app theme.';
+
+  @override
+  String get themeSystem => 'Windows default';
+
+  @override
+  String get themeLight => 'Light';
+
+  @override
+  String get themeDark => 'Dark';
+
+  @override
   String get settings => '设置';
 
   @override

@@ -18,6 +18,22 @@ class AppLocalizationsIt extends AppLocalizations {
   String get languageDescription => 'Scegli la lingua usata da ZapTweaks.';
 
   @override
+  String get appearance => 'Aspetto';
+
+  @override
+  String get appearanceDescription =>
+      'Segui Windows oppure usa un tema chiaro o scuro fisso per l\'app.';
+
+  @override
+  String get themeSystem => 'Predefinito Windows';
+
+  @override
+  String get themeLight => 'Chiaro';
+
+  @override
+  String get themeDark => 'Scuro';
+
+  @override
   String get settings => 'Impostazioni';
 
   @override

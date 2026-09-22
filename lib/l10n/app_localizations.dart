@@ -126,6 +126,36 @@ abstract class AppLocalizations {
   /// **'Choose the language used by ZapTweaks.'**
   String get languageDescription;
 
+  /// No description provided for @appearance.
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get appearance;
+
+  /// No description provided for @appearanceDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Follow Windows or use a fixed light or dark app theme.'**
+  String get appearanceDescription;
+
+  /// No description provided for @themeSystem.
+  ///
+  /// In en, this message translates to:
+  /// **'Windows default'**
+  String get themeSystem;
+
+  /// No description provided for @themeLight.
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get themeLight;
+
+  /// No description provided for @themeDark.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark'**
+  String get themeDark;
+
   /// No description provided for @settings.
   ///
   /// In en, this message translates to:

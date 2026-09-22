@@ -84,6 +84,47 @@ class _SettingsPageState extends State<SettingsPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
+                      Text(strings.appearance),
+                      const SizedBox(height: 3),
+                      Text(strings.appearanceDescription),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 16),
+                ComboBox<String>(
+                  value: controller.themeMode,
+                  items: <ComboBoxItem<String>>[
+                    ComboBoxItem<String>(
+                      value: 'system',
+                      child: Text(strings.themeSystem),
+                    ),
+                    ComboBoxItem<String>(
+                      value: 'light',
+                      child: Text(strings.themeLight),
+                    ),
+                    ComboBoxItem<String>(
+                      value: 'dark',
+                      child: Text(strings.themeDark),
+                    ),
+                  ],
+                  onChanged: (value) {
+                    if (value != null) controller.setThemeMode(value);
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: 12),
+        Card(
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
                       Text(strings.expertMode),
                       const SizedBox(height: 3),
                       Text(strings.expertModeDescription),
