@@ -3,6 +3,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../tweaks/application/tweak_controller.dart';
 import '../../tweaks/presentation/pages/tweaks_page.dart';
+import 'interrupt_configuration_page.dart';
 import 'power_plans_page.dart';
 
 class GamingHubPage extends StatefulWidget {
@@ -37,6 +38,11 @@ class _GamingHubPageState extends State<GamingHubPage> {
           text: Text(strings.powerPlans),
           icon: const Icon(FluentIcons.power_button),
           body: PowerPlansPage(controller: widget.controller),
+        ),
+        Tab(
+          text: Text(strings.interruptConfiguration),
+          icon: const Icon(FluentIcons.processing),
+          body: InterruptConfigurationPage(controller: widget.controller),
         ),
         Tab(
           text: Text(strings.tweaks),

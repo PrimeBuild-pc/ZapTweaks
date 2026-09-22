@@ -668,6 +668,42 @@ class AppLocalizationsIt extends AppLocalizations {
       'Sostituire tutti i piani correnti con quelli predefiniti di Windows? ZapTweaks esporterà prima ogni piano per il rollback esatto.';
 
   @override
+  String get interruptConfiguration => 'Interrupt';
+
+  @override
+  String get interruptConfigurationDescription =>
+      'Controlli avanzati con capability gate per MSI e affinità interrupt del gruppo 0, limitati ai dispositivi display, rete e media presenti. Nessun valore viene consigliato automaticamente.';
+
+  @override
+  String get configureMsi => 'Configura MSI';
+
+  @override
+  String get enableMsi => 'Abilita interrupt message-signaled';
+
+  @override
+  String get configureInterruptAffinity => 'Configura affinità';
+
+  @override
+  String get interruptChangeWarning =>
+      'Una policy interrupt non valida può rendere il dispositivo indisponibile fino al rollback o al riavvio. ZapTweaks convalida i limiti hardware e salva i valori correnti esatti.';
+
+  @override
+  String get affinityMaskHint => 'Maschera esadecimale gruppo 0, ad esempio 3';
+
+  @override
+  String get invalidAffinityMask =>
+      'Inserisci una maschera esadecimale canonica non nulla di massimo 64 bit.';
+
+  @override
+  String msiRange(int maximum) {
+    return 'Il numero di messaggi deve essere compreso tra 1 e $maximum.';
+  }
+
+  @override
+  String get noCompatibleInterruptDevices =>
+      'Nessun dispositivo PCI display, rete o media presente espone capability interrupt compatibili.';
+
+  @override
   String get renamePowerPlan => 'Rinomina piano di alimentazione';
 
   @override

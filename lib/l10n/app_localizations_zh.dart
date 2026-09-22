@@ -651,6 +651,42 @@ class AppLocalizationsZh extends AppLocalizations {
       'Replace all current power schemes with Windows defaults? ZapTweaks will first export every scheme for exact rollback.';
 
   @override
+  String get interruptConfiguration => 'Interrupts';
+
+  @override
+  String get interruptConfigurationDescription =>
+      'Advanced, capability-gated MSI and group-0 interrupt-affinity controls for present display, network, and media devices. No value is recommended automatically.';
+
+  @override
+  String get configureMsi => 'Configure MSI';
+
+  @override
+  String get enableMsi => 'Enable message-signaled interrupts';
+
+  @override
+  String get configureInterruptAffinity => 'Configure affinity';
+
+  @override
+  String get interruptChangeWarning =>
+      'An invalid interrupt policy can make the device unavailable until rollback or reboot. ZapTweaks validates hardware limits and snapshots the exact current values.';
+
+  @override
+  String get affinityMaskHint => 'Group-0 hexadecimal mask, for example 3';
+
+  @override
+  String get invalidAffinityMask =>
+      'Enter a non-zero canonical hexadecimal mask of at most 64 bits.';
+
+  @override
+  String msiRange(int maximum) {
+    return 'Message count must be between 1 and $maximum.';
+  }
+
+  @override
+  String get noCompatibleInterruptDevices =>
+      'No present display, network, or media PCI device exposes compatible interrupt capabilities.';
+
+  @override
   String get renamePowerPlan => 'Rename power plan';
 
   @override

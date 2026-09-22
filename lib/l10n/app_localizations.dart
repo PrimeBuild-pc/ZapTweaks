@@ -1284,6 +1284,66 @@ abstract class AppLocalizations {
   /// **'Replace all current power schemes with Windows defaults? ZapTweaks will first export every scheme for exact rollback.'**
   String get restoreDefaultPowerSchemesWarning;
 
+  /// No description provided for @interruptConfiguration.
+  ///
+  /// In en, this message translates to:
+  /// **'Interrupts'**
+  String get interruptConfiguration;
+
+  /// No description provided for @interruptConfigurationDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Advanced, capability-gated MSI and group-0 interrupt-affinity controls for present display, network, and media devices. No value is recommended automatically.'**
+  String get interruptConfigurationDescription;
+
+  /// No description provided for @configureMsi.
+  ///
+  /// In en, this message translates to:
+  /// **'Configure MSI'**
+  String get configureMsi;
+
+  /// No description provided for @enableMsi.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable message-signaled interrupts'**
+  String get enableMsi;
+
+  /// No description provided for @configureInterruptAffinity.
+  ///
+  /// In en, this message translates to:
+  /// **'Configure affinity'**
+  String get configureInterruptAffinity;
+
+  /// No description provided for @interruptChangeWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'An invalid interrupt policy can make the device unavailable until rollback or reboot. ZapTweaks validates hardware limits and snapshots the exact current values.'**
+  String get interruptChangeWarning;
+
+  /// No description provided for @affinityMaskHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Group-0 hexadecimal mask, for example 3'**
+  String get affinityMaskHint;
+
+  /// No description provided for @invalidAffinityMask.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a non-zero canonical hexadecimal mask of at most 64 bits.'**
+  String get invalidAffinityMask;
+
+  /// No description provided for @msiRange.
+  ///
+  /// In en, this message translates to:
+  /// **'Message count must be between 1 and {maximum}.'**
+  String msiRange(int maximum);
+
+  /// No description provided for @noCompatibleInterruptDevices.
+  ///
+  /// In en, this message translates to:
+  /// **'No present display, network, or media PCI device exposes compatible interrupt capabilities.'**
+  String get noCompatibleInterruptDevices;
+
   /// No description provided for @renamePowerPlan.
   ///
   /// In en, this message translates to:
