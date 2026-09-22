@@ -486,6 +486,10 @@ class TweakController extends ChangeNotifier {
 
   bool isDescriptorAvailable(TweakDescriptor descriptor) {
     if (descriptor.isRejected || descriptor.isBlockedLegacyScript) return false;
+    if (descriptor.isSystemToggle &&
+        _operationRegistry?.contains(descriptor.id) != true) {
+      return false;
+    }
     if (_isDescriptorEnabled(descriptor)) {
       return true;
     }
@@ -527,6 +531,10 @@ class TweakController extends ChangeNotifier {
     }
     if (descriptor.isBlockedLegacyScript) {
       return 'Legacy interactive script execution is blocked; use its native or assisted replacement.';
+    }
+    if (descriptor.isSystemToggle &&
+        _operationRegistry?.contains(descriptor.id) != true) {
+      return 'Legacy mutation is blocked until a typed native operation replaces it.';
     }
     if (descriptor.requiredCpuVendor != null &&
         !_hardwareProfile.supportsCpu(descriptor.requiredCpuVendor)) {
@@ -641,42 +649,35 @@ class TweakController extends ChangeNotifier {
     notifyListeners();
 
     try {
-      if (!_isAdmin && _elevatedHelperClient != null) {
-        final result = await _elevatedHelperClient.applySystemTweak(
-          operationId: descriptor.id,
-          desiredValue: nextValue,
-          createRestorePoint: createRestorePoint,
+      if (_operationRegistry?.contains(descriptor.id) != true) {
+        _toggleStates[descriptor.id] = previous;
+        return const OperationResult(
+          success: false,
+          message:
+              'Legacy mutation is blocked until a typed native operation replaces it.',
         );
-        if (!result.success || result.observed != nextValue) {
-          _toggleStates[descriptor.id] = previous;
-          return OperationResult(
-            success: false,
-            message:
-                result.message ??
-                'State verification failed for ${descriptor.title}.',
-          );
-        }
-      } else {
-        final result = await _tweakManager.applyTweak(
-          descriptor.systemKey!,
-          nextValue,
+      }
+      final desired = nextValue
+          ? (_nativeToggleEnabledValues[descriptor.id] ?? 1)
+          : _nativeToggleDisabledValues[descriptor.id];
+      final plan = await executeNativeRequests(<OperationRequest>[
+        OperationRequest(operationId: descriptor.id, desiredValue: desired),
+      ]);
+      if (plan.status == PlanStatus.dryRunComplete) {
+        _toggleStates[descriptor.id] = previous;
+        return const OperationResult(
+          success: true,
+          message: 'Dry run completed without changing Windows.',
         );
-        if (!result.success) {
-          _toggleStates[descriptor.id] = previous;
-          return OperationResult(
-            success: false,
-            message: result.errors.join('\n'),
-          );
-        }
-
-        if (await _tweakManager.detectTweakState(descriptor.systemKey!) !=
-            nextValue) {
-          _toggleStates[descriptor.id] = previous;
-          return OperationResult(
-            success: false,
-            message: 'State verification failed for ${descriptor.title}.',
-          );
-        }
+      }
+      final item = plan.items.single;
+      if (plan.status != PlanStatus.completed ||
+          item.status != PlanItemStatus.verified) {
+        _toggleStates[descriptor.id] = previous;
+        return OperationResult(
+          success: false,
+          message: item.error ?? item.before.message ?? 'Operation failed.',
+        );
       }
 
       await _preferences.setBool(descriptor.id, nextValue);
@@ -735,6 +736,13 @@ class TweakController extends ChangeNotifier {
       return const OperationResult(
         success: false,
         message: 'Invalid script tweak descriptor.',
+      );
+    }
+    if (descriptor.isBlockedLegacyScript) {
+      return const OperationResult(
+        success: false,
+        message:
+            'Legacy payload execution is blocked; use its native or assisted replacement.',
       );
     }
     if (_busyPresetCategories.contains(descriptor.category)) {

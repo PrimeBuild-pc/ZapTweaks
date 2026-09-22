@@ -49,6 +49,14 @@ void main() {
             item.scriptTweak is ExternalUrlLauncherTweak,
       ),
       isTrue,
+      reason: external
+          .where(
+            (item) =>
+                !item.isBlockedLegacyScript &&
+                item.scriptTweak is! ExternalUrlLauncherTweak,
+          )
+          .map((item) => '${item.id}:${item.scriptTweak.runtimeType}')
+          .join(', '),
     );
     expect(
       adapted

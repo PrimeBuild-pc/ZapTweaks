@@ -48,10 +48,12 @@ class TweakDescriptor {
       scriptTweak is ScriptInteractiveTweak ||
       scriptTweak is BatchScriptTweak ||
       scriptTweak is RegistryImportTweak ||
+      scriptTweak is PowerShellTerminalCommandTweak ||
       scriptTweak is NvidiaProfileImportTweak ||
       scriptTweak is ExecutableLauncherTweak ||
       scriptTweak is DirectoryLauncherTweak ||
-      scriptTweak is ExplorerSelectFileTweak;
+      scriptTweak is ExplorerSelectFileTweak ||
+      scriptTweak?.id == 'tool_winget_interactive_uninstaller';
 
   TweakDescriptor copyWith({
     String? category,
