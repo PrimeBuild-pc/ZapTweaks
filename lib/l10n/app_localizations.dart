@@ -1137,7 +1137,7 @@ abstract class AppLocalizations {
   /// No description provided for @captureEtwTraceDescription.
   ///
   /// In en, this message translates to:
-  /// **'Records a bounded 15-second Windows Performance Recorder trace on demand. No monitor remains active.'**
+  /// **'Records a bounded 15-second Windows Performance Recorder trace and a DPC/ISR event-count report on demand. Counts are diagnostic signals, not proof of latency. No monitor remains active.'**
   String get captureEtwTraceDescription;
 
   /// No description provided for @etwTraceSaved.
@@ -1145,6 +1145,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Trace saved to {path}'**
   String etwTraceSaved(Object path);
+
+  /// No description provided for @cleanupDiagnosticTraces.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete diagnostic traces'**
+  String get cleanupDiagnosticTraces;
+
+  /// No description provided for @cleanupDiagnosticTracesDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Scans only ZapTweaks trace files, shows the exact file count and byte total, then deletes them after confirmation.'**
+  String get cleanupDiagnosticTracesDescription;
+
+  /// No description provided for @cleanupTracePreview.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete {count} ZapTweaks trace files ({bytes} bytes)? This cannot be undone.'**
+  String cleanupTracePreview(int count, int bytes);
+
+  /// No description provided for @cleanupTracesCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'The previewed diagnostic traces were deleted and verified absent.'**
+  String get cleanupTracesCompleted;
+
+  /// No description provided for @noDiagnosticTraces.
+  ///
+  /// In en, this message translates to:
+  /// **'No ZapTweaks diagnostic traces were found.'**
+  String get noDiagnosticTraces;
 
   /// No description provided for @hardwareMonitor.
   ///

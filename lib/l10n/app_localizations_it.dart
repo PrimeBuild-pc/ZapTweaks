@@ -579,12 +579,32 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get captureEtwTraceDescription =>
-      'Registra su richiesta una traccia Windows Performance Recorder limitata a 15 secondi. Nessun monitor resta attivo.';
+      'Registra su richiesta una traccia Windows Performance Recorder limitata a 15 secondi e un report dei conteggi DPC/ISR. I conteggi sono segnali diagnostici, non prove di latenza. Nessun monitor resta attivo.';
 
   @override
   String etwTraceSaved(Object path) {
     return 'Traccia salvata in $path';
   }
+
+  @override
+  String get cleanupDiagnosticTraces => 'Elimina tracce diagnostiche';
+
+  @override
+  String get cleanupDiagnosticTracesDescription =>
+      'Analizza solo le tracce di ZapTweaks, mostra il numero esatto di file e byte e le elimina dopo conferma.';
+
+  @override
+  String cleanupTracePreview(int count, int bytes) {
+    return 'Eliminare $count file di traccia ZapTweaks ($bytes byte)? L\'operazione non può essere annullata.';
+  }
+
+  @override
+  String get cleanupTracesCompleted =>
+      'Le tracce diagnostiche mostrate nell\'anteprima sono state eliminate e verificate come assenti.';
+
+  @override
+  String get noDiagnosticTraces =>
+      'Nessuna traccia diagnostica di ZapTweaks trovata.';
 
   @override
   String get hardwareMonitor => 'Monitor hardware';

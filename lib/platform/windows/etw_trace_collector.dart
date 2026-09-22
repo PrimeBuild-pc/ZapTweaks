@@ -1,14 +1,17 @@
 import 'dart:io';
 
 import '../../core/services/process_runner.dart';
+import 'etw_dpc_analyzer.dart';
 
 class EtwTraceCollector {
   EtwTraceCollector({
     required this.processRunner,
+    this.analyzer,
     Future<void> Function(Duration)? delay,
   }) : delay = delay ?? Future<void>.delayed;
 
   final ProcessRunner processRunner;
+  final EtwDpcAnalyzer? analyzer;
   final Future<void> Function(Duration) delay;
 
   Future<File> capture({
@@ -45,6 +48,7 @@ class EtwTraceCollector {
     if (!await output.exists() || await output.length() == 0) {
       throw StateError('WPR completed without a trace file.');
     }
+    await analyzer?.analyze(output);
     return output;
   }
 }

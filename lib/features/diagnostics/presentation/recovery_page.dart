@@ -1,8 +1,10 @@
 import 'package:fluent_ui/fluent_ui.dart';
 
 import '../../../core/operations/operation.dart';
+import '../../../core/operations/trace_cleanup_operation.dart';
 import '../../../core/plans/operation_plan.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../../platform/windows/cleanup_preview.dart';
 import '../../tweaks/application/tweak_controller.dart';
 
 class RecoveryPage extends StatefulWidget {
@@ -61,17 +63,61 @@ class _RecoveryPageState extends State<RecoveryPage> {
       );
       _success = plan.status == PlanStatus.completed;
       _message = _success
-          ? id == 'diagnostics.etw.capture'
-                ? strings.etwTraceSaved(
-                    plan.items.single.written?.value?.toString() ?? '',
-                  )
-                : strings.systemRepairVerified
+          ? switch (id) {
+              'diagnostics.etw.capture' => strings.etwTraceSaved(
+                plan.items.single.written?.value?.toString() ?? '',
+              ),
+              'diagnostics.trace.cleanup' => strings.cleanupTracesCompleted,
+              _ => strings.systemRepairVerified,
+            }
           : plan.items.single.error ?? strings.operationFailed;
     } catch (error) {
       _success = false;
       _message = error.toString();
     } finally {
       if (mounted) setState(() => _busy = null);
+    }
+  }
+
+  Future<void> _previewAndCleanup() async {
+    final strings = AppLocalizations.of(context);
+    final preview = await const CleanupScanner().scanDirectory(
+      defaultTraceDirectory(),
+      category: 'ZapTweaks traces',
+      reason: 'User-requested diagnostic trace cleanup',
+    );
+    if (!mounted) return;
+    if (preview.candidates.isEmpty) {
+      setState(() {
+        _success = true;
+        _message = strings.noDiagnosticTraces;
+      });
+      return;
+    }
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => ContentDialog(
+        title: Text(strings.cleanupDiagnosticTraces),
+        content: Text(
+          strings.cleanupTracePreview(
+            preview.candidates.length,
+            preview.totalBytes,
+          ),
+        ),
+        actions: <Widget>[
+          Button(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(strings.cancel),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: Text(strings.delete),
+          ),
+        ],
+      ),
+    );
+    if (confirmed == true) {
+      await _run('diagnostics.trace.cleanup', confirm: false);
     }
   }
 
@@ -114,6 +160,13 @@ class _RecoveryPageState extends State<RecoveryPage> {
             confirm: false,
             parameters: const <String, Object?>{'durationSeconds': 15},
           ),
+        ),
+        const SizedBox(height: 12),
+        _repairCard(
+          strings.cleanupDiagnosticTraces,
+          strings.cleanupDiagnosticTracesDescription,
+          'diagnostics.trace.cleanup',
+          onRun: _previewAndCleanup,
         ),
       ],
     );

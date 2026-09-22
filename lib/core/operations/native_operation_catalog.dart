@@ -5,6 +5,7 @@ import '../../features/drivers/application/driver_update_policy_store.dart';
 import '../../features/drivers/application/local_driver_package_service.dart';
 import '../../features/drivers/application/setupapi_device_inventory_service.dart';
 import '../../features/drivers/application/windows_driver_inventory_service.dart';
+import '../../platform/windows/etw_dpc_analyzer.dart';
 import '../../platform/windows/etw_trace_collector.dart';
 import '../../platform/windows/power_plan_file_service.dart';
 import '../../platform/windows/power_scheme_service.dart';
@@ -36,6 +37,7 @@ import 'rss_configuration_operation.dart';
 import 'service_start_operation.dart';
 import 'scheduled_task_operation.dart';
 import 'system_repair_operation.dart';
+import 'trace_cleanup_operation.dart';
 import 'winget_package_operation.dart';
 
 List<OperationDefinition> createNativeOperationCatalog(
@@ -59,7 +61,13 @@ List<OperationDefinition> createNativeOperationCatalog(
     ),
     schemes: WindowsPowerSchemeService(),
   ),
-  EtwTraceOperation(collector: EtwTraceCollector(processRunner: processRunner)),
+  EtwTraceOperation(
+    collector: EtwTraceCollector(
+      processRunner: processRunner,
+      analyzer: EtwDpcAnalyzer(processRunner: processRunner),
+    ),
+  ),
+  TraceCleanupOperation(),
   SystemRepairOperation(
     kind: SystemRepairKind.componentStore,
     service: WindowsRepairService(processRunner: processRunner),

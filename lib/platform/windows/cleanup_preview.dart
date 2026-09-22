@@ -31,7 +31,10 @@ class CleanupScanner {
   }) async {
     if (!await directory.exists()) return const CleanupPreview([]);
     final candidates = <CleanupCandidate>[];
-    await for (final entity in directory.list(recursive: true)) {
+    await for (final entity in directory.list(
+      recursive: true,
+      followLinks: false,
+    )) {
       if (entity is! File) continue;
       try {
         candidates.add(

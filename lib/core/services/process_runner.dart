@@ -119,6 +119,8 @@ class ProcessRunner {
     'winget.exe',
     'wpr',
     'wpr.exe',
+    'tracerpt',
+    'tracerpt.exe',
     'dism',
     'dism.exe',
     'sfc',
