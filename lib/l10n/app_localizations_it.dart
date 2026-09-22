@@ -657,6 +657,17 @@ class AppLocalizationsIt extends AppLocalizations {
   String get exportActivePowerPlan => 'Esporta piano attivo';
 
   @override
+  String get restoreDefaultPowerSchemes => 'Ripristina predefiniti Windows';
+
+  @override
+  String get restoreDefaultPowerSchemesDescription =>
+      'Esporta e verifica tramite hash ogni piano corrente prima di ripristinare i predefiniti Windows.';
+
+  @override
+  String get restoreDefaultPowerSchemesWarning =>
+      'Sostituire tutti i piani correnti con quelli predefiniti di Windows? ZapTweaks esporterà prima ogni piano per il rollback esatto.';
+
+  @override
   String get renamePowerPlan => 'Rinomina piano di alimentazione';
 
   @override

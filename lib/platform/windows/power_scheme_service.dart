@@ -57,6 +57,9 @@ abstract interface class PowerSchemeManagement implements PowerSchemeInventory {
   void deleteScheme(String schemeId);
 }
 
+abstract interface class PowerSchemeAdministration
+    implements PowerSchemeManagement, PowerSchemeStore {}
+
 class PowerSchemeInfo {
   const PowerSchemeInfo({
     required this.id,
@@ -163,8 +166,7 @@ typedef _PowerWriteFriendlyNameDart =
       int,
     );
 
-class WindowsPowerSchemeService
-    implements PowerSchemeStore, PowerSchemeManagement {
+class WindowsPowerSchemeService implements PowerSchemeAdministration {
   WindowsPowerSchemeService({DynamicLibrary? library})
     : _library = library ?? DynamicLibrary.open('powrprof.dll') {
     _getActiveScheme = _library

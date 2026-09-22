@@ -368,6 +368,51 @@ class _PowerPlansPageState extends State<PowerPlansPage> {
     }
   }
 
+  Future<void> _restoreDefaults() async {
+    final strings = AppLocalizations.of(context);
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => ContentDialog(
+        title: Text(strings.restoreDefaultPowerSchemes),
+        content: Text(strings.restoreDefaultPowerSchemesWarning),
+        actions: <Widget>[
+          Button(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(strings.cancel),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: Text(strings.continueAction),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true) return;
+    setState(() {
+      _busy = true;
+      _error = null;
+    });
+    try {
+      final plan = await widget.controller
+          .executeNativeRequests(const <OperationRequest>[
+            OperationRequest(
+              operationId: 'power.schemes.restore_defaults',
+              desiredValue: true,
+            ),
+          ]);
+      if (plan.status != PlanStatus.completed) {
+        throw StateError(
+          plan.items.single.error ?? 'Restoring default schemes failed.',
+        );
+      }
+      await _load();
+    } catch (error) {
+      if (mounted) setState(() => _error = error.toString());
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
   Future<void> _exportActive() async {
     final path = const WindowsFileDialog().savePowerPlan();
     if (path == null) return;
@@ -409,6 +454,11 @@ class _PowerPlansPageState extends State<PowerPlansPage> {
             Button(
               onPressed: _busy || _schemes.isEmpty ? null : _exportActive,
               child: Text(strings.exportActivePowerPlan),
+            ),
+            const SizedBox(width: 8),
+            Button(
+              onPressed: _busy ? null : _restoreDefaults,
+              child: Text(strings.restoreDefaultPowerSchemes),
             ),
           ],
         ),

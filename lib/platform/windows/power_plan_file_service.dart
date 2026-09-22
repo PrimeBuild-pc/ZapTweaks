@@ -19,7 +19,7 @@ class PowerPlanFileService {
     final result = await processRunner.run('powercfg.exe', <String>[
       '/export',
       destination.absolute.path,
-      schemeId,
+      _powerCfgGuid(schemeId),
     ]);
     if (!result.success) {
       throw StateError('Power plan export failed: ${result.details}');
@@ -55,7 +55,7 @@ class PowerPlanFileService {
       final result = await processRunner.run('powercfg.exe', <String>[
         '/import',
         frozen.absolute.path,
-        if (schemeId != null) schemeId,
+        if (schemeId != null) _powerCfgGuid(schemeId),
       ]);
       if (!result.success) {
         throw StateError('Power plan import failed: ${result.details}');
@@ -75,6 +75,11 @@ class PowerPlanFileService {
       }
     }
   }
+
+  static String _powerCfgGuid(String value) =>
+      value.startsWith('{') && value.endsWith('}')
+      ? value.substring(1, value.length - 1)
+      : value;
 
   static void _requirePow(String path) {
     if (!path.toLowerCase().endsWith('.pow')) {

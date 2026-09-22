@@ -1266,6 +1266,24 @@ abstract class AppLocalizations {
   /// **'Export active plan'**
   String get exportActivePowerPlan;
 
+  /// No description provided for @restoreDefaultPowerSchemes.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore Windows defaults'**
+  String get restoreDefaultPowerSchemes;
+
+  /// No description provided for @restoreDefaultPowerSchemesDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Exports and hashes every current scheme before asking Windows to restore its defaults.'**
+  String get restoreDefaultPowerSchemesDescription;
+
+  /// No description provided for @restoreDefaultPowerSchemesWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Replace all current power schemes with Windows defaults? ZapTweaks will first export every scheme for exact rollback.'**
+  String get restoreDefaultPowerSchemesWarning;
+
   /// No description provided for @renamePowerPlan.
   ///
   /// In en, this message translates to:

@@ -640,6 +640,17 @@ class AppLocalizationsZh extends AppLocalizations {
   String get exportActivePowerPlan => 'Export active plan';
 
   @override
+  String get restoreDefaultPowerSchemes => 'Restore Windows defaults';
+
+  @override
+  String get restoreDefaultPowerSchemesDescription =>
+      'Exports and hashes every current scheme before asking Windows to restore its defaults.';
+
+  @override
+  String get restoreDefaultPowerSchemesWarning =>
+      'Replace all current power schemes with Windows defaults? ZapTweaks will first export every scheme for exact rollback.';
+
+  @override
   String get renamePowerPlan => 'Rename power plan';
 
   @override
