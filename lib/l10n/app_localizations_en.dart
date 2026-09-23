@@ -760,7 +760,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get interruptConfigurationDescription =>
-      'Advanced, capability-gated MSI and group-0 interrupt-affinity controls for present display, network, and media devices. No value is recommended automatically.';
+      'Advanced, capability-gated MSI and group-0 interrupt-affinity controls for present display, network, media, USB host, and HD audio devices. No value is recommended automatically.';
 
   @override
   String get configureMsi => 'Configure MSI';
@@ -789,7 +789,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noCompatibleInterruptDevices =>
-      'No present display, network, or media PCI device exposes compatible interrupt capabilities.';
+      'No present display, network, media, USB host, or HD audio PCI device exposes compatible interrupt capabilities.';
 
   @override
   String interruptCapabilities(

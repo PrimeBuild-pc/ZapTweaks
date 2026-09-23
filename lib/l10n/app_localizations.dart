@@ -1461,7 +1461,7 @@ abstract class AppLocalizations {
   /// No description provided for @interruptConfigurationDescription.
   ///
   /// In en, this message translates to:
-  /// **'Advanced, capability-gated MSI and group-0 interrupt-affinity controls for present display, network, and media devices. No value is recommended automatically.'**
+  /// **'Advanced, capability-gated MSI and group-0 interrupt-affinity controls for present display, network, media, USB host, and HD audio devices. No value is recommended automatically.'**
   String get interruptConfigurationDescription;
 
   /// No description provided for @configureMsi.
@@ -1509,7 +1509,7 @@ abstract class AppLocalizations {
   /// No description provided for @noCompatibleInterruptDevices.
   ///
   /// In en, this message translates to:
-  /// **'No present display, network, or media PCI device exposes compatible interrupt capabilities.'**
+  /// **'No present display, network, media, USB host, or HD audio PCI device exposes compatible interrupt capabilities.'**
   String get noCompatibleInterruptDevices;
 
   /// No description provided for @interruptCapabilities.

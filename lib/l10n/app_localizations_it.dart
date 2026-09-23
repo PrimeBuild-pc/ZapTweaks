@@ -766,7 +766,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get interruptConfigurationDescription =>
-      'Controlli avanzati con capability gate per MSI e affinità interrupt del gruppo 0, limitati ai dispositivi display, rete e media presenti. Nessun valore viene consigliato automaticamente.';
+      'Controlli avanzati con capability gate per MSI e affinità interrupt del gruppo 0, limitati ai dispositivi display, rete, media, controller host USB e audio HD presenti. Nessun valore viene consigliato automaticamente.';
 
   @override
   String get configureMsi => 'Configura MSI';
@@ -795,7 +795,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get noCompatibleInterruptDevices =>
-      'Nessun dispositivo PCI display, rete o media presente espone capability interrupt compatibili.';
+      'Nessun dispositivo PCI display, rete, media, controller host USB o audio HD presente espone capability interrupt compatibili.';
 
   @override
   String interruptCapabilities(

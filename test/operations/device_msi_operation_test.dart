@@ -40,12 +40,16 @@ class _Registry implements RegistryValueStore {
   }
 }
 
-PciInterruptCapability _capability({int maximum = 8}) => PciInterruptCapability(
-  device: const DeviceIdentity(
+PciInterruptCapability _capability({
+  int maximum = 8,
+  String classGuid = '4d36e972-e325-11ce-bfc1-08002be10318',
+  Set<String> hardwareIds = const <String>{r'PCI\VEN_1234&DEV_ABCD'},
+}) => PciInterruptCapability(
+  device: DeviceIdentity(
     instanceId: r'PCI\VEN_1234&DEV_ABCD\ONE',
-    classGuid: '4d36e972-e325-11ce-bfc1-08002be10318',
+    classGuid: classGuid,
     description: 'Network adapter',
-    hardwareIds: <String>{r'PCI\VEN_1234&DEV_ABCD'},
+    hardwareIds: hardwareIds,
     driverKey: r'{4d36e972-e325-11ce-bfc1-08002be10318}\0001',
     driverInf: 'oem1.inf',
   ),
@@ -79,12 +83,53 @@ void main() {
     expect(support.supported, isTrue);
     final snapshot = await operation.captureSnapshot(request);
     await operation.apply(request);
+    expect(
+      registry.values.keys,
+      everyElement(contains(r'HKLM\SYSTEM\CurrentControlSet\Enum\PCI\')),
+    );
     expect((await operation.verify(request)).value, request.desiredValue);
     await operation.rollback(request, snapshot);
     expect(
       (await operation.inspect(
         request,
       )).sameValue(snapshot.expectedAfterRollback),
+      isTrue,
+    );
+  });
+
+  test('undefined priority removes the override', () async {
+    final registry = _Registry();
+    final operation = DeviceMsiOperation(
+      registry: registry,
+      inventory: () => <PciInterruptCapability>[_capability()],
+    );
+    const request = OperationRequest(
+      operationId: 'device.msi.configure',
+      target: r'PCI\VEN_1234&DEV_ABCD\ONE',
+      desiredValue: <String, Object?>{
+        'msiSupported': 1,
+        'messageNumberLimit': 1,
+        'devicePriority': null,
+      },
+    );
+    await operation.apply(request);
+    expect((await operation.verify(request)).value, request.desiredValue);
+  });
+
+  test('USB host and PCI HD-audio controllers are allowlisted', () {
+    expect(
+      isAllowedInterruptDevice(
+        _capability(classGuid: '36fc9e60-c465-11cf-8056-444553540000'),
+      ),
+      isTrue,
+    );
+    expect(
+      isAllowedInterruptDevice(
+        _capability(
+          classGuid: '4d36e97d-e325-11ce-bfc1-08002be10318',
+          hardwareIds: const <String>{r'PCI\VEN_1234&DEV_ABCD&CC_040300'},
+        ),
+      ),
       isTrue,
     );
   });

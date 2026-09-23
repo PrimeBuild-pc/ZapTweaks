@@ -855,7 +855,7 @@ La Fase 8 può introdurre un profilo `Gaming competitivo raccomandato` soltanto 
 - PowrProf;
 - CPU, grafica, rete, input e storage;
 - controllo RSS tipizzato e topology-aware, senza preset o fallback registry;
-- [x] sostituzione MSI Utility v3 integrata con inventario live, stato corrente, Line/MSI/MSI-X, limite messaggi, `DevicePriority`, rollback e read-back;
+- [x] sostituzione MSI Utility v3 integrata con inventario live, stato corrente per-device da `Enum\\PCI`, Line/MSI/MSI-X, limite messaggi, `DevicePriority`, rollback e read-back per display, rete, media, host USB e audio HD;
 - [x] affinity tool integrato con tutte le policy documentate 0–5, selettore CPU group-0 topology-aware, maschera esatta, stato corrente e rollback;
 - [x] Power Settings Explorer integrato tramite PowrProf con tutti i setting enumerati, ricerca, gruppi, GUID, descrizioni, unità, valori possibili, limiti/incrementi live ed editing AC/DC tipizzato;
 - [x] topologia CPU;

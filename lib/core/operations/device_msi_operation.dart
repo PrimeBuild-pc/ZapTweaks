@@ -2,22 +2,32 @@ import 'dart:typed_data';
 
 import '../../features/drivers/domain/device_identity.dart';
 import '../../platform/windows/hardware_capability_validators.dart';
+import '../../platform/windows/interrupt_configuration_service.dart';
 import '../../platform/windows/registry_value_store.dart';
 import 'operation.dart';
 
 typedef InterruptCapabilityInventory = List<PciInterruptCapability> Function();
+
+const _interruptDeviceClasses = <String>{
+  '4d36e968-e325-11ce-bfc1-08002be10318', // Display
+  '4d36e972-e325-11ce-bfc1-08002be10318', // Network
+  '4d36e96c-e325-11ce-bfc1-08002be10318', // Media
+  '36fc9e60-c465-11cf-8056-444553540000', // USB host controller
+};
+
+bool isAllowedInterruptDevice(PciInterruptCapability capability) {
+  final device = capability.device;
+  return _interruptDeviceClasses.contains(
+        device.classGuid.replaceAll(RegExp(r'[{}]'), ''),
+      ) ||
+      device.hardwareIds.any((id) => id.contains(r'&CC_0403'));
+}
 
 class DeviceMsiOperation implements OperationDefinition {
   const DeviceMsiOperation({required this.registry, required this.inventory});
 
   final RegistryValueStore registry;
   final InterruptCapabilityInventory inventory;
-  static const _classes = <String>{
-    '4d36e968-e325-11ce-bfc1-08002be10318', // Display
-    '4d36e972-e325-11ce-bfc1-08002be10318', // Net
-    '4d36e96c-e325-11ce-bfc1-08002be10318', // Media
-  };
-
   PciInterruptCapability _device(OperationRequest request) {
     final target = request.target?.toUpperCase();
     if (target == null ||
@@ -31,7 +41,7 @@ class DeviceMsiOperation implements OperationDefinition {
     );
   }
 
-  ({int enabled, int? limit, int? priority}) _desired(
+  ({int enabled, int? limit, int? priority, bool configurePriority}) _desired(
     OperationRequest request,
   ) {
     final value = request.desiredValue;
@@ -40,24 +50,24 @@ class DeviceMsiOperation implements OperationDefinition {
     }
     final enabled = value['msiSupported']! as int;
     final limit = value['messageNumberLimit'];
+    final configurePriority = value.containsKey('devicePriority');
     final priority = value['devicePriority'];
     if ((enabled != 0 && enabled != 1) ||
         (limit != null && limit is! int) ||
         (priority != null &&
-            (priority is! int || priority < 0 || priority > 3))) {
+            (priority is! int || priority < 1 || priority > 3))) {
       throw StateError('Invalid MSI configuration.');
     }
-    return (enabled: enabled, limit: limit as int?, priority: priority as int?);
+    return (
+      enabled: enabled,
+      limit: limit as int?,
+      priority: priority as int?,
+      configurePriority: configurePriority,
+    );
   }
 
-  String _path(PciInterruptCapability capability) {
-    final key = capability.device.driverKey;
-    if (key == null ||
-        !RegExp(r'^\{[0-9a-fA-F-]{36}\}\\[0-9]{4}$').hasMatch(key)) {
-      throw StateError('The device has no stable driver registry key.');
-    }
-    return 'HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\$key\\Interrupt Management\\MessageSignaledInterruptProperties';
-  }
+  String _path(PciInterruptCapability capability) =>
+      '${interruptManagementRegistryPath(capability)}\\MessageSignaledInterruptProperties';
 
   Future<int?> _readDword(String path, String name) async {
     final raw = await registry.read(path, name);
@@ -84,11 +94,9 @@ class DeviceMsiOperation implements OperationDefinition {
     }
     try {
       final device = _device(request);
-      if (!_classes.contains(
-        device.device.classGuid.replaceAll(RegExp(r'[{}]'), ''),
-      )) {
+      if (!isAllowedInterruptDevice(device)) {
         return const SupportResult.unsupported(
-          'Only present display, network, and media devices are supported.',
+          'Only present display, network, media, USB host, and HD audio devices are supported.',
         );
       }
       final desired = _desired(request);
@@ -180,12 +188,16 @@ class DeviceMsiOperation implements OperationDefinition {
       await registry.write(path, 'MessageNumberLimit', _dword(desired.limit!));
     }
     final affinityPath = _affinityPath(device);
-    if (desired.priority != null) {
-      await registry.write(
-        affinityPath,
-        'DevicePriority',
-        _dword(desired.priority!),
-      );
+    if (desired.configurePriority) {
+      if (desired.priority == null) {
+        await registry.delete(affinityPath, 'DevicePriority');
+      } else {
+        await registry.write(
+          affinityPath,
+          'DevicePriority',
+          _dword(desired.priority!),
+        );
+      }
     }
   }
 
@@ -266,6 +278,8 @@ class DeviceMsiOperation implements OperationDefinition {
   List<String> get technicalSources => const <String>[
     'https://learn.microsoft.com/windows-hardware/drivers/kernel/enabling-message-signaled-interrupts-in-the-registry',
     'https://learn.microsoft.com/windows-hardware/drivers/install/devpkey-pcidevice-interruptsupport',
+    'https://github.com/vadyaravadim/msi-mode-utility/tree/20a8402adb4d8f31949aed9affba41b961a73cf2',
+    'https://github.com/spddl/GoInterruptPolicy/tree/f41fd1e325e1d3a386816c3586474e5f7bb63a25',
   ];
   @override
   List<String> get dependencies => const <String>[];

@@ -69,6 +69,10 @@ void main() {
     );
     final snapshot = await operation.captureSnapshot(request);
     await operation.apply(request);
+    expect(
+      registry.values.keys,
+      everyElement(contains(r'HKLM\SYSTEM\CurrentControlSet\Enum\PCI\')),
+    );
     expect((await operation.verify(request)).value, request.desiredValue);
     await operation.rollback(request, snapshot);
     expect(
@@ -77,6 +81,37 @@ void main() {
       )).sameValue(snapshot.expectedAfterRollback),
       isTrue,
     );
+  });
+
+  test('reads variable-width masks written by existing tools', () async {
+    final registry = _Registry();
+    const path =
+        r'HKLM\SYSTEM\CurrentControlSet\Enum\PCI\VEN_1234&DEV_ABCD\ONE\Device Parameters\Interrupt Management\Affinity Policy';
+    registry.values['$path/DevicePolicy'] = RawRegistryValue(
+      type: 4,
+      bytes: Uint8List.fromList(<int>[4, 0, 0, 0]),
+    );
+    registry.values['$path/AssignmentSetOverride'] = RawRegistryValue(
+      type: 3,
+      bytes: Uint8List.fromList(<int>[0x81]),
+    );
+    final operation = DeviceInterruptAffinityOperation(
+      registry: registry,
+      inventory: () => const <PciInterruptCapability>[_device],
+      topology: () =>
+          const ProcessorTopology(processorsPerGroup: <int, int>{0: 8}),
+    );
+    const request = OperationRequest(
+      operationId: 'device.interrupt_affinity.configure',
+      target: r'PCI\VEN_1234&DEV_ABCD\ONE',
+      desiredValue: <String, Object?>{
+        'devicePolicy': 4,
+        'processorGroup': 0,
+        'maskHex': '81',
+      },
+    );
+
+    expect((await operation.inspect(request)).value, request.desiredValue);
   });
 
   test('documented automatic affinity policies clear explicit masks', () async {

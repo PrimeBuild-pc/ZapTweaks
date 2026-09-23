@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import '../../features/drivers/domain/device_identity.dart';
 import '../../platform/windows/hardware_capability_validators.dart';
+import '../../platform/windows/interrupt_configuration_service.dart';
 import '../../platform/windows/processor_topology.dart';
 import '../../platform/windows/registry_value_store.dart';
 import 'device_msi_operation.dart';
@@ -17,12 +18,6 @@ class DeviceInterruptAffinityOperation implements OperationDefinition {
   final RegistryValueStore registry;
   final InterruptCapabilityInventory inventory;
   final ProcessorTopology Function() topology;
-  static const _classes = <String>{
-    '4d36e968-e325-11ce-bfc1-08002be10318',
-    '4d36e972-e325-11ce-bfc1-08002be10318',
-    '4d36e96c-e325-11ce-bfc1-08002be10318',
-  };
-
   PciInterruptCapability _device(OperationRequest request) {
     final target = request.target?.toUpperCase();
     if (target == null ||
@@ -36,14 +31,8 @@ class DeviceInterruptAffinityOperation implements OperationDefinition {
     );
   }
 
-  String _path(PciInterruptCapability capability) {
-    final key = capability.device.driverKey;
-    if (key == null ||
-        !RegExp(r'^\{[0-9a-fA-F-]{36}\}\\[0-9]{4}$').hasMatch(key)) {
-      throw StateError('The device has no stable driver registry key.');
-    }
-    return 'HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\$key\\Interrupt Management\\Affinity Policy';
-  }
+  String _path(PciInterruptCapability capability) =>
+      '${interruptManagementRegistryPath(capability)}\\Affinity Policy';
 
   ({int policy, int? group, BigInt? mask}) _desired(OperationRequest request) {
     final value = request.desiredValue;
@@ -99,11 +88,11 @@ class DeviceInterruptAffinityOperation implements OperationDefinition {
 
   static String? _mask(RawRegistryValue? value) {
     if (value == null) return null;
-    if (value.type != 3 || value.bytes.length != 8) {
+    if (value.type != 3 || value.bytes.isEmpty || value.bytes.length > 8) {
       throw StateError('AssignmentSetOverride has an unexpected type or size.');
     }
     var result = BigInt.zero;
-    for (var index = 7; index >= 0; index--) {
+    for (var index = value.bytes.length - 1; index >= 0; index--) {
       result = (result << 8) | BigInt.from(value.bytes[index]);
     }
     return result.toRadixString(16);
@@ -127,11 +116,9 @@ class DeviceInterruptAffinityOperation implements OperationDefinition {
     }
     try {
       final device = _device(request);
-      if (!_classes.contains(
-        device.device.classGuid.replaceAll(RegExp(r'[{}]'), ''),
-      )) {
+      if (!isAllowedInterruptDevice(device)) {
         return const SupportResult.unsupported(
-          'Only display, network, and media devices are supported.',
+          'Only display, network, media, USB host, and HD audio devices are supported.',
         );
       }
       _path(device);
@@ -282,6 +269,7 @@ class DeviceInterruptAffinityOperation implements OperationDefinition {
   @override
   List<String> get technicalSources => const <String>[
     'https://learn.microsoft.com/windows-hardware/drivers/kernel/interrupt-affinity-and-priority',
+    'https://github.com/spddl/GoInterruptPolicy/tree/f41fd1e325e1d3a386816c3586474e5f7bb63a25',
   ];
   @override
   List<String> get dependencies => const <String>[];

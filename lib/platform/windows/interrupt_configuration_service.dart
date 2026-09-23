@@ -3,6 +3,16 @@ import 'dart:typed_data';
 import '../../features/drivers/domain/device_identity.dart';
 import 'registry_value_store.dart';
 
+String interruptManagementRegistryPath(PciInterruptCapability capability) {
+  final instanceId = capability.device.instanceId.toUpperCase();
+  if (!RegExp(
+    r'^PCI\\[A-Z0-9_&.-]{1,240}\\[A-Z0-9_&.-]{1,240}$',
+  ).hasMatch(instanceId)) {
+    throw StateError('The device has no valid PCI instance ID.');
+  }
+  return 'HKLM\\SYSTEM\\CurrentControlSet\\Enum\\$instanceId\\Device Parameters\\Interrupt Management';
+}
+
 class DeviceInterruptConfiguration {
   const DeviceInterruptConfiguration({
     required this.msiSupported,
@@ -41,14 +51,8 @@ class InterruptConfigurationService {
     );
   }
 
-  String _root(PciInterruptCapability capability) {
-    final key = capability.device.driverKey;
-    if (key == null ||
-        !RegExp(r'^\{[0-9a-fA-F-]{36}\}\\[0-9]{4}$').hasMatch(key)) {
-      throw StateError('The device has no stable driver registry key.');
-    }
-    return 'HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\$key\\Interrupt Management';
-  }
+  String _root(PciInterruptCapability capability) =>
+      interruptManagementRegistryPath(capability);
 
   Future<int?> _dword(String path, String name) async {
     final raw = await registry.read(path, name);

@@ -35,6 +35,8 @@ These entries are links only. ZapTweaks neither bundles nor silently executes th
 | Cinebench 2024 | https://www.maxon.net/en/downloads/cinebench-2024-downloads | Maxon download; not redistributed. |
 | MemTest86 | https://www.memtest86.com/download.htm | PassMark download; not redistributed. |
 | CoreCycler | https://github.com/sp00n/corecycler | Upstream project license applies; linked, not copied. |
+| MSI Mode Utility | https://github.com/vadyaravadim/msi-mode-utility/tree/20a8402adb4d8f31949aed9affba41b961a73cf2 | MIT; reviewed as a reference for per-device `Enum\\PCI` MSI state and exact absent-value rollback. No PowerShell code is bundled or executed. |
+| GoInterruptPolicy | https://github.com/spddl/GoInterruptPolicy/tree/f41fd1e325e1d3a386816c3586474e5f7bb63a25 | MIT; reviewed as a reference for SetupAPI capability discovery, per-device interrupt policy state and variable-width affinity masks. No Go code is bundled or executed. |
 
 The ISO-modification, archived edition-conversion, theme, Discord-icon, and developer-only zoicware repositories are intentionally not exposed because they are outside ZapTweaks' supported scope.
 

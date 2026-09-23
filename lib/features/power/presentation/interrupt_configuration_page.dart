@@ -1,5 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 
+import '../../../core/operations/device_msi_operation.dart';
 import '../../../core/operations/operation.dart';
 import '../../../core/plans/operation_plan.dart';
 import '../../../features/drivers/application/setupapi_device_inventory_service.dart';
@@ -39,18 +40,9 @@ class _InterruptConfigurationPageState
   Future<void> _load() async {
     if (mounted) setState(() => _loading = true);
     try {
-      const allowed = <String>{
-        '4d36e968-e325-11ce-bfc1-08002be10318',
-        '4d36e972-e325-11ce-bfc1-08002be10318',
-        '4d36e96c-e325-11ce-bfc1-08002be10318',
-      };
       final devices = const SetupApiDeviceInventoryService()
           .scanPciInterruptCapabilities()
-          .where(
-            (item) => allowed.contains(
-              item.device.classGuid.replaceAll(RegExp(r'[{}]'), ''),
-            ),
-          )
+          .where(isAllowedInterruptDevice)
           .toList(growable: false);
       const reader = InterruptConfigurationService(WindowsRegistryValueStore());
       final configurations = <String, DeviceInterruptConfiguration>{};
@@ -184,7 +176,7 @@ class _InterruptConfigurationPageState
         desiredValue: <String, Object?>{
           'msiSupported': enabled ? 1 : 0,
           if (enabled) 'messageNumberLimit': limit,
-          'devicePriority': priority,
+          'devicePriority': priority == 0 ? null : priority,
         },
       ),
     );
