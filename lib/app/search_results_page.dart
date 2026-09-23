@@ -90,10 +90,16 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                 'gpu memory temperature sensori',
               ),
               _SearchDestination(
-                strings.diagnosticTools,
+                strings.dpcLatencyAnalyzer,
                 'Diagnostics & Recovery',
                 2,
-                'etw dpc isr trace pulizia cleanup',
+                'latencymon wtools etw dpc isr trace driver latency latenza',
+              ),
+              _SearchDestination(
+                strings.diagnosticTools,
+                'Diagnostics & Recovery',
+                3,
+                'pulizia cleanup strumenti diagnostica',
               ),
             ]
             .where(

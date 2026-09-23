@@ -32,6 +32,7 @@ import 'power_scheme_delete_operation.dart';
 import 'power_scheme_duplicate_operation.dart';
 import 'power_scheme_rename_operation.dart';
 import 'power_schemes_restore_defaults_operation.dart';
+import 'power_setting_configure_operation.dart';
 import 'power_setting_operation.dart';
 import 'registry_dword_operation.dart';
 import 'rss_configuration_operation.dart';
@@ -70,6 +71,7 @@ List<OperationDefinition> createNativeOperationCatalog(
     schemes: WindowsPowerSchemeService(),
     processRunner: processRunner,
   ),
+  PowerSettingConfigureOperation(WindowsPowerSchemeService()),
   EtwTraceOperation(
     collector: EtwTraceCollector(
       processRunner: processRunner,

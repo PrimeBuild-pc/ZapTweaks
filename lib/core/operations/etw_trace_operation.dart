@@ -54,7 +54,11 @@ class EtwTraceOperation implements OperationDefinition {
       if (path == null) return const OperationState(OperationStateKind.absent);
       final file = File(path);
       return await file.exists() && await file.length() > 0
-          ? OperationState(OperationStateKind.configured, value: path)
+          ? OperationState(
+              OperationStateKind.configured,
+              value: true,
+              message: path,
+            )
           : const OperationState(
               OperationStateKind.error,
               message: 'ETW trace is missing or empty.',

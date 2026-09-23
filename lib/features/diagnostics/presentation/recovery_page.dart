@@ -65,7 +65,7 @@ class _RecoveryPageState extends State<RecoveryPage> {
       _message = _success
           ? switch (id) {
               'diagnostics.etw.capture' => strings.etwTraceSaved(
-                plan.items.single.written?.value?.toString() ?? '',
+                plan.items.single.written?.message ?? '',
               ),
               'diagnostics.trace.cleanup' => strings.cleanupTracesCompleted,
               _ => strings.systemRepairVerified,

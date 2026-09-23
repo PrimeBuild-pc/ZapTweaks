@@ -1203,8 +1203,110 @@ abstract class AppLocalizations {
   /// No description provided for @captureEtwTraceDescription.
   ///
   /// In en, this message translates to:
-  /// **'Records a bounded 15-second Windows Performance Recorder trace and a DPC/ISR event-count report on demand. Counts are diagnostic signals, not proof of latency. No monitor remains active.'**
+  /// **'Records a bounded Windows Performance Recorder trace and produces a DPC/ISR diagnostic report on demand. No monitor remains active.'**
   String get captureEtwTraceDescription;
+
+  /// No description provided for @dpcLatencyAnalyzer.
+  ///
+  /// In en, this message translates to:
+  /// **'DPC / ISR latency analyzer'**
+  String get dpcLatencyAnalyzer;
+
+  /// No description provided for @dpcLatencyAnalyzerDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Captures ETW on demand and reports DPC, ISR, hard-fault and context-switch activity, per-processor distribution, observed kernel-module names and ETW providers.'**
+  String get dpcLatencyAnalyzerDescription;
+
+  /// No description provided for @diagnosticNotCausality.
+  ///
+  /// In en, this message translates to:
+  /// **'Diagnostic signal, not a latency verdict'**
+  String get diagnosticNotCausality;
+
+  /// No description provided for @diagnosticNotCausalityDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Counts and observed module names help narrow an investigation but do not prove that a driver caused latency. Confirm with repeatable A/B/A traces and WPA or vendor tooling.'**
+  String get diagnosticNotCausalityDescription;
+
+  /// No description provided for @startDpcCapture.
+  ///
+  /// In en, this message translates to:
+  /// **'Start capture'**
+  String get startDpcCapture;
+
+  /// No description provided for @openTraceFolder.
+  ///
+  /// In en, this message translates to:
+  /// **'Open trace folder'**
+  String get openTraceFolder;
+
+  /// No description provided for @captureInProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Capturing for {seconds} seconds… keep the workload running.'**
+  String captureInProgress(int seconds);
+
+  /// No description provided for @traceDuration.
+  ///
+  /// In en, this message translates to:
+  /// **'Observed duration'**
+  String get traceDuration;
+
+  /// No description provided for @hardFaults.
+  ///
+  /// In en, this message translates to:
+  /// **'Hard faults'**
+  String get hardFaults;
+
+  /// No description provided for @contextSwitches.
+  ///
+  /// In en, this message translates to:
+  /// **'Context switches'**
+  String get contextSwitches;
+
+  /// No description provided for @totalEvents.
+  ///
+  /// In en, this message translates to:
+  /// **'Total ETW events'**
+  String get totalEvents;
+
+  /// No description provided for @kernelModulesObserved.
+  ///
+  /// In en, this message translates to:
+  /// **'Kernel modules observed in DPC/ISR events'**
+  String get kernelModulesObserved;
+
+  /// No description provided for @noKernelModulesObserved.
+  ///
+  /// In en, this message translates to:
+  /// **'The exported events did not expose kernel module names. Open the ETL in WPA for symbol-aware analysis.'**
+  String get noKernelModulesObserved;
+
+  /// No description provided for @dpcIsrByProcessor.
+  ///
+  /// In en, this message translates to:
+  /// **'DPC/ISR events by logical processor'**
+  String get dpcIsrByProcessor;
+
+  /// No description provided for @noProcessorDistribution.
+  ///
+  /// In en, this message translates to:
+  /// **'Processor IDs were not present in the exported events.'**
+  String get noProcessorDistribution;
+
+  /// No description provided for @topEtwProviders.
+  ///
+  /// In en, this message translates to:
+  /// **'Top ETW providers'**
+  String get topEtwProviders;
+
+  /// No description provided for @noProviderData.
+  ///
+  /// In en, this message translates to:
+  /// **'No provider data was available.'**
+  String get noProviderData;
 
   /// No description provided for @etwTraceSaved.
   ///
@@ -1410,6 +1512,143 @@ abstract class AppLocalizations {
   /// **'No present display, network, or media PCI device exposes compatible interrupt capabilities.'**
   String get noCompatibleInterruptDevices;
 
+  /// No description provided for @interruptCapabilities.
+  ///
+  /// In en, this message translates to:
+  /// **'Hardware: Line {line} · MSI {msi} · MSI-X {msix} · maximum messages {maximum}'**
+  String interruptCapabilities(
+    Object line,
+    Object msi,
+    Object msix,
+    int maximum,
+  );
+
+  /// No description provided for @messageNumberLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'Message number limit'**
+  String get messageNumberLimit;
+
+  /// No description provided for @interruptPriority.
+  ///
+  /// In en, this message translates to:
+  /// **'Interrupt priority policy'**
+  String get interruptPriority;
+
+  /// No description provided for @interruptPriorityDefault.
+  ///
+  /// In en, this message translates to:
+  /// **'Undefined / driver default'**
+  String get interruptPriorityDefault;
+
+  /// No description provided for @interruptPriorityLow.
+  ///
+  /// In en, this message translates to:
+  /// **'Low'**
+  String get interruptPriorityLow;
+
+  /// No description provided for @interruptPriorityNormal.
+  ///
+  /// In en, this message translates to:
+  /// **'Normal'**
+  String get interruptPriorityNormal;
+
+  /// No description provided for @interruptPriorityHigh.
+  ///
+  /// In en, this message translates to:
+  /// **'High'**
+  String get interruptPriorityHigh;
+
+  /// No description provided for @interruptPolicy.
+  ///
+  /// In en, this message translates to:
+  /// **'Processor affinity policy'**
+  String get interruptPolicy;
+
+  /// No description provided for @interruptPolicyDefault.
+  ///
+  /// In en, this message translates to:
+  /// **'Machine default'**
+  String get interruptPolicyDefault;
+
+  /// No description provided for @interruptPolicyAllClose.
+  ///
+  /// In en, this message translates to:
+  /// **'All close processors'**
+  String get interruptPolicyAllClose;
+
+  /// No description provided for @interruptPolicyOneClose.
+  ///
+  /// In en, this message translates to:
+  /// **'One close processor'**
+  String get interruptPolicyOneClose;
+
+  /// No description provided for @interruptPolicyAllProcessors.
+  ///
+  /// In en, this message translates to:
+  /// **'All processors'**
+  String get interruptPolicyAllProcessors;
+
+  /// No description provided for @interruptPolicySpecified.
+  ///
+  /// In en, this message translates to:
+  /// **'Specified processors (group 0)'**
+  String get interruptPolicySpecified;
+
+  /// No description provided for @interruptPolicySpread.
+  ///
+  /// In en, this message translates to:
+  /// **'Spread messages across processors'**
+  String get interruptPolicySpread;
+
+  /// No description provided for @selectLogicalProcessors.
+  ///
+  /// In en, this message translates to:
+  /// **'Select logical processors in processor group 0'**
+  String get selectLogicalProcessors;
+
+  /// No description provided for @compatibleDevices.
+  ///
+  /// In en, this message translates to:
+  /// **'Compatible devices'**
+  String get compatibleDevices;
+
+  /// No description provided for @msiEnabledDevices.
+  ///
+  /// In en, this message translates to:
+  /// **'MSI currently enabled'**
+  String get msiEnabledDevices;
+
+  /// No description provided for @logicalProcessors.
+  ///
+  /// In en, this message translates to:
+  /// **'Logical processors'**
+  String get logicalProcessors;
+
+  /// No description provided for @searchDevices.
+  ///
+  /// In en, this message translates to:
+  /// **'Search devices, instance IDs, or driver INF'**
+  String get searchDevices;
+
+  /// No description provided for @driverUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Driver INF unavailable'**
+  String get driverUnknown;
+
+  /// No description provided for @currentInterruptConfiguration.
+  ///
+  /// In en, this message translates to:
+  /// **'Current: {mode} · messages {messages} · priority {priority} · policy {policy} · mask {mask}'**
+  String currentInterruptConfiguration(
+    Object mode,
+    Object messages,
+    Object priority,
+    Object policy,
+    Object mask,
+  );
+
   /// No description provided for @renamePowerPlan.
   ///
   /// In en, this message translates to:
@@ -1463,6 +1702,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Values must be between 0 and {maximum}.'**
   String powerValueRange(int maximum);
+
+  /// No description provided for @powerSettingConfigure.
+  ///
+  /// In en, this message translates to:
+  /// **'Configure any bounded power setting'**
+  String get powerSettingConfigure;
+
+  /// No description provided for @powerSettingConfigureDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Edits a setting exposed by PowrProf only when Windows provides live minimum, maximum, and increment metadata.'**
+  String get powerSettingConfigureDescription;
+
+  /// No description provided for @searchPowerSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Search settings, descriptions, subgroups, or GUIDs'**
+  String get searchPowerSettings;
+
+  /// No description provided for @allPowerSubgroups.
+  ///
+  /// In en, this message translates to:
+  /// **'All power-setting groups'**
+  String get allPowerSubgroups;
+
+  /// No description provided for @powerSettingCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} settings'**
+  String powerSettingCount(int count);
+
+  /// No description provided for @powerSettingRange.
+  ///
+  /// In en, this message translates to:
+  /// **'Range {minimum}–{maximum}, step {increment}'**
+  String powerSettingRange(Object minimum, Object maximum, Object increment);
+
+  /// No description provided for @powerSettingBoundsUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Windows did not expose safe edit bounds for this setting.'**
+  String get powerSettingBoundsUnavailable;
 
   /// No description provided for @delete.
   ///

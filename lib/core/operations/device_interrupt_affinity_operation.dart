@@ -45,17 +45,30 @@ class DeviceInterruptAffinityOperation implements OperationDefinition {
     return 'HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\$key\\Interrupt Management\\Affinity Policy';
   }
 
-  ({int policy, int group, BigInt mask}) _desired(OperationRequest request) {
+  ({int policy, int? group, BigInt? mask}) _desired(OperationRequest request) {
     final value = request.desiredValue;
-    if (value is! Map ||
-        value['devicePolicy'] is! int ||
-        value['processorGroup'] is! int ||
-        value['maskHex'] is! String) {
+    if (value is! Map || value['devicePolicy'] is! int) {
       throw StateError('A typed interrupt affinity policy is required.');
     }
     final policy = value['devicePolicy']! as int;
+    if (policy < 0 || policy > 5) {
+      throw StateError('Interrupt policy must be between 0 and 5.');
+    }
+    if (policy != 4) {
+      if (value.length != 1) {
+        throw StateError(
+          'Only the specified-processors policy accepts a mask.',
+        );
+      }
+      return (policy: policy, group: null, mask: null);
+    }
+    if (value.length != 3 ||
+        value['processorGroup'] is! int ||
+        value['maskHex'] is! String) {
+      throw StateError('Specified processors require a group and mask.');
+    }
     final group = value['processorGroup']! as int;
-    if (policy != 4 || group != 0) {
+    if (group != 0) {
       throw StateError(
         'Only explicit group-0 affinity is safely representable.',
       );
@@ -133,12 +146,14 @@ class DeviceInterruptAffinityOperation implements OperationDefinition {
   Future<OperationState> inspect(OperationRequest request) async {
     try {
       final path = _path(_device(request));
+      final desired = _desired(request);
       return OperationState(
         OperationStateKind.configured,
         value: <String, Object?>{
           'devicePolicy': _policy(await _read(path, 'DevicePolicy')),
-          'processorGroup': 0,
-          'maskHex': _mask(await _read(path, 'AssignmentSetOverride')),
+          if (desired.policy == 4) 'processorGroup': 0,
+          if (desired.policy == 4)
+            'maskHex': _mask(await _read(path, 'AssignmentSetOverride')),
         },
       );
     } catch (error) {
@@ -174,22 +189,26 @@ class DeviceInterruptAffinityOperation implements OperationDefinition {
     ByteData.sublistView(
       policyBytes,
     ).setUint32(0, desired.policy, Endian.little);
-    final maskBytes = Uint8List(8);
-    var mask = desired.mask;
-    for (var index = 0; index < 8; index++) {
-      maskBytes[index] = (mask & BigInt.from(0xff)).toInt();
-      mask >>= 8;
-    }
     await registry.write(
       path,
       'DevicePolicy',
       RawRegistryValue(type: 4, bytes: policyBytes),
     );
-    await registry.write(
-      path,
-      'AssignmentSetOverride',
-      RawRegistryValue(type: 3, bytes: maskBytes),
-    );
+    if (desired.mask == null) {
+      await registry.delete(path, 'AssignmentSetOverride');
+    } else {
+      final maskBytes = Uint8List(8);
+      var mask = desired.mask!;
+      for (var index = 0; index < 8; index++) {
+        maskBytes[index] = (mask & BigInt.from(0xff)).toInt();
+        mask >>= 8;
+      }
+      await registry.write(
+        path,
+        'AssignmentSetOverride',
+        RawRegistryValue(type: 3, bytes: maskBytes),
+      );
+    }
   }
 
   @override

@@ -40,7 +40,8 @@ void main() {
     final state = await operation.verify(request);
 
     expect(state.kind, OperationStateKind.configured);
-    expect(state.value, endsWith('trace.etl'));
+    expect(state.value, isTrue);
+    expect(state.message, endsWith('trace.etl'));
   });
 
   test('ETW operation rejects captures longer than two minutes', () async {

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:isolate';
 
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:win32/win32.dart';
@@ -27,6 +28,8 @@ class _PowerPlansPageState extends State<PowerPlansPage> {
   List<PowerSettingInfo>? _settings;
   String? _settingsTitle;
   String? _settingsSchemeId;
+  String _settingQuery = '';
+  String? _settingSubgroup;
 
   @override
   void initState() {
@@ -75,7 +78,7 @@ class _PowerPlansPageState extends State<PowerPlansPage> {
   Future<void> _showSettings(PowerSchemeInfo scheme) async {
     setState(() => _busy = true);
     try {
-      final settings = await Future<List<PowerSettingInfo>>(
+      final settings = await Isolate.run(
         () => WindowsPowerSchemeService().enumerateSettings(scheme.id),
       );
       if (mounted) {
@@ -83,6 +86,8 @@ class _PowerPlansPageState extends State<PowerPlansPage> {
           _settings = settings;
           _settingsTitle = scheme.name;
           _settingsSchemeId = scheme.id;
+          _settingQuery = '';
+          _settingSubgroup = null;
         });
       }
     } catch (error) {
@@ -96,13 +101,16 @@ class _PowerPlansPageState extends State<PowerPlansPage> {
     final active = _schemes.singleWhere((item) => item.active);
     setState(() => _busy = true);
     try {
-      final service = WindowsPowerSchemeService();
-      final left = await Future<List<PowerSettingInfo>>(
-        () => service.enumerateSettings(active.id),
-      );
-      final right = await Future<List<PowerSettingInfo>>(
-        () => service.enumerateSettings(scheme.id),
-      );
+      final results = await Future.wait(<Future<List<PowerSettingInfo>>>[
+        Isolate.run(
+          () => WindowsPowerSchemeService().enumerateSettings(active.id),
+        ),
+        Isolate.run(
+          () => WindowsPowerSchemeService().enumerateSettings(scheme.id),
+        ),
+      ]);
+      final left = results[0];
+      final right = results[1];
       final rightById = <String, PowerSettingInfo>{
         for (final setting in right) setting.settingId: setting,
       };
@@ -132,37 +140,91 @@ class _PowerPlansPageState extends State<PowerPlansPage> {
     final strings = AppLocalizations.of(context);
     final ac = TextEditingController(text: setting.value.ac.toString());
     final dc = TextEditingController(text: setting.value.dc.toString());
+    var selectedAc = setting.value.ac;
+    var selectedDc = setting.value.dc;
+    final options = <int, String>{
+      ...setting.possibleValues,
+      if (!setting.possibleValues.containsKey(setting.value.ac))
+        setting.value.ac: setting.value.ac.toString(),
+      if (!setting.possibleValues.containsKey(setting.value.dc))
+        setting.value.dc: setting.value.dc.toString(),
+    };
     final values = await showDialog<List<int>>(
       context: context,
-      builder: (context) => ContentDialog(
-        title: Text(setting.name),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            const Text('AC'),
-            TextBox(controller: ac),
-            const SizedBox(height: 8),
-            const Text('DC'),
-            TextBox(controller: dc),
+      builder: (context) => StatefulBuilder(
+        builder: (context, setDialogState) => ContentDialog(
+          title: Text(setting.name),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                strings.powerSettingRange(
+                  setting.minimum?.toString() ?? '?',
+                  setting.maximum?.toString() ?? '?',
+                  (setting.increment ?? 1).toString(),
+                ),
+              ),
+              if (setting.units?.isNotEmpty == true) Text(setting.units!),
+              const SizedBox(height: 12),
+              const Text('AC'),
+              if (setting.possibleValues.isNotEmpty)
+                ComboBox<int>(
+                  value: selectedAc,
+                  isExpanded: true,
+                  items: <ComboBoxItem<int>>[
+                    for (final option in options.entries)
+                      ComboBoxItem<int>(
+                        value: option.key,
+                        child: Text('${option.key} — ${option.value}'),
+                      ),
+                  ],
+                  onChanged: (value) =>
+                      setDialogState(() => selectedAc = value ?? selectedAc),
+                )
+              else
+                TextBox(controller: ac),
+              const SizedBox(height: 8),
+              const Text('DC'),
+              if (setting.possibleValues.isNotEmpty)
+                ComboBox<int>(
+                  value: selectedDc,
+                  isExpanded: true,
+                  items: <ComboBoxItem<int>>[
+                    for (final option in options.entries)
+                      ComboBoxItem<int>(
+                        value: option.key,
+                        child: Text('${option.key} — ${option.value}'),
+                      ),
+                  ],
+                  onChanged: (value) =>
+                      setDialogState(() => selectedDc = value ?? selectedDc),
+                )
+              else
+                TextBox(controller: dc),
+            ],
+          ),
+          actions: <Widget>[
+            Button(
+              onPressed: () => Navigator.pop(context),
+              child: Text(strings.cancel),
+            ),
+            FilledButton(
+              onPressed: () {
+                final parsedAc = setting.possibleValues.isNotEmpty
+                    ? selectedAc
+                    : int.tryParse(ac.text);
+                final parsedDc = setting.possibleValues.isNotEmpty
+                    ? selectedDc
+                    : int.tryParse(dc.text);
+                if (parsedAc != null && parsedDc != null) {
+                  Navigator.pop(context, <int>[parsedAc, parsedDc]);
+                }
+              },
+              child: Text(strings.apply),
+            ),
           ],
         ),
-        actions: <Widget>[
-          Button(
-            onPressed: () => Navigator.pop(context),
-            child: Text(strings.cancel),
-          ),
-          FilledButton(
-            onPressed: () {
-              final parsedAc = int.tryParse(ac.text);
-              final parsedDc = int.tryParse(dc.text);
-              if (parsedAc != null && parsedDc != null) {
-                Navigator.pop(context, <int>[parsedAc, parsedDc]);
-              }
-            },
-            child: Text(strings.apply),
-          ),
-        ],
       ),
     );
     ac.dispose();
@@ -170,13 +232,24 @@ class _PowerPlansPageState extends State<PowerPlansPage> {
     if (values == null || _settingsSchemeId == null) {
       return;
     }
-    final operation =
-        setting.settingId == 'be337238-0d82-4146-a960-4f3749d470c7'
-        ? 'power_processor_boost_mode'
-        : 'power_max_processor_state';
-    final max = operation == 'power_max_processor_state' ? 100 : 6;
-    if (values.any((value) => value < 0 || value > max)) {
-      setState(() => _error = strings.powerValueRange(max));
+    final minimum = setting.minimum;
+    final maximum = setting.maximum;
+    final increment = setting.increment ?? 1;
+    if (minimum == null ||
+        maximum == null ||
+        values.any(
+          (value) =>
+              value < minimum ||
+              value > maximum ||
+              (increment > 0 && (value - minimum) % increment != 0),
+        )) {
+      setState(
+        () => _error = strings.powerSettingRange(
+          minimum?.toString() ?? '?',
+          maximum?.toString() ?? '?',
+          increment.toString(),
+        ),
+      );
       return;
     }
     setState(() => _busy = true);
@@ -184,9 +257,13 @@ class _PowerPlansPageState extends State<PowerPlansPage> {
       final plan = await widget.controller.executeNativeRequests(
         <OperationRequest>[
           OperationRequest(
-            operationId: operation,
+            operationId: 'power.setting.configure',
             target: _settingsSchemeId,
             desiredValue: <String, int>{'ac': values[0], 'dc': values[1]},
+            parameters: <String, Object?>{
+              'subgroupId': setting.subgroupId,
+              'settingId': setting.settingId,
+            },
           ),
         ],
       );
@@ -430,6 +507,12 @@ class _PowerPlansPageState extends State<PowerPlansPage> {
     }
   }
 
+  String _formatSettingValue(PowerSettingInfo setting, int value) {
+    final label = setting.possibleValues[value];
+    final units = setting.units?.isNotEmpty == true ? ' ${setting.units}' : '';
+    return '$value$units${label == null ? '' : ' ($label)'}';
+  }
+
   @override
   Widget build(BuildContext context) {
     final strings = AppLocalizations.of(context);
@@ -439,6 +522,24 @@ class _PowerPlansPageState extends State<PowerPlansPage> {
           return query.isEmpty ||
               scheme.name.toLowerCase().contains(query) ||
               scheme.id.contains(query);
+        })
+        .toList(growable: false);
+    final subgroups =
+        (_settings ?? const <PowerSettingInfo>[])
+            .map((setting) => setting.subgroupName)
+            .toSet()
+            .toList()
+          ..sort();
+    final visibleSettings = (_settings ?? const <PowerSettingInfo>[])
+        .where((setting) {
+          final query = _settingQuery.trim().toLowerCase();
+          return (_settingSubgroup == null ||
+                  setting.subgroupName == _settingSubgroup) &&
+              (query.isEmpty ||
+                  setting.name.toLowerCase().contains(query) ||
+                  setting.description.toLowerCase().contains(query) ||
+                  setting.settingId.contains(query) ||
+                  setting.subgroupName.toLowerCase().contains(query));
         })
         .toList(growable: false);
     return ListView(
@@ -543,26 +644,68 @@ class _PowerPlansPageState extends State<PowerPlansPage> {
             style: FluentTheme.of(context).typography.subtitle,
           ),
           const SizedBox(height: 8),
-          if (_settings!.isEmpty)
+          Wrap(
+            spacing: 10,
+            runSpacing: 10,
+            children: <Widget>[
+              SizedBox(
+                width: 320,
+                child: TextBox(
+                  placeholder: strings.searchPowerSettings,
+                  onChanged: (value) => setState(() => _settingQuery = value),
+                ),
+              ),
+              SizedBox(
+                width: 280,
+                child: ComboBox<String?>(
+                  value: _settingSubgroup,
+                  isExpanded: true,
+                  items: <ComboBoxItem<String?>>[
+                    ComboBoxItem<String?>(
+                      value: null,
+                      child: Text(strings.allPowerSubgroups),
+                    ),
+                    for (final subgroup in subgroups)
+                      ComboBoxItem<String?>(
+                        value: subgroup,
+                        child: Text(subgroup),
+                      ),
+                  ],
+                  onChanged: (value) =>
+                      setState(() => _settingSubgroup = value),
+                ),
+              ),
+              Text(strings.powerSettingCount(visibleSettings.length)),
+            ],
+          ),
+          const SizedBox(height: 8),
+          if (visibleSettings.isEmpty)
             Text(strings.noPowerDifferences)
           else
-            ..._settings!.map(
-              (setting) => ListTile(
-                title: Text(setting.name),
-                subtitle: Text(
-                  '${setting.subgroupName} · AC ${setting.value.ac} · DC ${setting.value.dc}\n${setting.description}',
+            ...visibleSettings.map(
+              (setting) => Card(
+                child: ListTile(
+                  title: Text(setting.name),
+                  subtitle: Text(
+                    '${setting.subgroupName}\n'
+                    'AC ${_formatSettingValue(setting, setting.value.ac)} · '
+                    'DC ${_formatSettingValue(setting, setting.value.dc)} · '
+                    '${strings.powerSettingRange(setting.minimum?.toString() ?? '?', setting.maximum?.toString() ?? '?', (setting.increment ?? 1).toString())}\n'
+                    '${setting.description}\n${setting.settingId}',
+                  ),
+                  trailing:
+                      _settingsSchemeId != null &&
+                          setting.minimum != null &&
+                          setting.maximum != null
+                      ? Button(
+                          onPressed: _busy ? null : () => _editSetting(setting),
+                          child: Text(strings.edit),
+                        )
+                      : Tooltip(
+                          message: strings.powerSettingBoundsUnavailable,
+                          child: const Icon(FluentIcons.lock),
+                        ),
                 ),
-                trailing:
-                    _settingsSchemeId != null &&
-                        const <String>{
-                          'be337238-0d82-4146-a960-4f3749d470c7',
-                          'bc5038f7-23e0-4960-96da-33abaf5935ec',
-                        }.contains(setting.settingId)
-                    ? Button(
-                        onPressed: _busy ? null : () => _editSetting(setting),
-                        child: Text(strings.edit),
-                      )
-                    : null,
               ),
             ),
         ],

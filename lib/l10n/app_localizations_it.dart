@@ -614,7 +614,66 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get captureEtwTraceDescription =>
-      'Registra su richiesta una traccia Windows Performance Recorder limitata a 15 secondi e un report dei conteggi DPC/ISR. I conteggi sono segnali diagnostici, non prove di latenza. Nessun monitor resta attivo.';
+      'Registra su richiesta una traccia Windows Performance Recorder limitata e produce un report diagnostico DPC/ISR. Nessun monitor resta attivo.';
+
+  @override
+  String get dpcLatencyAnalyzer => 'Analizzatore latenza DPC / ISR';
+
+  @override
+  String get dpcLatencyAnalyzerDescription =>
+      'Acquisisce ETW su richiesta e mostra attività DPC, ISR, hard fault e context switch, distribuzione per processore, moduli kernel osservati e provider ETW.';
+
+  @override
+  String get diagnosticNotCausality =>
+      'Segnale diagnostico, non un verdetto sulla latenza';
+
+  @override
+  String get diagnosticNotCausalityDescription =>
+      'Conteggi e moduli osservati aiutano l’indagine ma non provano che un driver causi latenza. Conferma con tracce A/B/A ripetibili e WPA o strumenti del produttore.';
+
+  @override
+  String get startDpcCapture => 'Avvia acquisizione';
+
+  @override
+  String get openTraceFolder => 'Apri cartella tracce';
+
+  @override
+  String captureInProgress(int seconds) {
+    return 'Acquisizione per $seconds secondi… mantieni attivo il carico di lavoro.';
+  }
+
+  @override
+  String get traceDuration => 'Durata osservata';
+
+  @override
+  String get hardFaults => 'Hard fault';
+
+  @override
+  String get contextSwitches => 'Context switch';
+
+  @override
+  String get totalEvents => 'Eventi ETW totali';
+
+  @override
+  String get kernelModulesObserved =>
+      'Moduli kernel osservati negli eventi DPC/ISR';
+
+  @override
+  String get noKernelModulesObserved =>
+      'Gli eventi esportati non espongono nomi di moduli kernel. Apri l’ETL in WPA per l’analisi con simboli.';
+
+  @override
+  String get dpcIsrByProcessor => 'Eventi DPC/ISR per processore logico';
+
+  @override
+  String get noProcessorDistribution =>
+      'Gli ID processore non erano presenti negli eventi esportati.';
+
+  @override
+  String get topEtwProviders => 'Provider ETW principali';
+
+  @override
+  String get noProviderData => 'Nessun dato provider disponibile.';
 
   @override
   String etwTraceSaved(Object path) {
@@ -739,6 +798,85 @@ class AppLocalizationsIt extends AppLocalizations {
       'Nessun dispositivo PCI display, rete o media presente espone capability interrupt compatibili.';
 
   @override
+  String interruptCapabilities(
+    Object line,
+    Object msi,
+    Object msix,
+    int maximum,
+  ) {
+    return 'Hardware: Line $line · MSI $msi · MSI-X $msix · messaggi massimi $maximum';
+  }
+
+  @override
+  String get messageNumberLimit => 'Limite numero messaggi';
+
+  @override
+  String get interruptPriority => 'Policy priorità interrupt';
+
+  @override
+  String get interruptPriorityDefault => 'Non definita / predefinita driver';
+
+  @override
+  String get interruptPriorityLow => 'Bassa';
+
+  @override
+  String get interruptPriorityNormal => 'Normale';
+
+  @override
+  String get interruptPriorityHigh => 'Alta';
+
+  @override
+  String get interruptPolicy => 'Policy affinità processori';
+
+  @override
+  String get interruptPolicyDefault => 'Predefinita macchina';
+
+  @override
+  String get interruptPolicyAllClose => 'Tutti i processori vicini';
+
+  @override
+  String get interruptPolicyOneClose => 'Un processore vicino';
+
+  @override
+  String get interruptPolicyAllProcessors => 'Tutti i processori';
+
+  @override
+  String get interruptPolicySpecified => 'Processori specificati (gruppo 0)';
+
+  @override
+  String get interruptPolicySpread => 'Distribuisci messaggi tra i processori';
+
+  @override
+  String get selectLogicalProcessors =>
+      'Seleziona processori logici nel gruppo 0';
+
+  @override
+  String get compatibleDevices => 'Dispositivi compatibili';
+
+  @override
+  String get msiEnabledDevices => 'MSI attualmente attivo';
+
+  @override
+  String get logicalProcessors => 'Processori logici';
+
+  @override
+  String get searchDevices => 'Cerca dispositivi, Instance ID o INF driver';
+
+  @override
+  String get driverUnknown => 'INF driver non disponibile';
+
+  @override
+  String currentInterruptConfiguration(
+    Object mode,
+    Object messages,
+    Object priority,
+    Object policy,
+    Object mask,
+  ) {
+    return 'Attuale: $mode · messaggi $messages · priorità $priority · policy $policy · maschera $mask';
+  }
+
+  @override
   String get renamePowerPlan => 'Rinomina piano di alimentazione';
 
   @override
@@ -768,6 +906,34 @@ class AppLocalizationsIt extends AppLocalizations {
   String powerValueRange(int maximum) {
     return 'I valori devono essere compresi tra 0 e $maximum.';
   }
+
+  @override
+  String get powerSettingConfigure =>
+      'Configura qualsiasi power setting con limiti noti';
+
+  @override
+  String get powerSettingConfigureDescription =>
+      'Modifica un setting esposto da PowrProf solo quando Windows fornisce minimo, massimo e incremento live.';
+
+  @override
+  String get searchPowerSettings => 'Cerca setting, descrizioni, gruppi o GUID';
+
+  @override
+  String get allPowerSubgroups => 'Tutti i gruppi power setting';
+
+  @override
+  String powerSettingCount(int count) {
+    return '$count setting';
+  }
+
+  @override
+  String powerSettingRange(Object minimum, Object maximum, Object increment) {
+    return 'Intervallo $minimum–$maximum, incremento $increment';
+  }
+
+  @override
+  String get powerSettingBoundsUnavailable =>
+      'Windows non ha esposto limiti di modifica sicuri per questo setting.';
 
   @override
   String get delete => 'Elimina';

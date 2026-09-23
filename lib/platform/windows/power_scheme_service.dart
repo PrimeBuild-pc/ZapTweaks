@@ -1,4 +1,5 @@
 import 'dart:ffi';
+import 'dart:typed_data';
 
 import 'package:ffi/ffi.dart';
 import 'package:win32/win32.dart';
@@ -37,6 +38,11 @@ class PowerSettingInfo {
     required this.name,
     required this.description,
     required this.value,
+    this.minimum,
+    this.maximum,
+    this.increment,
+    this.units,
+    this.possibleValues = const <int, String>{},
   });
 
   final String subgroupId;
@@ -45,6 +51,11 @@ class PowerSettingInfo {
   final String name;
   final String description;
   final PowerSettingValue value;
+  final int? minimum;
+  final int? maximum;
+  final int? increment;
+  final String? units;
+  final Map<int, String> possibleValues;
 }
 
 abstract interface class PowerSchemeInventory {
@@ -58,7 +69,9 @@ abstract interface class PowerSchemeManagement implements PowerSchemeInventory {
 }
 
 abstract interface class PowerSchemeAdministration
-    implements PowerSchemeManagement, PowerSchemeStore {}
+    implements PowerSchemeManagement, PowerSchemeStore {
+  List<PowerSettingInfo> enumerateSettings(String schemeId);
+}
 
 class PowerSchemeInfo {
   const PowerSchemeInfo({
@@ -139,6 +152,64 @@ typedef _PowerWriteValueIndexNative =
     );
 typedef _PowerWriteValueIndexDart =
     int Function(int, Pointer<GUID>, Pointer<GUID>, Pointer<GUID>, int);
+typedef _PowerReadValueBoundNative =
+    Uint32 Function(IntPtr, Pointer<GUID>, Pointer<GUID>, Pointer<Uint32>);
+typedef _PowerReadValueBoundDart =
+    int Function(int, Pointer<GUID>, Pointer<GUID>, Pointer<Uint32>);
+typedef _PowerReadUnitsNative =
+    Uint32 Function(
+      IntPtr,
+      Pointer<GUID>,
+      Pointer<GUID>,
+      Pointer<Uint8>,
+      Pointer<Uint32>,
+    );
+typedef _PowerReadUnitsDart =
+    int Function(
+      int,
+      Pointer<GUID>,
+      Pointer<GUID>,
+      Pointer<Uint8>,
+      Pointer<Uint32>,
+    );
+typedef _PowerReadPossibleValueNative =
+    Uint32 Function(
+      IntPtr,
+      Pointer<GUID>,
+      Pointer<GUID>,
+      Pointer<Uint32>,
+      Uint32,
+      Pointer<Uint8>,
+      Pointer<Uint32>,
+    );
+typedef _PowerReadPossibleValueDart =
+    int Function(
+      int,
+      Pointer<GUID>,
+      Pointer<GUID>,
+      Pointer<Uint32>,
+      int,
+      Pointer<Uint8>,
+      Pointer<Uint32>,
+    );
+typedef _PowerReadPossibleNameNative =
+    Uint32 Function(
+      IntPtr,
+      Pointer<GUID>,
+      Pointer<GUID>,
+      Uint32,
+      Pointer<Uint8>,
+      Pointer<Uint32>,
+    );
+typedef _PowerReadPossibleNameDart =
+    int Function(
+      int,
+      Pointer<GUID>,
+      Pointer<GUID>,
+      int,
+      Pointer<Uint8>,
+      Pointer<Uint32>,
+    );
 typedef _PowerSetActiveSchemeNative = Uint32 Function(IntPtr, Pointer<GUID>);
 typedef _PowerSetActiveSchemeDart = int Function(int, Pointer<GUID>);
 typedef _PowerDuplicateSchemeNative =
@@ -203,6 +274,32 @@ class WindowsPowerSchemeService implements PowerSchemeAdministration {
         .lookupFunction<_PowerWriteValueIndexNative, _PowerWriteValueIndexDart>(
           'PowerWriteDCValueIndex',
         );
+    _readValueMin = _library
+        .lookupFunction<_PowerReadValueBoundNative, _PowerReadValueBoundDart>(
+          'PowerReadValueMin',
+        );
+    _readValueMax = _library
+        .lookupFunction<_PowerReadValueBoundNative, _PowerReadValueBoundDart>(
+          'PowerReadValueMax',
+        );
+    _readValueIncrement = _library
+        .lookupFunction<_PowerReadValueBoundNative, _PowerReadValueBoundDart>(
+          'PowerReadValueIncrement',
+        );
+    _readUnits = _library
+        .lookupFunction<_PowerReadUnitsNative, _PowerReadUnitsDart>(
+          'PowerReadValueUnitsSpecifier',
+        );
+    _readPossibleValue = _library
+        .lookupFunction<
+          _PowerReadPossibleValueNative,
+          _PowerReadPossibleValueDart
+        >('PowerReadPossibleValue');
+    _readPossibleFriendlyName = _library
+        .lookupFunction<
+          _PowerReadPossibleNameNative,
+          _PowerReadPossibleNameDart
+        >('PowerReadPossibleFriendlyName');
     _setActiveScheme = _library
         .lookupFunction<_PowerSetActiveSchemeNative, _PowerSetActiveSchemeDart>(
           'PowerSetActiveScheme',
@@ -234,6 +331,12 @@ class WindowsPowerSchemeService implements PowerSchemeAdministration {
   late final _PowerReadValueIndexDart _readDcValueIndex;
   late final _PowerWriteValueIndexDart _writeAcValueIndex;
   late final _PowerWriteValueIndexDart _writeDcValueIndex;
+  late final _PowerReadValueBoundDart _readValueMin;
+  late final _PowerReadValueBoundDart _readValueMax;
+  late final _PowerReadValueBoundDart _readValueIncrement;
+  late final _PowerReadUnitsDart _readUnits;
+  late final _PowerReadPossibleValueDart _readPossibleValue;
+  late final _PowerReadPossibleNameDart _readPossibleFriendlyName;
   late final _PowerSetActiveSchemeDart _setActiveScheme;
   late final _PowerDuplicateSchemeDart _duplicateScheme;
   late final _PowerDeleteSchemeDart _deleteScheme;
@@ -372,6 +475,7 @@ class WindowsPowerSchemeService implements PowerSchemeAdministration {
     return schemes;
   }
 
+  @override
   List<PowerSettingInfo> enumerateSettings(String schemeId) => using((arena) {
     final scheme = _guid(schemeId, arena);
     final settings = <PowerSettingInfo>[];
@@ -411,6 +515,11 @@ class WindowsPowerSchemeService implements PowerSchemeAdministration {
               optional: true,
             ),
             value: readSetting(schemeId, subgroupId, settingId),
+            minimum: _readBound(_readValueMin, subgroup, setting),
+            maximum: _readBound(_readValueMax, subgroup, setting),
+            increment: _readBound(_readValueIncrement, subgroup, setting),
+            units: _readUnitsText(subgroup, setting),
+            possibleValues: _readPossibleValues(subgroup, setting),
           ),
         );
       }
@@ -446,6 +555,134 @@ class WindowsPowerSchemeService implements PowerSchemeAdministration {
       }
     }
     return ids;
+  }
+
+  int? _readBound(
+    _PowerReadValueBoundDart reader,
+    Pointer<GUID> subgroup,
+    Pointer<GUID> setting,
+  ) {
+    final value = calloc<Uint32>();
+    try {
+      return reader(0, subgroup, setting, value) == ERROR_SUCCESS
+          ? value.value
+          : null;
+    } finally {
+      calloc.free(value);
+    }
+  }
+
+  String? _readUnitsText(Pointer<GUID> subgroup, Pointer<GUID> setting) {
+    final size = calloc<Uint32>();
+    try {
+      final first = _readUnits(0, subgroup, setting, nullptr, size);
+      if (first != ERROR_MORE_DATA || size.value < 2) return null;
+      final buffer = calloc<Uint8>(size.value);
+      try {
+        if (_readUnits(0, subgroup, setting, buffer, size) != ERROR_SUCCESS) {
+          return null;
+        }
+        final value = buffer.cast<Utf16>().toDartString().trim();
+        return value.isEmpty ? null : value;
+      } finally {
+        calloc.free(buffer);
+      }
+    } finally {
+      calloc.free(size);
+    }
+  }
+
+  Map<int, String> _readPossibleValues(
+    Pointer<GUID> subgroup,
+    Pointer<GUID> setting,
+  ) {
+    final result = <int, String>{};
+    for (var index = 0; index < 256; index++) {
+      final type = calloc<Uint32>();
+      final size = calloc<Uint32>();
+      try {
+        final first = _readPossibleValue(
+          0,
+          subgroup,
+          setting,
+          type,
+          index,
+          nullptr,
+          size,
+        );
+        if ((first != ERROR_MORE_DATA && first != ERROR_SUCCESS) ||
+            size.value != 4) {
+          break;
+        }
+        final buffer = calloc<Uint8>(size.value);
+        try {
+          if (_readPossibleValue(
+                0,
+                subgroup,
+                setting,
+                type,
+                index,
+                buffer,
+                size,
+              ) !=
+              ERROR_SUCCESS) {
+            break;
+          }
+          final value = ByteData.sublistView(
+            Uint8List.fromList(buffer.asTypedList(4)),
+          ).getUint32(0, Endian.little);
+          result[value] = _possibleName(subgroup, setting, index) ?? '$value';
+        } finally {
+          calloc.free(buffer);
+        }
+      } finally {
+        calloc.free(type);
+        calloc.free(size);
+      }
+    }
+    return Map.unmodifiable(result);
+  }
+
+  String? _possibleName(
+    Pointer<GUID> subgroup,
+    Pointer<GUID> setting,
+    int index,
+  ) {
+    final size = calloc<Uint32>();
+    try {
+      final first = _readPossibleFriendlyName(
+        0,
+        subgroup,
+        setting,
+        index,
+        nullptr,
+        size,
+      );
+      if ((first != ERROR_MORE_DATA && first != ERROR_SUCCESS) ||
+          size.value < 2) {
+        return null;
+      }
+      final buffer = calloc<Uint8>(size.value);
+      try {
+        if (_readPossibleFriendlyName(
+              0,
+              subgroup,
+              setting,
+              index,
+              buffer,
+              size,
+            ) !=
+            ERROR_SUCCESS) {
+          return null;
+        }
+        final value = buffer.cast<Utf16>().toDartString().trim();
+        return value.isEmpty ? null : value;
+      } finally {
+        calloc.free(buffer);
+      }
+    } finally {
+      calloc.free(size);
+    }
   }
 
   String _activeSchemeId() {

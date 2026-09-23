@@ -31,17 +31,23 @@ class DeviceMsiOperation implements OperationDefinition {
     );
   }
 
-  ({int enabled, int? limit}) _desired(OperationRequest request) {
+  ({int enabled, int? limit, int? priority}) _desired(
+    OperationRequest request,
+  ) {
     final value = request.desiredValue;
     if (value is! Map || value['msiSupported'] is! int) {
       throw StateError('A typed MSI configuration is required.');
     }
     final enabled = value['msiSupported']! as int;
     final limit = value['messageNumberLimit'];
-    if ((enabled != 0 && enabled != 1) || (limit != null && limit is! int)) {
+    final priority = value['devicePriority'];
+    if ((enabled != 0 && enabled != 1) ||
+        (limit != null && limit is! int) ||
+        (priority != null &&
+            (priority is! int || priority < 0 || priority > 3))) {
       throw StateError('Invalid MSI configuration.');
     }
-    return (enabled: enabled, limit: limit as int?);
+    return (enabled: enabled, limit: limit as int?, priority: priority as int?);
   }
 
   String _path(PciInterruptCapability capability) {
@@ -105,15 +111,25 @@ class DeviceMsiOperation implements OperationDefinition {
     }
   }
 
+  String _affinityPath(PciInterruptCapability capability) => _path(
+    capability,
+  ).replaceAll(r'\MessageSignaledInterruptProperties', r'\Affinity Policy');
+
   @override
   Future<OperationState> inspect(OperationRequest request) async {
     try {
-      final path = _path(_device(request));
+      final device = _device(request);
+      final path = _path(device);
       return OperationState(
         OperationStateKind.configured,
         value: <String, Object?>{
           'msiSupported': await _readDword(path, 'MSISupported'),
           'messageNumberLimit': await _readDword(path, 'MessageNumberLimit'),
+          if ((request.desiredValue as Map).containsKey('devicePriority'))
+            'devicePriority': await _readDword(
+              _affinityPath(device),
+              'DevicePriority',
+            ),
         },
       );
     } catch (error) {
@@ -127,9 +143,12 @@ class DeviceMsiOperation implements OperationDefinition {
   @override
   Future<OperationSnapshot> captureSnapshot(OperationRequest request) async {
     _desired(request);
-    final path = _path(_device(request));
+    final device = _device(request);
+    final path = _path(device);
+    final affinityPath = _affinityPath(device);
     final enabled = await registry.read(path, 'MSISupported');
     final limit = await registry.read(path, 'MessageNumberLimit');
+    final priority = await registry.read(affinityPath, 'DevicePriority');
     final before = await inspect(request);
     return OperationSnapshot(
       type: 'deviceMsi',
@@ -137,6 +156,8 @@ class DeviceMsiOperation implements OperationDefinition {
         'path': path,
         'enabled': _rawJson(enabled),
         'limit': _rawJson(limit),
+        'affinityPath': affinityPath,
+        'priority': _rawJson(priority),
       },
       expectedAfterRollback: before,
     );
@@ -150,12 +171,21 @@ class DeviceMsiOperation implements OperationDefinition {
   @override
   Future<void> apply(OperationRequest request) async {
     final desired = _desired(request);
-    final path = _path(_device(request));
+    final device = _device(request);
+    final path = _path(device);
     await registry.write(path, 'MSISupported', _dword(desired.enabled));
     if (desired.limit == null) {
       await registry.delete(path, 'MessageNumberLimit');
     } else {
       await registry.write(path, 'MessageNumberLimit', _dword(desired.limit!));
+    }
+    final affinityPath = _affinityPath(device);
+    if (desired.priority != null) {
+      await registry.write(
+        affinityPath,
+        'DevicePriority',
+        _dword(desired.priority!),
+      );
     }
   }
 
@@ -173,6 +203,12 @@ class DeviceMsiOperation implements OperationDefinition {
     }
     await _restore(path, 'MSISupported', snapshot.data['enabled']);
     await _restore(path, 'MessageNumberLimit', snapshot.data['limit']);
+    final affinityPath = snapshot.data['affinityPath'];
+    if (affinityPath is! String ||
+        affinityPath != _affinityPath(_device(request))) {
+      throw StateError('Invalid MSI priority snapshot.');
+    }
+    await _restore(affinityPath, 'DevicePriority', snapshot.data['priority']);
   }
 
   Future<void> _restore(String path, String name, Object? data) async {

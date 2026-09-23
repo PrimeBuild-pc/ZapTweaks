@@ -14,6 +14,9 @@ class EtwDpcReport {
     required this.hardFaultEvents,
     required this.contextSwitchEvents,
     required this.topProviders,
+    this.topDpcIsrModules = const <String, int>{},
+    this.dpcIsrByProcessor = const <String, int>{},
+    this.traceDurationSeconds,
     this.message,
   });
 
@@ -24,6 +27,9 @@ class EtwDpcReport {
   final int hardFaultEvents;
   final int contextSwitchEvents;
   final Map<String, int> topProviders;
+  final Map<String, int> topDpcIsrModules;
+  final Map<String, int> dpcIsrByProcessor;
+  final double? traceDurationSeconds;
   final String? message;
 
   Map<String, Object?> toJson() => <String, Object?>{
@@ -34,6 +40,13 @@ class EtwDpcReport {
     'hardFaultEvents': hardFaultEvents,
     'contextSwitchEvents': contextSwitchEvents,
     'topProviders': topProviders,
+    'topDpcIsrModules': topDpcIsrModules,
+    'dpcIsrByProcessor': dpcIsrByProcessor,
+    if (traceDurationSeconds != null) ...<String, Object?>{
+      'traceDurationSeconds': traceDurationSeconds,
+      'dpcEventsPerSecond': dpcEvents / traceDurationSeconds!,
+      'isrEventsPerSecond': isrEvents / traceDurationSeconds!,
+    },
     if (message != null) 'message': message,
     'interpretation':
         'Event counts identify trace activity only; they do not prove latency or identify a faulty driver.',
@@ -125,11 +138,18 @@ class EtwDpcAnalyzer {
     var hardFault = 0;
     var contextSwitch = 0;
     final providers = <String, int>{};
+    final modules = <String, int>{};
+    final processors = <String, int>{};
+    DateTime? firstTimestamp;
+    DateTime? lastTimestamp;
     for (final event in events) {
       total++;
-      final text = event.toXmlString().toLowerCase();
-      if (RegExp(r'\bdpc\b').hasMatch(text)) dpc++;
-      if (RegExp(r'\bisr\b|interrupt service routine').hasMatch(text)) isr++;
+      final xml = event.toXmlString();
+      final text = xml.toLowerCase();
+      final isDpc = RegExp(r'\bdpc\b').hasMatch(text);
+      final isIsr = RegExp(r'\bisr\b|interrupt service routine').hasMatch(text);
+      if (isDpc) dpc++;
+      if (isIsr) isr++;
       if (text.contains('hardfault') || text.contains('hard fault')) {
         hardFault++;
       }
@@ -147,9 +167,61 @@ class EtwDpcAnalyzer {
           provider?.getAttribute('guid') ??
           'unknown';
       providers.update(name, (count) => count + 1, ifAbsent: () => 1);
+      final timestamp = event.descendants
+          .whereType<XmlElement>()
+          .where((element) => element.name.local.toLowerCase() == 'timecreated')
+          .map(
+            (element) =>
+                element.getAttribute('SystemTime') ??
+                element.getAttribute('systemtime'),
+          )
+          .whereType<String>()
+          .map(DateTime.tryParse)
+          .whereType<DateTime>()
+          .firstOrNull;
+      if (timestamp != null && (isDpc || isIsr)) {
+        final first = firstTimestamp;
+        final last = lastTimestamp;
+        firstTimestamp = first == null || timestamp.isBefore(first)
+            ? timestamp
+            : first;
+        lastTimestamp = last == null || timestamp.isAfter(last)
+            ? timestamp
+            : last;
+      }
+      if (isDpc || isIsr) {
+        for (final match in RegExp(
+          r'([a-z0-9_.-]+\.sys)\b',
+          caseSensitive: false,
+        ).allMatches(xml)) {
+          final module = match.group(1)!.toLowerCase();
+          modules.update(module, (count) => count + 1, ifAbsent: () => 1);
+        }
+        final execution = event.descendants
+            .whereType<XmlElement>()
+            .where((element) => element.name.local.toLowerCase() == 'execution')
+            .firstOrNull;
+        final processor =
+            execution?.getAttribute('ProcessorID') ??
+            execution?.getAttribute('processorid');
+        if (processor != null) {
+          processors.update(processor, (count) => count + 1, ifAbsent: () => 1);
+        }
+      }
     }
-    final sorted = providers.entries.toList()
-      ..sort((left, right) => right.value.compareTo(left.value));
+    Map<String, int> top(Map<String, int> values, int limit) {
+      final sorted = values.entries.toList()
+        ..sort((left, right) => right.value.compareTo(left.value));
+      return <String, int>{
+        for (final entry in sorted.take(limit)) entry.key: entry.value,
+      };
+    }
+
+    final first = firstTimestamp;
+    final last = lastTimestamp;
+    final duration = first == null || last == null
+        ? null
+        : last.difference(first).inMicroseconds / 1000000;
     return EtwDpcReport(
       analysisAvailable: true,
       totalEvents: total,
@@ -157,9 +229,10 @@ class EtwDpcAnalyzer {
       isrEvents: isr,
       hardFaultEvents: hardFault,
       contextSwitchEvents: contextSwitch,
-      topProviders: <String, int>{
-        for (final entry in sorted.take(10)) entry.key: entry.value,
-      },
+      topProviders: top(providers, 10),
+      topDpcIsrModules: top(modules, 15),
+      dpcIsrByProcessor: top(processors, processors.length),
+      traceDurationSeconds: duration != null && duration > 0 ? duration : null,
     );
   }
 }

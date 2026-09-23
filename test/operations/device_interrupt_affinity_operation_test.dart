@@ -79,6 +79,45 @@ void main() {
     );
   });
 
+  test('documented automatic affinity policies clear explicit masks', () async {
+    final registry = _Registry();
+    final operation = DeviceInterruptAffinityOperation(
+      registry: registry,
+      inventory: () => const <PciInterruptCapability>[_device],
+      topology: () =>
+          const ProcessorTopology(processorsPerGroup: <int, int>{0: 8}),
+    );
+    const specified = OperationRequest(
+      operationId: 'device.interrupt_affinity.configure',
+      target: r'PCI\VEN_1234&DEV_ABCD\ONE',
+      desiredValue: <String, Object?>{
+        'devicePolicy': 4,
+        'processorGroup': 0,
+        'maskHex': '3',
+      },
+    );
+    await operation.apply(specified);
+    const automatic = OperationRequest(
+      operationId: 'device.interrupt_affinity.configure',
+      target: r'PCI\VEN_1234&DEV_ABCD\ONE',
+      desiredValue: <String, Object?>{'devicePolicy': 5},
+    );
+
+    expect(
+      (await operation.supports(
+        const OperationContext(windowsBuild: 26100, edition: 'Pro'),
+        automatic,
+      )).supported,
+      isTrue,
+    );
+    await operation.apply(automatic);
+    final state = Map<String, Object?>.from(
+      (await operation.inspect(automatic)).value! as Map,
+    );
+    expect(state['devicePolicy'], 5);
+    expect(state['maskHex'], isNull);
+  });
+
   test(
     'interrupt affinity rejects masks outside the processor group',
     () async {

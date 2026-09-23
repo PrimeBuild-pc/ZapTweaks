@@ -19,6 +19,9 @@ class _Schemes implements PowerSchemeAdministration {
   @override
   String get activeSchemeId => active;
   @override
+  List<PowerSettingInfo> enumerateSettings(String schemeId) =>
+      const <PowerSettingInfo>[];
+  @override
   List<PowerSchemeInfo> enumerate() => ids
       .map((id) => PowerSchemeInfo(id: id, name: id, active: id == active))
       .toList();

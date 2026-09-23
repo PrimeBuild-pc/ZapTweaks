@@ -80,7 +80,7 @@ void main() {
       (item) => item.id == 'ui_taskbar_end_task',
     );
 
-    expect(operations, hasLength(43));
+    expect(operations, hasLength(44));
     expect(operation.id, 'ui_taskbar_end_task');
     expect(operation.scope, OperationScope.user);
     expect(operation.rollbackCapability, RollbackCapability.exact);

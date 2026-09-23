@@ -68,6 +68,7 @@ void main() {
       desiredValue: <String, Object?>{
         'msiSupported': 1,
         'messageNumberLimit': 4,
+        'devicePriority': 3,
       },
     );
 

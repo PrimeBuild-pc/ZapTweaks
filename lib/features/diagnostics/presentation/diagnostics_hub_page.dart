@@ -3,6 +3,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../tweaks/application/tweak_controller.dart';
 import '../../tweaks/presentation/pages/tweaks_page.dart';
+import 'dpc_latency_page.dart';
 import 'hardware_monitor_page.dart';
 import 'recovery_page.dart';
 
@@ -34,7 +35,7 @@ class _DiagnosticsHubPageState extends State<DiagnosticsHubPage> {
   @override
   void initState() {
     super.initState();
-    _index = widget.initialIndex.clamp(0, 2);
+    _index = widget.initialIndex.clamp(0, 3);
   }
 
   @override
@@ -54,6 +55,11 @@ class _DiagnosticsHubPageState extends State<DiagnosticsHubPage> {
           text: Text(strings.hardwareMonitor),
           icon: const Icon(FluentIcons.speed_high),
           body: const HardwareMonitorPage(),
+        ),
+        Tab(
+          text: Text(strings.dpcLatencyAnalyzer),
+          icon: const Icon(FluentIcons.speed_high),
+          body: DpcLatencyPage(controller: widget.controller),
         ),
         Tab(
           text: Text(strings.diagnosticTools),

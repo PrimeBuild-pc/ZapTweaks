@@ -31,6 +31,19 @@ void main() {
       );
       expect(settings.every((setting) => setting.settingId.isNotEmpty), isTrue);
       expect(settings.every((setting) => setting.name.isNotEmpty), isTrue);
+      expect(
+        settings.any(
+          (setting) =>
+              setting.minimum != null &&
+              setting.maximum != null &&
+              setting.minimum! <= setting.maximum!,
+        ),
+        isTrue,
+      );
+      expect(
+        settings.any((setting) => setting.possibleValues.isNotEmpty),
+        isTrue,
+      );
     },
   );
 

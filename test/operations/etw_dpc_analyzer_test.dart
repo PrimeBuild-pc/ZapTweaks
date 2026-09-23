@@ -8,8 +8,8 @@ import 'package:script_utility/platform/windows/etw_dpc_analyzer.dart';
 void main() {
   const fixture = '''
 <Events>
-  <Event><System><Provider Name="Microsoft-Windows-Kernel"/><Task>DPC</Task></System></Event>
-  <Event><System><Provider Name="Microsoft-Windows-Kernel"/><Opcode>ISR</Opcode></System></Event>
+  <Event><System><Provider Name="Microsoft-Windows-Kernel"/><Task>DPC</Task><TimeCreated SystemTime="2026-01-01T00:00:00Z"/><Execution ProcessorID="2"/></System><EventData><Data>ndis.sys</Data></EventData></Event>
+  <Event><System><Provider Name="Microsoft-Windows-Kernel"/><Opcode>ISR</Opcode><TimeCreated SystemTime="2026-01-01T00:00:02Z"/><Execution ProcessorID="3"/></System><EventData><Data>dxgkrnl.sys</Data></EventData></Event>
   <Event><System><Provider Name="Memory"/></System><EventData><Data>HardFault</Data></EventData></Event>
   <Event><System><Provider Name="Scheduler"/><Task>CSwitch</Task></System></Event>
   <Event><System><Provider Name="Scheduler"/><Task>ReadyThread</Task></System></Event>
@@ -26,6 +26,12 @@ void main() {
     expect(report.hardFaultEvents, 1);
     expect(report.contextSwitchEvents, 1);
     expect(report.topProviders['Scheduler'], 2);
+    expect(report.topDpcIsrModules, <String, int>{
+      'ndis.sys': 1,
+      'dxgkrnl.sys': 1,
+    });
+    expect(report.dpcIsrByProcessor, <String, int>{'2': 1, '3': 1});
+    expect(report.traceDurationSeconds, 2);
     expect(report.toJson()['interpretation'], contains('do not prove latency'));
   });
 
