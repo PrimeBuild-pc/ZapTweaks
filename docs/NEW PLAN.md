@@ -208,6 +208,7 @@ Non assumere che il driver numericamente più recente sia il migliore. Se una fo
 - memoria e cache;
 - storage;
 - rete e adattatori;
+- tab `TCP Optimizer` nativa, con inventario live, configurazione TCP tipizzata, QoS per applicazione, misure diagnostiche e ripristino;
 - input e periferiche;
 - Game Mode, HAGS, VRR e flip model;
 - timer e latenza;
@@ -307,6 +308,7 @@ Home e Impostazioni sono infrastrutture applicative nuove. Il numero di nuove op
 | MSI Utility | supporto Line-Based/MSI/MSI-X, limite e priorità | validazione hardware obbligatoria |
 | Interrupt Affinity Policy Tool | policy, maschera processori e riavvio dispositivo | snapshot esatto obbligatorio |
 | GoInterruptPolicy | SetupAPI, CPU topology, MSI e affinity unificati | sorgente MIT con attribuzione se riutilizzata |
+| WINSPAR Windows TCP Optimizer | stato TCP globale, configurazione manuale, QoS per applicazione, misura throughput e backup/ripristino | riferimento clean-room AGPL-3.0 alla revisione `6392524fcd51925ffe0e082a76facf5b3bb8f322`; nessuna copia o derivazione del codice dentro l’app MIT |
 | Zenit Latency Suite, corpus locale fino a Engine v8.0 | inventario RSS/NDIS, dry run, read-back, restore point, analisi statica Ghidra e tracce Procmon | solo ricerca statica; licenza del codice applicativo non dichiarata, nessun riuso |
 
 ### 5.1 Tool esterni permanenti
@@ -322,6 +324,7 @@ Home e Impostazioni sono infrastrutture applicative nuove. Il numero di nuove op
 - MSI Utility v3;
 - Interrupt Affinity Policy Tool;
 - GoInterruptPolicy;
+- WINSPAR Windows TCP Optimizer;
 - tutti i 78 tool/integrazioni già presenti nell’Allegato A.
 
 Una sostituzione nativa non autorizza la rimozione del tool. La card può mostrare `Funzione nativa disponibile`, ma deve continuare a offrire download/apertura del riferimento originale.
@@ -681,6 +684,18 @@ Regole:
 - Restart adapter e reboot sono impatti pianificati e confermati, non effetti collaterali automatici.
 - Un reset Winsock/IP non è rollback esatto e resta una procedura manuale di ultima istanza, non un’ottimizzazione.
 
+La tab `TCP Optimizer` deve essere una UI ZapTweaks nativa e bilingue nella stessa sezione di Power Settings Explorer, non un wrapper del binario WINSPAR. Deve:
+
+- mostrare lo stato live delle impostazioni TCP globali e dei template supportati, distinguendole dalle proprietà per-adapter già gestite dal servizio RSS;
+- esporre soltanto valori enumerati dalla build corrente per autotuning, euristiche di scaling, ECN, RSC, RSS globale e provider/algoritmo di congestione;
+- offrire gestione esplicita delle policy QoS per applicazione con nome, percorso, DSCP e throttle validati, senza monitor residente o modifica automatica di processi non selezionati;
+- usare operation tipizzate con preview, snapshot esatto di valore presente/assente, una sola UAC quando richiesta, read-back, verify, journal e rollback;
+- offrire misure prima/dopo di throughput, latenza, jitter e perdita come diagnostica ripetibile, senza dichiarare automaticamente un valore “migliore” da una singola speed test;
+- integrare backup e ripristino nel journal ZapTweaks, senza file plaintext posizionali né parsing dipendente dalla lingua;
+- attribuire `powplowdevs/WINSPAR-Windows-TCP-Optimizer` e mantenere un link alla sorgente originale.
+
+Sono vietati nella reimplementazione: copia del codice AGPL dentro ZapTweaks MIT, inclusione degli `.exe` o del file test da 40 MiB, comandi costruiti da input non validato, cancellazione dell’intero ramo QoS, `gpupdate /force` implicito, modifica della priorità dei processi, auto-tuning mutante senza snapshot tra i campioni e dipendenze obbligatorie da endpoint speed-test terzi. Il dettaglio di handoff è in `docs/TCP_OPTIMIZER_HANDOFF.md`.
+
 ### 11.9 Diagnostica, ETW e sensori
 
 Le sessioni ETW sono avviate su richiesta e chiuse anche in caso di errore. DPC/ISR deve mostrare driver, conteggi, durata e intervallo di osservazione, senza convertire automaticamente un picco in una diagnosi certa.
@@ -858,6 +873,7 @@ La Fase 8 può introdurre un profilo `Gaming competitivo raccomandato` soltanto 
 - [x] sostituzione MSI Utility v3 integrata con inventario live, stato corrente per-device da `Enum\\PCI`, Line/MSI/MSI-X, limite messaggi, `DevicePriority`, rollback e read-back per display, rete, media, host USB e audio HD;
 - [x] affinity tool integrato con tutte le policy documentate 0–5, topologia nativa `GetSystemCpuSetInformation`, selettori group-0 per logical CPU, un thread per core fisico, P/E-core, NUMA e LLC/CCD, maschera esatta, stato corrente e rollback;
 - [x] Power Settings Explorer integrato tramite PowrProf con tutti i setting enumerati, ricerca, gruppi, GUID, descrizioni, unità, valori possibili, limiti/incrementi live ed editing AC/DC tipizzato;
+- [ ] tab `TCP Optimizer` nativa ispirata clean-room a WINSPAR, con stato live, modifica tipizzata, QoS selettivo, diagnostica prima/dopo e rollback esatto secondo `docs/TCP_OPTIMIZER_HANDOFF.md`;
 - [x] topologia CPU;
 - verifica hardware-specifica.
 
@@ -912,6 +928,7 @@ La Fase 8 può introdurre un profilo `Gaming competitivo raccomandato` soltanto 
 - metadati di evidenza completi e riferiti a build/hash quando necessario;
 - divieto di promuovere a raccomandata un’operation priva di `benefitEvidence` adeguata;
 - RSS fuori capacità rifiutato senza scritture o fallback;
+- TCP Optimizer: valori non esposti rifiutati, output strutturato indipendente dalla lingua, QoS confinato alla policy selezionata e benchmark incapace di mutare senza snapshot/rollback;
 - serializzazione snapshot senza perdita di tipo;
 - rollback di valore esistente e valore assente;
 - conflitto dopo modifica manuale;
@@ -950,6 +967,7 @@ Un exit code zero non basta. Una operation è riuscita soltanto quando `verify` 
 - CTT WinUtil: MIT.
 - PowerPlanSettingsEditor: MIT, revisione studiata `bc15755f981b7ed831126df29541922b4171501d`.
 - GoInterruptPolicy: MIT, revisione studiata `f41fd1e325e1d3a386816c3586474e5f7bb63a25`.
+- WINSPAR Windows TCP Optimizer: AGPL-3.0, revisione studiata `6392524fcd51925ffe0e082a76facf5b3bb8f322`; l’attribuzione da sola non rende il codice compatibile con la distribuzione MIT, quindi usare soltanto analisi clean-room del comportamento e API Windows documentate, senza copiare codice o asset.
 - Winhance: solo inventario clean-room; non copiare codice.
 - Zenit Latency Suite: solo ricerca statica; licenza del codice applicativo non dichiarata, quindi nessuna copia di sorgenti, database, profili, binari o descrizioni.
 - Progetti senza licenza esplicita: nessun vendoring o copia.
