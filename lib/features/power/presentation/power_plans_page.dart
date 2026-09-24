@@ -1,7 +1,6 @@
 import 'dart:io';
-import 'dart:isolate';
-
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter/foundation.dart';
 import 'package:win32/win32.dart';
 
 import '../../../core/operations/operation.dart';
@@ -12,6 +11,13 @@ import '../../../platform/windows/power_plan_file_service.dart';
 import '../../../platform/windows/power_scheme_service.dart';
 import '../../../platform/windows/windows_file_dialog.dart';
 import '../../tweaks/application/tweak_controller.dart';
+
+List<PowerSettingInfo> _enumeratePowerSettings(String schemeId) =>
+    WindowsPowerSchemeService().enumerateSettings(schemeId);
+
+@visibleForTesting
+Future<List<PowerSettingInfo>> loadPowerSettingsInBackground(String schemeId) =>
+    compute(_enumeratePowerSettings, schemeId);
 
 class PowerPlansPage extends StatefulWidget {
   const PowerPlansPage({required this.controller, super.key});
@@ -76,11 +82,12 @@ class _PowerPlansPageState extends State<PowerPlansPage> {
   }
 
   Future<void> _showSettings(PowerSchemeInfo scheme) async {
-    setState(() => _busy = true);
+    setState(() {
+      _busy = true;
+      _error = null;
+    });
     try {
-      final settings = await Isolate.run(
-        () => WindowsPowerSchemeService().enumerateSettings(scheme.id),
-      );
+      final settings = await loadPowerSettingsInBackground(scheme.id);
       if (mounted) {
         setState(() {
           _settings = settings;
@@ -99,24 +106,25 @@ class _PowerPlansPageState extends State<PowerPlansPage> {
 
   Future<void> _compare(PowerSchemeInfo scheme) async {
     final active = _schemes.singleWhere((item) => item.active);
-    setState(() => _busy = true);
+    setState(() {
+      _busy = true;
+      _error = null;
+    });
     try {
       final results = await Future.wait(<Future<List<PowerSettingInfo>>>[
-        Isolate.run(
-          () => WindowsPowerSchemeService().enumerateSettings(active.id),
-        ),
-        Isolate.run(
-          () => WindowsPowerSchemeService().enumerateSettings(scheme.id),
-        ),
+        loadPowerSettingsInBackground(active.id),
+        loadPowerSettingsInBackground(scheme.id),
       ]);
       final left = results[0];
       final right = results[1];
       final rightById = <String, PowerSettingInfo>{
-        for (final setting in right) setting.settingId: setting,
+        for (final setting in right)
+          '${setting.subgroupId}/${setting.settingId}': setting,
       };
       final differences = left
           .where((setting) {
-            final other = rightById[setting.settingId];
+            final other =
+                rightById['${setting.subgroupId}/${setting.settingId}'];
             return other == null ||
                 other.value.ac != setting.value.ac ||
                 other.value.dc != setting.value.dc;
@@ -143,10 +151,12 @@ class _PowerPlansPageState extends State<PowerPlansPage> {
     var selectedAc = setting.value.ac;
     var selectedDc = setting.value.dc;
     final options = <int, String>{
-      ...setting.possibleValues,
-      if (!setting.possibleValues.containsKey(setting.value.ac))
+      if (setting.usesPossibleValues) ...setting.possibleValues,
+      if (setting.usesPossibleValues &&
+          !setting.possibleValues.containsKey(setting.value.ac))
         setting.value.ac: setting.value.ac.toString(),
-      if (!setting.possibleValues.containsKey(setting.value.dc))
+      if (setting.usesPossibleValues &&
+          !setting.possibleValues.containsKey(setting.value.dc))
         setting.value.dc: setting.value.dc.toString(),
     };
     final values = await showDialog<List<int>>(
@@ -159,16 +169,18 @@ class _PowerPlansPageState extends State<PowerPlansPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
-                strings.powerSettingRange(
-                  setting.minimum?.toString() ?? '?',
-                  setting.maximum?.toString() ?? '?',
-                  (setting.increment ?? 1).toString(),
-                ),
+                setting.usesPossibleValues
+                    ? strings.powerSettingOptions(setting.possibleValues.length)
+                    : strings.powerSettingRange(
+                        setting.minimum?.toString() ?? '?',
+                        setting.maximum?.toString() ?? '?',
+                        (setting.increment ?? 1).toString(),
+                      ),
               ),
               if (setting.units?.isNotEmpty == true) Text(setting.units!),
               const SizedBox(height: 12),
               const Text('AC'),
-              if (setting.possibleValues.isNotEmpty)
+              if (setting.usesPossibleValues)
                 ComboBox<int>(
                   value: selectedAc,
                   isExpanded: true,
@@ -186,7 +198,7 @@ class _PowerPlansPageState extends State<PowerPlansPage> {
                 TextBox(controller: ac),
               const SizedBox(height: 8),
               const Text('DC'),
-              if (setting.possibleValues.isNotEmpty)
+              if (setting.usesPossibleValues)
                 ComboBox<int>(
                   value: selectedDc,
                   isExpanded: true,
@@ -211,10 +223,10 @@ class _PowerPlansPageState extends State<PowerPlansPage> {
             ),
             FilledButton(
               onPressed: () {
-                final parsedAc = setting.possibleValues.isNotEmpty
+                final parsedAc = setting.usesPossibleValues
                     ? selectedAc
                     : int.tryParse(ac.text);
-                final parsedDc = setting.possibleValues.isNotEmpty
+                final parsedDc = setting.usesPossibleValues
                     ? selectedDc
                     : int.tryParse(dc.text);
                 if (parsedAc != null && parsedDc != null) {
@@ -235,14 +247,17 @@ class _PowerPlansPageState extends State<PowerPlansPage> {
     final minimum = setting.minimum;
     final maximum = setting.maximum;
     final increment = setting.increment ?? 1;
-    if (minimum == null ||
-        maximum == null ||
-        values.any(
-          (value) =>
-              value < minimum ||
-              value > maximum ||
-              (increment > 0 && (value - minimum) % increment != 0),
-        )) {
+    final invalid = setting.usesPossibleValues
+        ? values.any((value) => !setting.possibleValues.containsKey(value))
+        : minimum == null ||
+              maximum == null ||
+              values.any(
+                (value) =>
+                    value < minimum ||
+                    value > maximum ||
+                    (increment > 0 && (value - minimum) % increment != 0),
+              );
+    if (invalid) {
       setState(
         () => _error = strings.powerSettingRange(
           minimum?.toString() ?? '?',
@@ -508,7 +523,9 @@ class _PowerPlansPageState extends State<PowerPlansPage> {
   }
 
   String _formatSettingValue(PowerSettingInfo setting, int value) {
-    final label = setting.possibleValues[value];
+    final label = setting.usesPossibleValues
+        ? setting.possibleValues[value]
+        : null;
     final units = setting.units?.isNotEmpty == true ? ' ${setting.units}' : '';
     return '$value$units${label == null ? '' : ' ($label)'}';
   }
@@ -545,104 +562,137 @@ class _PowerPlansPageState extends State<PowerPlansPage> {
     return ListView(
       padding: const EdgeInsets.all(24),
       children: <Widget>[
-        Row(
-          children: <Widget>[
-            Button(
-              onPressed: _busy ? null : _import,
-              child: Text(strings.importPowerPlan),
-            ),
-            const SizedBox(width: 8),
-            Button(
-              onPressed: _busy || _schemes.isEmpty ? null : _exportActive,
-              child: Text(strings.exportActivePowerPlan),
-            ),
-            const SizedBox(width: 8),
-            Button(
-              onPressed: _busy ? null : _restoreDefaults,
-              child: Text(strings.restoreDefaultPowerSchemes),
-            ),
-          ],
-        ),
-        const SizedBox(height: 12),
-        TextBox(
-          placeholder: strings.searchPowerPlans,
-          prefix: const Padding(
-            padding: EdgeInsets.only(left: 8),
-            child: Icon(FluentIcons.search),
+        if (_settings == null) ...<Widget>[
+          Row(
+            children: <Widget>[
+              Button(
+                onPressed: _busy ? null : _import,
+                child: Text(strings.importPowerPlan),
+              ),
+              const SizedBox(width: 8),
+              Button(
+                onPressed: _busy || _schemes.isEmpty ? null : _exportActive,
+                child: Text(strings.exportActivePowerPlan),
+              ),
+              const SizedBox(width: 8),
+              Button(
+                onPressed: _busy ? null : _restoreDefaults,
+                child: Text(strings.restoreDefaultPowerSchemes),
+              ),
+            ],
           ),
-          onChanged: (value) => setState(() => _query = value),
-        ),
-        if (_error != null) ...<Widget>[
           const SizedBox(height: 12),
           InfoBar(
-            title: Text(strings.operationFailed),
-            content: Text(_error!),
-            severity: InfoBarSeverity.error,
+            title: Text(strings.powerPlanEditorHint),
+            severity: InfoBarSeverity.info,
           ),
-        ],
-        const SizedBox(height: 12),
-        if (_busy && _schemes.isEmpty)
-          const Center(child: ProgressRing())
-        else
-          ...visible.map(
-            (scheme) => Padding(
-              padding: const EdgeInsets.only(bottom: 8),
-              child: Card(
-                child: ListTile(
-                  title: Text(scheme.name),
-                  subtitle: Text(scheme.id),
-                  leading: Icon(
-                    scheme.active
-                        ? FluentIcons.radio_btn_on
-                        : FluentIcons.radio_btn_off,
-                  ),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Button(
-                        onPressed: _busy ? null : () => _showSettings(scheme),
-                        child: Text(strings.details),
-                      ),
-                      const SizedBox(width: 8),
-                      Button(
-                        onPressed: _busy ? null : () => _rename(scheme),
-                        child: Text(strings.rename),
-                      ),
-                      const SizedBox(width: 8),
-                      Button(
-                        onPressed: _busy ? null : () => _duplicate(scheme),
-                        child: Text(strings.duplicate),
-                      ),
-                      const SizedBox(width: 8),
-                      if (!scheme.active) ...<Widget>[
+          const SizedBox(height: 12),
+          TextBox(
+            placeholder: strings.searchPowerPlans,
+            prefix: const Padding(
+              padding: EdgeInsets.only(left: 8),
+              child: Icon(FluentIcons.search),
+            ),
+            onChanged: (value) => setState(() => _query = value),
+          ),
+          if (_error != null) ...<Widget>[
+            const SizedBox(height: 12),
+            InfoBar(
+              title: Text(strings.operationFailed),
+              content: Text(_error!),
+              severity: InfoBarSeverity.error,
+            ),
+          ],
+          const SizedBox(height: 12),
+          if (_busy && _schemes.isEmpty)
+            const Center(child: ProgressRing())
+          else
+            ...visible.map(
+              (scheme) => Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Card(
+                  child: ListTile(
+                    title: Text(scheme.name),
+                    subtitle: Text(scheme.id),
+                    leading: Icon(
+                      scheme.active
+                          ? FluentIcons.radio_btn_on
+                          : FluentIcons.radio_btn_off,
+                    ),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
                         Button(
-                          onPressed: _busy ? null : () => _compare(scheme),
-                          child: Text(strings.compare),
+                          onPressed: _busy ? null : () => _showSettings(scheme),
+                          child: Text(strings.details),
                         ),
                         const SizedBox(width: 8),
                         Button(
-                          onPressed: _busy ? null : () => _activate(scheme.id),
-                          child: Text(strings.activate),
+                          onPressed: _busy ? null : () => _rename(scheme),
+                          child: Text(strings.rename),
                         ),
                         const SizedBox(width: 8),
                         Button(
-                          onPressed: _busy ? null : () => _delete(scheme),
-                          child: Text(strings.delete),
+                          onPressed: _busy ? null : () => _duplicate(scheme),
+                          child: Text(strings.duplicate),
                         ),
-                      ] else
-                        Text(strings.activePowerPlan),
-                    ],
+                        const SizedBox(width: 8),
+                        if (!scheme.active) ...<Widget>[
+                          Button(
+                            onPressed: _busy ? null : () => _compare(scheme),
+                            child: Text(strings.compare),
+                          ),
+                          const SizedBox(width: 8),
+                          Button(
+                            onPressed: _busy
+                                ? null
+                                : () => _activate(scheme.id),
+                            child: Text(strings.activate),
+                          ),
+                          const SizedBox(width: 8),
+                          Button(
+                            onPressed: _busy ? null : () => _delete(scheme),
+                            child: Text(strings.delete),
+                          ),
+                        ] else
+                          Text(strings.activePowerPlan),
+                      ],
+                    ),
                   ),
                 ),
               ),
             ),
+        ] else ...<Widget>[
+          Row(
+            children: <Widget>[
+              Button(
+                onPressed: _busy
+                    ? null
+                    : () => setState(() {
+                        _settings = null;
+                        _settingsTitle = null;
+                        _settingsSchemeId = null;
+                        _error = null;
+                      }),
+                child: Text(strings.backToPowerPlans),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  _settingsTitle!,
+                  style: FluentTheme.of(context).typography.subtitle,
+                ),
+              ),
+            ],
           ),
-        if (_settings != null) ...<Widget>[
-          const SizedBox(height: 16),
-          Text(
-            _settingsTitle!,
-            style: FluentTheme.of(context).typography.subtitle,
-          ),
+          if (_error != null) ...<Widget>[
+            const SizedBox(height: 12),
+            InfoBar(
+              title: Text(strings.operationFailed),
+              content: Text(_error!),
+              severity: InfoBarSeverity.error,
+            ),
+          ],
           const SizedBox(height: 8),
           Wrap(
             spacing: 10,
@@ -690,13 +740,10 @@ class _PowerPlansPageState extends State<PowerPlansPage> {
                     '${setting.subgroupName}\n'
                     'AC ${_formatSettingValue(setting, setting.value.ac)} · '
                     'DC ${_formatSettingValue(setting, setting.value.dc)} · '
-                    '${strings.powerSettingRange(setting.minimum?.toString() ?? '?', setting.maximum?.toString() ?? '?', (setting.increment ?? 1).toString())}\n'
+                    '${setting.usesPossibleValues ? strings.powerSettingOptions(setting.possibleValues.length) : strings.powerSettingRange(setting.minimum?.toString() ?? '?', setting.maximum?.toString() ?? '?', (setting.increment ?? 1).toString())}\n'
                     '${setting.description}\n${setting.settingId}',
                   ),
-                  trailing:
-                      _settingsSchemeId != null &&
-                          setting.minimum != null &&
-                          setting.maximum != null
+                  trailing: _settingsSchemeId != null && setting.safelyEditable
                       ? Button(
                           onPressed: _busy ? null : () => _editSetting(setting),
                           child: Text(strings.edit),

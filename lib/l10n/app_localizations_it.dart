@@ -955,13 +955,25 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
+  String powerSettingOptions(int count) {
+    return '$count opzioni definite da Windows';
+  }
+
+  @override
+  String get backToPowerPlans => 'Torna ai piani di alimentazione';
+
+  @override
+  String get powerPlanEditorHint =>
+      'Duplica un piano per creare il tuo profilo personalizzato, quindi apri Dettagli e modifica uno per uno i setting AC/DC nascosti.';
+
+  @override
   String powerSettingRange(Object minimum, Object maximum, Object increment) {
     return 'Intervallo $minimum–$maximum, incremento $increment';
   }
 
   @override
   String get powerSettingBoundsUnavailable =>
-      'Windows non ha esposto limiti di modifica sicuri per questo setting.';
+      'Windows non ha esposto valori o limiti di modifica sicuri per questo setting.';
 
   @override
   String get delete => 'Elimina';

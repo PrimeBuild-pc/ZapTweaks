@@ -8,6 +8,9 @@ const subgroup = '22222222-2222-2222-2222-222222222222';
 const setting = '33333333-3333-3333-3333-333333333333';
 
 class _Schemes implements PowerSchemeAdministration {
+  _Schemes({this.overrideInfo});
+
+  final PowerSettingInfo? overrideInfo;
   PowerSettingValue value = const PowerSettingValue(ac: 40, dc: 30);
   String active = scheme;
 
@@ -16,18 +19,19 @@ class _Schemes implements PowerSchemeAdministration {
   @override
   List<PowerSettingInfo> enumerateSettings(String schemeId) =>
       <PowerSettingInfo>[
-        PowerSettingInfo(
-          subgroupId: subgroup,
-          subgroupName: 'Processor',
-          settingId: setting,
-          name: 'Bounded setting',
-          description: 'Test',
-          value: value,
-          minimum: 0,
-          maximum: 100,
-          increment: 5,
-          units: '%',
-        ),
+        overrideInfo ??
+            PowerSettingInfo(
+              subgroupId: subgroup,
+              subgroupName: 'Processor',
+              settingId: setting,
+              name: 'Bounded setting',
+              description: 'Test',
+              value: value,
+              minimum: 0,
+              maximum: 100,
+              increment: 5,
+              units: '%',
+            ),
       ];
   @override
   PowerSettingValue readSetting(
@@ -83,6 +87,40 @@ void main() {
       expect(schemes.value.dc, 30);
     },
   );
+
+  test('enumerated settings are editable without numeric bounds', () async {
+    final schemes = _Schemes(
+      overrideInfo: PowerSettingInfo(
+        subgroupId: subgroup,
+        subgroupName: 'Wireless',
+        settingId: setting,
+        name: 'Power saving mode',
+        description: 'Test',
+        value: const PowerSettingValue(ac: 0, dc: 2),
+        possibleValues: const <int, String>{
+          0: 'Maximum performance',
+          1: 'Low saving',
+          2: 'Medium saving',
+          3: 'Maximum saving',
+        },
+      ),
+    );
+    final operation = PowerSettingConfigureOperation(schemes);
+    const request = OperationRequest(
+      operationId: 'power.setting.configure',
+      target: scheme,
+      desiredValue: <String, int>{'ac': 1, 'dc': 3},
+      parameters: <String, Object?>{
+        'subgroupId': subgroup,
+        'settingId': setting,
+      },
+    );
+
+    expect((await operation.supports(context, request)).supported, isTrue);
+    await operation.apply(request);
+    expect(schemes.value.ac, 1);
+    expect(schemes.value.dc, 3);
+  });
 
   test(
     'generic power editor rejects values outside live bounds or increments',

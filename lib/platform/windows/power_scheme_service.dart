@@ -56,6 +56,10 @@ class PowerSettingInfo {
   final int? increment;
   final String? units;
   final Map<int, String> possibleValues;
+
+  bool get hasNumericBounds => minimum != null && maximum != null;
+  bool get usesPossibleValues => !hasNumericBounds && possibleValues.isNotEmpty;
+  bool get safelyEditable => hasNumericBounds || usesPossibleValues;
 }
 
 abstract interface class PowerSchemeInventory {
@@ -611,7 +615,8 @@ class WindowsPowerSchemeService implements PowerSchemeAdministration {
           size,
         );
         if ((first != ERROR_MORE_DATA && first != ERROR_SUCCESS) ||
-            size.value != 4) {
+            size.value == 0 ||
+            size.value > 1024) {
           break;
         }
         final buffer = calloc<Uint8>(size.value);
@@ -628,9 +633,11 @@ class WindowsPowerSchemeService implements PowerSchemeAdministration {
               ERROR_SUCCESS) {
             break;
           }
-          final value = ByteData.sublistView(
-            Uint8List.fromList(buffer.asTypedList(4)),
-          ).getUint32(0, Endian.little);
+          final value = type.value == REG_DWORD && size.value >= 4
+              ? ByteData.sublistView(
+                  Uint8List.fromList(buffer.asTypedList(4)),
+                ).getUint32(0, Endian.little)
+              : index;
           result[value] = _possibleName(subgroup, setting, index) ?? '$value';
         } finally {
           calloc.free(buffer);

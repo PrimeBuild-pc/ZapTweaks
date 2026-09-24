@@ -1781,6 +1781,24 @@ abstract class AppLocalizations {
   /// **'{count} settings'**
   String powerSettingCount(int count);
 
+  /// No description provided for @powerSettingOptions.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} Windows-defined options'**
+  String powerSettingOptions(int count);
+
+  /// No description provided for @backToPowerPlans.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to power plans'**
+  String get backToPowerPlans;
+
+  /// No description provided for @powerPlanEditorHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Duplicate a plan to create your custom profile, then open Details and edit its hidden AC/DC settings one by one.'**
+  String get powerPlanEditorHint;
+
   /// No description provided for @powerSettingRange.
   ///
   /// In en, this message translates to:
@@ -1790,7 +1808,7 @@ abstract class AppLocalizations {
   /// No description provided for @powerSettingBoundsUnavailable.
   ///
   /// In en, this message translates to:
-  /// **'Windows did not expose safe edit bounds for this setting.'**
+  /// **'Windows did not expose safe values or bounds for this setting.'**
   String get powerSettingBoundsUnavailable;
 
   /// No description provided for @delete.

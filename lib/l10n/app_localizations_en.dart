@@ -949,13 +949,25 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String powerSettingOptions(int count) {
+    return '$count Windows-defined options';
+  }
+
+  @override
+  String get backToPowerPlans => 'Back to power plans';
+
+  @override
+  String get powerPlanEditorHint =>
+      'Duplicate a plan to create your custom profile, then open Details and edit its hidden AC/DC settings one by one.';
+
+  @override
   String powerSettingRange(Object minimum, Object maximum, Object increment) {
     return 'Range $minimum–$maximum, step $increment';
   }
 
   @override
   String get powerSettingBoundsUnavailable =>
-      'Windows did not expose safe edit bounds for this setting.';
+      'Windows did not expose safe values or bounds for this setting.';
 
   @override
   String get delete => 'Delete';

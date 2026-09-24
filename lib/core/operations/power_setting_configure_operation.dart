@@ -29,18 +29,20 @@ class PowerSettingConfigureOperation implements OperationDefinition {
     final key = '$schemeId/$normalizedSubgroup/$normalizedSetting';
     final info = _cache.putIfAbsent(
       key,
-      () => schemes.enumerateSettings(schemeId).singleWhere(
-        (item) =>
-            _canonical(item.subgroupId) == normalizedSubgroup &&
-            _canonical(item.settingId) == normalizedSetting,
-        orElse: () => throw const FormatException(
-          'The power setting is not present in this scheme.',
-        ),
-      ),
+      () => schemes
+          .enumerateSettings(schemeId)
+          .singleWhere(
+            (item) =>
+                _canonical(item.subgroupId) == normalizedSubgroup &&
+                _canonical(item.settingId) == normalizedSetting,
+            orElse: () => throw const FormatException(
+              'The power setting is not present in this scheme.',
+            ),
+          ),
     );
-    if (info.minimum == null || info.maximum == null) {
+    if (!info.safelyEditable) {
       throw const FormatException(
-        'Windows did not expose safe bounds for this setting.',
+        'Windows did not expose safe values or bounds for this setting.',
       );
     }
     return (
@@ -60,21 +62,23 @@ class PowerSettingConfigureOperation implements OperationDefinition {
       dc: value['dc']! as int,
     );
     for (final candidate in <int>[desired.ac, desired.dc]) {
-      if (candidate < info.minimum! || candidate > info.maximum!) {
-        throw FormatException(
-          'Value must be between ${info.minimum} and ${info.maximum}.',
-        );
+      if (info.usesPossibleValues) {
+        if (!info.possibleValues.containsKey(candidate)) {
+          throw const FormatException(
+            'Value is not exposed by Windows for this setting.',
+          );
+        }
+        continue;
       }
-      if (info.possibleValues.isNotEmpty &&
-          !info.possibleValues.containsKey(candidate)) {
-        throw const FormatException(
-          'Value is not exposed by Windows for this setting.',
-        );
+      final minimum = info.minimum!;
+      final maximum = info.maximum!;
+      if (candidate < minimum || candidate > maximum) {
+        throw FormatException('Value must be between $minimum and $maximum.');
       }
       final increment = info.increment;
       if (increment != null &&
           increment > 0 &&
-          (candidate - info.minimum!) % increment != 0) {
+          (candidate - minimum) % increment != 0) {
         throw FormatException('Value must use increments of $increment.');
       }
     }
@@ -237,6 +241,7 @@ class PowerSettingConfigureOperation implements OperationDefinition {
   @override
   List<String> get technicalSources => const <String>[
     'https://learn.microsoft.com/windows/win32/power/power-management-functions',
+    'https://github.com/zoicware/PowerPlanSettingsEditor/tree/bc15755f981b7ed831126df29541922b4171501d',
   ];
   @override
   List<String> get dependencies => const <String>[];

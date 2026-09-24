@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:script_utility/features/power/presentation/power_plans_page.dart';
 import 'package:script_utility/platform/windows/power_scheme_service.dart';
 
 void main() {
@@ -44,6 +45,23 @@ void main() {
         settings.any((setting) => setting.possibleValues.isNotEmpty),
         isTrue,
       );
+      final wirelessMode = settings.singleWhere(
+        (setting) =>
+            setting.settingId.toLowerCase() ==
+            '{12bbebe6-58d6-4636-95bb-3217ef867c1a}',
+      );
+      expect(wirelessMode.possibleValues, hasLength(4));
+    },
+  );
+
+  test(
+    'setting inventory crosses the isolate boundary used by the UI',
+    () async {
+      final schemeId = WindowsPowerSchemeService().activeSchemeId;
+      final settings = await loadPowerSettingsInBackground(schemeId);
+
+      expect(settings, isNotEmpty);
+      expect(settings.every((setting) => setting.settingId.isNotEmpty), isTrue);
     },
   );
 
