@@ -555,6 +555,14 @@ class ElevatedHelperHost {
       elevatedExecutor: const DirectOperationExecutor(),
     );
     final plan = await engine.plan(requests);
+    final rejected = plan.items.where(
+      (item) => item.status == PlanItemStatus.skipped,
+    );
+    if (rejected.isNotEmpty) {
+      throw StateError(
+        rejected.first.error ?? 'Native plan item was rejected.',
+      );
+    }
     await _writeEvent(events, 'executingPlan');
     await engine.execute(plan);
     await _writeEvent(events, 'completedPlan');

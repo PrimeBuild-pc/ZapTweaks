@@ -78,6 +78,12 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                 'msi utility v3 message signaled interrupts affinity tool affinita interrupt',
               ),
               _SearchDestination(
+                strings.tcpOptimizer,
+                'Gaming & Performance',
+                3,
+                'tcp optimizer winspar qos dscp congestion autotuning ecn rsc rss throughput latency jitter packet loss rete',
+              ),
+              _SearchDestination(
                 strings.recovery,
                 'Diagnostics & Recovery',
                 0,

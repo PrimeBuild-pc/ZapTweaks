@@ -1247,4 +1247,189 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get appCatalogSources =>
       'Catalog merged from pinned CTT WinUtil, clean-room Winhance candidates, TweakHub, and requested official sources.';
+
+  @override
+  String get tcpOptimizer => 'TCP Optimizer';
+
+  @override
+  String get tcpOptimizerDescription =>
+      'Inspect and configure Windows TCP templates, global offloads, per-application QoS, and repeatable network diagnostics.';
+
+  @override
+  String get tcpNoRecommendation =>
+      'No value is recommended automatically. A read-back or one network test does not prove a performance benefit.';
+
+  @override
+  String get tcpLiveState => 'Live TCP state';
+
+  @override
+  String get tcpTemplates => 'TCP templates';
+
+  @override
+  String get tcpGlobal => 'Global TCP offloads';
+
+  @override
+  String get tcpAutotuning => 'Receive-window autotuning';
+
+  @override
+  String get tcpHeuristics => 'Window-scaling heuristics';
+
+  @override
+  String get tcpEcn => 'ECN capability';
+
+  @override
+  String get tcpCongestion => 'Congestion control';
+
+  @override
+  String get tcpRsc => 'Receive segment coalescing (RSC)';
+
+  @override
+  String get tcpRss => 'Global receive-side scaling (RSS)';
+
+  @override
+  String get tcpConfigure => 'Configure';
+
+  @override
+  String get tcpChangePreview => 'TCP change preview';
+
+  @override
+  String get tcpCurrentValue => 'Current value';
+
+  @override
+  String get tcpNewValue => 'New value';
+
+  @override
+  String get tcpExactRollbackNotice =>
+      'ZapTweaks will snapshot the exact current value, apply with one UAC request, read it back, journal it, and preserve exact rollback.';
+
+  @override
+  String get tcpUnsupported => 'Not exposed by this Windows build';
+
+  @override
+  String get tcpAdapterRss => 'Open per-adapter RSS controls';
+
+  @override
+  String get rssAdapterState => 'Per-adapter RSS state';
+
+  @override
+  String get rssEnabled => 'RSS enabled';
+
+  @override
+  String get rssProfile => 'RSS profile';
+
+  @override
+  String get rssQueuesProcessors => 'Queues/processors';
+
+  @override
+  String get tcpSettingOperationTitle => 'Configure TCP setting';
+
+  @override
+  String get tcpSettingOperationDescription =>
+      'Changes one capability-gated Windows TCP template or global offload value with exact rollback.';
+
+  @override
+  String get qosPolicies => 'Application QoS policies';
+
+  @override
+  String get qosDescription =>
+      'Create explicit persistent QoS policies for one executable. Existing non-ZapTweaks policies remain read-only.';
+
+  @override
+  String get qosCreate => 'Create policy';
+
+  @override
+  String get qosEdit => 'Edit';
+
+  @override
+  String get qosDelete => 'Delete';
+
+  @override
+  String get qosName => 'Policy name';
+
+  @override
+  String get qosAppPath => 'Executable path';
+
+  @override
+  String get qosProtocol => 'Protocol';
+
+  @override
+  String get qosSourcePort => 'Source port (optional)';
+
+  @override
+  String get qosDestinationPort => 'Destination port (optional)';
+
+  @override
+  String get qosDscp => 'DSCP 0–63 (optional)';
+
+  @override
+  String get qosThrottleMbps => 'Throttle Mbit/s (optional)';
+
+  @override
+  String get qosOwnedOnly =>
+      'Names must start with “ZapTweaks - ”. Only the selected policy is changed; unrelated QoS policies are never cleared.';
+
+  @override
+  String get qosDeleteConfirm =>
+      'Delete the selected QoS policy? Its exact state is stored in the ZapTweaks journal for rollback.';
+
+  @override
+  String get qosReadOnly => 'Read-only';
+
+  @override
+  String get qosPolicyOperationTitle => 'Configure application QoS';
+
+  @override
+  String get qosPolicyOperationDescription =>
+      'Creates, edits, or removes one validated persistent per-application QoS policy with exact rollback.';
+
+  @override
+  String get networkDiagnostics => 'Before/after diagnostics';
+
+  @override
+  String get networkDiagnosticsDescription =>
+      'Measure bounded TCP connection latency, jitter, loss, and HTTPS download throughput. Results are diagnostic evidence, not a recommendation.';
+
+  @override
+  String get diagnosticEndpoint => 'Direct HTTPS test-file URL';
+
+  @override
+  String get diagnosticNetworkCost =>
+      'The test downloads at most 10 MiB from the endpoint you enter. No third-party endpoint is built in.';
+
+  @override
+  String get diagnosticBaseline => 'Run baseline';
+
+  @override
+  String get diagnosticComparison => 'Run comparison';
+
+  @override
+  String get diagnosticCancel => 'Cancel measurement';
+
+  @override
+  String get diagnosticLatency => 'Latency';
+
+  @override
+  String get diagnosticJitter => 'Jitter';
+
+  @override
+  String get diagnosticPacketLoss => 'Packet loss';
+
+  @override
+  String get diagnosticThroughput => 'Throughput';
+
+  @override
+  String get diagnosticRawSamples => 'Raw latency samples';
+
+  @override
+  String get diagnosticDownloadedBytes => 'Downloaded bytes';
+
+  @override
+  String get diagnosticDifference => 'Difference B − A';
+
+  @override
+  String get tcpAttribution =>
+      'Inspired by WINSPAR — powplowdevs (frozen revision)';
+
+  @override
+  String get openRecoveryHistory => 'Open recovery and journal';
 }

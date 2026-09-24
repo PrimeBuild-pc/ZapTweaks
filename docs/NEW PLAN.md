@@ -873,7 +873,7 @@ La Fase 8 può introdurre un profilo `Gaming competitivo raccomandato` soltanto 
 - [x] sostituzione MSI Utility v3 integrata con inventario live, stato corrente per-device da `Enum\\PCI`, Line/MSI/MSI-X, limite messaggi, `DevicePriority`, rollback e read-back per display, rete, media, host USB e audio HD;
 - [x] affinity tool integrato con tutte le policy documentate 0–5, topologia nativa `GetSystemCpuSetInformation`, selettori group-0 per logical CPU, un thread per core fisico, P/E-core, NUMA e LLC/CCD, maschera esatta, stato corrente e rollback;
 - [x] Power Settings Explorer integrato tramite PowrProf con tutti i setting enumerati, ricerca, gruppi, GUID, descrizioni, unità, valori possibili, limiti/incrementi live ed editing AC/DC tipizzato;
-- [ ] tab `TCP Optimizer` nativa ispirata clean-room a WINSPAR, con stato live, modifica tipizzata, QoS selettivo, diagnostica prima/dopo e rollback esatto secondo `docs/TCP_OPTIMIZER_HANDOFF.md`;
+- [x] tab `TCP Optimizer` nativa ispirata clean-room a WINSPAR, con stato live, modifica tipizzata, QoS selettivo, diagnostica prima/dopo e rollback esatto secondo `docs/TCP_OPTIMIZER_HANDOFF.md`;
 - [x] topologia CPU;
 - verifica hardware-specifica.
 

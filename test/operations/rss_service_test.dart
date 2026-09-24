@@ -7,6 +7,18 @@ import 'package:script_utility/platform/windows/processor_topology.dart';
 import 'package:script_utility/platform/windows/rss_service.dart';
 
 void main() {
+  test('RSS adapter inventory is structured and locale independent', () async {
+    final runner = ProcessRunner(
+      processRunDelegate: (executable, arguments, {runInShell = false}) async =>
+          ProcessResult(1, 0, '{"names":["Ethernet","Wi-Fi"]}', ''),
+    );
+
+    expect(
+      await WindowsRssService(processRunner: runner).adapterNames(),
+      <String>['Ethernet', 'Wi-Fi'],
+    );
+  });
+
   test(
     'restoring enabled RSS re-enables provider before validating live limits',
     () async {

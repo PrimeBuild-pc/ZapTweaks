@@ -8,6 +8,7 @@ import 'package:script_utility/core/models/tweak_descriptor.dart';
 import 'package:script_utility/core/operations/operation.dart';
 import 'package:script_utility/core/operations/operation_registry.dart';
 import 'package:script_utility/core/operations/registry_dword_operation.dart';
+import 'package:script_utility/core/operations/tcp_optimizer_operations.dart';
 import 'package:script_utility/core/persistence/operation_store.dart';
 import 'package:script_utility/core/plans/operation_plan.dart';
 import 'package:script_utility/core/security/elevated_helper.dart';
@@ -19,6 +20,7 @@ import 'package:script_utility/features/apps/application/windows_app_inventory_s
 import 'package:script_utility/features/apps/domain/app_package.dart';
 import 'package:script_utility/features/apps/domain/windows_optional_feature.dart';
 import 'package:script_utility/platform/windows/registry_value_store.dart';
+import 'package:script_utility/platform/windows/tcp_optimizer_service.dart';
 
 class _Catalog extends TweakCatalogService {
   @override
@@ -70,6 +72,19 @@ class _Registry implements RegistryValueStore {
     RawRegistryValue next, {
     RegistryView view = RegistryView.registry64,
   }) async => value = next;
+}
+
+class _QosStore implements QosPolicyStore {
+  var writes = 0;
+
+  @override
+  Future<List<QosPolicy>> inventory() async => const <QosPolicy>[];
+
+  @override
+  Future<QosPolicy?> inspect(String name) async => null;
+
+  @override
+  Future<void> write(String name, QosPolicy? policy) async => writes++;
 }
 
 class _Restore extends RestorePointService {
@@ -323,6 +338,55 @@ void main() {
     expect(plan.items.every((item) => item.snapshot != null), isTrue);
     expect(database.select('SELECT * FROM plans'), hasLength(1));
   });
+
+  test(
+    'helper rejects arbitrary TCP Optimizer fields before mutation',
+    () async {
+      final directory = await Directory.systemTemp.createTemp('zap-helper-');
+      addTearDown(() => directory.delete(recursive: true));
+      final store = _QosStore();
+      final operation = QosPolicyOperation(store);
+      final host = ElevatedHelperHost(
+        allowedDirectory: directory,
+        catalogService: _Catalog(),
+        tweakManager: _Manager(),
+        restorePointService: _Restore(),
+        operationRegistry: OperationRegistry(<OperationDefinition>[operation]),
+        operationContext: const OperationContext(
+          windowsBuild: 26100,
+          edition: 'Pro',
+        ),
+      );
+      final client = ElevatedHelperClient(
+        directory: directory,
+        secureDirectory: (_) async {},
+        launcher: (_, request, nonce, digest) =>
+            host.run(request, nonce, digest),
+      );
+
+      await expectLater(
+        client.executeNativePlan(
+          requests: <OperationRequest>[
+            OperationRequest(
+              operationId: operation.id,
+              target: 'ZapTweaks - Game',
+              desiredValue: const QosPolicy(
+                name: 'ZapTweaks - Game',
+                appPath: r'C:\Games\game.exe',
+                protocol: 'TCP',
+                dscp: 46,
+              ).toJson(),
+              parameters: const <String, Object?>{'command': 'whoami'},
+            ),
+          ],
+          user: 'test-user',
+          appVersion: 'test',
+        ),
+        throwsA(isA<StateError>()),
+      );
+      expect(store.writes, 0);
+    },
+  );
 
   test('helper refuses request files outside its private directory', () async {
     final directory = await Directory.systemTemp.createTemp('zap-helper-');

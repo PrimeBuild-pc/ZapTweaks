@@ -13,13 +13,27 @@ The product inspiration is:
 
 The user requested an adaptation, but ZapTweaks is MIT and attribution alone does not make copied AGPL code MIT-compatible. Implement the useful behavior clean-room from documented Windows interfaces. Do not copy source, UI code, assets or binaries. Keep a small visible attribution/link in the tab and the complete notice in `THIRD_PARTY_NOTICES.md`.
 
+## Completion record
+
+Implemented on `feat/one-app-plan` as a clean-room native feature:
+
+- live capability-gated global and template TCP inventory, with built-in templates read-only and supported custom/global values editable;
+- typed `tcp.setting.configure` and `network.qos.policy` operations with snapshots, read-back verification, helper allowlisting, journal integration and conflict-aware rollback;
+- the existing `WindowsRssService` and `network.rss.configure` operation reused for per-adapter RSS controls;
+- explicit inventory plus create/edit/delete for only `ZapTweaks - ` QoS policies, with unrelated policies read-only;
+- user-supplied direct HTTPS diagnostics bounded to 10 MiB and 30 seconds, cancellable, repeatable, and reported as raw samples plus throughput/latency/jitter/loss;
+- EN/IT UI, global-search deep link, and visible attribution to the frozen revision;
+- unit/security tests, read-only physical inventory, and a targeted existing-VM TCP/QoS apply/read-back/rollback round trip ending with `CLEAN=true` and the VM off.
+
+No automatic recommendation, daemon, process-priority controller, broad QoS deletion, mutable download-and-execute path, or WINSPAR code/asset/binary was added.
+
 ## Current repository state
 
 - Branch: `feat/one-app-plan`.
-- Last functional commit before this handoff: `66ac15c fix: make hidden power settings editable`.
+- Implementation baseline: `940cbac3e9c7a351ea00f25f1e3375e650cb7cd9`.
 - Binding specification: `docs/NEW PLAN.md`.
 - Milestone ledger: `docs/IMPLEMENTATION_STATUS.md`.
-- Current validation: `flutter analyze` clean, 219 tests passing and Windows Release build successful.
+- Current validation: `flutter analyze` clean, 237 tests passing, Windows Release build successful, and the release executable remains running through the startup smoke interval.
 - Release executable: `build/windows/x64/runner/Release/ZapTweaks.exe`.
 - All 346 legacy IDs remain preserved; the adapted catalog currently has 372 entries.
 - Mutating tests may run only in the existing VMs under `D:\VmLab`, through PowerShell Direct and targeted release payloads. Do not mutate the developer's physical machine.

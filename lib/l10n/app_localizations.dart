@@ -2280,6 +2280,354 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Catalog merged from pinned CTT WinUtil, clean-room Winhance candidates, TweakHub, and requested official sources.'**
   String get appCatalogSources;
+
+  /// No description provided for @tcpOptimizer.
+  ///
+  /// In en, this message translates to:
+  /// **'TCP Optimizer'**
+  String get tcpOptimizer;
+
+  /// No description provided for @tcpOptimizerDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Inspect and configure Windows TCP templates, global offloads, per-application QoS, and repeatable network diagnostics.'**
+  String get tcpOptimizerDescription;
+
+  /// No description provided for @tcpNoRecommendation.
+  ///
+  /// In en, this message translates to:
+  /// **'No value is recommended automatically. A read-back or one network test does not prove a performance benefit.'**
+  String get tcpNoRecommendation;
+
+  /// No description provided for @tcpLiveState.
+  ///
+  /// In en, this message translates to:
+  /// **'Live TCP state'**
+  String get tcpLiveState;
+
+  /// No description provided for @tcpTemplates.
+  ///
+  /// In en, this message translates to:
+  /// **'TCP templates'**
+  String get tcpTemplates;
+
+  /// No description provided for @tcpGlobal.
+  ///
+  /// In en, this message translates to:
+  /// **'Global TCP offloads'**
+  String get tcpGlobal;
+
+  /// No description provided for @tcpAutotuning.
+  ///
+  /// In en, this message translates to:
+  /// **'Receive-window autotuning'**
+  String get tcpAutotuning;
+
+  /// No description provided for @tcpHeuristics.
+  ///
+  /// In en, this message translates to:
+  /// **'Window-scaling heuristics'**
+  String get tcpHeuristics;
+
+  /// No description provided for @tcpEcn.
+  ///
+  /// In en, this message translates to:
+  /// **'ECN capability'**
+  String get tcpEcn;
+
+  /// No description provided for @tcpCongestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Congestion control'**
+  String get tcpCongestion;
+
+  /// No description provided for @tcpRsc.
+  ///
+  /// In en, this message translates to:
+  /// **'Receive segment coalescing (RSC)'**
+  String get tcpRsc;
+
+  /// No description provided for @tcpRss.
+  ///
+  /// In en, this message translates to:
+  /// **'Global receive-side scaling (RSS)'**
+  String get tcpRss;
+
+  /// No description provided for @tcpConfigure.
+  ///
+  /// In en, this message translates to:
+  /// **'Configure'**
+  String get tcpConfigure;
+
+  /// No description provided for @tcpChangePreview.
+  ///
+  /// In en, this message translates to:
+  /// **'TCP change preview'**
+  String get tcpChangePreview;
+
+  /// No description provided for @tcpCurrentValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Current value'**
+  String get tcpCurrentValue;
+
+  /// No description provided for @tcpNewValue.
+  ///
+  /// In en, this message translates to:
+  /// **'New value'**
+  String get tcpNewValue;
+
+  /// No description provided for @tcpExactRollbackNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'ZapTweaks will snapshot the exact current value, apply with one UAC request, read it back, journal it, and preserve exact rollback.'**
+  String get tcpExactRollbackNotice;
+
+  /// No description provided for @tcpUnsupported.
+  ///
+  /// In en, this message translates to:
+  /// **'Not exposed by this Windows build'**
+  String get tcpUnsupported;
+
+  /// No description provided for @tcpAdapterRss.
+  ///
+  /// In en, this message translates to:
+  /// **'Open per-adapter RSS controls'**
+  String get tcpAdapterRss;
+
+  /// No description provided for @rssAdapterState.
+  ///
+  /// In en, this message translates to:
+  /// **'Per-adapter RSS state'**
+  String get rssAdapterState;
+
+  /// No description provided for @rssEnabled.
+  ///
+  /// In en, this message translates to:
+  /// **'RSS enabled'**
+  String get rssEnabled;
+
+  /// No description provided for @rssProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'RSS profile'**
+  String get rssProfile;
+
+  /// No description provided for @rssQueuesProcessors.
+  ///
+  /// In en, this message translates to:
+  /// **'Queues/processors'**
+  String get rssQueuesProcessors;
+
+  /// No description provided for @tcpSettingOperationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Configure TCP setting'**
+  String get tcpSettingOperationTitle;
+
+  /// No description provided for @tcpSettingOperationDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Changes one capability-gated Windows TCP template or global offload value with exact rollback.'**
+  String get tcpSettingOperationDescription;
+
+  /// No description provided for @qosPolicies.
+  ///
+  /// In en, this message translates to:
+  /// **'Application QoS policies'**
+  String get qosPolicies;
+
+  /// No description provided for @qosDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Create explicit persistent QoS policies for one executable. Existing non-ZapTweaks policies remain read-only.'**
+  String get qosDescription;
+
+  /// No description provided for @qosCreate.
+  ///
+  /// In en, this message translates to:
+  /// **'Create policy'**
+  String get qosCreate;
+
+  /// No description provided for @qosEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get qosEdit;
+
+  /// No description provided for @qosDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get qosDelete;
+
+  /// No description provided for @qosName.
+  ///
+  /// In en, this message translates to:
+  /// **'Policy name'**
+  String get qosName;
+
+  /// No description provided for @qosAppPath.
+  ///
+  /// In en, this message translates to:
+  /// **'Executable path'**
+  String get qosAppPath;
+
+  /// No description provided for @qosProtocol.
+  ///
+  /// In en, this message translates to:
+  /// **'Protocol'**
+  String get qosProtocol;
+
+  /// No description provided for @qosSourcePort.
+  ///
+  /// In en, this message translates to:
+  /// **'Source port (optional)'**
+  String get qosSourcePort;
+
+  /// No description provided for @qosDestinationPort.
+  ///
+  /// In en, this message translates to:
+  /// **'Destination port (optional)'**
+  String get qosDestinationPort;
+
+  /// No description provided for @qosDscp.
+  ///
+  /// In en, this message translates to:
+  /// **'DSCP 0–63 (optional)'**
+  String get qosDscp;
+
+  /// No description provided for @qosThrottleMbps.
+  ///
+  /// In en, this message translates to:
+  /// **'Throttle Mbit/s (optional)'**
+  String get qosThrottleMbps;
+
+  /// No description provided for @qosOwnedOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Names must start with “ZapTweaks - ”. Only the selected policy is changed; unrelated QoS policies are never cleared.'**
+  String get qosOwnedOnly;
+
+  /// No description provided for @qosDeleteConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete the selected QoS policy? Its exact state is stored in the ZapTweaks journal for rollback.'**
+  String get qosDeleteConfirm;
+
+  /// No description provided for @qosReadOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Read-only'**
+  String get qosReadOnly;
+
+  /// No description provided for @qosPolicyOperationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Configure application QoS'**
+  String get qosPolicyOperationTitle;
+
+  /// No description provided for @qosPolicyOperationDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Creates, edits, or removes one validated persistent per-application QoS policy with exact rollback.'**
+  String get qosPolicyOperationDescription;
+
+  /// No description provided for @networkDiagnostics.
+  ///
+  /// In en, this message translates to:
+  /// **'Before/after diagnostics'**
+  String get networkDiagnostics;
+
+  /// No description provided for @networkDiagnosticsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Measure bounded TCP connection latency, jitter, loss, and HTTPS download throughput. Results are diagnostic evidence, not a recommendation.'**
+  String get networkDiagnosticsDescription;
+
+  /// No description provided for @diagnosticEndpoint.
+  ///
+  /// In en, this message translates to:
+  /// **'Direct HTTPS test-file URL'**
+  String get diagnosticEndpoint;
+
+  /// No description provided for @diagnosticNetworkCost.
+  ///
+  /// In en, this message translates to:
+  /// **'The test downloads at most 10 MiB from the endpoint you enter. No third-party endpoint is built in.'**
+  String get diagnosticNetworkCost;
+
+  /// No description provided for @diagnosticBaseline.
+  ///
+  /// In en, this message translates to:
+  /// **'Run baseline'**
+  String get diagnosticBaseline;
+
+  /// No description provided for @diagnosticComparison.
+  ///
+  /// In en, this message translates to:
+  /// **'Run comparison'**
+  String get diagnosticComparison;
+
+  /// No description provided for @diagnosticCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel measurement'**
+  String get diagnosticCancel;
+
+  /// No description provided for @diagnosticLatency.
+  ///
+  /// In en, this message translates to:
+  /// **'Latency'**
+  String get diagnosticLatency;
+
+  /// No description provided for @diagnosticJitter.
+  ///
+  /// In en, this message translates to:
+  /// **'Jitter'**
+  String get diagnosticJitter;
+
+  /// No description provided for @diagnosticPacketLoss.
+  ///
+  /// In en, this message translates to:
+  /// **'Packet loss'**
+  String get diagnosticPacketLoss;
+
+  /// No description provided for @diagnosticThroughput.
+  ///
+  /// In en, this message translates to:
+  /// **'Throughput'**
+  String get diagnosticThroughput;
+
+  /// No description provided for @diagnosticRawSamples.
+  ///
+  /// In en, this message translates to:
+  /// **'Raw latency samples'**
+  String get diagnosticRawSamples;
+
+  /// No description provided for @diagnosticDownloadedBytes.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloaded bytes'**
+  String get diagnosticDownloadedBytes;
+
+  /// No description provided for @diagnosticDifference.
+  ///
+  /// In en, this message translates to:
+  /// **'Difference B − A'**
+  String get diagnosticDifference;
+
+  /// No description provided for @tcpAttribution.
+  ///
+  /// In en, this message translates to:
+  /// **'Inspired by WINSPAR — powplowdevs (frozen revision)'**
+  String get tcpAttribution;
+
+  /// No description provided for @openRecoveryHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Open recovery and journal'**
+  String get openRecoveryHistory;
 }
 
 class _AppLocalizationsDelegate

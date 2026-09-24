@@ -260,6 +260,35 @@ void main() {
     },
   );
 
+  testWidgets('TCP Optimizer deep link renders at scaled laptop size', (
+    tester,
+  ) async {
+    tester.view.devicePixelRatio = 1.5;
+    addTearDown(tester.view.resetDevicePixelRatio);
+    final controller = await _buildController();
+    await controller.initialize();
+    await _pumpApp(tester, controller, size: const Size(1024, 720));
+
+    await tester.enterText(find.byType(TextBox).first, 'tcp optimizer');
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Open').first);
+    await tester.pump(const Duration(seconds: 1));
+
+    expect(controller.selectedCategory, 'Gaming & Performance');
+    expect(controller.navigationTab, 3);
+    expect(
+      find.text(
+        'No value is recommended automatically. A read-back or one network test does not prove a performance benefit.',
+      ),
+      findsOneWidget,
+    );
+    expect(tester.takeException(), isNull);
+
+    await tester.pumpWidget(const SizedBox.shrink());
+    controller.dispose();
+    await tester.pump(const Duration(milliseconds: 150));
+  });
+
   testWidgets('app search deep links preserve the matched app name', (
     tester,
   ) async {

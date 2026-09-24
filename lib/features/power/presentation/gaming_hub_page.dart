@@ -5,6 +5,7 @@ import '../../tweaks/application/tweak_controller.dart';
 import '../../tweaks/presentation/pages/tweaks_page.dart';
 import 'interrupt_configuration_page.dart';
 import 'power_plans_page.dart';
+import 'tcp_optimizer_page.dart';
 
 class GamingHubPage extends StatefulWidget {
   const GamingHubPage({
@@ -32,7 +33,7 @@ class _GamingHubPageState extends State<GamingHubPage> {
   @override
   void initState() {
     super.initState();
-    _index = widget.initialIndex.clamp(0, 2);
+    _index = widget.initialIndex.clamp(0, 3);
   }
 
   @override
@@ -61,6 +62,11 @@ class _GamingHubPageState extends State<GamingHubPage> {
             category: 'Gaming & Performance',
             onSafetyPrompt: widget.onSafetyPrompt,
           ),
+        ),
+        Tab(
+          text: Text(strings.tcpOptimizer),
+          icon: const Icon(FluentIcons.network_tower),
+          body: TcpOptimizerPage(controller: widget.controller),
         ),
       ],
     );

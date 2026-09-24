@@ -104,6 +104,14 @@ class WindowsRssService implements RssStore {
     return base64Encode(utf8.encode(trimmed));
   }
 
+  Future<List<String>> adapterNames() async {
+    final output = await _processRunner.runPowerShellForOutput(r'''
+[ordered]@{names=@(Get-NetAdapterRss -ErrorAction Stop | ForEach-Object { [string]$_.Name })} | ConvertTo-Json -Compress
+''');
+    final json = Map<String, dynamic>.from(jsonDecode(output) as Map);
+    return (json['names'] as List? ?? const <Object>[]).cast<String>();
+  }
+
   @override
   Future<RssAdapterState> inspect(String adapterName) async {
     final name = _name(adapterName);
