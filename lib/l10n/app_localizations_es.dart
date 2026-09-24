@@ -1249,187 +1249,187 @@ class AppLocalizationsEs extends AppLocalizations {
       'Catalog merged from pinned CTT WinUtil, clean-room Winhance candidates, TweakHub, and requested official sources.';
 
   @override
-  String get tcpOptimizer => 'TCP Optimizer';
+  String get tcpOptimizer => 'Optimizador TCP';
 
   @override
   String get tcpOptimizerDescription =>
-      'Inspect and configure Windows TCP templates, global offloads, per-application QoS, and repeatable network diagnostics.';
+      'Inspecciona y configura las plantillas TCP de Windows, las descargas globales, la QoS por aplicación y los diagnósticos de red repetibles.';
 
   @override
   String get tcpNoRecommendation =>
-      'No value is recommended automatically. A read-back or one network test does not prove a performance benefit.';
+      'No se recomienda ningún valor automáticamente. Una lectura posterior o una sola prueba de red no demuestra una mejora de rendimiento.';
 
   @override
-  String get tcpLiveState => 'Live TCP state';
+  String get tcpLiveState => 'Estado TCP actual';
 
   @override
-  String get tcpTemplates => 'TCP templates';
+  String get tcpTemplates => 'Plantillas TCP';
 
   @override
-  String get tcpGlobal => 'Global TCP offloads';
+  String get tcpGlobal => 'Descargas TCP globales';
 
   @override
-  String get tcpAutotuning => 'Receive-window autotuning';
+  String get tcpAutotuning => 'Ajuste automático de la ventana de recepción';
 
   @override
-  String get tcpHeuristics => 'Window-scaling heuristics';
+  String get tcpHeuristics => 'Heurística de escalado de ventana';
 
   @override
-  String get tcpEcn => 'ECN capability';
+  String get tcpEcn => 'Compatibilidad con ECN';
 
   @override
-  String get tcpCongestion => 'Congestion control';
+  String get tcpCongestion => 'Control de congestión';
 
   @override
-  String get tcpRsc => 'Receive segment coalescing (RSC)';
+  String get tcpRsc => 'Coalescencia de segmentos recibidos (RSC)';
 
   @override
-  String get tcpRss => 'Global receive-side scaling (RSS)';
+  String get tcpRss => 'Escalado global del lado de recepción (RSS)';
 
   @override
-  String get tcpConfigure => 'Configure';
+  String get tcpConfigure => 'Configurar';
 
   @override
-  String get tcpChangePreview => 'TCP change preview';
+  String get tcpChangePreview => 'Vista previa del cambio TCP';
 
   @override
-  String get tcpCurrentValue => 'Current value';
+  String get tcpCurrentValue => 'Valor actual';
 
   @override
-  String get tcpNewValue => 'New value';
+  String get tcpNewValue => 'Nuevo valor';
 
   @override
   String get tcpExactRollbackNotice =>
-      'ZapTweaks will snapshot the exact current value, apply with one UAC request, read it back, journal it, and preserve exact rollback.';
+      'ZapTweaks guardará el valor actual exacto, aplicará el cambio con una solicitud de UAC, volverá a leerlo, lo registrará y conservará una restauración exacta.';
 
   @override
-  String get tcpUnsupported => 'Not exposed by this Windows build';
+  String get tcpUnsupported => 'No disponible en esta compilación de Windows';
 
   @override
-  String get tcpAdapterRss => 'Open per-adapter RSS controls';
+  String get tcpAdapterRss => 'Abrir controles RSS por adaptador';
 
   @override
-  String get rssAdapterState => 'Per-adapter RSS state';
+  String get rssAdapterState => 'Estado RSS por adaptador';
 
   @override
-  String get rssEnabled => 'RSS enabled';
+  String get rssEnabled => 'RSS habilitado';
 
   @override
-  String get rssProfile => 'RSS profile';
+  String get rssProfile => 'Perfil RSS';
 
   @override
-  String get rssQueuesProcessors => 'Queues/processors';
+  String get rssQueuesProcessors => 'Colas/procesadores';
 
   @override
-  String get tcpSettingOperationTitle => 'Configure TCP setting';
+  String get tcpSettingOperationTitle => 'Configurar ajuste TCP';
 
   @override
   String get tcpSettingOperationDescription =>
-      'Changes one capability-gated Windows TCP template or global offload value with exact rollback.';
+      'Cambia una plantilla TCP de Windows o un valor de descarga global admitido por el sistema, con restauración exacta.';
 
   @override
-  String get qosPolicies => 'Application QoS policies';
+  String get qosPolicies => 'Políticas QoS de aplicaciones';
 
   @override
   String get qosDescription =>
-      'Create explicit persistent QoS policies for one executable. Existing non-ZapTweaks policies remain read-only.';
+      'Crea políticas QoS persistentes y explícitas para un ejecutable. Las políticas existentes que no sean de ZapTweaks permanecen en modo de solo lectura.';
 
   @override
-  String get qosCreate => 'Create policy';
+  String get qosCreate => 'Crear política';
 
   @override
-  String get qosEdit => 'Edit';
+  String get qosEdit => 'Editar';
 
   @override
-  String get qosDelete => 'Delete';
+  String get qosDelete => 'Eliminar';
 
   @override
-  String get qosName => 'Policy name';
+  String get qosName => 'Nombre de la política';
 
   @override
-  String get qosAppPath => 'Executable path';
+  String get qosAppPath => 'Ruta del ejecutable';
 
   @override
-  String get qosProtocol => 'Protocol';
+  String get qosProtocol => 'Protocolo';
 
   @override
-  String get qosSourcePort => 'Source port (optional)';
+  String get qosSourcePort => 'Puerto de origen (opcional)';
 
   @override
-  String get qosDestinationPort => 'Destination port (optional)';
+  String get qosDestinationPort => 'Puerto de destino (opcional)';
 
   @override
-  String get qosDscp => 'DSCP 0–63 (optional)';
+  String get qosDscp => 'DSCP 0–63 (opcional)';
 
   @override
-  String get qosThrottleMbps => 'Throttle Mbit/s (optional)';
+  String get qosThrottleMbps => 'Límite en Mbit/s (opcional)';
 
   @override
   String get qosOwnedOnly =>
-      'Names must start with “ZapTweaks - ”. Only the selected policy is changed; unrelated QoS policies are never cleared.';
+      'Los nombres deben comenzar por «ZapTweaks - ». Solo se modifica la política seleccionada; las demás políticas QoS nunca se eliminan.';
 
   @override
   String get qosDeleteConfirm =>
-      'Delete the selected QoS policy? Its exact state is stored in the ZapTweaks journal for rollback.';
+      '¿Eliminar la política QoS seleccionada? Su estado exacto se guarda en el diario de ZapTweaks para poder restaurarlo.';
 
   @override
-  String get qosReadOnly => 'Read-only';
+  String get qosReadOnly => 'Solo lectura';
 
   @override
-  String get qosPolicyOperationTitle => 'Configure application QoS';
+  String get qosPolicyOperationTitle => 'Configurar QoS de aplicación';
 
   @override
   String get qosPolicyOperationDescription =>
-      'Creates, edits, or removes one validated persistent per-application QoS policy with exact rollback.';
+      'Crea, edita o elimina una política QoS persistente y validada por aplicación con restauración exacta.';
 
   @override
-  String get networkDiagnostics => 'Before/after diagnostics';
+  String get networkDiagnostics => 'Diagnóstico antes/después';
 
   @override
   String get networkDiagnosticsDescription =>
-      'Measure bounded TCP connection latency, jitter, loss, and HTTPS download throughput. Results are diagnostic evidence, not a recommendation.';
+      'Mide con límites la latencia de conexión TCP, la fluctuación, la pérdida y el rendimiento de descarga HTTPS. Los resultados son datos de diagnóstico, no una recomendación.';
 
   @override
-  String get diagnosticEndpoint => 'Direct HTTPS test-file URL';
+  String get diagnosticEndpoint => 'URL HTTPS directa del archivo de prueba';
 
   @override
   String get diagnosticNetworkCost =>
-      'The test downloads at most 10 MiB from the endpoint you enter. No third-party endpoint is built in.';
+      'La prueba descarga como máximo 10 MiB del extremo introducido. No se incluye ningún extremo de terceros.';
 
   @override
-  String get diagnosticBaseline => 'Run baseline';
+  String get diagnosticBaseline => 'Ejecutar medición inicial';
 
   @override
-  String get diagnosticComparison => 'Run comparison';
+  String get diagnosticComparison => 'Ejecutar comparación';
 
   @override
-  String get diagnosticCancel => 'Cancel measurement';
+  String get diagnosticCancel => 'Cancelar medición';
 
   @override
-  String get diagnosticLatency => 'Latency';
+  String get diagnosticLatency => 'Latencia';
 
   @override
-  String get diagnosticJitter => 'Jitter';
+  String get diagnosticJitter => 'Fluctuación';
 
   @override
-  String get diagnosticPacketLoss => 'Packet loss';
+  String get diagnosticPacketLoss => 'Pérdida de paquetes';
 
   @override
-  String get diagnosticThroughput => 'Throughput';
+  String get diagnosticThroughput => 'Rendimiento';
 
   @override
-  String get diagnosticRawSamples => 'Raw latency samples';
+  String get diagnosticRawSamples => 'Muestras de latencia sin procesar';
 
   @override
-  String get diagnosticDownloadedBytes => 'Downloaded bytes';
+  String get diagnosticDownloadedBytes => 'Bytes descargados';
 
   @override
-  String get diagnosticDifference => 'Difference B − A';
+  String get diagnosticDifference => 'Diferencia B − A';
 
   @override
   String get tcpAttribution =>
-      'Inspired by WINSPAR — powplowdevs (frozen revision)';
+      'Inspirado en WINSPAR — powplowdevs (revisión fijada)';
 
   @override
-  String get openRecoveryHistory => 'Open recovery and journal';
+  String get openRecoveryHistory => 'Abrir restauración y diario';
 }

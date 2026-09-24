@@ -33,7 +33,7 @@ No automatic recommendation, daemon, process-priority controller, broad QoS dele
 - Implementation baseline: `940cbac3e9c7a351ea00f25f1e3375e650cb7cd9`.
 - Binding specification: `docs/NEW PLAN.md`.
 - Milestone ledger: `docs/IMPLEMENTATION_STATUS.md`.
-- Current validation: `flutter analyze` clean, 237 tests passing, Windows Release build successful, and the release executable remains running through the startup smoke interval.
+- Current validation: `flutter analyze` clean, 238 tests passing (including all seven available UI languages), Windows Release build successful, and the release executable remains running through the startup smoke interval.
 - Release executable: `build/windows/x64/runner/Release/ZapTweaks.exe`.
 - All 346 legacy IDs remain preserved; the adapted catalog currently has 372 entries.
 - Mutating tests may run only in the existing VMs under `D:\VmLab`, through PowerShell Direct and targeted release payloads. Do not mutate the developer's physical machine.

@@ -1235,187 +1235,181 @@ class AppLocalizationsZh extends AppLocalizations {
       'Catalog merged from pinned CTT WinUtil, clean-room Winhance candidates, TweakHub, and requested official sources.';
 
   @override
-  String get tcpOptimizer => 'TCP Optimizer';
+  String get tcpOptimizer => 'TCP 优化器';
 
   @override
   String get tcpOptimizerDescription =>
-      'Inspect and configure Windows TCP templates, global offloads, per-application QoS, and repeatable network diagnostics.';
+      '检查并配置 Windows TCP 模板、全局卸载、每应用 QoS 和可重复的网络诊断。';
 
   @override
-  String get tcpNoRecommendation =>
-      'No value is recommended automatically. A read-back or one network test does not prove a performance benefit.';
+  String get tcpNoRecommendation => '不会自动推荐任何值。回读结果或单次网络测试不能证明性能有所提升。';
 
   @override
-  String get tcpLiveState => 'Live TCP state';
+  String get tcpLiveState => '实时 TCP 状态';
 
   @override
-  String get tcpTemplates => 'TCP templates';
+  String get tcpTemplates => 'TCP 模板';
 
   @override
-  String get tcpGlobal => 'Global TCP offloads';
+  String get tcpGlobal => '全局 TCP 卸载';
 
   @override
-  String get tcpAutotuning => 'Receive-window autotuning';
+  String get tcpAutotuning => '接收窗口自动调节';
 
   @override
-  String get tcpHeuristics => 'Window-scaling heuristics';
+  String get tcpHeuristics => '窗口缩放启发式设置';
 
   @override
-  String get tcpEcn => 'ECN capability';
+  String get tcpEcn => 'ECN 功能';
 
   @override
-  String get tcpCongestion => 'Congestion control';
+  String get tcpCongestion => '拥塞控制';
 
   @override
-  String get tcpRsc => 'Receive segment coalescing (RSC)';
+  String get tcpRsc => '接收段合并 (RSC)';
 
   @override
-  String get tcpRss => 'Global receive-side scaling (RSS)';
+  String get tcpRss => '全局接收端缩放 (RSS)';
 
   @override
-  String get tcpConfigure => 'Configure';
+  String get tcpConfigure => '配置';
 
   @override
-  String get tcpChangePreview => 'TCP change preview';
+  String get tcpChangePreview => 'TCP 更改预览';
 
   @override
-  String get tcpCurrentValue => 'Current value';
+  String get tcpCurrentValue => '当前值';
 
   @override
-  String get tcpNewValue => 'New value';
+  String get tcpNewValue => '新值';
 
   @override
   String get tcpExactRollbackNotice =>
-      'ZapTweaks will snapshot the exact current value, apply with one UAC request, read it back, journal it, and preserve exact rollback.';
+      'ZapTweaks 将保存当前准确值，通过一次 UAC 请求应用更改，回读并记入日志，同时保留准确回滚能力。';
 
   @override
-  String get tcpUnsupported => 'Not exposed by this Windows build';
+  String get tcpUnsupported => '此 Windows 版本未提供';
 
   @override
-  String get tcpAdapterRss => 'Open per-adapter RSS controls';
+  String get tcpAdapterRss => '打开每适配器 RSS 控制';
 
   @override
-  String get rssAdapterState => 'Per-adapter RSS state';
+  String get rssAdapterState => '每适配器 RSS 状态';
 
   @override
-  String get rssEnabled => 'RSS enabled';
+  String get rssEnabled => 'RSS 已启用';
 
   @override
-  String get rssProfile => 'RSS profile';
+  String get rssProfile => 'RSS 配置文件';
 
   @override
-  String get rssQueuesProcessors => 'Queues/processors';
+  String get rssQueuesProcessors => '队列/处理器';
 
   @override
-  String get tcpSettingOperationTitle => 'Configure TCP setting';
+  String get tcpSettingOperationTitle => '配置 TCP 设置';
 
   @override
   String get tcpSettingOperationDescription =>
-      'Changes one capability-gated Windows TCP template or global offload value with exact rollback.';
+      '更改一个系统支持的 Windows TCP 模板或全局卸载值，并支持准确回滚。';
 
   @override
-  String get qosPolicies => 'Application QoS policies';
+  String get qosPolicies => '应用程序 QoS 策略';
 
   @override
-  String get qosDescription =>
-      'Create explicit persistent QoS policies for one executable. Existing non-ZapTweaks policies remain read-only.';
+  String get qosDescription => '为一个可执行文件创建明确且持久的 QoS 策略。现有的非 ZapTweaks 策略保持只读。';
 
   @override
-  String get qosCreate => 'Create policy';
+  String get qosCreate => '创建策略';
 
   @override
-  String get qosEdit => 'Edit';
+  String get qosEdit => '编辑';
 
   @override
-  String get qosDelete => 'Delete';
+  String get qosDelete => '删除';
 
   @override
-  String get qosName => 'Policy name';
+  String get qosName => '策略名称';
 
   @override
-  String get qosAppPath => 'Executable path';
+  String get qosAppPath => '可执行文件路径';
 
   @override
-  String get qosProtocol => 'Protocol';
+  String get qosProtocol => '协议';
 
   @override
-  String get qosSourcePort => 'Source port (optional)';
+  String get qosSourcePort => '源端口（可选）';
 
   @override
-  String get qosDestinationPort => 'Destination port (optional)';
+  String get qosDestinationPort => '目标端口（可选）';
 
   @override
-  String get qosDscp => 'DSCP 0–63 (optional)';
+  String get qosDscp => 'DSCP 0–63（可选）';
 
   @override
-  String get qosThrottleMbps => 'Throttle Mbit/s (optional)';
+  String get qosThrottleMbps => '限速 Mbit/s（可选）';
 
   @override
-  String get qosOwnedOnly =>
-      'Names must start with “ZapTweaks - ”. Only the selected policy is changed; unrelated QoS policies are never cleared.';
+  String get qosOwnedOnly => '名称必须以“ZapTweaks - ”开头。仅更改所选策略；绝不会清除其他 QoS 策略。';
 
   @override
-  String get qosDeleteConfirm =>
-      'Delete the selected QoS policy? Its exact state is stored in the ZapTweaks journal for rollback.';
+  String get qosDeleteConfirm => '删除所选 QoS 策略？其准确状态将保存在 ZapTweaks 日志中，以便回滚。';
 
   @override
-  String get qosReadOnly => 'Read-only';
+  String get qosReadOnly => '只读';
 
   @override
-  String get qosPolicyOperationTitle => 'Configure application QoS';
+  String get qosPolicyOperationTitle => '配置应用程序 QoS';
 
   @override
   String get qosPolicyOperationDescription =>
-      'Creates, edits, or removes one validated persistent per-application QoS policy with exact rollback.';
+      '创建、编辑或删除一条经过验证的持久每应用 QoS 策略，并支持准确回滚。';
 
   @override
-  String get networkDiagnostics => 'Before/after diagnostics';
+  String get networkDiagnostics => '更改前/后诊断';
 
   @override
   String get networkDiagnosticsDescription =>
-      'Measure bounded TCP connection latency, jitter, loss, and HTTPS download throughput. Results are diagnostic evidence, not a recommendation.';
+      '在有限范围内测量 TCP 连接延迟、抖动、丢包和 HTTPS 下载吞吐量。结果是诊断依据，并非建议。';
 
   @override
-  String get diagnosticEndpoint => 'Direct HTTPS test-file URL';
+  String get diagnosticEndpoint => '测试文件的直接 HTTPS URL';
 
   @override
-  String get diagnosticNetworkCost =>
-      'The test downloads at most 10 MiB from the endpoint you enter. No third-party endpoint is built in.';
+  String get diagnosticNetworkCost => '测试最多从您输入的端点下载 10 MiB。未内置任何第三方端点。';
 
   @override
-  String get diagnosticBaseline => 'Run baseline';
+  String get diagnosticBaseline => '运行基准测试';
 
   @override
-  String get diagnosticComparison => 'Run comparison';
+  String get diagnosticComparison => '运行对比测试';
 
   @override
-  String get diagnosticCancel => 'Cancel measurement';
+  String get diagnosticCancel => '取消测量';
 
   @override
-  String get diagnosticLatency => 'Latency';
+  String get diagnosticLatency => '延迟';
 
   @override
-  String get diagnosticJitter => 'Jitter';
+  String get diagnosticJitter => '抖动';
 
   @override
-  String get diagnosticPacketLoss => 'Packet loss';
+  String get diagnosticPacketLoss => '丢包率';
 
   @override
-  String get diagnosticThroughput => 'Throughput';
+  String get diagnosticThroughput => '吞吐量';
 
   @override
-  String get diagnosticRawSamples => 'Raw latency samples';
+  String get diagnosticRawSamples => '原始延迟样本';
 
   @override
-  String get diagnosticDownloadedBytes => 'Downloaded bytes';
+  String get diagnosticDownloadedBytes => '已下载字节数';
 
   @override
-  String get diagnosticDifference => 'Difference B − A';
+  String get diagnosticDifference => '差值 B − A';
 
   @override
-  String get tcpAttribution =>
-      'Inspired by WINSPAR — powplowdevs (frozen revision)';
+  String get tcpAttribution => '灵感来自 WINSPAR — powplowdevs（固定修订版）';
 
   @override
-  String get openRecoveryHistory => 'Open recovery and journal';
+  String get openRecoveryHistory => '打开恢复和日志';
 }

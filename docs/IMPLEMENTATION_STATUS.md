@@ -20,7 +20,7 @@ The fourth `TCP Optimizer` tab is implemented clean-room from the frozen WINSPAR
 
 ## Last local verification
 
-- `flutter test -j 1`: 237 tests passed, including EN/IT key parity and the TCP Optimizer deep link at 150% scaling in a constrained laptop viewport.
+- `flutter test -j 1`: 238 tests passed, including TCP Optimizer translation coverage for all seven available languages and the deep link at 150% scaling in a constrained laptop viewport.
 - `flutter analyze`: no issues.
 - `flutter build windows --debug` and the current `flutter build windows --release`: succeeded; the current release executable also remained running through the startup smoke interval.
 - The main executable starts as `asInvoker`; real UAC helper smoke tests
