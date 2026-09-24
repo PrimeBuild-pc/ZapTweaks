@@ -629,7 +629,7 @@ class TweakController extends ChangeNotifier {
         final createRestorePoint =
             !_helperRestorePointAttempted && await _helperRestorePointDecision!;
         _helperRestorePointAttempted |= createRestorePoint;
-        return _setSystemTweak(
+        return await _setSystemTweak(
           descriptor,
           nextValue,
           createRestorePoint: createRestorePoint,
