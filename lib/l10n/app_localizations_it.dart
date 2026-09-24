@@ -851,6 +851,34 @@ class AppLocalizationsIt extends AppLocalizations {
       'Seleziona processori logici nel gruppo 0';
 
   @override
+  String get affinitySelectAll => 'Tutti i processori logici';
+
+  @override
+  String get affinityClear => 'Deseleziona';
+
+  @override
+  String get affinityPhysicalCores => 'Un thread per core fisico';
+
+  @override
+  String get affinityPerformanceCores => 'Performance core';
+
+  @override
+  String get affinityEfficiencyCores => 'Efficiency core';
+
+  @override
+  String get affinityParked => 'parcheggiato';
+
+  @override
+  String affinityLlcGroup(int index) {
+    return 'LLC / CCD $index';
+  }
+
+  @override
+  String affinityNumaNode(int index) {
+    return 'Nodo NUMA $index';
+  }
+
+  @override
   String get compatibleDevices => 'Dispositivi compatibili';
 
   @override

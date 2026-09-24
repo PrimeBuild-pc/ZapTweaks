@@ -1,9 +1,21 @@
 class ProcessorAddress {
-  const ProcessorAddress(this.group, this.number, {this.numaNode});
+  const ProcessorAddress(
+    this.group,
+    this.number, {
+    this.numaNode,
+    this.coreIndex,
+    this.lastLevelCacheIndex,
+    this.efficiencyClass,
+    this.parked = false,
+  });
 
   final int group;
   final int number;
   final int? numaNode;
+  final int? coreIndex;
+  final int? lastLevelCacheIndex;
+  final int? efficiencyClass;
+  final bool parked;
 
   @override
   bool operator ==(Object other) =>

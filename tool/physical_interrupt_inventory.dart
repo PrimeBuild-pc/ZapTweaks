@@ -52,6 +52,39 @@ Future<void> main() async {
             .map((item) => item.numaNode)
             .toSet()
             .length,
+        'smt': topology.hasSmt,
+        'heterogeneousCores': topology.hasHeterogeneousCores,
+        'efficiencyClasses':
+            topology.addresses
+                .map((item) => item.efficiencyClass)
+                .whereType<int>()
+                .toSet()
+                .toList()
+              ..sort(),
+        'lastLevelCaches':
+            topology.addresses
+                .map((item) => item.lastLevelCacheIndex)
+                .whereType<int>()
+                .toSet()
+                .toList()
+              ..sort(),
+        'processors':
+            (topology.addresses.toList()..sort((a, b) {
+                  final byGroup = a.group.compareTo(b.group);
+                  return byGroup != 0 ? byGroup : a.number.compareTo(b.number);
+                }))
+                .map(
+                  (item) => <String, Object?>{
+                    'group': item.group,
+                    'logicalProcessor': item.number,
+                    'core': item.coreIndex,
+                    'numaNode': item.numaNode,
+                    'lastLevelCache': item.lastLevelCacheIndex,
+                    'efficiencyClass': item.efficiencyClass,
+                    'parked': item.parked,
+                  },
+                )
+                .toList(),
       },
       'devices': devices,
     }),

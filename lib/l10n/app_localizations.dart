@@ -1607,6 +1607,54 @@ abstract class AppLocalizations {
   /// **'Select logical processors in processor group 0'**
   String get selectLogicalProcessors;
 
+  /// No description provided for @affinitySelectAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All logical processors'**
+  String get affinitySelectAll;
+
+  /// No description provided for @affinityClear.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get affinityClear;
+
+  /// No description provided for @affinityPhysicalCores.
+  ///
+  /// In en, this message translates to:
+  /// **'One thread per physical core'**
+  String get affinityPhysicalCores;
+
+  /// No description provided for @affinityPerformanceCores.
+  ///
+  /// In en, this message translates to:
+  /// **'Performance cores'**
+  String get affinityPerformanceCores;
+
+  /// No description provided for @affinityEfficiencyCores.
+  ///
+  /// In en, this message translates to:
+  /// **'Efficiency cores'**
+  String get affinityEfficiencyCores;
+
+  /// No description provided for @affinityParked.
+  ///
+  /// In en, this message translates to:
+  /// **'parked'**
+  String get affinityParked;
+
+  /// No description provided for @affinityLlcGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'LLC / CCD {index}'**
+  String affinityLlcGroup(int index);
+
+  /// No description provided for @affinityNumaNode.
+  ///
+  /// In en, this message translates to:
+  /// **'NUMA node {index}'**
+  String affinityNumaNode(int index);
+
   /// No description provided for @compatibleDevices.
   ///
   /// In en, this message translates to:

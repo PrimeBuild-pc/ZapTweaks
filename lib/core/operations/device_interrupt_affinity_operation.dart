@@ -269,6 +269,7 @@ class DeviceInterruptAffinityOperation implements OperationDefinition {
   @override
   List<String> get technicalSources => const <String>[
     'https://learn.microsoft.com/windows-hardware/drivers/kernel/interrupt-affinity-and-priority',
+    'https://learn.microsoft.com/windows/win32/api/processthreadsapi/nf-processthreadsapi-getsystemcpusetinformation',
     'https://github.com/spddl/GoInterruptPolicy/tree/f41fd1e325e1d3a386816c3586474e5f7bb63a25',
   ];
   @override

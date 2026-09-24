@@ -6,6 +6,7 @@ import '../../../core/plans/operation_plan.dart';
 import '../../../features/drivers/application/setupapi_device_inventory_service.dart';
 import '../../../features/drivers/domain/device_identity.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../../platform/windows/hardware_capability_validators.dart';
 import '../../../platform/windows/interrupt_configuration_service.dart';
 import '../../../platform/windows/processor_topology.dart';
 import '../../../platform/windows/registry_value_store.dart';
@@ -186,7 +187,13 @@ class _InterruptConfigurationPageState
     final strings = AppLocalizations.of(context);
     final current = _configurations[capability.device.instanceId];
     var policy = current?.devicePolicy ?? 0;
-    final processorCount = _topology?.processorsPerGroup[0] ?? 0;
+    final topology = _topology;
+    final processors =
+        (topology?.addresses ?? const <ProcessorAddress>{})
+            .where((item) => item.group == 0)
+            .toList()
+          ..sort((a, b) => a.number.compareTo(b.number));
+    final processorCount = topology?.processorsPerGroup[0] ?? 0;
     final currentMask =
         BigInt.tryParse(current?.assignmentMaskHex ?? '', radix: 16) ??
         BigInt.zero;
@@ -200,47 +207,144 @@ class _InterruptConfigurationPageState
         builder: (context, setDialogState) => ContentDialog(
           title: Text(strings.configureInterruptAffinity),
           constraints: const BoxConstraints(maxWidth: 680),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(strings.interruptChangeWarning),
-              const SizedBox(height: 12),
-              Text(strings.interruptPolicy),
-              ComboBox<int>(
-                value: policy,
-                isExpanded: true,
-                items: <ComboBoxItem<int>>[
-                  for (var value = 0; value <= 5; value++)
-                    ComboBoxItem<int>(
-                      value: value,
-                      child: Text(_policyName(strings, value)),
-                    ),
-                ],
-                onChanged: (value) => setDialogState(() => policy = value ?? 0),
-              ),
-              if (policy == 4) ...<Widget>[
-                const SizedBox(height: 12),
-                Text(strings.selectLogicalProcessors),
-                const SizedBox(height: 8),
-                Wrap(
-                  spacing: 6,
-                  runSpacing: 6,
-                  children: <Widget>[
-                    for (var cpu = 0; cpu < processorCount; cpu++)
-                      ToggleButton(
-                        checked: selected.contains(cpu),
-                        onChanged: (checked) => setDialogState(
-                          () => checked
-                              ? selected.add(cpu)
-                              : selected.remove(cpu),
+          content: ConstrainedBox(
+            constraints: const BoxConstraints(maxHeight: 520),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(strings.interruptChangeWarning),
+                  const SizedBox(height: 12),
+                  Text(strings.interruptPolicy),
+                  ComboBox<int>(
+                    value: policy,
+                    isExpanded: true,
+                    items: <ComboBoxItem<int>>[
+                      for (var value = 0; value <= 5; value++)
+                        ComboBoxItem<int>(
+                          value: value,
+                          child: Text(_policyName(strings, value)),
                         ),
-                        child: Text('CPU $cpu'),
-                      ),
+                    ],
+                    onChanged: (value) =>
+                        setDialogState(() => policy = value ?? 0),
+                  ),
+                  if (policy == 4) ...<Widget>[
+                    const SizedBox(height: 12),
+                    Text(strings.selectLogicalProcessors),
+                    const SizedBox(height: 8),
+                    Wrap(
+                      spacing: 6,
+                      runSpacing: 6,
+                      children: <Widget>[
+                        Button(
+                          onPressed: () => setDialogState(
+                            () => selected
+                              ..clear()
+                              ..addAll(processors.map((item) => item.number)),
+                          ),
+                          child: Text(strings.affinitySelectAll),
+                        ),
+                        Button(
+                          onPressed: () => setDialogState(selected.clear),
+                          child: Text(strings.affinityClear),
+                        ),
+                        if (topology?.hasSmt == true)
+                          Button(
+                            onPressed: () => setDialogState(
+                              () => selected
+                                ..clear()
+                                ..addAll(
+                                  topology!.primaryThreads
+                                      .where((item) => item.group == 0)
+                                      .map((item) => item.number),
+                                ),
+                            ),
+                            child: Text(strings.affinityPhysicalCores),
+                          ),
+                        if (topology?.hasHeterogeneousCores ==
+                            true) ...<Widget>[
+                          Button(
+                            onPressed: () => setDialogState(
+                              () => selected
+                                ..clear()
+                                ..addAll(
+                                  topology!.performanceCores
+                                      .where((item) => item.group == 0)
+                                      .map((item) => item.number),
+                                ),
+                            ),
+                            child: Text(strings.affinityPerformanceCores),
+                          ),
+                          Button(
+                            onPressed: () => setDialogState(
+                              () => selected
+                                ..clear()
+                                ..addAll(
+                                  topology!.efficiencyCores
+                                      .where((item) => item.group == 0)
+                                      .map((item) => item.number),
+                                ),
+                            ),
+                            child: Text(strings.affinityEfficiencyCores),
+                          ),
+                        ],
+                        for (final entry
+                            in topology?.addressesByLastLevelCache(0).entries ??
+                                const <MapEntry<int, Set<ProcessorAddress>>>[])
+                          Button(
+                            onPressed: () => setDialogState(
+                              () => selected
+                                ..clear()
+                                ..addAll(
+                                  entry.value.map((item) => item.number),
+                                ),
+                            ),
+                            child: Text(strings.affinityLlcGroup(entry.key)),
+                          ),
+                        for (final entry
+                            in (topology?.addressesByNumaNode(0).length ?? 0) >
+                                    1
+                                ? topology!.addressesByNumaNode(0).entries
+                                : const <
+                                    MapEntry<int, Set<ProcessorAddress>>
+                                  >[])
+                          Button(
+                            onPressed: () => setDialogState(
+                              () => selected
+                                ..clear()
+                                ..addAll(
+                                  entry.value.map((item) => item.number),
+                                ),
+                            ),
+                            child: Text(strings.affinityNumaNode(entry.key)),
+                          ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Wrap(
+                      spacing: 6,
+                      runSpacing: 6,
+                      children: <Widget>[
+                        for (final processor in processors)
+                          ToggleButton(
+                            checked: selected.contains(processor.number),
+                            onChanged: (checked) => setDialogState(
+                              () => checked
+                                  ? selected.add(processor.number)
+                                  : selected.remove(processor.number),
+                            ),
+                            child: Text(
+                              _processorLabel(strings, topology, processor),
+                            ),
+                          ),
+                      ],
+                    ),
                   ],
-                ),
-              ],
-            ],
+                ],
+              ),
+            ),
           ),
           actions: <Widget>[
             Button(
@@ -275,6 +379,26 @@ class _InterruptConfigurationPageState
         },
       ),
     );
+  }
+
+  String _processorLabel(
+    AppLocalizations strings,
+    ProcessorTopology? topology,
+    ProcessorAddress processor,
+  ) {
+    final details = <String>['CPU ${processor.number}'];
+    if (processor.coreIndex != null) details.add('C${processor.coreIndex}');
+    if (topology?.hasHeterogeneousCores == true) {
+      details.add(
+        topology!.performanceCores.contains(processor) ? 'P-core' : 'E-core',
+      );
+    }
+    if (processor.numaNode != null) details.add('N${processor.numaNode}');
+    if (processor.lastLevelCacheIndex != null) {
+      details.add('LLC${processor.lastLevelCacheIndex}');
+    }
+    if (processor.parked) details.add(strings.affinityParked);
+    return details.join(' · ');
   }
 
   String _priorityName(AppLocalizations strings, int value) => switch (value) {

@@ -849,6 +849,34 @@ class AppLocalizationsDe extends AppLocalizations {
       'Select logical processors in processor group 0';
 
   @override
+  String get affinitySelectAll => 'All logical processors';
+
+  @override
+  String get affinityClear => 'Clear';
+
+  @override
+  String get affinityPhysicalCores => 'One thread per physical core';
+
+  @override
+  String get affinityPerformanceCores => 'Performance cores';
+
+  @override
+  String get affinityEfficiencyCores => 'Efficiency cores';
+
+  @override
+  String get affinityParked => 'parked';
+
+  @override
+  String affinityLlcGroup(int index) {
+    return 'LLC / CCD $index';
+  }
+
+  @override
+  String affinityNumaNode(int index) {
+    return 'NUMA node $index';
+  }
+
+  @override
   String get compatibleDevices => 'Compatible devices';
 
   @override
