@@ -26,12 +26,28 @@ class MetricCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text(title, style: FluentTheme.of(context).typography.bodyStrong),
+            Text(
+              title,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: FluentTheme.of(context).typography.bodyStrong,
+            ),
             const SizedBox(height: 6),
-            Text(value, style: FluentTheme.of(context).typography.titleLarge),
+            Text(
+              value,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: FluentTheme.of(context).typography.titleLarge,
+            ),
             const SizedBox(height: 2),
-            Text(subtitle),
-            const SizedBox(height: 10),
+            Expanded(
+              child: Text(
+                subtitle,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            const SizedBox(height: 8),
             SizedBox(
               height: 64,
               width: double.infinity,

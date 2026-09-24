@@ -1,1 +1,0 @@
-Start-Process "control.exe" -ArgumentList "main.cpl ,2"

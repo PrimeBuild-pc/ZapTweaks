@@ -18,6 +18,22 @@ class AppLocalizationsDe extends AppLocalizations {
   String get languageDescription => 'Wähle die Sprache für ZapTweaks.';
 
   @override
+  String get appearance => 'Appearance';
+
+  @override
+  String get appearanceDescription =>
+      'Follow Windows or use a fixed light or dark app theme.';
+
+  @override
+  String get themeSystem => 'Windows default';
+
+  @override
+  String get themeLight => 'Light';
+
+  @override
+  String get themeDark => 'Dark';
+
+  @override
   String get settings => 'Einstellungen';
 
   @override
@@ -355,4 +371,1066 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get startingUp => 'ZapTweaks wird gestartet';
+
+  @override
+  String get expertMode => 'Expert mode';
+
+  @override
+  String get expertModeDescription =>
+      'Show advanced operations and external tools. Safety restrictions still apply.';
+
+  @override
+  String get searchOperations => 'Search operations';
+
+  @override
+  String get searchResults => 'Search results';
+
+  @override
+  String get searchSections => 'Sections and integrated tools';
+
+  @override
+  String get searchApps => 'Search apps';
+
+  @override
+  String get searchCatalog => 'Operations and external tools';
+
+  @override
+  String get searchOpenResult => 'Open';
+
+  @override
+  String get searchExpertRequired => 'Enable Expert mode to open';
+
+  @override
+  String get noSearchResults =>
+      'No matching sections, apps, operations, or tools.';
+
+  @override
+  String get operationTaskbarEndTaskTitle => 'Taskbar End task';
+
+  @override
+  String get operationTaskbarEndTaskDescription =>
+      'Show End task in taskbar app context menus.';
+
+  @override
+  String get appStore => 'App store';
+
+  @override
+  String get appManagement => 'Installed apps';
+
+  @override
+  String get windowsAppTools => 'Windows app tools';
+
+  @override
+  String get optionalFeatures => 'Optional features';
+
+  @override
+  String get searchOptionalFeatures => 'Search optional features';
+
+  @override
+  String get scanOptionalFeatures => 'Scan features (UAC)';
+
+  @override
+  String get optionalFeaturesUacNotice =>
+      'Feature inventory and each change run through the allowlisted helper. No change occurs during scanning.';
+
+  @override
+  String get confirmOptionalFeatureChange => 'Confirm optional feature change';
+
+  @override
+  String confirmOptionalFeatureChangeMessage(Object name, Object action) {
+    return 'Feature: $name\nAction: $action\n\nWindows may require a restart. The previous enabled state is captured before the change.';
+  }
+
+  @override
+  String get enable => 'Enable';
+
+  @override
+  String get disable => 'Disable';
+
+  @override
+  String get enabled => 'Enabled';
+
+  @override
+  String get disabled => 'Disabled';
+
+  @override
+  String get enablePending => 'Enable pending restart';
+
+  @override
+  String get disablePending => 'Disable pending restart';
+
+  @override
+  String get startupApps => 'Startup apps';
+
+  @override
+  String get searchStartupApps => 'Search startup apps';
+
+  @override
+  String get openStartupSettings => 'Open Startup Settings';
+
+  @override
+  String get openTaskManagerStartup => 'Open Task Manager Startup';
+
+  @override
+  String get startupInventoryNotice =>
+      'Read-only startup inventory. Use Windows Settings or Task Manager to change an entry.';
+
+  @override
+  String get guidedSetup => 'Guided setup';
+
+  @override
+  String get wizardInventory => 'Inventory';
+
+  @override
+  String get wizardBaseline => 'Baseline';
+
+  @override
+  String get wizardWindowsUpdate => 'Windows Update';
+
+  @override
+  String get wizardDrivers => 'Driver check';
+
+  @override
+  String get wizardApplications => 'Applications';
+
+  @override
+  String get wizardDebloat => 'Selective debloat';
+
+  @override
+  String get wizardPrivacyInterface => 'Privacy and interface';
+
+  @override
+  String get wizardPreview => 'Plan preview';
+
+  @override
+  String get wizardApply => 'Apply';
+
+  @override
+  String get wizardReport => 'Final report';
+
+  @override
+  String get wizardInventoryDescription =>
+      'Read hardware, installed winget packages, and present devices before making choices.';
+
+  @override
+  String get runInventory => 'Run inventory';
+
+  @override
+  String inventorySummary(Object apps, Object devices) {
+    return 'Detected $apps winget packages and $devices present devices.';
+  }
+
+  @override
+  String get wizardUpdateNotice =>
+      'Review Windows Update before driver and app changes. ZapTweaks does not install updates automatically.';
+
+  @override
+  String get openWindowsUpdate => 'Open Windows Update';
+
+  @override
+  String get updatesReviewed => 'I reviewed Windows Update';
+
+  @override
+  String driverInventorySummary(Object devices, Object missing) {
+    return 'Present devices: $devices\nDevices without a bound INF: $missing';
+  }
+
+  @override
+  String get wizardDebloatNotice =>
+      'No debloat choice is implicit. Only current-user AppX packages with a verified restore source can be selected here; other removals remain available from App → Installed apps with a separate preview.';
+
+  @override
+  String get wizardPrivacyNotice =>
+      'Privacy and interface settings remain unchanged unless selected explicitly below.';
+
+  @override
+  String get noAppsSelected =>
+      'No operations selected. The wizard will make no changes.';
+
+  @override
+  String planContains(Object count) {
+    return 'The plan contains $count explicit operation(s):';
+  }
+
+  @override
+  String readyToApply(Object count) {
+    return 'Ready to apply $count app operation(s). Each package is verified after winget completes.';
+  }
+
+  @override
+  String get noPlanReport => 'Finished without applying a plan.';
+
+  @override
+  String get planStatus => 'Plan status';
+
+  @override
+  String get applyPlan => 'Apply plan';
+
+  @override
+  String get back => 'Back';
+
+  @override
+  String get finish => 'Finish';
+
+  @override
+  String get recovery => 'Recovery';
+
+  @override
+  String get diagnosticTools => 'Diagnostic tools';
+
+  @override
+  String get repairComponentStore => 'Repair Windows component store';
+
+  @override
+  String get repairComponentStoreDescription =>
+      'Runs DISM RestoreHealth, then a separate ScanHealth verification. This can take a long time.';
+
+  @override
+  String get repairSystemFiles => 'Repair protected system files';
+
+  @override
+  String get repairSystemFilesDescription =>
+      'Runs SFC scan and repair, then a separate verification pass.';
+
+  @override
+  String get confirmSystemRepair => 'Confirm Windows repair';
+
+  @override
+  String get systemRepairWarning =>
+      'The repair may replace corrupted Windows components and cannot be rolled back by ZapTweaks. Do not turn off the PC while it runs.';
+
+  @override
+  String get systemRepairVerified =>
+      'Repair completed and the verification pass succeeded.';
+
+  @override
+  String get runRepair => 'Run repair';
+
+  @override
+  String get operationCompleted => 'Operation completed';
+
+  @override
+  String get captureEtwTrace => 'Capture performance trace';
+
+  @override
+  String get captureEtwTraceDescription =>
+      'Records a bounded Windows Performance Recorder trace and produces a DPC/ISR diagnostic report on demand. No monitor remains active.';
+
+  @override
+  String get dpcLatencyAnalyzer => 'DPC / ISR latency analyzer';
+
+  @override
+  String get dpcLatencyAnalyzerDescription =>
+      'Captures ETW on demand and reports DPC, ISR, hard-fault and context-switch activity, per-processor distribution, observed kernel-module names and ETW providers.';
+
+  @override
+  String get diagnosticNotCausality =>
+      'Diagnostic signal, not a latency verdict';
+
+  @override
+  String get diagnosticNotCausalityDescription =>
+      'Counts and observed module names help narrow an investigation but do not prove that a driver caused latency. Confirm with repeatable A/B/A traces and WPA or vendor tooling.';
+
+  @override
+  String get startDpcCapture => 'Start capture';
+
+  @override
+  String get openTraceFolder => 'Open trace folder';
+
+  @override
+  String captureInProgress(int seconds) {
+    return 'Capturing for $seconds seconds… keep the workload running.';
+  }
+
+  @override
+  String get traceDuration => 'Observed duration';
+
+  @override
+  String get hardFaults => 'Hard faults';
+
+  @override
+  String get contextSwitches => 'Context switches';
+
+  @override
+  String get totalEvents => 'Total ETW events';
+
+  @override
+  String get kernelModulesObserved =>
+      'Kernel modules observed in DPC/ISR events';
+
+  @override
+  String get noKernelModulesObserved =>
+      'The exported events did not expose kernel module names. Open the ETL in WPA for symbol-aware analysis.';
+
+  @override
+  String get dpcIsrByProcessor => 'DPC/ISR events by logical processor';
+
+  @override
+  String get noProcessorDistribution =>
+      'Processor IDs were not present in the exported events.';
+
+  @override
+  String get topEtwProviders => 'Top ETW providers';
+
+  @override
+  String get noProviderData => 'No provider data was available.';
+
+  @override
+  String etwTraceSaved(Object path) {
+    return 'Trace saved to $path';
+  }
+
+  @override
+  String get cleanupDiagnosticTraces => 'Delete diagnostic traces';
+
+  @override
+  String get cleanupDiagnosticTracesDescription =>
+      'Scans only ZapTweaks trace files, shows the exact file count and byte total, then deletes them after confirmation.';
+
+  @override
+  String cleanupTracePreview(int count, int bytes) {
+    return 'Delete $count ZapTweaks trace files ($bytes bytes)? This cannot be undone.';
+  }
+
+  @override
+  String get cleanupTracesCompleted =>
+      'The previewed diagnostic traces were deleted and verified absent.';
+
+  @override
+  String get noDiagnosticTraces => 'No ZapTweaks diagnostic traces were found.';
+
+  @override
+  String get hardwareMonitor => 'Hardware monitor';
+
+  @override
+  String get dedicatedVramUsage => 'Dedicated GPU memory in use';
+
+  @override
+  String get dedicatedVramUsageDescription =>
+      'Takes one Windows GPU performance-counter snapshot. Nothing keeps running afterward.';
+
+  @override
+  String vramUsageValue(Object megabytes) {
+    return '$megabytes MB';
+  }
+
+  @override
+  String get captureNow => 'Capture now';
+
+  @override
+  String get tweaks => 'Tweaks';
+
+  @override
+  String get searchPowerPlans => 'Search power plans';
+
+  @override
+  String get activePowerPlan => 'Active';
+
+  @override
+  String get activate => 'Activate';
+
+  @override
+  String get details => 'Details';
+
+  @override
+  String get compare => 'Compare';
+
+  @override
+  String get noPowerDifferences => 'No AC/DC value differences were found.';
+
+  @override
+  String get importPowerPlan => 'Import .pow';
+
+  @override
+  String get importPowerPlanDescription =>
+      'Imports one locally selected power plan after bounded, hash-verified staging.';
+
+  @override
+  String get exportActivePowerPlan => 'Export active plan';
+
+  @override
+  String get restoreDefaultPowerSchemes => 'Restore Windows defaults';
+
+  @override
+  String get restoreDefaultPowerSchemesDescription =>
+      'Exports and hashes every current scheme before asking Windows to restore its defaults.';
+
+  @override
+  String get restoreDefaultPowerSchemesWarning =>
+      'Replace all current power schemes with Windows defaults? ZapTweaks will first export every scheme for exact rollback.';
+
+  @override
+  String get interruptConfiguration => 'MSI Utility v3 & Interrupt Affinity';
+
+  @override
+  String get interruptConfigurationDescription =>
+      'Advanced, capability-gated MSI and group-0 interrupt-affinity controls for present display, network, media, USB host, and HD audio devices. No value is recommended automatically.';
+
+  @override
+  String get configureMsi => 'Configure MSI';
+
+  @override
+  String get enableMsi => 'Enable message-signaled interrupts';
+
+  @override
+  String get configureInterruptAffinity => 'Configure affinity';
+
+  @override
+  String get interruptChangeWarning =>
+      'An invalid interrupt policy can make the device unavailable until rollback or reboot. ZapTweaks validates hardware limits and snapshots the exact current values.';
+
+  @override
+  String get affinityMaskHint => 'Group-0 hexadecimal mask, for example 3';
+
+  @override
+  String get invalidAffinityMask =>
+      'Enter a non-zero canonical hexadecimal mask of at most 64 bits.';
+
+  @override
+  String msiRange(int maximum) {
+    return 'Message count must be between 1 and $maximum.';
+  }
+
+  @override
+  String get noCompatibleInterruptDevices =>
+      'No present display, network, media, USB host, or HD audio PCI device exposes compatible interrupt capabilities.';
+
+  @override
+  String interruptCapabilities(
+    Object line,
+    Object msi,
+    Object msix,
+    int maximum,
+  ) {
+    return 'Hardware: Line $line · MSI $msi · MSI-X $msix · maximum messages $maximum';
+  }
+
+  @override
+  String get messageNumberLimit => 'Message number limit';
+
+  @override
+  String get interruptPriority => 'Interrupt priority policy';
+
+  @override
+  String get interruptPriorityDefault => 'Undefined / driver default';
+
+  @override
+  String get interruptPriorityLow => 'Low';
+
+  @override
+  String get interruptPriorityNormal => 'Normal';
+
+  @override
+  String get interruptPriorityHigh => 'High';
+
+  @override
+  String get interruptPolicy => 'Processor affinity policy';
+
+  @override
+  String get interruptPolicyDefault => 'Machine default';
+
+  @override
+  String get interruptPolicyAllClose => 'All close processors';
+
+  @override
+  String get interruptPolicyOneClose => 'One close processor';
+
+  @override
+  String get interruptPolicyAllProcessors => 'All processors';
+
+  @override
+  String get interruptPolicySpecified => 'Specified processors (group 0)';
+
+  @override
+  String get interruptPolicySpread => 'Spread messages across processors';
+
+  @override
+  String get selectLogicalProcessors =>
+      'Select logical processors in processor group 0';
+
+  @override
+  String get affinitySelectAll => 'All logical processors';
+
+  @override
+  String get affinityClear => 'Clear';
+
+  @override
+  String get affinityPhysicalCores => 'One thread per physical core';
+
+  @override
+  String get affinityPerformanceCores => 'Performance cores';
+
+  @override
+  String get affinityEfficiencyCores => 'Efficiency cores';
+
+  @override
+  String get affinityParked => 'parked';
+
+  @override
+  String affinityLlcGroup(int index) {
+    return 'LLC / CCD $index';
+  }
+
+  @override
+  String affinityNumaNode(int index) {
+    return 'NUMA node $index';
+  }
+
+  @override
+  String get compatibleDevices => 'Compatible devices';
+
+  @override
+  String get msiEnabledDevices => 'MSI currently enabled';
+
+  @override
+  String get logicalProcessors => 'Logical processors';
+
+  @override
+  String get searchDevices => 'Search devices, instance IDs, or driver INF';
+
+  @override
+  String get driverUnknown => 'Driver INF unavailable';
+
+  @override
+  String currentInterruptConfiguration(
+    Object mode,
+    Object messages,
+    Object priority,
+    Object policy,
+    Object mask,
+  ) {
+    return 'Current: $mode · messages $messages · priority $priority · policy $policy · mask $mask';
+  }
+
+  @override
+  String get renamePowerPlan => 'Rename power plan';
+
+  @override
+  String get renamePowerPlanDescription =>
+      'Changes only the selected plan\'s display name and preserves the original name for rollback.';
+
+  @override
+  String get rename => 'Rename';
+
+  @override
+  String get duplicate => 'Duplicate';
+
+  @override
+  String get duplicatePowerPlan => 'Duplicate power plan';
+
+  @override
+  String get duplicatePowerPlanDescription =>
+      'Creates and verifies a PowrProf copy. Rollback is best effort because Windows assigns its GUID during creation.';
+
+  @override
+  String get apply => 'Apply';
+
+  @override
+  String get edit => 'Edit';
+
+  @override
+  String powerValueRange(int maximum) {
+    return 'Values must be between 0 and $maximum.';
+  }
+
+  @override
+  String get powerSettingConfigure => 'Configure any bounded power setting';
+
+  @override
+  String get powerSettingConfigureDescription =>
+      'Edits a setting exposed by PowrProf only when Windows provides live minimum, maximum, and increment metadata.';
+
+  @override
+  String get searchPowerSettings =>
+      'Search settings, descriptions, subgroups, or GUIDs';
+
+  @override
+  String get allPowerSubgroups => 'All power-setting groups';
+
+  @override
+  String powerSettingCount(int count) {
+    return '$count settings';
+  }
+
+  @override
+  String powerSettingOptions(int count) {
+    return '$count Windows-defined options';
+  }
+
+  @override
+  String get backToPowerPlans => 'Back to power plans';
+
+  @override
+  String get powerPlanEditorHint =>
+      'Duplicate a plan to create your custom profile, then open Details and edit its hidden AC/DC settings one by one.';
+
+  @override
+  String powerSettingRange(Object minimum, Object maximum, Object increment) {
+    return 'Range $minimum–$maximum, step $increment';
+  }
+
+  @override
+  String get powerSettingBoundsUnavailable =>
+      'Windows did not expose safe values or bounds for this setting.';
+
+  @override
+  String get delete => 'Delete';
+
+  @override
+  String get deletePowerPlan => 'Delete power plan';
+
+  @override
+  String get deletePowerPlanDescription =>
+      'Exports the selected inactive plan before deleting it and preserves the backup for exact rollback.';
+
+  @override
+  String deletePowerPlanWarning(Object name) {
+    return 'Delete $name? ZapTweaks will export a recovery copy first.';
+  }
+
+  @override
+  String get firmwareTemperatures => 'Firmware thermal zones';
+
+  @override
+  String get firmwareTemperaturesDescription =>
+      'Reads ACPI thermal zones once. Availability and sensor meaning depend on the PC firmware; values are not labeled as CPU or GPU temperatures.';
+
+  @override
+  String get noThermalSensors =>
+      'No ACPI thermal zones were exposed by this PC.';
+
+  @override
+  String get driverInventory => 'Driver Store inventory';
+
+  @override
+  String get installLocalDriver => 'Install a local driver package';
+
+  @override
+  String get installLocalDriverDescription =>
+      'Verify a local INF, its signed catalog, and hardware compatibility before installation.';
+
+  @override
+  String get selectDevice => 'Select a present device';
+
+  @override
+  String get localInfPath => 'Absolute path to the local .inf file';
+
+  @override
+  String get verifyDriverPackage => 'Verify package';
+
+  @override
+  String verifiedDriverPublisher(Object publisher, Object sha256) {
+    return 'Verified publisher: $publisher\nINF SHA-256: $sha256';
+  }
+
+  @override
+  String get confirmLocalDriverInstall => 'Confirm local driver installation';
+
+  @override
+  String confirmLocalDriverInstallMessage(
+    Object device,
+    Object publisher,
+    Object sha256,
+  ) {
+    return 'Device: $device\nSigned publisher: $publisher\nINF SHA-256: $sha256\n\nWindows may change the active driver and require a restart. Rollback is best effort.';
+  }
+
+  @override
+  String get driverTools => 'Assisted flows';
+
+  @override
+  String get temporaryDriverUpdatesPause =>
+      'Temporarily exclude drivers from Windows quality updates';
+
+  @override
+  String get temporaryDriverUpdatesPauseDescription =>
+      'Uses the documented Windows Update policy for 7 or 30 days. ZapTweaks records the exact previous value and shows a reminder when the pause expires; restoration requires your confirmation.';
+
+  @override
+  String get driverUpdatePolicy => 'Windows Update driver policy';
+
+  @override
+  String get driverUpdatePolicyDescription =>
+      'Exclude device drivers from Windows quality updates for 7 days, 30 days, or until you explicitly restore the exact previous policy.';
+
+  @override
+  String get disableUntilRestored => 'Disable until restored';
+
+  @override
+  String get driverUpdatePausePermanent =>
+      'Driver updates remain excluded until you restore the previous policy.';
+
+  @override
+  String get driverUpdatePauseActive => 'Driver update pause active';
+
+  @override
+  String get driverUpdatePauseExpired =>
+      'Driver update pause expired — restore the previous policy';
+
+  @override
+  String driverUpdatePauseUntil(Object date) {
+    return 'Scheduled expiration: $date';
+  }
+
+  @override
+  String get pauseSevenDays => 'Pause for 7 days';
+
+  @override
+  String get pauseThirtyDays => 'Pause for 30 days';
+
+  @override
+  String get restoreDriverUpdates => 'Restore previous policy';
+
+  @override
+  String get assistedDriverFlows => 'Verified and assisted driver flows';
+
+  @override
+  String get assistedDriverFlowsDescription =>
+      'ZapTweaks opens only vendor-owned sources and Windows surfaces. It does not run mutable remote scripts, flash firmware, or silently remove driver components.';
+
+  @override
+  String get amdDriverFlow => 'AMD drivers and software';
+
+  @override
+  String get amdDriverFlowDescription =>
+      'Open AMD\'s official driver selector. Verify the detected product before downloading.';
+
+  @override
+  String get nvidiaDriverFlow => 'NVIDIA drivers';
+
+  @override
+  String get nvidiaDriverFlowDescription =>
+      'Open NVIDIA\'s official manual driver search. Clean installation remains an explicit vendor-installer choice.';
+
+  @override
+  String get intelDriverFlow => 'Intel Driver & Support Assistant';
+
+  @override
+  String get intelDriverFlowDescription =>
+      'Open Intel\'s official detection and support flow.';
+
+  @override
+  String get windowsOptionalDrivers => 'Windows optional driver updates';
+
+  @override
+  String get windowsOptionalDriversDescription =>
+      'Review optional driver updates in Windows Settings; nothing is selected automatically.';
+
+  @override
+  String get deviceManager => 'Device Manager';
+
+  @override
+  String get deviceManagerDescription =>
+      'Inspect devices, status codes, active drivers, and manual rollback options.';
+
+  @override
+  String get openOfficialSource => 'Open official source';
+
+  @override
+  String get openWindowsPanel => 'Open Windows panel';
+
+  @override
+  String get searchDrivers => 'Search Driver Store';
+
+  @override
+  String get driverStoreSafetyNotice =>
+      'Only signed, unbound third-party packages can be removed here. ZapTweaks exports and hashes the package first; restoration is best effort because Windows may assign a different published name.';
+
+  @override
+  String get signed => 'Signed';
+
+  @override
+  String get unsigned => 'Unsigned';
+
+  @override
+  String get driverInUse => 'In use';
+
+  @override
+  String get driverUnbound => 'Unbound';
+
+  @override
+  String get exportAndRemove => 'Export and remove';
+
+  @override
+  String get confirmDriverRemoval => 'Confirm Driver Store removal';
+
+  @override
+  String confirmDriverRemovalMessage(
+    Object published,
+    Object inf,
+    Object publisher,
+    Object version,
+  ) {
+    return 'Published name: $published\nOriginal INF: $inf\nPublisher: $publisher\nVersion: $version\n\nZapTweaks will export and hash the package before removal. A restart may be required; restoration is best effort.';
+  }
+
+  @override
+  String get searchInstalledApps => 'Search installed apps';
+
+  @override
+  String get scanAllUsers => 'Scan all users (UAC)';
+
+  @override
+  String get systemScopesComplete =>
+      'All-user and provisioned AppX scopes are included.';
+
+  @override
+  String get systemScopesIncomplete =>
+      'Current-user and winget inventory only. Scan all users to include system AppX scopes.';
+
+  @override
+  String get currentUser => 'Current user';
+
+  @override
+  String get allUsers => 'All users';
+
+  @override
+  String get provisioned => 'Provisioned';
+
+  @override
+  String get confirmAppxRemoval => 'Confirm AppX removal';
+
+  @override
+  String confirmAppxRemovalMessage(
+    Object name,
+    Object id,
+    Object scope,
+    Object recovery,
+  ) {
+    return 'App: $name\nIdentity: $id\nScope: $scope\nRecovery: $recovery\n\nOnly the listed scope will be removed. This operation has no exact rollback.';
+  }
+
+  @override
+  String get reinstallable => 'Verified restore source available';
+
+  @override
+  String get notReinstallable => 'No verified restore source';
+
+  @override
+  String get allCategories => 'All categories';
+
+  @override
+  String get installedOnly => 'Installed only';
+
+  @override
+  String get refreshInventory => 'Refresh inventory';
+
+  @override
+  String get install => 'Install';
+
+  @override
+  String get uninstall => 'Uninstall';
+
+  @override
+  String get uninstallSelected => 'Uninstall selected';
+
+  @override
+  String get openOfficialPage => 'Open official page';
+
+  @override
+  String get installed => 'Installed';
+
+  @override
+  String get notInstalled => 'Not installed';
+
+  @override
+  String get appInventoryUnavailable =>
+      'Installed-app detection is unavailable.';
+
+  @override
+  String get confirmBulkUninstall => 'Confirm bulk uninstall';
+
+  @override
+  String confirmBulkUninstallMessage(Object apps) {
+    return 'The following apps will be uninstalled:\n\n$apps';
+  }
+
+  @override
+  String get appCatalogSources =>
+      'Catalog merged from pinned CTT WinUtil, clean-room Winhance candidates, TweakHub, and requested official sources.';
+
+  @override
+  String get tcpOptimizer => 'TCP-Optimierer';
+
+  @override
+  String get tcpOptimizerDescription =>
+      'Windows-TCP-Vorlagen, globale Offloads, QoS pro Anwendung und wiederholbare Netzwerkdiagnosen prüfen und konfigurieren.';
+
+  @override
+  String get tcpNoRecommendation =>
+      'Kein Wert wird automatisch empfohlen. Ein Auslesen oder ein einzelner Netzwerktest belegt keinen Leistungsvorteil.';
+
+  @override
+  String get tcpLiveState => 'Aktueller TCP-Status';
+
+  @override
+  String get tcpTemplates => 'TCP-Vorlagen';
+
+  @override
+  String get tcpGlobal => 'Globale TCP-Offloads';
+
+  @override
+  String get tcpAutotuning => 'Autotuning des Empfangsfensters';
+
+  @override
+  String get tcpHeuristics => 'Heuristik der Fensterskalierung';
+
+  @override
+  String get tcpEcn => 'ECN-Unterstützung';
+
+  @override
+  String get tcpCongestion => 'Überlastungssteuerung';
+
+  @override
+  String get tcpRsc => 'Empfangssegment-Zusammenführung (RSC)';
+
+  @override
+  String get tcpRss => 'Globales Receive-Side Scaling (RSS)';
+
+  @override
+  String get tcpConfigure => 'Konfigurieren';
+
+  @override
+  String get tcpChangePreview => 'Vorschau der TCP-Änderung';
+
+  @override
+  String get tcpCurrentValue => 'Aktueller Wert';
+
+  @override
+  String get tcpNewValue => 'Neuer Wert';
+
+  @override
+  String get tcpExactRollbackNotice =>
+      'ZapTweaks sichert den exakten aktuellen Wert, wendet die Änderung mit einer UAC-Anfrage an, liest sie zurück, protokolliert sie und ermöglicht die exakte Wiederherstellung.';
+
+  @override
+  String get tcpUnsupported => 'Von diesem Windows-Build nicht bereitgestellt';
+
+  @override
+  String get tcpAdapterRss => 'RSS-Steuerung pro Adapter öffnen';
+
+  @override
+  String get rssAdapterState => 'RSS-Status pro Adapter';
+
+  @override
+  String get rssEnabled => 'RSS aktiviert';
+
+  @override
+  String get rssProfile => 'RSS-Profil';
+
+  @override
+  String get rssQueuesProcessors => 'Warteschlangen/Prozessoren';
+
+  @override
+  String get tcpSettingOperationTitle => 'TCP-Einstellung konfigurieren';
+
+  @override
+  String get tcpSettingOperationDescription =>
+      'Ändert eine von den Systemfunktionen unterstützte Windows-TCP-Vorlage oder einen globalen Offload-Wert mit exakter Wiederherstellung.';
+
+  @override
+  String get qosPolicies => 'QoS-Richtlinien für Anwendungen';
+
+  @override
+  String get qosDescription =>
+      'Explizite dauerhafte QoS-Richtlinien für eine ausführbare Datei erstellen. Vorhandene Richtlinien, die nicht von ZapTweaks stammen, bleiben schreibgeschützt.';
+
+  @override
+  String get qosCreate => 'Richtlinie erstellen';
+
+  @override
+  String get qosEdit => 'Bearbeiten';
+
+  @override
+  String get qosDelete => 'Löschen';
+
+  @override
+  String get qosName => 'Richtlinienname';
+
+  @override
+  String get qosAppPath => 'Pfad zur ausführbaren Datei';
+
+  @override
+  String get qosProtocol => 'Protokoll';
+
+  @override
+  String get qosSourcePort => 'Quellport (optional)';
+
+  @override
+  String get qosDestinationPort => 'Zielport (optional)';
+
+  @override
+  String get qosDscp => 'DSCP 0–63 (optional)';
+
+  @override
+  String get qosThrottleMbps => 'Drosselung in Mbit/s (optional)';
+
+  @override
+  String get qosOwnedOnly =>
+      'Namen müssen mit „ZapTweaks - “ beginnen. Nur die ausgewählte Richtlinie wird geändert; andere QoS-Richtlinien werden niemals gelöscht.';
+
+  @override
+  String get qosDeleteConfirm =>
+      'Ausgewählte QoS-Richtlinie löschen? Ihr exakter Zustand wird für die Wiederherstellung im ZapTweaks-Journal gespeichert.';
+
+  @override
+  String get qosReadOnly => 'Schreibgeschützt';
+
+  @override
+  String get qosPolicyOperationTitle => 'Anwendungs-QoS konfigurieren';
+
+  @override
+  String get qosPolicyOperationDescription =>
+      'Erstellt, bearbeitet oder entfernt eine validierte dauerhafte QoS-Richtlinie pro Anwendung mit exakter Wiederherstellung.';
+
+  @override
+  String get networkDiagnostics => 'Vorher-/Nachher-Diagnose';
+
+  @override
+  String get networkDiagnosticsDescription =>
+      'Begrenzt TCP-Verbindungslatenz, Jitter, Verlust und HTTPS-Download-Durchsatz messen. Die Ergebnisse sind Diagnosewerte und keine Empfehlung.';
+
+  @override
+  String get diagnosticEndpoint => 'Direkte HTTPS-URL der Testdatei';
+
+  @override
+  String get diagnosticNetworkCost =>
+      'Der Test lädt höchstens 10 MiB vom eingegebenen Endpunkt herunter. Es ist kein Drittanbieter-Endpunkt integriert.';
+
+  @override
+  String get diagnosticBaseline => 'Ausgangsmessung starten';
+
+  @override
+  String get diagnosticComparison => 'Vergleichsmessung starten';
+
+  @override
+  String get diagnosticCancel => 'Messung abbrechen';
+
+  @override
+  String get diagnosticLatency => 'Latenz';
+
+  @override
+  String get diagnosticJitter => 'Jitter';
+
+  @override
+  String get diagnosticPacketLoss => 'Paketverlust';
+
+  @override
+  String get diagnosticThroughput => 'Durchsatz';
+
+  @override
+  String get diagnosticRawSamples => 'Unverarbeitete Latenzmesswerte';
+
+  @override
+  String get diagnosticDownloadedBytes => 'Heruntergeladene Bytes';
+
+  @override
+  String get diagnosticDifference => 'Differenz B − A';
+
+  @override
+  String get tcpAttribution =>
+      'Inspiriert von WINSPAR — powplowdevs (fixierte Revision)';
+
+  @override
+  String get openRecoveryHistory => 'Wiederherstellung und Journal öffnen';
 }

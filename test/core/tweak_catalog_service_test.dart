@@ -48,15 +48,56 @@ void main() {
         'Windows': 45,
         'System Checks': 17,
         'Services': 31,
-        'Refresh & Recovery': 23,
+        'Refresh & Recovery': 24,
         'Setup': 12,
         'Advanced': 23,
         'Privacy': 12,
         'Visuals': 14,
-        'Tools': 76,
+        'Tools': 101,
       });
     },
   );
+
+  test('zoicware and stress tools use authoritative HTTPS links only', () {
+    final byId = <String, dynamic>{
+      for (final item in TweakCatalogService().buildCatalog()) item.id: item,
+    };
+    const ids = <String>{
+      'tool_zoicware_suite',
+      'tool_zoicware_defender_pro_tools',
+      'tool_zoicware_remove_windows_ai',
+      'tool_zoicware_pbo_tuner_2',
+      'tool_zoicware_remove_cbs_apps',
+      'tool_zoicware_ultimate_disk_cleanup',
+      'tool_benchmate',
+      'tool_linpack_xtreme',
+      'tool_occt',
+      'tool_y_cruncher',
+      'tool_cinebench_2024',
+      'tool_memtest86',
+      'tool_corecycler',
+    };
+
+    for (final id in ids) {
+      final tool = byId[id].scriptTweak as ExternalUrlLauncherTweak;
+      expect(Uri.parse(tool.url).scheme, 'https', reason: id);
+    }
+    expect(byId, isNot(contains('tool_zoicware_iso_tweaker')));
+  });
+
+  test('startup app launchers expose their different Windows surfaces', () {
+    final byId = <String, dynamic>{
+      for (final descriptor in TweakCatalogService().buildCatalog())
+        descriptor.id: descriptor,
+    };
+
+    expect(byId['setup_startup_apps_7'].title, 'Startup Apps Settings');
+    expect(byId['setup_startup_apps_8'].title, 'Startup Apps in Task Manager');
+    expect(
+      byId['setup_startup_apps_7'].description,
+      isNot(byId['setup_startup_apps_8'].description),
+    );
+  });
 
   test('safe presets exclude security-reducing and destructive tweaks', () {
     final byId = <String, dynamic>{
@@ -167,9 +208,10 @@ void main() {
 
     expect(tweaks, hasLength(90));
     expect(tweaks.map((item) => item.id).toSet(), hasLength(90));
-    expect(tweaks, everyElement(isA<ScriptInteractiveTweak>()));
+    expect(tweaks.whereType<ScriptInteractiveTweak>(), hasLength(86));
+    expect(tweaks.whereType<ExternalUrlLauncherTweak>(), hasLength(4));
     expect(
-      tweaks.cast<ScriptInteractiveTweak>(),
+      tweaks.whereType<ScriptInteractiveTweak>(),
       everyElement(
         predicate<ScriptInteractiveTweak>(
           (item) => item.scriptSegments.length >= 3,

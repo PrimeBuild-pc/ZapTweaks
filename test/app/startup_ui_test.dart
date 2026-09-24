@@ -98,9 +98,10 @@ Future<TweakController> _buildController({UpdateInfo? update}) async {
 
 Future<NavigationView> _pumpApp(
   WidgetTester tester,
-  TweakController controller,
-) async {
-  await tester.binding.setSurfaceSize(const Size(1280, 820));
+  TweakController controller, {
+  Size size = const Size(1280, 820),
+}) async {
+  await tester.binding.setSurfaceSize(size);
   addTearDown(() => tester.binding.setSurfaceSize(null));
   await tester.pumpWidget(
     ZapTweaksApp(
@@ -198,6 +199,141 @@ void main() {
     await tester.pumpWidget(const SizedBox.shrink());
     controller.dispose();
     await tester.pump(const Duration(milliseconds: 150));
+  });
+
+  testWidgets('Italian light and dark themes render at scaled laptop size', (
+    tester,
+  ) async {
+    SharedPreferences.setMockInitialValues(<String, Object>{
+      'executionMode': 'dryRun',
+      'automaticUpdateChecks': false,
+      'localeCode': 'it',
+      'themeMode': 'light',
+    });
+    tester.view.devicePixelRatio = 1.5;
+    addTearDown(tester.view.resetDevicePixelRatio);
+    final controller = await _buildController();
+    await controller.initialize();
+
+    await _pumpApp(tester, controller, size: const Size(1024, 720));
+    expect(controller.localeCode, 'it');
+    expect(controller.themeMode, 'light');
+    expect(
+      FluentTheme.of(tester.element(find.byType(NavigationView))).brightness,
+      Brightness.light,
+    );
+    expect(tester.takeException(), isNull);
+
+    await controller.setThemeMode('dark');
+    await tester.pumpAndSettle();
+    expect(
+      FluentTheme.of(tester.element(find.byType(NavigationView))).brightness,
+      Brightness.dark,
+    );
+    expect(tester.takeException(), isNull);
+
+    await tester.pumpWidget(const SizedBox.shrink());
+    controller.dispose();
+    await tester.pump(const Duration(milliseconds: 150));
+  });
+
+  testWidgets(
+    'global search finds and opens integrated tools by partial typo',
+    (tester) async {
+      final controller = await _buildController();
+      await controller.initialize();
+      await _pumpApp(tester, controller);
+
+      await tester.enterText(find.byType(TextBox).first, 'powre settings');
+      await tester.pumpAndSettle();
+
+      expect(find.text('Power Settings Explorer'), findsOneWidget);
+      await tester.tap(find.text('Open').first);
+      await tester.pumpAndSettle();
+      expect(controller.selectedCategory, 'Gaming & Performance');
+      expect(controller.navigationTab, 0);
+      expect(controller.searchQuery, isEmpty);
+
+      await tester.pumpWidget(const SizedBox.shrink());
+      controller.dispose();
+      await tester.pump(const Duration(milliseconds: 150));
+    },
+  );
+
+  testWidgets('TCP Optimizer deep link renders at scaled laptop size', (
+    tester,
+  ) async {
+    tester.view.devicePixelRatio = 1.5;
+    addTearDown(tester.view.resetDevicePixelRatio);
+    final controller = await _buildController();
+    await controller.initialize();
+    await _pumpApp(tester, controller, size: const Size(1024, 720));
+
+    await tester.enterText(find.byType(TextBox).first, 'tcp optimizer');
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Open').first);
+    await tester.pump(const Duration(seconds: 1));
+
+    expect(controller.selectedCategory, 'Gaming & Performance');
+    expect(controller.navigationTab, 3);
+    expect(
+      find.text(
+        'No value is recommended automatically. A read-back or one network test does not prove a performance benefit.',
+      ),
+      findsOneWidget,
+    );
+    expect(tester.takeException(), isNull);
+
+    await tester.pumpWidget(const SizedBox.shrink());
+    controller.dispose();
+    await tester.pump(const Duration(milliseconds: 150));
+  });
+
+  testWidgets('app search deep links preserve the matched app name', (
+    tester,
+  ) async {
+    final controller = await _buildController();
+    await controller.initialize();
+    controller.navigateTo('Apps', searchTerm: 'Firefox');
+    await _pumpApp(tester, controller);
+
+    expect(controller.selectedCategory, 'Apps');
+    expect(
+      tester
+          .widgetList<TextBox>(find.byType(TextBox))
+          .any((box) => box.controller?.text == 'Firefox'),
+      isTrue,
+    );
+
+    await tester.pumpWidget(const SizedBox.shrink());
+    controller.dispose();
+    await tester.pump(const Duration(milliseconds: 150));
+  });
+
+  test('Expert navigation is opt-in and persisted', () async {
+    final controller = await _buildController();
+    addTearDown(controller.dispose);
+    await controller.initialize();
+
+    expect(controller.categories, isNot(contains('Expert')));
+    expect(controller.categories, <String>[
+      'Home',
+      'Guided Setup',
+      'Apps',
+      'Drivers',
+      'Gaming & Performance',
+      'Windows',
+      'Diagnostics & Recovery',
+      'Settings',
+    ]);
+
+    await controller.setExpertModeEnabled(true);
+
+    expect(controller.categories, contains('Expert'));
+    expect(
+      (await SharedPreferences.getInstance()).getBool('expertMode'),
+      isTrue,
+    );
   });
 
   test('every startup step is reported and completed', () async {

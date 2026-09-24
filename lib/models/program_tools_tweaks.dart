@@ -4,6 +4,232 @@ import 'system_tweak.dart';
 List<SystemTweak> createProgramToolTweaks() {
   return <SystemTweak>[
     // Core launcher actions (non-executable resources)
+    ExternalUrlLauncherTweak(
+      id: 'recovery_repair_bad_tweaks_zoicware',
+      title: 'Repair Bad Tweaks by zoicware',
+      description:
+          'Opens the pinned MIT-licensed upstream source; the script is not bundled or executed by ZapTweaks.',
+      category: 'Refresh & Recovery',
+      url:
+          'https://github.com/zoicware/RepairBadTweaks/tree/0afa349ba7dca7a44eb8a5e64de1a38ae12f71a5',
+      actionLabel: 'Open Pinned Source',
+    ),
+    ExternalUrlLauncherTweak(
+      id: 'tool_zoicware_suite',
+      title: 'ZOICWARE',
+      description:
+          'Opens the official MIT-licensed Windows 11 performance and quality-of-life utility project.',
+      category: 'Drivers & Installers',
+      url: 'https://github.com/zoicware/ZOICWARE',
+      actionLabel: 'Open Official Project',
+    ),
+    ExternalUrlLauncherTweak(
+      id: 'tool_zoicware_defender_pro_tools',
+      title: 'DefenderProTools by zoicware',
+      description:
+          'Opens the official MIT-licensed project for explicit Windows Defender controls. Nothing is downloaded or executed automatically.',
+      category: 'Drivers & Installers',
+      url: 'https://github.com/zoicware/DefenderProTools',
+      actionLabel: 'Open Official Project',
+    ),
+    ExternalUrlLauncherTweak(
+      id: 'tool_zoicware_remove_windows_ai',
+      title: 'RemoveWindowsAI by zoicware',
+      description:
+          'Opens the official MIT-licensed project for reviewing removal of Copilot, Recall, and related components.',
+      category: 'Drivers & Installers',
+      url: 'https://github.com/zoicware/RemoveWindowsAI',
+      actionLabel: 'Open Official Project',
+    ),
+    ExternalUrlLauncherTweak(
+      id: 'tool_zoicware_zscripts',
+      title: 'zScripts by zoicware',
+      description:
+          'Opens the official miscellaneous PowerShell scripts repository. No license is declared, so ZapTweaks does not copy or execute its code.',
+      category: 'Drivers & Installers',
+      url: 'https://github.com/zoicware/zScripts',
+      actionLabel: 'Open Official Project',
+    ),
+    ExternalUrlLauncherTweak(
+      id: 'tool_zoicware_pbo_tuner_2',
+      title: 'PBOTuner2 by zoicware',
+      description:
+          'Opens the official Ryzen PBO undervolt automation project. Firmware tuning remains external and requires independent stability testing.',
+      category: 'Drivers & Installers',
+      url: 'https://github.com/zoicware/PBOTuner2',
+      actionLabel: 'Open Official Project',
+    ),
+    ExternalUrlLauncherTweak(
+      id: 'tool_zoicware_remove_cbs_apps',
+      title: 'RemoveCBSApps by zoicware',
+      description:
+          'Opens the official MIT-licensed project for Get Started, Windows Backup, and Cross Device Resume controls.',
+      category: 'Drivers & Installers',
+      url: 'https://github.com/zoicware/RemoveCBSApps',
+      actionLabel: 'Open Official Project',
+    ),
+    ExternalUrlLauncherTweak(
+      id: 'tool_zoicware_power_plan_settings_editor',
+      title: 'PowerPlanSettingsEditor by zoicware',
+      description:
+          'Opens the official MIT-licensed editor. ZapTweaks also provides its own integrated Power Settings Explorer.',
+      category: 'Drivers & Installers',
+      url: 'https://github.com/zoicware/PowerPlanSettingsEditor',
+      actionLabel: 'Open Official Project',
+    ),
+    ExternalUrlLauncherTweak(
+      id: 'tool_zoicware_ultimate_disk_cleanup',
+      title: 'UltimateDiskCleanup by zoicware',
+      description:
+          'Opens the official Windows Disk Cleanup project with hidden options. Review targets before deleting data.',
+      category: 'Drivers & Installers',
+      url: 'https://github.com/zoicware/UltimateDiskCleanup',
+      actionLabel: 'Open Official Project',
+    ),
+    ExternalUrlLauncherTweak(
+      id: 'tool_zoicware_service_manager_plus',
+      title: 'ServiceManagerPlus by zoicware',
+      description:
+          'Opens the official MIT-licensed advanced Windows service manager project.',
+      category: 'Drivers & Installers',
+      url: 'https://github.com/zoicware/ServiceManagerPlus',
+      actionLabel: 'Open Official Project',
+    ),
+    ExternalUrlLauncherTweak(
+      id: 'tool_zoicware_windows_device_remover',
+      title: 'WindowsDeviceRemover by zoicware',
+      description:
+          'Opens the official MIT-licensed device and driver removal project. ZapTweaks keeps driver removal capability-gated.',
+      category: 'Drivers & Installers',
+      url: 'https://github.com/zoicware/WindowsDeviceRemover',
+      actionLabel: 'Open Official Project',
+    ),
+    ExternalUrlLauncherTweak(
+      id: 'tool_zoicware_windows_update_manager',
+      title: 'WindowsUpdateManager by zoicware',
+      description:
+          'Opens the official advanced Windows Update manager project; its code is not bundled because no license is declared.',
+      category: 'Drivers & Installers',
+      url: 'https://github.com/zoicware/WindowsUpdateManager',
+      actionLabel: 'Open Official Project',
+    ),
+    ExternalUrlLauncherTweak(
+      id: 'tool_zoicware_dynamic_min_services',
+      title: 'DynamicMinServices by zoicware',
+      description:
+          'Opens the official experimental service-reduction project. No license is declared and no code is bundled.',
+      category: 'Drivers & Installers',
+      url: 'https://github.com/zoicware/DynamicMinServices',
+      actionLabel: 'Open Official Project',
+    ),
+    ExternalUrlLauncherTweak(
+      id: 'tool_zoicware_zturbo',
+      title: 'zTurbo by zoicware',
+      description:
+          'Opens the official parallel optimization script project. No license is declared and no code is bundled.',
+      category: 'Drivers & Installers',
+      url: 'https://github.com/zoicware/zTurbo',
+      actionLabel: 'Open Official Project',
+    ),
+    ExternalUrlLauncherTweak(
+      id: 'tool_zoicware_override_edid',
+      title: 'OverrideEDID by zoicware',
+      description:
+          'Opens the official project for reviewing EDID extension-block changes related to app startup stutter.',
+      category: 'Drivers & Installers',
+      url: 'https://github.com/zoicware/OverrideEDID',
+      actionLabel: 'Open Official Project',
+    ),
+    ExternalUrlLauncherTweak(
+      id: 'tool_zoicware_hosts_builder',
+      title: 'HostsBuilder by zoicware',
+      description:
+          'Opens the official custom Windows hosts-file builder project. No license is declared and no code is bundled.',
+      category: 'Drivers & Installers',
+      url: 'https://github.com/zoicware/HostsBuilder',
+      actionLabel: 'Open Official Project',
+    ),
+    ExternalUrlLauncherTweak(
+      id: 'tool_zoicware_remove_apps_policy_editor',
+      title: 'RemoveAppsPolicyEditor by zoicware',
+      description:
+          'Opens the official MIT-licensed Windows 11 RemoveDefaultMicrosoftStorePackages policy editor.',
+      category: 'Drivers & Installers',
+      url: 'https://github.com/zoicware/RemoveAppsPolicyEditor',
+      actionLabel: 'Open Official Project',
+    ),
+    ExternalUrlLauncherTweak(
+      id: 'tool_zoicware_tweak_fth',
+      title: 'TweakFTH by zoicware',
+      description:
+          'Opens the official MIT-licensed Fault Tolerant Heap management project.',
+      category: 'Drivers & Installers',
+      url: 'https://github.com/zoicware/TweakFTH',
+      actionLabel: 'Open Official Project',
+    ),
+    ExternalUrlLauncherTweak(
+      id: 'tool_benchmate',
+      title: 'BenchMate',
+      description:
+          'Opens the official benchmark validation suite download page. The application is not bundled.',
+      category: 'Drivers & Installers',
+      url: 'https://benchmate.org/',
+      actionLabel: 'Open Official Download',
+    ),
+    ExternalUrlLauncherTweak(
+      id: 'tool_linpack_xtreme',
+      title: 'Linpack Xtreme',
+      description:
+          'Opens the publisher download page hosted by TechPowerUp for CPU and memory stress testing.',
+      category: 'Drivers & Installers',
+      url: 'https://www.techpowerup.com/download/linpack-xtreme/',
+      actionLabel: 'Open Publisher Download',
+    ),
+    ExternalUrlLauncherTweak(
+      id: 'tool_occt',
+      title: 'OCCT',
+      description:
+          'Opens the official stability and stress-testing download page. The application is not bundled.',
+      category: 'Drivers & Installers',
+      url: 'https://www.ocbase.com/download',
+      actionLabel: 'Open Official Download',
+    ),
+    ExternalUrlLauncherTweak(
+      id: 'tool_y_cruncher',
+      title: 'y-cruncher',
+      description:
+          'Opens the official CPU and memory benchmark and stress-test page.',
+      category: 'Drivers & Installers',
+      url: 'https://www.numberworld.org/y-cruncher/',
+      actionLabel: 'Open Official Download',
+    ),
+    ExternalUrlLauncherTweak(
+      id: 'tool_cinebench_2024',
+      title: 'Cinebench 2024',
+      description:
+          'Opens Maxon’s official CPU and GPU benchmark download page.',
+      category: 'Drivers & Installers',
+      url: 'https://www.maxon.net/en/downloads/cinebench-2024-downloads',
+      actionLabel: 'Open Official Download',
+    ),
+    ExternalUrlLauncherTweak(
+      id: 'tool_memtest86',
+      title: 'MemTest86',
+      description:
+          'Opens PassMark’s official bootable memory-test download page.',
+      category: 'Drivers & Installers',
+      url: 'https://www.memtest86.com/download.htm',
+      actionLabel: 'Open Official Download',
+    ),
+    ExternalUrlLauncherTweak(
+      id: 'tool_corecycler',
+      title: 'CoreCycler',
+      description:
+          'Opens the official project for per-core Ryzen stability testing after PBO or Curve Optimizer changes.',
+      category: 'Drivers & Installers',
+      url: 'https://github.com/sp00n/corecycler',
+      actionLabel: 'Open Official Project',
+    ),
     BatchScriptTweak(
       id: 'tool_winscript_batch',
       title: 'WinScript Batch Utility',
@@ -42,18 +268,14 @@ List<SystemTweak> createProgramToolTweaks() {
       warningMessage:
           'This opens the author-provided public Discord source. Review the shared file, version, and instructions before running any device tweak.',
     ),
-    ScriptInteractiveTweak(
+    ExternalUrlLauncherTweak(
       id: 'tool_device_tweaker_script',
       title: 'Device Tweaker (LLG x LLC)',
       description:
-          'Opens the bundled Device Tweaker GUI script for per-device interrupt, MSI, and power tuning.',
+          'Opens the author-provided distribution channel; the mutable script is not bundled.',
       category: 'Drivers & Installers',
-      scriptSegments: <String>['interactive_scripts', 'DeviceTweaker.ps1'],
-      actionLabel: 'Open Tool',
-      isAggressive: true,
-      warningMessage:
-          'Device Tweaker changes per-device interrupt affinity, MSI mode, and power settings. '
-          'Review each change in its window before applying it.',
+      url: 'https://discord.gg/eGmDd28m4k',
+      actionLabel: 'Open Author Source',
     ),
     ExternalUrlLauncherTweak(
       id: 'tool_scewin_gui_releases',
@@ -109,16 +331,14 @@ List<SystemTweak> createProgramToolTweaks() {
       url: "https://tools.mariusheier.com/",
       actionLabel: 'Open',
     ),
-    PowerShellTerminalCommandTweak(
+    ExternalUrlLauncherTweak(
       id: "tool_marius_deeppoll_script",
-      title: "DeepPoll USB Polling Analyzer (Script)",
+      title: "DeepPoll USB Polling Analyzer",
       description:
-          "Runs DeepPoll in an elevated PowerShell window: USB polling rate analysis with microsecond precision via kernel ETW tracing.",
+          "Opens the official DeepPoll page; ZapTweaks never executes its mutable remote script.",
       category: 'Drivers & Installers',
-      command: "irm https://tools.mariusheier.com/deeppoll.ps1 | iex",
-      actionLabel: 'Run Tool',
-      warningMessage:
-          "This action executes a remote PowerShell command from tools.mariusheier.com. Continue only if you trust the source.",
+      url: "https://tools.mariusheier.com/deeppoll.html",
+      actionLabel: 'Open Official Page',
     ),
     ExternalUrlLauncherTweak(
       id: "tool_marius_deeppoll_web",
@@ -129,16 +349,14 @@ List<SystemTweak> createProgramToolTweaks() {
       url: "https://tools.mariusheier.com/deeppoll.html",
       actionLabel: 'Open',
     ),
-    PowerShellTerminalCommandTweak(
+    ExternalUrlLauncherTweak(
       id: "tool_marius_deeplog_script",
-      title: "DeepLog Input Recorder (Script)",
+      title: "DeepLog Input Recorder",
       description:
-          "Runs DeepLog in an elevated PowerShell window: records 30 seconds of controller input with a system snapshot for diagnostics.",
+          "Opens the official DeepLog page; ZapTweaks never executes its mutable remote script.",
       category: 'Drivers & Installers',
-      command: "irm https://tools.mariusheier.com/deeplog.ps1 | iex",
-      actionLabel: 'Run Tool',
-      warningMessage:
-          "This action executes a remote PowerShell command from tools.mariusheier.com. Continue only if you trust the source.",
+      url: "https://tools.mariusheier.com/deeplog.html",
+      actionLabel: 'Open Official Page',
     ),
     ExternalUrlLauncherTweak(
       id: "tool_marius_deeplog_web",
@@ -149,16 +367,14 @@ List<SystemTweak> createProgramToolTweaks() {
       url: "https://tools.mariusheier.com/deeplog.html",
       actionLabel: 'Open',
     ),
-    PowerShellTerminalCommandTweak(
+    ExternalUrlLauncherTweak(
       id: "tool_marius_rig_script",
-      title: "Rig Profiles Hardware Report (Script)",
+      title: "Rig Profiles Hardware Report",
       description:
-          "Runs the Rig Profiles diagnostic script that collects and submits a hardware profile and compatibility information.",
+          "Opens the official Rig Profiles page; ZapTweaks never executes its mutable remote script.",
       category: 'Drivers & Installers',
-      command: "irm https://tools.mariusheier.com/rig.ps1 | iex",
-      actionLabel: 'Run Tool',
-      warningMessage:
-          "This action executes a remote PowerShell command from tools.mariusheier.com. Continue only if you trust the source.",
+      url: "https://tools.mariusheier.com/rig.html",
+      actionLabel: 'Open Official Page',
     ),
     ExternalUrlLauncherTweak(
       id: "tool_marius_rig_web",
@@ -169,16 +385,14 @@ List<SystemTweak> createProgramToolTweaks() {
       url: "https://tools.mariusheier.com/rig.html",
       actionLabel: 'Open',
     ),
-    PowerShellTerminalCommandTweak(
+    ExternalUrlLauncherTweak(
       id: "tool_marius_cpudirect_script",
-      title: "CPU Direct USB Port Check (Script)",
+      title: "CPU Direct USB Port Check",
       description:
-          "Runs CPU Direct in an elevated PowerShell window: checks whether USB devices sit on CPU-direct or chipset ports and detects hubs.",
+          "Opens the official CPU Direct page; ZapTweaks never executes its mutable remote script.",
       category: 'Drivers & Installers',
-      command: "irm https://tools.mariusheier.com/cpudirect.ps1 | iex",
-      actionLabel: 'Run Tool',
-      warningMessage:
-          "This action executes a remote PowerShell command from tools.mariusheier.com. Continue only if you trust the source.",
+      url: "https://tools.mariusheier.com/cpudirect.html",
+      actionLabel: 'Open Official Page',
     ),
     ExternalUrlLauncherTweak(
       id: "tool_marius_cpudirect_web",
@@ -219,17 +433,24 @@ List<SystemTweak> createProgramToolTweaks() {
       warningMessage:
           'This action executes a remote PowerShell command from debloat.raphi.re and can change system configuration. Continue only if you trust the source.',
     ),
-    PowerShellTerminalCommandTweak(
-      id: 'tool_ctt_winutil',
-      title: 'Run CTT WinUtil',
+    ExternalUrlLauncherTweak(
+      id: 'tool_windows_11_fix_tweaks_kubaam',
+      title: 'Windows 11 Fix Tweaks by kubaam',
       description:
-          'Opens Chris Titus Tech WinUtil for common Windows setup, repair, and baseline optimization tasks.',
+          'Opens the pinned upstream project for review. Its all-in-one batch file is not executed by ZapTweaks.',
       category: 'Drivers & Installers',
-      command: 'irm https://christitus.com/win | iex',
-      actionLabel: 'Run WinUtil',
-      isAggressive: true,
-      warningMessage:
-          'This action runs the official remote WinUtil script from christitus.com. Review its choices before applying changes.',
+      url:
+          'https://github.com/kubaam/Windows-11-Fix-Tweaks/tree/8da4fe0251f3c46aec6434e38e7a92f06307313a',
+      actionLabel: 'Open source',
+    ),
+    ExternalUrlLauncherTweak(
+      id: 'tool_ctt_winutil',
+      title: 'CTT WinUtil by Chris Titus Tech',
+      description:
+          'Opens the official WinUtil releases page. ZapTweaks never executes mutable remote PowerShell code.',
+      category: 'Drivers & Installers',
+      url: 'https://github.com/ChrisTitusTech/winutil/releases',
+      actionLabel: 'Open releases',
     ),
     PowerShellTerminalCommandTweak(
       id: 'tool_install_winhance',
@@ -252,174 +473,177 @@ List<SystemTweak> createProgramToolTweaks() {
       actionLabel: 'Install',
       isAggressive: true,
     ),
-    PowerShellTerminalCommandTweak(
+    ExternalUrlLauncherTweak(
       id: 'tool_winsux_debloat',
       title: 'WinSux by Fr33hty',
       description:
-          'Runs Fr33hty\'s remote WinSux debloat command. Invasive action with no in-app revert.',
+          'Opens the official WinSux source. ZapTweaks never executes its mutable remote script.',
       category: 'Privacy & Bloatware',
-      command:
-          'iwr https://github.com/FR33THYFR33THY/WinSux/raw/refs/heads/main/WinSux.ps1 -useb | iex',
-      actionLabel: 'Run WinSux',
-      isAggressive: true,
-      warningMessage:
-          'This action executes a remote PowerShell command from '
-          'github.com/FR33THYFR33THY and applies invasive debloat changes. '
-          'There is no in-app revert for this action. Continue only if you '
-          'fully trust the source.',
+      url: 'https://github.com/FR33THYFR33THY/WinSux',
+      actionLabel: 'Open Official Source',
     ),
 
     // Existing bundled tools
-    ExecutableLauncherTweak(
+    ExternalUrlLauncherTweak(
       id: 'tool_unpark_cpu',
       title: 'Unpark CPU',
-      description: 'CPU core unparking utility.',
+      description:
+          'Opens the authoritative download or documentation page; the binary is not bundled.',
       category: 'Drivers & Installers',
-      executableSegments: <String>['programmi', 'UnparkCpu.exe'],
+      url: 'https://coderbag.com/product/quickcpu',
+      actionLabel: 'Open Authoritative Page',
     ),
-    ExecutableLauncherTweak(
+    ExternalUrlLauncherTweak(
       id: 'tool_mouse_flat_curve',
-      title: 'Mouse Flat Curve',
-      description: 'Applies flat mouse acceleration curve settings.',
+      title: 'MarkC Mouse Fix',
+      description:
+          'Opens the authoritative download or documentation page; the binary is not bundled.',
       category: 'Drivers & Installers',
-      executableSegments: <String>['programmi', 'MouseFlatCurve.exe'],
+      url:
+          'https://donewmouseaccel.blogspot.com/2010/03/markc-windows-7-mouse-acceleration-fix.html',
+      actionLabel: 'Open Authoritative Page',
     ),
-    ExecutableLauncherTweak(
+    ExternalUrlLauncherTweak(
       id: 'tool_mouse_movement_recorder',
       title: 'Mouse Movement Recorder',
-      description: 'Checks effective mouse polling behavior.',
+      description:
+          'Opens the authoritative download or documentation page; the binary is not bundled.',
       category: 'Drivers & Installers',
-      executableSegments: <String>['programmi', 'mousemovementrecorder.exe'],
+      url:
+          'https://donewmouseaccel.blogspot.com/2010/03/markc-windows-7-mouse-acceleration-fix.html',
+      actionLabel: 'Open Authoritative Page',
     ),
-    ExecutableLauncherTweak(
+    ExternalUrlLauncherTweak(
       id: 'tool_controller_polling',
-      title: 'Polling Tool',
-      description: 'Controller polling rate measurement tool.',
+      title: 'HIDUSBF polling tools',
+      description:
+          'Opens the official download page; the binary is not bundled.',
       category: 'Drivers & Installers',
-      executableSegments: <String>['programmi', 'polling.exe'],
+      url: 'https://github.com/LordOfMice/hidusbf/releases',
+      actionLabel: 'Open Official Download',
     ),
-    ExecutableLauncherTweak(
+    ExternalUrlLauncherTweak(
       id: 'tool_queue_size_tuner',
-      title: 'Queue Size Tuner',
-      description: 'Storage queue tuning utility.',
+      title: 'Storage queue guidance',
+      description:
+          'Opens the authoritative download or documentation page; the binary is not bundled.',
       category: 'Drivers & Installers',
-      executableSegments: <String>['programmi', 'QueueSize_Tuner.exe'],
-      isAggressive: true,
+      url:
+          'https://learn.microsoft.com/windows-hardware/test/wpt/optimizing-performance-and-responsiveness-exercise-3',
+      actionLabel: 'Open Authoritative Page',
     ),
-    ExecutableLauncherTweak(
+    ExternalUrlLauncherTweak(
       id: 'tool_power_settings_explorer',
       title: 'PowerSettingsExplorer',
-      description: 'Advanced Windows power-plan settings editor.',
+      description:
+          'Opens the authoritative download or documentation page; the binary is not bundled.',
       category: 'Drivers & Installers',
-      executableSegments: <String>[
-        'programmi',
-        'PowerSettingsExplorer',
-        'PowerSettingsExplorer.exe',
-      ],
-      isAggressive: true,
+      url:
+          'https://forums.guru3d.com/threads/windows-power-plan-settings-explorer-utility.416058/',
+      actionLabel: 'Open Authoritative Page',
     ),
-    ExecutableLauncherTweak(
+    ExternalUrlLauncherTweak(
       id: 'tool_interrupt_affinity_policy',
-      title: 'Interrupt Affinity Policy Tool',
-      description: 'Interrupt affinity and IRQ policy tuning utility.',
+      title: 'Interrupt Affinity Tool (integrated replacement)',
+      description:
+          'Opens the authoritative download or documentation page; the binary is not bundled.',
       category: 'Drivers & Installers',
-      executableSegments: <String>[
-        'programmi',
-        'Interrupt_Affinity_Policy_Tool',
-        'intPolicy_x64.exe',
-      ],
-      isAggressive: true,
+      url:
+          'https://learn.microsoft.com/windows-hardware/drivers/kernel/interrupt-affinity-and-priority',
+      actionLabel: 'Open Authoritative Page',
     ),
-    ExecutableLauncherTweak(
+    ExternalUrlLauncherTweak(
       id: 'tool_gpuz',
       title: 'GPU-Z',
-      description: 'Detailed GPU diagnostics and sensors.',
+      description:
+          'Opens the official download page; the binary is not bundled.',
       category: 'Drivers & Installers',
-      executableSegments: <String>['programmi', 'GPU-Z.2.69.0.exe'],
+      url: 'https://www.techpowerup.com/gpuz/',
+      actionLabel: 'Open Official Download',
     ),
-    ExecutableLauncherTweak(
+    ExternalUrlLauncherTweak(
       id: 'tool_furmark_setup',
-      title: 'FurMark Installer',
-      description: 'GPU stress-test installer package.',
+      title: 'FurMark',
+      description:
+          'Opens the official download page; the binary is not bundled.',
       category: 'Drivers & Installers',
-      executableSegments: <String>[
-        'programmi',
-        'FurMark_2.10.2_Win64_Setup.exe',
-      ],
-      actionLabel: 'Install',
-      isAggressive: true,
+      url: 'https://geeks3d.com/furmark/',
+      actionLabel: 'Open Official Download',
     ),
-    ExecutableLauncherTweak(
+    ExternalUrlLauncherTweak(
       id: 'tool_more_clock_tool',
-      title: 'More Clock Tool',
-      description: 'AMD clock/voltage control utility.',
+      title: 'MoreClockTool',
+      description:
+          'Opens the official download page; the binary is not bundled.',
       category: 'Drivers & Installers',
-      executableSegments: <String>['programmi', 'MoreClockTool.exe'],
-      isAggressive: true,
+      url:
+          'https://www.igorslab.de/en/download-area-new-version-of-morepowertool-mpt-and-final-release-of-redbioseditor-rbe/',
+      actionLabel: 'Open Official Download',
     ),
-    ExecutableLauncherTweak(
+    ExternalUrlLauncherTweak(
       id: 'tool_more_power_tool_setup',
-      title: 'MorePowerTool Installer',
-      description: 'AMD power table tuning installer.',
+      title: 'MorePowerTool',
+      description:
+          'Opens the official download page; the binary is not bundled.',
       category: 'Drivers & Installers',
-      executableSegments: <String>['programmi', 'MorePowerTool_Setup.exe'],
-      actionLabel: 'Install',
-      isAggressive: true,
+      url:
+          'https://www.igorslab.de/en/download-area-new-version-of-morepowertool-mpt-and-final-release-of-redbioseditor-rbe/',
+      actionLabel: 'Open Official Download',
     ),
-    ExecutableLauncherTweak(
+    ExternalUrlLauncherTweak(
       id: 'tool_msi_afterburner_setup',
-      title: 'MSI Afterburner Installer',
-      description: 'GPU overclocking and monitoring installer.',
+      title: 'MSI Afterburner',
+      description:
+          'Opens the official download page; the binary is not bundled.',
       category: 'Drivers & Installers',
-      executableSegments: <String>[
-        'programmi',
-        'MSIAfterburnerSetup467Beta2.exe',
-      ],
-      actionLabel: 'Install',
-      isAggressive: true,
+      url: 'https://www.msi.com/Landing/afterburner/graphics-cards',
+      actionLabel: 'Open Official Download',
     ),
-    DirectoryLauncherTweak(
+    ExternalUrlLauncherTweak(
       id: 'tool_autoruns_folder',
       title: 'Autoruns',
-      description: 'Startup and scheduled task analyzer suite.',
+      description:
+          'Opens the official download page; the binary is not bundled.',
       category: 'Drivers & Installers',
-      directorySegments: <String>['programmi', 'Autoruns'],
-      launchExecutableRelativePath: 'Autoruns64.exe',
-      isAggressive: true,
+      url: 'https://learn.microsoft.com/sysinternals/downloads/autoruns',
+      actionLabel: 'Open Official Download',
     ),
-    DirectoryLauncherTweak(
+    ExternalUrlLauncherTweak(
       id: 'tool_cpuz_folder',
       title: 'CPU-Z',
-      description: 'CPU and memory information utility.',
+      description:
+          'Opens the official download page; the binary is not bundled.',
       category: 'Drivers & Installers',
-      directorySegments: <String>['programmi', 'cpu-z_2.19-en'],
-      launchExecutableRelativePath: 'cpuz_x64.exe',
+      url: 'https://www.cpuid.com/softwares/cpu-z.html',
+      actionLabel: 'Open Official Download',
     ),
-    DirectoryLauncherTweak(
+    ExternalUrlLauncherTweak(
       id: 'tool_cru_folder',
-      title: 'CRU',
-      description: 'Custom Resolution Utility for display modes.',
+      title: 'Custom Resolution Utility',
+      description:
+          'Opens the authoritative download or documentation page; the binary is not bundled.',
       category: 'Drivers & Installers',
-      directorySegments: <String>['programmi', 'cru-1.5.3'],
-      launchExecutableRelativePath: 'CRU.exe',
-      isAggressive: true,
+      url:
+          'https://www.monitortests.com/forum/Thread-Custom-Resolution-Utility-CRU',
+      actionLabel: 'Open Authoritative Page',
     ),
-    DirectoryLauncherTweak(
+    ExternalUrlLauncherTweak(
       id: 'tool_hidusbf_folder',
-      title: 'hidusbf',
-      description: 'USB polling overclock toolkit for HID devices.',
+      title: 'HIDUSBF',
+      description:
+          'Opens the authoritative download or documentation page; the binary is not bundled.',
       category: 'Drivers & Installers',
-      directorySegments: <String>['programmi', 'hidusbf (BB11.5.25)'],
-      launchExecutableRelativePath: 'DRIVER/Setup.exe',
-      isAggressive: true,
+      url: 'https://github.com/LordOfMice/hidusbf/releases',
+      actionLabel: 'Open Authoritative Page',
     ),
-    DirectoryLauncherTweak(
+    ExternalUrlLauncherTweak(
       id: 'tool_hwinfo_folder',
       title: 'HWiNFO',
-      description: 'System sensors and hardware telemetry suite.',
+      description:
+          'Opens the official download page; the binary is not bundled.',
       category: 'Drivers & Installers',
-      directorySegments: <String>['programmi', 'hwi_834'],
-      launchExecutableRelativePath: 'HWiNFO64.EXE',
+      url: 'https://www.hwinfo.com/download/',
+      actionLabel: 'Open Official Download',
     ),
     ExternalUrlLauncherTweak(
       id: 'tool_nvidia_profile_inspector_download',
@@ -429,52 +653,53 @@ List<SystemTweak> createProgramToolTweaks() {
       url: 'https://github.com/Orbmu2k/nvidiaProfileInspector/releases',
       actionLabel: 'Open Download',
     ),
-    DirectoryLauncherTweak(
+    ExternalUrlLauncherTweak(
       id: 'tool_nvidia_profile_inspector_folder',
       title: 'NVIDIA Profile Inspector',
-      description: 'Advanced NVIDIA profile editor.',
-      category: 'Drivers & Installers',
-      directorySegments: <String>['programmi', 'nvidiaProfileInspector'],
-      launchExecutableRelativePath: 'nvidiaProfileInspector.exe',
-      isAggressive: true,
-    ),
-    NvidiaProfileImportTweak(
-      id: 'tool_nvidia_profile_inspector_nip_profile',
-      title: 'NVIDIA Profile Inspector Profiles (.nip)',
       description:
-          'Choose a bundled profile and import it directly with NVIDIA Profile Inspector.',
+          'Opens the authoritative download or documentation page; the binary is not bundled.',
       category: 'Drivers & Installers',
-      isAggressive: true,
+      url: 'https://github.com/Orbmu2k/nvidiaProfileInspector/releases',
+      actionLabel: 'Open Authoritative Page',
     ),
-    DirectoryLauncherTweak(
+    ExternalUrlLauncherTweak(
+      id: 'tool_nvidia_profile_inspector_nip_profile',
+      title: 'NVIDIA Profile Inspector profiles',
+      description:
+          'Opens the authoritative download or documentation page; the binary is not bundled.',
+      category: 'Drivers & Installers',
+      url: 'https://github.com/Orbmu2k/nvidiaProfileInspector/releases',
+      actionLabel: 'Open Authoritative Page',
+    ),
+    ExternalUrlLauncherTweak(
       id: 'tool_prime95_folder',
       title: 'Prime95',
-      description: 'CPU stress-test and stability validation.',
+      description:
+          'Opens the official download page; the binary is not bundled.',
       category: 'Drivers & Installers',
-      directorySegments: <String>['programmi', 'p95v3019b20.win64'],
-      launchExecutableRelativePath: 'prime95.exe',
-      isAggressive: true,
+      url: 'https://www.mersenne.org/download/',
+      actionLabel: 'Open Official Download',
     ),
-    DirectoryLauncherTweak(
+    ExternalUrlLauncherTweak(
       id: 'tool_testmem5_folder',
       title: 'TestMem5',
-      description: 'RAM stress-test utility.',
+      description:
+          'Opens the authoritative download or documentation page; the binary is not bundled.',
       category: 'Drivers & Installers',
-      directorySegments: <String>['programmi', 'TestMem5'],
-      launchExecutableRelativePath: 'TM5.exe',
-      isAggressive: true,
+      url:
+          'https://www.overclock.net/threads/memory-testing-with-testmem5-tm5-with-custom-configs.1751608/',
+      actionLabel: 'Open Authoritative Page',
     ),
 
     // Newly integrated external and bundled utilities
-    ExecutableLauncherTweak(
+    ExternalUrlLauncherTweak(
       id: 'tool_wtools_setup',
-      title: 'WTools 1.0.9.3 Installer',
+      title: 'WTools',
       description:
-          'Installs the bundled, Wagnardsoft-signed WTools 1.0.9.3 package.',
+          'Opens the official download page; the binary is not bundled.',
       category: 'Drivers & Installers',
-      executableSegments: <String>['programmi', 'WTools v1.0.9.3_setup.exe'],
-      actionLabel: 'Install',
-      isAggressive: true,
+      url: 'https://www.wagnardsoft.com/wtools',
+      actionLabel: 'Open Official Download',
     ),
     ExternalUrlLauncherTweak(
       id: 'tool_wtools_official_page',
@@ -485,147 +710,145 @@ List<SystemTweak> createProgramToolTweaks() {
       url: 'https://www.wagnardsoft.com/wtools',
       actionLabel: 'Open Download',
     ),
-    DirectoryLauncherTweak(
+    ExternalUrlLauncherTweak(
       id: 'tool_rammap_folder',
       title: 'RAMMap',
-      description: 'Microsoft Sysinternals physical memory analysis utility.',
+      description:
+          'Opens the official download page; the binary is not bundled.',
       category: 'Drivers & Installers',
-      directorySegments: <String>['programmi', 'RAMMap'],
-      launchExecutableRelativePath: 'RAMMap64.exe',
-      isAggressive: true,
+      url: 'https://learn.microsoft.com/sysinternals/downloads/rammap',
+      actionLabel: 'Open Official Download',
     ),
-    DirectoryLauncherTweak(
+    ExternalUrlLauncherTweak(
       id: 'tool_device_cleanup_folder',
-      title: 'Device Cleanup',
-      description: 'Cleans phantom/non-present device entries from Windows.',
+      title: 'Device Cleanup Tool',
+      description:
+          'Opens the authoritative download or documentation page; the binary is not bundled.',
       category: 'Drivers & Installers',
-      directorySegments: <String>['programmi', 'DeviceCleanup'],
-      launchExecutableRelativePath: 'DeviceCleanup.exe',
-      isAggressive: true,
+      url: 'https://www.uwe-sieber.de/misc_tools_e.html',
+      actionLabel: 'Open Authoritative Page',
     ),
-    DirectoryLauncherTweak(
+    ExternalUrlLauncherTweak(
       id: 'tool_driver_store_explorer_folder',
-      title: 'Driver Store Explorer (RAPR)',
-      description: 'Inspects and prunes old/unused driver packages.',
+      title: 'Driver Store Explorer',
+      description:
+          'Opens the authoritative download or documentation page; the binary is not bundled.',
       category: 'Drivers & Installers',
-      directorySegments: <String>['programmi', 'DriverStoreExplorer-v1.0.26'],
-      launchExecutableRelativePath: 'Rapr.exe',
-      isAggressive: true,
+      url: 'https://github.com/lostindark/DriverStoreExplorer/releases',
+      actionLabel: 'Open Authoritative Page',
     ),
-    DirectoryLauncherTweak(
+    ExternalUrlLauncherTweak(
       id: 'tool_dismpp_folder',
       title: 'Dism++',
-      description: 'Advanced DISM and servicing operations toolkit.',
+      description:
+          'Opens the authoritative download or documentation page; the binary is not bundled.',
       category: 'Drivers & Installers',
-      directorySegments: <String>['programmi', 'Dism++10.1.1002.1B'],
-      launchExecutableRelativePath: 'Dism++x64.exe',
-      isAggressive: true,
+      url: 'https://github.com/Chuyu-Team/Dism-Multi-language/releases',
+      actionLabel: 'Open Authoritative Page',
     ),
-    DirectoryLauncherTweak(
+    ExternalUrlLauncherTweak(
       id: 'tool_cleanmgrplus_folder',
       title: 'Cleanmgr+',
       description:
-          'Extended disk cleanup and temporary-file management utility.',
+          'Opens the authoritative download or documentation page; the binary is not bundled.',
       category: 'Drivers & Installers',
-      directorySegments: <String>['programmi', 'cleanmgrplus'],
-      launchExecutableRelativePath: 'Cleanmgr+.exe',
+      url: 'https://github.com/builtbybel/CleanmgrPlus/releases',
+      actionLabel: 'Open Authoritative Page',
     ),
-    ExecutableLauncherTweak(
+    ExternalUrlLauncherTweak(
       id: 'tool_gpu_dword_manager',
       title: 'GPU DWORD Manager',
-      description: 'GPU registry DWORD tuning utility.',
+      description:
+          'Opens the official download page; the binary is not bundled.',
       category: 'Drivers & Installers',
-      executableSegments: <String>['programmi', 'GPU_Dword_Manager.exe'],
-      isAggressive: true,
+      url: 'https://github.com/YuukiFST/GPU-Dword-Manager/releases',
+      actionLabel: 'Open Official Download',
     ),
-    DirectoryLauncherTweak(
+    ExternalUrlLauncherTweak(
       id: 'tool_msi_util_folder',
       title: 'MSI Utility v3',
-      description: 'Message Signaled Interrupt policy utility.',
+      description:
+          'Opens the authoritative download or documentation page; the binary is not bundled.',
       category: 'Drivers & Installers',
-      directorySegments: <String>['programmi', 'MSI_util_v3'],
-      launchExecutableRelativePath: 'MSI_util_v3.exe',
-      isAggressive: true,
+      url:
+          'https://forums.guru3d.com/threads/windows-line-based-vs-message-signaled-based-interrupts-msi-tool.378044/',
+      actionLabel: 'Open Authoritative Page',
     ),
-    ExecutableLauncherTweak(
+    ExternalUrlLauncherTweak(
       id: 'tool_polling_rate_tester_app',
-      title: 'Polling Rate Tester App',
-      description: 'Dedicated mouse polling rate validation utility.',
+      title: 'Razer Polling Rate Tester',
+      description:
+          'Opens the authoritative download or documentation page; the binary is not bundled.',
       category: 'Drivers & Installers',
-      executableSegments: <String>[
-        'programmi',
-        'PollingRateTesterApp_v1.00.01.exe',
-      ],
+      url: 'https://www.razer.com/technology/razer-polling-rate-tester',
+      actionLabel: 'Open Authoritative Page',
     ),
-    DirectoryLauncherTweak(
+    ExternalUrlLauncherTweak(
       id: 'tool_radeon_tuner_folder',
       title: 'Radeon Tuner',
-      description: 'AMD Radeon driver tuning and profile utility.',
+      description:
+          'Opens the authoritative download or documentation page; the binary is not bundled.',
       category: 'Drivers & Installers',
-      directorySegments: <String>['programmi', 'RadeonTuner'],
-      launchExecutableRelativePath: 'RadeonTuner.exe',
-      isAggressive: true,
+      url: 'https://github.com/GSDragoon/RadeonTuner/releases',
+      actionLabel: 'Open Authoritative Page',
     ),
-    DirectoryLauncherTweak(
+    ExternalUrlLauncherTweak(
       id: 'tool_tcp_optimizer_folder',
       title: 'TCP Optimizer',
-      description: 'Network stack optimization and diagnostics tool.',
+      description:
+          'Opens the authoritative download or documentation page; the binary is not bundled.',
       category: 'Drivers & Installers',
-      directorySegments: <String>['programmi', 'TCPOptimizer'],
-      launchExecutableRelativePath: 'TCPOptimizer.exe',
-      isAggressive: true,
+      url: 'https://www.speedguide.net/downloads.php',
+      actionLabel: 'Open Authoritative Page',
     ),
-    DirectoryLauncherTweak(
+    ExternalUrlLauncherTweak(
       id: 'tool_vivetool_folder',
       title: 'ViVeTool',
-      description: 'Windows feature flag management utility.',
-      category: 'Drivers & Installers',
-      directorySegments: <String>['programmi', 'ViVeTool-v0.3.4-IntelAmd'],
-      launchExecutableRelativePath: 'ViVeTool.exe',
-      isAggressive: true,
-    ),
-    DirectoryLauncherTweak(
-      id: 'tool_star_ethernet_analyzer_folder',
-      title: 'Star Ethernet Analyzer',
-      description: 'Ethernet and jitter diagnostics toolkit.',
-      category: 'Drivers & Installers',
-      directorySegments: <String>['programmi', 'Star Ethernet Analyzer'],
-      launchExecutableRelativePath: '2. StarTrinity.Installer.exe',
-    ),
-    ExplorerSelectFileTweak(
-      id: 'tool_star_ethernet_analyzer_video',
-      title: 'Star Ethernet Analyzer Video Guide',
       description:
-          'Opens the bundled video guide with the default Windows app.',
+          'Opens the authoritative download or documentation page; the binary is not bundled.',
       category: 'Drivers & Installers',
-      fileSegments: <String>[
-        'programmi',
-        'Star Ethernet Analyzer',
-        '0. How_to_use.mp4',
-      ],
-      openWithDefaultApp: true,
-      actionLabel: 'Play Video',
+      url: 'https://github.com/thebookisclosed/ViVe/releases',
+      actionLabel: 'Open Authoritative Page',
     ),
-    ScriptInteractiveTweak(
-      id: 'tool_star_ethernet_analyzer_script',
-      title: 'Star Ethernet Analyzer Script',
-      description: 'Interactive helper script for Star Ethernet Analyzer.',
+    ExternalUrlLauncherTweak(
+      id: 'tool_star_ethernet_analyzer_folder',
+      title: 'StarTrinity network tools',
+      description:
+          'Opens the official download page; the binary is not bundled.',
       category: 'Drivers & Installers',
-      scriptSegments: <String>[
-        'programmi',
-        'Star Ethernet Analyzer',
-        'StarAnalyzer_bam.ps1',
-      ],
-      isAggressive: true,
+      url:
+          'https://startrinity.com/InternetQuality/ContinuousBandwidthTester.aspx',
+      actionLabel: 'Open Official Download',
+    ),
+    ExternalUrlLauncherTweak(
+      id: 'tool_star_ethernet_analyzer_video',
+      title: 'StarTrinity network tools guide',
+      description:
+          'Opens the official download page; the binary is not bundled.',
+      category: 'Drivers & Installers',
+      url:
+          'https://startrinity.com/InternetQuality/ContinuousBandwidthTester.aspx',
+      actionLabel: 'Open Official Download',
+    ),
+    ExternalUrlLauncherTweak(
+      id: 'tool_star_ethernet_analyzer_script',
+      title: 'StarTrinity network tools',
+      description:
+          'Opens the official download page; the helper script is not bundled.',
+      category: 'Drivers & Installers',
+      url:
+          'https://startrinity.com/InternetQuality/ContinuousBandwidthTester.aspx',
+      actionLabel: 'Open Official Download',
     ),
     // Newly added scripts and programs
-    ExecutableLauncherTweak(
+    ExternalUrlLauncherTweak(
       id: 'tool_rtl_utility',
       title: 'RTL Utility',
-      description: 'Realtek utility and diagnostics tool.',
+      description:
+          'Opens the authoritative download or documentation page; the binary is not bundled.',
       category: 'Drivers & Installers',
-      executableSegments: <String>['programmi', 'RTL_Utility_1_0_12_x64.exe'],
-      isAggressive: true,
+      url: 'https://oblique-audio.com/rtl-utility.php',
+      actionLabel: 'Open Authoritative Page',
     ),
     BatchScriptTweak(
       id: 'tool_fix_tools_runner',

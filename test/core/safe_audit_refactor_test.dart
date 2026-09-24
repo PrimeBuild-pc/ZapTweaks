@@ -208,7 +208,7 @@ void main() {
     expect(result.update?.installerUrl, 'https://example.test/setup.exe');
   });
 
-  test('video guide opens with the default Windows app', () async {
+  test('StarTrinity guide opens its authoritative page', () async {
     final previousRunner = ProcessRunner.shared;
     final runner = _CapturingLaunchRunner();
     ProcessRunner.configureShared(runner);
@@ -221,10 +221,11 @@ void main() {
 
       await video.runAction();
 
-      expect(runner.executable, 'cmd');
-      expect(runner.arguments, containsAllInOrder(<String>['/c', 'start']));
-      expect(runner.arguments?.last, endsWith('0. How_to_use.mp4'));
-      expect(runner.usedShell, isTrue);
+      expect(runner.executable, 'explorer');
+      expect(runner.arguments, <String>[
+        'https://startrinity.com/InternetQuality/ContinuousBandwidthTester.aspx',
+      ]);
+      expect(runner.usedShell, isFalse);
     } finally {
       ProcessRunner.configureShared(previousRunner);
     }

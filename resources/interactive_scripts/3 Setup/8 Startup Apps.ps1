@@ -1,1 +1,0 @@
-Start-Process "taskmgr" -ArgumentList " /0 /startup"

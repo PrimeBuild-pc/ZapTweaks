@@ -1,0 +1,814 @@
+{
+  "schemaVersion": 1,
+  "invariants": {
+    "total": 100,
+    "actionableNonExternal": 95,
+    "aliases": 23,
+    "composites": 14,
+    "rejected": 1,
+    "externalTools": 4,
+    "procedures": 58
+  },
+  "entries": [
+    {
+      "id": "setup_memory_compression_script",
+      "title": "Memory Compression (Script Variant)",
+      "resource": "resources/interactive_scripts/3 Setup/2 Memory Compression.ps1",
+      "classification": "alias",
+      "executionPolicy": "redirect",
+      "replacement": "checks_memory_compression_off"
+    },
+    {
+      "id": "setup_activation_script",
+      "title": "Activation (Script Variant)",
+      "resource": "resources/interactive_scripts/3 Setup/5 Activation.ps1",
+      "classification": "composite",
+      "executionPolicy": "blockedUntilDecomposed",
+      "replacement": null
+    },
+    {
+      "id": "setup_background_apps_script",
+      "title": "Background Apps (Script Variant)",
+      "resource": "resources/interactive_scripts/3 Setup/9 Background Apps.ps1",
+      "classification": "alias",
+      "executionPolicy": "redirect",
+      "replacement": "ui_background_apps_off"
+    },
+    {
+      "id": "setup_edge_settings_script",
+      "title": "Edge Settings (Script Variant)",
+      "resource": "resources/interactive_scripts/3 Setup/10 Edge Settings.ps1",
+      "classification": "composite",
+      "executionPolicy": "blockedUntilDecomposed",
+      "replacement": null
+    },
+    {
+      "id": "setup_store_settings_script",
+      "title": "Store Settings (Script Variant)",
+      "resource": "resources/interactive_scripts/3 Setup/11 Store Settings.ps1",
+      "classification": "composite",
+      "executionPolicy": "blockedUntilDecomposed",
+      "replacement": null
+    },
+    {
+      "id": "refresh_factory_reset",
+      "title": "Factory Reset",
+      "resource": "resources/interactive_scripts/2 Refresh/1 Factory Reset.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": "Recovery di Windows"
+    },
+    {
+      "id": "refresh_account_local",
+      "title": "Account Local",
+      "resource": "resources/interactive_scripts/2 Refresh/2 Account Local.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "id": "refresh_reinstall",
+      "title": "Reinstall",
+      "resource": "resources/interactive_scripts/2 Refresh/3 Reinstall.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": "Recovery di Windows"
+    },
+    {
+      "id": "refresh_autounattend",
+      "title": "Autounattend",
+      "resource": "resources/interactive_scripts/2 Refresh/4 Autounattend.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "id": "refresh_updates_drivers_block",
+      "title": "Updates Drivers Block",
+      "resource": "resources/interactive_scripts/2 Refresh/5 Updates Drivers Block.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "id": "refresh_to_bios",
+      "title": "To BIOS",
+      "resource": "resources/interactive_scripts/2 Refresh/7 To Bios.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "id": "setup_bitlocker",
+      "title": "BitLocker",
+      "resource": "resources/interactive_scripts/3 Setup/1 BitLocker.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "id": "setup_convert_home_to_pro",
+      "title": "Convert Home To Pro",
+      "resource": "resources/interactive_scripts/3 Setup/3 Convert Home To Pro.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "id": "setup_keys",
+      "title": "Keys",
+      "resource": "resources/interactive_scripts/3 Setup/4 Keys.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "id": "setup_date_language_region_time",
+      "title": "Date Language Region Time",
+      "resource": "resources/interactive_scripts/3 Setup/6 Date Language Region Time.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "id": "setup_startup_apps_7",
+      "title": "Startup Apps Settings",
+      "resource": "resources/interactive_scripts/3 Setup/7 Startup Apps.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "id": "setup_startup_apps_8",
+      "title": "Startup Apps in Task Manager",
+      "resource": "resources/interactive_scripts/3 Setup/8 Startup Apps.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "id": "setup_updates_pause",
+      "title": "Updates Pause",
+      "resource": "resources/interactive_scripts/3 Setup/12 Updates Pause.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "id": "installers_menu",
+      "title": "Installers Menu",
+      "resource": "resources/interactive_scripts/4 Installers/1 Installers.ps1",
+      "classification": "externalTool",
+      "executionPolicy": "expertOnDemand",
+      "replacement": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "id": "installers_msi_afterburner",
+      "title": "MSI Afterburner Script Installer",
+      "resource": "resources/interactive_scripts/4 Installers/2 MSI Afterburner.ps1",
+      "classification": "externalTool",
+      "executionPolicy": "expertOnDemand",
+      "replacement": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "id": "installers_more_clock_tool",
+      "title": "More Clock Tool Script Installer",
+      "resource": "resources/interactive_scripts/4 Installers/4 More Clock Tool.ps1",
+      "classification": "externalTool",
+      "executionPolicy": "expertOnDemand",
+      "replacement": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "id": "installers_cru_sre",
+      "title": "CRU SRE Script Installer",
+      "resource": "resources/interactive_scripts/4 Installers/5 CRU SRE.ps1",
+      "classification": "externalTool",
+      "executionPolicy": "expertOnDemand",
+      "replacement": "download/apertura on-demand; mantenere anche dopo la sostituzione nativa"
+    },
+    {
+      "id": "graphics_driver_clean",
+      "title": "Driver Clean",
+      "resource": "resources/interactive_scripts/5 Graphics/1 Driver Clean.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "id": "graphics_driver_install_latest",
+      "title": "Driver Install Latest",
+      "resource": "resources/interactive_scripts/5 Graphics/2 Driver Install Latest.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "id": "graphics_driver_install_debloat_settings",
+      "title": "Driver Install Debloat & Settings",
+      "resource": "resources/interactive_scripts/5 Graphics/3 Driver Install Debloat & Settings.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "id": "graphics_nvidia_settings",
+      "title": "NVIDIA Settings",
+      "resource": "resources/interactive_scripts/5 Graphics/4 Nvidia Settings.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "id": "graphics_amd_settings",
+      "title": "AMD Settings",
+      "resource": "resources/interactive_scripts/5 Graphics/5 Amd Settings.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "id": "graphics_intel_settings",
+      "title": "Intel Settings",
+      "resource": "resources/interactive_scripts/5 Graphics/6 Intel Settings.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "id": "graphics_hdcp",
+      "title": "HDCP",
+      "resource": "resources/interactive_scripts/5 Graphics/7 Hdcp.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "id": "graphics_p0_state",
+      "title": "P0 State",
+      "resource": "resources/interactive_scripts/5 Graphics/8 P0 State.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "id": "graphics_msi_mode_script",
+      "title": "MSI Mode (Script Variant)",
+      "resource": "resources/interactive_scripts/5 Graphics/9 Msi Mode.ps1",
+      "classification": "alias",
+      "executionPolicy": "redirect",
+      "replacement": "device.interrupt.editor"
+    },
+    {
+      "id": "graphics_directx",
+      "title": "DirectX Runtime",
+      "resource": "resources/interactive_scripts/5 Graphics/10 DirectX.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "id": "graphics_cpp_runtime",
+      "title": "Visual C++ All-in-One Runtimes",
+      "resource": "resources/interactive_scripts/5 Graphics/11 C++.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "id": "graphics_resolution_refresh_rate",
+      "title": "Resolution Refresh Rate",
+      "resource": "resources/interactive_scripts/5 Graphics/12 Resolution Refresh Rate.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "id": "graphics_hags_windowed",
+      "title": "HAGS Windowed",
+      "resource": "resources/interactive_scripts/5 Graphics/13 Hags Windowed.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "id": "windows_start_menu_taskbar_script",
+      "title": "Start Menu Taskbar (Script Variant)",
+      "resource": "resources/interactive_scripts/6 Windows/1 Start Menu Taskbar.ps1",
+      "classification": "composite",
+      "executionPolicy": "blockedUntilDecomposed",
+      "replacement": null
+    },
+    {
+      "id": "windows_start_menu_layout_script",
+      "title": "Start Menu Layout (Script Variant)",
+      "resource": "resources/interactive_scripts/6 Windows/2 Start Menu Layout.ps1",
+      "classification": "composite",
+      "executionPolicy": "blockedUntilDecomposed",
+      "replacement": null
+    },
+    {
+      "id": "windows_start_menu_shortcuts_script",
+      "title": "Start Menu Shortcuts (Script Variant)",
+      "resource": "resources/interactive_scripts/6 Windows/3 Start Menu Shortcuts.ps1",
+      "classification": "composite",
+      "executionPolicy": "blockedUntilDecomposed",
+      "replacement": null
+    },
+    {
+      "id": "windows_context_menu_script",
+      "title": "Context Menu (Script Variant)",
+      "resource": "resources/interactive_scripts/6 Windows/4 Context Menu.ps1",
+      "classification": "alias",
+      "executionPolicy": "redirect",
+      "replacement": "ui_context_menu_clean"
+    },
+    {
+      "id": "windows_theme_black_script",
+      "title": "Theme Black (Script Variant)",
+      "resource": "resources/interactive_scripts/6 Windows/5 Theme Black.ps1",
+      "classification": "alias",
+      "executionPolicy": "redirect",
+      "replacement": "ui_dark_theme"
+    },
+    {
+      "id": "windows_signout_lockscreen_wallpaper_black",
+      "title": "Signout Lockscreen Wallpaper Black",
+      "resource": "resources/interactive_scripts/6 Windows/6 Signout Lockscreen Wallpaper Black.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "id": "windows_user_account_pictures_black",
+      "title": "User Account Pictures Black",
+      "resource": "resources/interactive_scripts/6 Windows/7 User Account Pictures Black.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "id": "windows_widgets_script",
+      "title": "Widgets (Script Variant)",
+      "resource": "resources/interactive_scripts/6 Windows/8 Widgets.ps1",
+      "classification": "alias",
+      "executionPolicy": "redirect",
+      "replacement": "privacy_widgets"
+    },
+    {
+      "id": "windows_copilot_script",
+      "title": "Copilot (Script Variant)",
+      "resource": "resources/interactive_scripts/6 Windows/9 Copilot.ps1",
+      "classification": "alias",
+      "executionPolicy": "redirect",
+      "replacement": "privacy_copilot"
+    },
+    {
+      "id": "windows_gamemode",
+      "title": "Gamemode",
+      "resource": "resources/interactive_scripts/6 Windows/10 Gamemode.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "id": "windows_pointer_precision_script",
+      "title": "Pointer Precision (Script Variant)",
+      "resource": "resources/interactive_scripts/6 Windows/11 Pointer Precision.ps1",
+      "classification": "alias",
+      "executionPolicy": "redirect",
+      "replacement": "ui_pointer_precision_off"
+    },
+    {
+      "id": "windows_scaling",
+      "title": "Scaling",
+      "resource": "resources/interactive_scripts/6 Windows/12 Scaling.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "id": "windows_notepad_settings",
+      "title": "Notepad Settings",
+      "resource": "resources/interactive_scripts/6 Windows/13 Notepad Settings.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "id": "windows_control_panel_settings_script",
+      "title": "Control Panel Settings (Script Variant)",
+      "resource": "resources/interactive_scripts/6 Windows/14 Control Panel Settings.ps1",
+      "classification": "composite",
+      "executionPolicy": "blockedUntilDecomposed",
+      "replacement": null
+    },
+    {
+      "id": "windows_sound",
+      "title": "Sound",
+      "resource": "resources/interactive_scripts/6 Windows/15 Sound.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "id": "windows_loudness_eq",
+      "title": "Loudness EQ",
+      "resource": "resources/interactive_scripts/6 Windows/16 Loudness EQ.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "id": "windows_device_manager_power_savings_wake",
+      "title": "Device Manager Power Savings & Wake",
+      "resource": "resources/interactive_scripts/6 Windows/17 Device Manager Power Savings & Wake.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "id": "windows_nvme_faster_driver",
+      "title": "NVME Faster Driver",
+      "resource": "resources/interactive_scripts/6 Windows/20 NVME Faster Driver.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "id": "windows_write_cache_buffer_flushing",
+      "title": "Write Cache Buffer Flushing",
+      "resource": "resources/interactive_scripts/6 Windows/21 Write Cache Buffer Flushing.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "id": "windows_network_adapter_power_savings_script",
+      "title": "Network Adapter Power Savings & Wake (Script Variant)",
+      "resource": "resources/interactive_scripts/6 Windows/18 Network Adapter Power Savings & Wake.ps1",
+      "classification": "alias",
+      "executionPolicy": "redirect",
+      "replacement": "network_adapter_power_savings_wake_off"
+    },
+    {
+      "id": "windows_network_ipv4_only_script",
+      "title": "Network IPv4 Only (Script Variant)",
+      "resource": "resources/interactive_scripts/6 Windows/19 Network IPv4 Only.ps1",
+      "classification": "alias",
+      "executionPolicy": "redirect",
+      "replacement": "network_ipv4_only"
+    },
+    {
+      "id": "windows_gamebar_script",
+      "title": "Gamebar (Script Variant)",
+      "resource": "resources/interactive_scripts/6 Windows/22 Gamebar.ps1",
+      "classification": "alias",
+      "executionPolicy": "redirect",
+      "replacement": "privacy_gamebar"
+    },
+    {
+      "id": "windows_edge_webview_script",
+      "title": "Edge & WebView (Script Variant)",
+      "resource": "resources/interactive_scripts/6 Windows/23 Edge & WebView.ps1",
+      "classification": "composite",
+      "executionPolicy": "blockedUntilDecomposed",
+      "replacement": null
+    },
+    {
+      "id": "windows_bloatware_script",
+      "title": "Bloatware (Script Variant)",
+      "resource": "resources/interactive_scripts/6 Windows/24 Bloatware.ps1",
+      "classification": "composite",
+      "executionPolicy": "blockedUntilDecomposed",
+      "replacement": null
+    },
+    {
+      "id": "windows_bloatware_legacy_apps_check_script",
+      "title": "Bloatware Legacy Apps Check (Script Variant)",
+      "resource": "resources/interactive_scripts/6 Windows/25 Bloatware Legacy Apps Check.ps1",
+      "classification": "composite",
+      "executionPolicy": "blockedUntilDecomposed",
+      "replacement": null
+    },
+    {
+      "id": "windows_bloatware_legacy_features_check_script",
+      "title": "Bloatware Legacy Features Check (Script Variant)",
+      "resource": "resources/interactive_scripts/6 Windows/26 Bloatware Legacy Features Check.ps1",
+      "classification": "composite",
+      "executionPolicy": "blockedUntilDecomposed",
+      "replacement": null
+    },
+    {
+      "id": "windows_bloatware_uwp_apps_check_script",
+      "title": "Bloatware UWP Apps Check (Script Variant)",
+      "resource": "resources/interactive_scripts/6 Windows/27 Bloatware UWP Apps Check.ps1",
+      "classification": "composite",
+      "executionPolicy": "blockedUntilDecomposed",
+      "replacement": null
+    },
+    {
+      "id": "windows_bloatware_uwp_features_check_script",
+      "title": "Bloatware UWP Features Check (Script Variant)",
+      "resource": "resources/interactive_scripts/6 Windows/28 Bloatware UWP Features Check.ps1",
+      "classification": "composite",
+      "executionPolicy": "blockedUntilDecomposed",
+      "replacement": null
+    },
+    {
+      "id": "windows_bloatware_taskmgr_check_script",
+      "title": "Bloatware TaskMgr Check (Script Variant)",
+      "resource": "resources/interactive_scripts/6 Windows/29 Bloatware TaskMgr Check.ps1",
+      "classification": "composite",
+      "executionPolicy": "blockedUntilDecomposed",
+      "replacement": null
+    },
+    {
+      "id": "windows_power_plan_script",
+      "title": "Power Plan (Script Variant)",
+      "resource": "resources/interactive_scripts/6 Windows/30 Power Plan.ps1",
+      "classification": "alias",
+      "executionPolicy": "redirect",
+      "replacement": "power.plan.editor"
+    },
+    {
+      "id": "windows_timer_resolution_script",
+      "title": "Timer Resolution (Script Variant)",
+      "resource": "resources/interactive_scripts/6 Windows/31 Timer Resolution.ps1",
+      "classification": "alias",
+      "executionPolicy": "redirect",
+      "replacement": "power_global_timer_resolution"
+    },
+    {
+      "id": "windows_uac_script",
+      "title": "UAC (Script Variant)",
+      "resource": "resources/interactive_scripts/6 Windows/32 UAC.ps1",
+      "classification": "alias",
+      "executionPolicy": "redirect",
+      "replacement": "checks_uac_off"
+    },
+    {
+      "id": "windows_core_isolation_script",
+      "title": "Core Isolation (Script Variant)",
+      "resource": "resources/interactive_scripts/6 Windows/33 Core Isolation.ps1",
+      "classification": "alias",
+      "executionPolicy": "redirect",
+      "replacement": "checks_core_isolation_off"
+    },
+    {
+      "id": "windows_defender_optimize",
+      "title": "Defender Optimize",
+      "resource": "resources/interactive_scripts/6 Windows/34 Defender Optimize.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "id": "windows_autoruns_startup_tasks_apps_check",
+      "title": "Autoruns Startup Tasks & Apps Check",
+      "resource": "resources/interactive_scripts/6 Windows/35 Autoruns Startup Tasks & Apps Check.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "id": "windows_cleanup",
+      "title": "Cleanup",
+      "resource": "resources/interactive_scripts/6 Windows/36 Cleanup.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "id": "windows_restore_point",
+      "title": "Restore Point",
+      "resource": "resources/interactive_scripts/6 Windows/37 Restore Point.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "id": "advanced_defender",
+      "title": "Defender",
+      "resource": "resources/interactive_scripts/8 Advanced/1 Defender.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "id": "advanced_firewall_script",
+      "title": "Firewall (Script Variant)",
+      "resource": "resources/interactive_scripts/8 Advanced/2 Firewall.ps1",
+      "classification": "alias",
+      "executionPolicy": "redirect",
+      "replacement": "checks_firewall_off"
+    },
+    {
+      "id": "advanced_spectre_meltdown_script",
+      "title": "Spectre Meltdown (Script Variant)",
+      "resource": "resources/interactive_scripts/8 Advanced/3 Spectre Meltdown.ps1",
+      "classification": "alias",
+      "executionPolicy": "redirect",
+      "replacement": "checks_spectre_meltdown_off"
+    },
+    {
+      "id": "advanced_dep_script",
+      "title": "Data Execution Prevention (Script Variant)",
+      "resource": "resources/interactive_scripts/8 Advanced/4 Data Execution Prevention.ps1",
+      "classification": "alias",
+      "executionPolicy": "redirect",
+      "replacement": "checks_dep_off"
+    },
+    {
+      "id": "advanced_file_download_security_warning",
+      "title": "File Download Security Warning",
+      "resource": "resources/interactive_scripts/8 Advanced/5 File Download Security Warning.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "id": "advanced_mmagent_features_script",
+      "title": "MMAgent Features (Script Variant)",
+      "resource": "resources/interactive_scripts/8 Advanced/6 MMAgent Features.ps1",
+      "classification": "alias",
+      "executionPolicy": "redirect",
+      "replacement": "network_mmagent_features_off"
+    },
+    {
+      "id": "advanced_rebar_force",
+      "title": "ReBar Force",
+      "resource": "resources/interactive_scripts/8 Advanced/7 ReBar Force.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "id": "advanced_smt_ht",
+      "title": "SMT HT",
+      "resource": "resources/interactive_scripts/8 Advanced/8 Smt Ht.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "id": "advanced_core_1_thread_1",
+      "title": "Core 1 Thread 1",
+      "resource": "resources/interactive_scripts/8 Advanced/9 Core 1 Thread 1.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "id": "advanced_priority",
+      "title": "Priority",
+      "resource": "resources/interactive_scripts/8 Advanced/10 Priority.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "id": "advanced_mpo_script",
+      "title": "MPO (Script Variant)",
+      "resource": "resources/interactive_scripts/8 Advanced/11 Mpo.ps1",
+      "classification": "alias",
+      "executionPolicy": "redirect",
+      "replacement": "gaming_mpo_off"
+    },
+    {
+      "id": "advanced_hardware_legacy_flip_script",
+      "title": "Hardware Legacy Flip (Script Variant)",
+      "resource": "resources/interactive_scripts/8 Advanced/12 Hardware Legacy Flip.ps1",
+      "classification": "alias",
+      "executionPolicy": "redirect",
+      "replacement": "gaming_legacy_flip_fse"
+    },
+    {
+      "id": "advanced_hardware_composed_flip_script",
+      "title": "Hardware Composed Independent Flip (Script Variant)",
+      "resource": "resources/interactive_scripts/8 Advanced/13 Hardware Composed Independent Flip.ps1",
+      "classification": "alias",
+      "executionPolicy": "redirect",
+      "replacement": "gaming_composed_flip_immediate_mode"
+    },
+    {
+      "id": "advanced_ulps_script",
+      "title": "ULPS (Script Variant)",
+      "resource": "resources/interactive_scripts/8 Advanced/14 Ulps.ps1",
+      "classification": "alias",
+      "executionPolicy": "redirect",
+      "replacement": "gaming_amd_ulps_off"
+    },
+    {
+      "id": "advanced_driver_whql_secure_boot_bypass",
+      "title": "Driver WHQL Secure Boot Bypass",
+      "resource": "resources/interactive_scripts/8 Advanced/15 Driver Whql Secure Boot Bypass.ps1",
+      "classification": "rejected",
+      "executionPolicy": "blocked",
+      "replacement": null
+    },
+    {
+      "id": "advanced_keyboard_shortcuts",
+      "title": "Keyboard Shortcuts",
+      "resource": "resources/interactive_scripts/8 Advanced/16 Keyboard Shortcuts.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "id": "advanced_services",
+      "title": "Services",
+      "resource": "resources/interactive_scripts/8 Advanced/17 Services.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "id": "advanced_start_search_shell_mobsync",
+      "title": "Start Search Shell Mobsync",
+      "resource": "resources/interactive_scripts/8 Advanced/18 Start Search Shell Mobsync.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": "adattare subito, poi sostituire lo script con operation native o procedura assistita verificabile"
+    },
+    {
+      "id": "check_space_check",
+      "title": "Space Check",
+      "resource": "resources/interactive_scripts/1 Check/1 Space Check.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": null
+    },
+    {
+      "id": "check_ram_check",
+      "title": "RAM Check",
+      "resource": "resources/interactive_scripts/1 Check/2 Ram Check.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": null
+    },
+    {
+      "id": "check_gpu_check",
+      "title": "GPU Check",
+      "resource": "resources/interactive_scripts/1 Check/3 Gpu Check.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": null
+    },
+    {
+      "id": "check_bios_update",
+      "title": "BIOS Update Search",
+      "resource": "resources/interactive_scripts/1 Check/4 Bios Update.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": null
+    },
+    {
+      "id": "check_bios_settings",
+      "title": "BIOS Settings Guide",
+      "resource": "resources/interactive_scripts/1 Check/5 Bios Settings.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": null
+    },
+    {
+      "id": "check_cpu_test",
+      "title": "CPU Test",
+      "resource": "resources/interactive_scripts/1 Check/6 Cpu Test.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": null
+    },
+    {
+      "id": "check_ram_test",
+      "title": "RAM Test",
+      "resource": "resources/interactive_scripts/1 Check/7 Ram Test.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": null
+    },
+    {
+      "id": "check_gpu_test",
+      "title": "GPU Test",
+      "resource": "resources/interactive_scripts/1 Check/8 Gpu Test.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": null
+    },
+    {
+      "id": "hardware_controller_overclock_script",
+      "title": "Controller Overclock",
+      "resource": "resources/interactive_scripts/7 Hardware/4 Controller Overclock.ps1",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": null
+    },
+    {
+      "id": "network_itr_interactive_config",
+      "title": "NIC ITR Interactive Config",
+      "sourceFile": "lib/models/networking_tweaks.dart",
+      "classification": "procedure",
+      "executionPolicy": "assistedOnly",
+      "replacement": "device-specific native NDIS advanced-property operation"
+    }
+  ]
+}

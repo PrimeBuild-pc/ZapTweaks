@@ -1,4 +1,5 @@
 import '../core/services/process_runner.dart';
+import '../features/apps/domain/microsoft_restore_catalog.dart';
 import 'system_tweak.dart';
 
 /// Missing, individually controllable Windows options found during the
@@ -485,26 +486,13 @@ WindowsSettingsLauncherTweak _toolShortcut(
 );
 
 List<SystemTweak> _restoreTweaks() => <SystemTweak>[
-  for (final app in <(String, String)>[
-    ('Microsoft.WindowsStore', 'Microsoft Store'),
-    ('Microsoft.StickyNotes', 'Sticky Notes'),
-    ('Microsoft.WindowsAlarms', 'Clock'),
-    ('Microsoft.WindowsFeedbackHub', 'Feedback Hub'),
-    ('Microsoft.Todos', 'Microsoft To Do'),
-    ('Microsoft.YourPhone', 'Phone Link'),
-    ('Microsoft.OneDrive', 'OneDrive'),
-    ('Microsoft.GamingApp', 'Xbox App'),
-    ('Microsoft.XboxGamingOverlay', 'Xbox Game Bar'),
-    ('Microsoft.XboxIdentityProvider', 'Xbox Identity Provider'),
-    ('Clipchamp.Clipchamp', 'Clipchamp'),
-    ('Microsoft.Family', 'Microsoft Family'),
-    ('Microsoft.QuickAssist', 'Quick Assist'),
-    ('Microsoft.PowerAutomateDesktop', 'Power Automate'),
-    ('Microsoft.DevHome', 'Dev Home'),
-    ('Microsoft.MicrosoftOfficeHub', 'Office Hub'),
-    ('Microsoft.OutlookForWindows', 'Outlook (new)'),
-  ])
-    WingetRestoreTweak(packageId: app.$1, title: app.$2),
+  for (final app in microsoftRestoreCatalog.entries)
+    WingetRestoreTweak(
+      legacyPackageName: app.key,
+      packageId: app.value.packageId,
+      source: app.value.source,
+      title: app.value.name,
+    ),
 ];
 
 List<SystemTweak> _serviceTweaks() => <SystemTweak>[
@@ -572,18 +560,23 @@ class PowerShellStateTweak extends SystemTweak {
 }
 
 class WingetRestoreTweak extends ActionSystemTweak {
-  WingetRestoreTweak({required this.packageId, required String title})
-    : super(
-        id: 'restore_${packageId.toLowerCase().replaceAll('.', '_')}',
-        title: 'Restore $title',
-        description:
-            'Installs $title from the configured Windows package sources.',
-        category: 'Refresh & Recovery',
-        type: TweakUiType.launcher,
-        actionLabel: 'Restore',
-      );
+  WingetRestoreTweak({
+    required String legacyPackageName,
+    required this.packageId,
+    required this.source,
+    required String title,
+  }) : super(
+         id: 'restore_${legacyPackageName.toLowerCase().replaceAll('.', '_')}',
+         title: 'Restore $title',
+         description:
+             'Installs $title from the configured Windows package sources.',
+         category: 'Refresh & Recovery',
+         type: TweakUiType.launcher,
+         actionLabel: 'Restore',
+       );
 
   final String packageId;
+  final String source;
 
   @override
   bool get requiresSafetyPrompt => false;
@@ -595,6 +588,8 @@ class WingetRestoreTweak extends ActionSystemTweak {
       '--exact',
       '--id',
       packageId,
+      '--source',
+      source,
       '--accept-package-agreements',
       '--accept-source-agreements',
     ], timeout: const Duration(minutes: 5));

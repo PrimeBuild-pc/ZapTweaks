@@ -1,7 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:script_utility/core/services/tweak_catalog_service.dart';
-import 'package:script_utility/core/services/process_runner.dart';
 import 'package:script_utility/models/action_tweaks.dart';
 
 void main() {
@@ -20,6 +19,8 @@ void main() {
     expect(ids.contains('tool_wtools_setup'), isTrue);
     expect(ids.contains('tool_wtools_official_page'), isTrue);
     expect(ids.contains('tool_ctt_winutil'), isTrue);
+    expect(ids.contains('tool_windows_11_fix_tweaks_kubaam'), isTrue);
+    expect(ids.contains('recovery_repair_bad_tweaks_zoicware'), isTrue);
     expect(ids.contains('tool_install_winhance'), isTrue);
     expect(ids.contains('tool_star_ethernet_analyzer_video'), isTrue);
     expect(
@@ -46,32 +47,25 @@ void main() {
       isTrue,
     );
 
-    final profileImport =
-        catalog
-                .singleWhere(
-                  (item) =>
-                      item.id == 'tool_nvidia_profile_inspector_nip_profile',
-                )
-                .scriptTweak
-            as NvidiaProfileImportTweak;
-    final profiles = profileImport.availableProfiles();
-    expect(profiles, hasLength(16));
-    expect(
-      profiles.map((profile) => profile.name),
-      containsAll(<String>[
-        'nvidia-performance-settings',
-        'FortniteDX12_2025Profile_by_Jackpot',
-        'NovaOS',
-      ]),
-    );
+    final ctt = catalog.singleWhere((item) => item.id == 'tool_ctt_winutil');
+    expect(ctt.title, contains('by Chris Titus Tech'));
+    expect(ctt.scriptTweak, isA<ExternalUrlLauncherTweak>());
 
-    profileImport.selectProfile(profiles.first);
-    ProcessRunner.configureShared(
-      ProcessRunner(
-        mode: ProcessExecutionMode.dryRun,
-        dryRunDelay: Duration.zero,
-      ),
+    final w11Fix = catalog.singleWhere(
+      (item) => item.id == 'tool_windows_11_fix_tweaks_kubaam',
     );
-    await profileImport.onApply();
+    expect(w11Fix.title, contains('by kubaam'));
+    expect(w11Fix.scriptTweak, isA<ExternalUrlLauncherTweak>());
+
+    final repair = catalog.singleWhere(
+      (item) => item.id == 'recovery_repair_bad_tweaks_zoicware',
+    );
+    expect(repair.title, contains('by zoicware'));
+    expect(repair.scriptTweak, isA<ExternalUrlLauncherTweak>());
+
+    final profileImport = catalog.singleWhere(
+      (item) => item.id == 'tool_nvidia_profile_inspector_nip_profile',
+    );
+    expect(profileImport.scriptTweak, isA<ExternalUrlLauncherTweak>());
   });
 }

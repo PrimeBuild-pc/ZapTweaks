@@ -8,32 +8,12 @@ import 'package:script_utility/models/action_tweaks.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  test(
-    'bundled power-plan library is complete and excludes registry overrides',
-    () {
-      final powerPlans =
-          Directory(
-                path.join(Directory.current.path, 'resources', 'Powerplans'),
-              )
-              .listSync()
-              .whereType<File>()
-              .where((file) => file.path.toLowerCase().endsWith('.pow'))
-              .toList();
-
-      expect(powerPlans, hasLength(102));
-      expect(
-        File(
-          path.join(
-            Directory.current.path,
-            'resources',
-            'Powerplans',
-            'FixPowerPlans.reg',
-          ),
-        ).existsSync(),
-        isFalse,
-      );
-    },
-  );
+  test('legacy power-plan payloads are not bundled', () {
+    final directory = Directory(
+      path.join(Directory.current.path, 'resources', 'Powerplans'),
+    );
+    expect(directory.existsSync(), isFalse);
+  });
 
   test('all bundled scripts and executables are mapped by the catalog', () {
     final repoRoot = Directory.current.path;

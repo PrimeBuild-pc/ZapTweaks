@@ -12,18 +12,26 @@ import '../../../core/models/safety_gate_result.dart';
 import '../../../core/models/system_metrics_snapshot.dart';
 import '../../../core/models/tweak_descriptor.dart';
 import '../../../core/models/update_info.dart';
+import '../../../core/operations/operation.dart';
+import '../../../core/operations/operation_registry.dart';
+import '../../../core/persistence/operation_store.dart';
+import '../../../core/plans/operation_plan.dart';
+import '../../../core/plans/plan_engine.dart';
+import '../../../core/security/elevated_helper.dart';
+import '../../../core/search/search_matcher.dart';
 import '../../../core/services/app_locale_service.dart';
 import '../../../core/services/hardware_detection_service.dart';
 import '../../../core/services/logging_service.dart';
 import '../../../core/services/metrics_sampling_service.dart';
 import '../../../core/services/permission_service.dart';
-import '../../../core/services/power_plan_service.dart';
 import '../../../core/services/process_runner.dart';
 import '../../../core/services/safety_gate_service.dart';
 import '../../../core/services/system_action_service.dart';
 import '../../../core/services/tweak_catalog_service.dart';
 import '../../../core/tweak_manager.dart';
+import '../../../legacy/adapters/legacy_catalog_adapter.dart';
 import '../../../models/system_tweak.dart';
+import '../../../platform/windows/system_uptime.dart';
 
 class TweakController extends ChangeNotifier {
   TweakController({
@@ -38,7 +46,11 @@ class TweakController extends ChangeNotifier {
     required ProcessRunner processRunner,
     required String appVersion,
     LoggingService? loggingService,
-    PowerPlanService? powerPlanService,
+    Future<LegacyCatalogAdapter> Function()? legacyCatalogAdapterLoader,
+    ElevatedHelperClient? elevatedHelperClient,
+    OperationRegistry? operationRegistry,
+    OperationStore? operationStore,
+    OperationExecutor? elevatedOperationExecutor,
   }) : _tweakManager = tweakManager,
        _permissionService = permissionService,
        _hardwareDetectionService = hardwareDetectionService,
@@ -48,14 +60,15 @@ class TweakController extends ChangeNotifier {
        _metricsSamplingService = metricsSamplingService,
        _preferences = preferences,
        _processRunner = processRunner,
-       _powerPlanService =
-           powerPlanService ??
-           PowerPlanService(
-             preferences: preferences,
-             processRunner: processRunner,
-           ),
        _appVersion = appVersion,
-       _loggingService = loggingService ?? LoggingService.instance;
+       _loggingService = loggingService ?? LoggingService.instance,
+       _legacyCatalogAdapterLoader =
+           legacyCatalogAdapterLoader ??
+           (() async => LegacyCatalogAdapter.identity),
+       _elevatedHelperClient = elevatedHelperClient,
+       _operationRegistry = operationRegistry,
+       _operationStore = operationStore,
+       _elevatedOperationExecutor = elevatedOperationExecutor;
 
   final TweakManager _tweakManager;
   final PermissionService _permissionService;
@@ -66,9 +79,14 @@ class TweakController extends ChangeNotifier {
   final MetricsSamplingService _metricsSamplingService;
   final SharedPreferences _preferences;
   final ProcessRunner _processRunner;
-  final PowerPlanService _powerPlanService;
   final String _appVersion;
   final LoggingService _loggingService;
+  final Future<LegacyCatalogAdapter> Function() _legacyCatalogAdapterLoader;
+  final ElevatedHelperClient? _elevatedHelperClient;
+  final OperationRegistry? _operationRegistry;
+  final OperationStore? _operationStore;
+  final OperationExecutor? _elevatedOperationExecutor;
+  PlanEngine? _planEngine;
 
   static const String defaultPreset = 'Default';
   static const String safePreset = 'Safe';
@@ -82,16 +100,33 @@ class TweakController extends ChangeNotifier {
   static const String _expandedCollectionsKey = 'expandedCollections';
   static const String _localeCodeKey = AppLocaleService.preferenceKey;
   static const String _startWithWindowsKey = 'startWithWindows';
+  static const String _expertModeKey = 'expertMode';
+  static const String _themeModeKey = 'themeMode';
   static const int _maxMetricsPoints = 40;
   static const Set<String> _interactionLockingTweaks = <String>{
     'network_low_latency_bandwidth_profile',
   };
+  static const Map<String, Object> _nativeToggleEnabledValues =
+      <String, Object>{
+        'ui_taskbar_end_task': 1,
+        'power_throttling_off': 1,
+        'power_processor_boost_mode': <String, int>{'ac': 2, 'dc': 2},
+        'power_max_processor_state': <String, int>{'ac': 100, 'dc': 100},
+      };
+  static const Map<String, Object?> _nativeToggleDisabledValues =
+      <String, Object?>{
+        'ui_taskbar_end_task': null,
+        'power_throttling_off': null,
+        'power_processor_boost_mode': <String, int>{'ac': 1, 'dc': 1},
+        'power_max_processor_state': <String, int>{'ac': 99, 'dc': 99},
+      };
 
   bool _isLoading = true;
   bool _isAdmin = false;
   bool _needsRestart = false;
   HardwareProfile _hardwareProfile = HardwareProfile.unknown;
-  String _selectedCategory = TweakCatalogService.navigationCategories.first;
+  String _selectedCategory =
+      TweakCatalogService.oneAppNavigationCategories.first;
 
   final Map<String, bool> _toggleStates = <String, bool>{};
   final Set<String> _busyTweaks = <String>{};
@@ -100,8 +135,15 @@ class TweakController extends ChangeNotifier {
   Timer? _metricsTicker;
   bool _isSamplingMetrics = false;
   bool _isSystemOperationActive = false;
+  Future<bool>? _helperRestorePointDecision;
+  bool _helperRestorePointAttempted = false;
   bool _automaticUpdateChecksEnabled = true;
   bool _startWithWindows = false;
+  bool _expertModeEnabled = false;
+  String _themeMode = 'system';
+  String _searchQuery = '';
+  int _navigationTab = 0;
+  String? _navigationSearchTerm;
   String _localeCode = AppLocaleService.systemCode();
   bool _isCheckingForUpdates = false;
   UpdateInfo? _availableUpdate;
@@ -142,16 +184,20 @@ class TweakController extends ChangeNotifier {
   String get selectedCategory => _selectedCategory;
   Map<String, bool> get toggleStates => _toggleStates;
   Set<String> get busyTweaks => _busyTweaks;
-  List<String> get categories => const <String>[
-    ...TweakCatalogService.navigationCategories,
-    settingsCategory,
-  ];
+  List<String> get categories => TweakCatalogService.oneAppNavigationCategories
+      .where((category) => category != 'Expert' || _expertModeEnabled)
+      .toList(growable: false);
   bool get isDryRunMode => _processRunner.isDryRun;
   String get loadingStatus => _loadingStatus;
   bool isLoadingStepDone(String step) => _completedLoadingSteps.contains(step);
   String get appVersion => _appVersion;
   bool get automaticUpdateChecksEnabled => _automaticUpdateChecksEnabled;
   bool get startWithWindows => _startWithWindows;
+  bool get expertModeEnabled => _expertModeEnabled;
+  String get themeMode => _themeMode;
+  String get searchQuery => _searchQuery;
+  int get navigationTab => _navigationTab;
+  String? get navigationSearchTerm => _navigationSearchTerm;
   String get localeCode => _localeCode;
   bool get isCheckingForUpdates => _isCheckingForUpdates;
   bool get isUpdateAvailable => _availableUpdate != null;
@@ -168,27 +214,6 @@ class TweakController extends ChangeNotifier {
   List<double> get memoryHistory => _memoryHistory;
   List<double> get gpuHistory => _gpuHistory;
   List<double> get vramHistory => _vramHistory;
-
-  Future<List<PowerPlan>> availablePowerPlans() =>
-      _powerPlanService.availablePlans();
-
-  Future<OperationResult> importAndActivatePowerPlan(PowerPlan plan) async {
-    try {
-      await _powerPlanService.importAndActivate(plan);
-      return const OperationResult(success: true);
-    } catch (error) {
-      return OperationResult(success: false, message: error.toString());
-    }
-  }
-
-  Future<OperationResult> restorePreviousPowerPlan() async {
-    try {
-      await _powerPlanService.restorePreviousPlan();
-      return const OperationResult(success: true);
-    } catch (error) {
-      return OperationResult(success: false, message: error.toString());
-    }
-  }
 
   /// Returns true when a category includes at least one toggle-capable tweak.
   bool categoryHasToggleableItems(String category, {bool systemOnly = false}) {
@@ -228,8 +253,39 @@ class TweakController extends ChangeNotifier {
 
   List<TweakDescriptor> categoryTweaks(String category) {
     return _catalog
-        .where((descriptor) => descriptor.category == category)
+        .where(
+          (descriptor) =>
+              descriptor.category == category && !descriptor.isAlias,
+        )
         .toList(growable: false);
+  }
+
+  List<TweakDescriptor> searchTweaks(
+    String query, {
+    bool includeExpert = false,
+  }) {
+    if (query.trim().isEmpty) return const <TweakDescriptor>[];
+
+    final byId = <String, TweakDescriptor>{
+      for (final descriptor in _catalog) descriptor.id: descriptor,
+    };
+    final results = <String, TweakDescriptor>{};
+    for (final descriptor in _catalog) {
+      if (!includeExpert &&
+          !_expertModeEnabled &&
+          descriptor.category == 'Expert') {
+        continue;
+      }
+      final haystack =
+          '${descriptor.id} ${descriptor.title} ${descriptor.description} '
+          '${descriptor.category} ${descriptor.collection}';
+      if (!SearchMatcher.matches(query, haystack)) continue;
+      final resolved = descriptor.aliasTarget == null
+          ? descriptor
+          : (byId[descriptor.aliasTarget!] ?? descriptor);
+      results[resolved.id] = resolved;
+    }
+    return results.values.toList(growable: false);
   }
 
   Future<void> initialize() async {
@@ -246,13 +302,16 @@ class TweakController extends ChangeNotifier {
       _automaticUpdateChecksEnabled =
           _preferences.getBool(_automaticUpdateChecksKey) ?? true;
       _startWithWindows = _preferences.getBool(_startWithWindowsKey) ?? false;
+      _expertModeEnabled = _preferences.getBool(_expertModeKey) ?? false;
+      _themeMode = _normalizedThemeMode(_preferences.getString(_themeModeKey));
       _localeCode = AppLocaleService.normalize(
         _preferences.getString(_localeCodeKey) ?? AppLocaleService.systemCode(),
       );
 
       _completeLoadingStep('Loading preferences...');
       _beginLoadingStep('Loading tweaks catalog...');
-      _catalog = _tweakCatalogService.buildCatalog();
+      final adapter = await _legacyCatalogAdapterLoader();
+      _catalog = adapter.adapt(_tweakCatalogService.buildCatalog());
       unawaited(
         _loggingService.logInfo(
           'Loaded ${_catalog.length} tweak catalog entries.',
@@ -289,6 +348,32 @@ class TweakController extends ChangeNotifier {
 
       _isAdmin = futures[0] as bool;
       _hardwareProfile = futures[1] as HardwareProfile;
+      if (_operationRegistry != null) {
+        _planEngine = PlanEngine(
+          registry: _operationRegistry,
+          context: OperationContext(
+            windowsBuild: _hardwareProfile.windowsBuild,
+            edition: 'Home/Pro',
+          ),
+          user: Platform.environment['USERNAME'] ?? 'current-user',
+          appVersion: _appVersion,
+          store: _operationStore,
+          elevatedExecutor: _elevatedOperationExecutor,
+        );
+        try {
+          await _planEngine!.reconcileAfterRestart(
+            domain: 'drivers',
+            rebootedSince: windowsRebootedSince,
+          );
+        } catch (error) {
+          unawaited(
+            _loggingService.logError(
+              'Driver post-restart verification failed: $error',
+              source: 'TweakController',
+            ),
+          );
+        }
+      }
       final detectedStates = futures[2] as Map<String, bool>;
       unawaited(
         _loggingService.logInfo(
@@ -391,15 +476,59 @@ class TweakController extends ChangeNotifier {
   }
 
   void selectCategory(String category) {
-    if (_selectedCategory == category) {
+    navigateTo(category);
+  }
+
+  void navigateTo(String category, {int tab = 0, String? searchTerm}) {
+    if (!categories.contains(category)) return;
+    if (_selectedCategory == category &&
+        _searchQuery.isEmpty &&
+        _navigationTab == tab &&
+        _navigationSearchTerm == searchTerm) {
       return;
     }
-
     _selectedCategory = category;
+    _searchQuery = '';
+    _navigationTab = tab;
+    _navigationSearchTerm = searchTerm;
     notifyListeners();
   }
 
+  void setSearchQuery(String query) {
+    if (_searchQuery == query) return;
+    _searchQuery = query;
+    notifyListeners();
+  }
+
+  Future<void> setExpertModeEnabled(bool enabled) async {
+    if (_expertModeEnabled == enabled) return;
+    _expertModeEnabled = enabled;
+    await _preferences.setBool(_expertModeKey, enabled);
+    if (!enabled && _selectedCategory == 'Expert') {
+      _selectedCategory = TweakCatalogService.oneAppNavigationCategories.first;
+    }
+    notifyListeners();
+  }
+
+  Future<void> setThemeMode(String value) async {
+    final normalized = _normalizedThemeMode(value);
+    if (_themeMode == normalized) return;
+    _themeMode = normalized;
+    await _preferences.setString(_themeModeKey, normalized);
+    notifyListeners();
+  }
+
+  static String _normalizedThemeMode(String? value) =>
+      const <String>{'system', 'light', 'dark'}.contains(value)
+      ? value!
+      : 'system';
+
   bool isDescriptorAvailable(TweakDescriptor descriptor) {
+    if (descriptor.isRejected || descriptor.isBlockedLegacyScript) return false;
+    if (descriptor.isSystemToggle &&
+        _operationRegistry?.contains(descriptor.id) != true) {
+      return false;
+    }
     if (_isDescriptorEnabled(descriptor)) {
       return true;
     }
@@ -436,6 +565,16 @@ class TweakController extends ChangeNotifier {
   }
 
   String availabilityHint(TweakDescriptor descriptor) {
+    if (descriptor.isRejected) {
+      return 'Documented for compatibility, but intentionally not automated.';
+    }
+    if (descriptor.isBlockedLegacyScript) {
+      return 'Legacy interactive script execution is blocked; use its native or assisted replacement.';
+    }
+    if (descriptor.isSystemToggle &&
+        _operationRegistry?.contains(descriptor.id) != true) {
+      return 'Legacy mutation is blocked until a typed native operation replaces it.';
+    }
     if (descriptor.requiredCpuVendor != null &&
         !_hardwareProfile.supportsCpu(descriptor.requiredCpuVendor)) {
       return 'Available only on ${descriptor.requiredCpuVendor!.toUpperCase()} CPUs.';
@@ -480,6 +619,27 @@ class TweakController extends ChangeNotifier {
 
     // Mark busy up front: creating a restore point can take a while and the
     // user needs a spinner for the whole operation, not just the apply step.
+    if (_processRunner.isDryRun) {
+      return _setSystemTweak(descriptor, nextValue);
+    }
+
+    if (!_isAdmin && _elevatedHelperClient != null) {
+      try {
+        _helperRestorePointDecision ??= confirmRestorePoint();
+        final createRestorePoint =
+            !_helperRestorePointAttempted && await _helperRestorePointDecision!;
+        _helperRestorePointAttempted |= createRestorePoint;
+        return await _setSystemTweak(
+          descriptor,
+          nextValue,
+          createRestorePoint: createRestorePoint,
+        );
+      } catch (error) {
+        _helperRestorePointDecision = null;
+        return OperationResult(success: false, message: error.toString());
+      }
+    }
+
     _markBusy(descriptor.id);
     try {
       final gate = await _safetyGateService.ensureSafety(
@@ -498,8 +658,9 @@ class TweakController extends ChangeNotifier {
 
   Future<OperationResult> _setSystemTweak(
     TweakDescriptor descriptor,
-    bool nextValue,
-  ) async {
+    bool nextValue, {
+    bool createRestorePoint = false,
+  }) async {
     if (nextValue && !isDescriptorAvailable(descriptor)) {
       return OperationResult(
         success: false,
@@ -515,30 +676,46 @@ class TweakController extends ChangeNotifier {
 
     _isSystemOperationActive = true;
     final previous = _toggleStates[descriptor.id] ?? false;
+    if (_processRunner.isDryRun) {
+      _isSystemOperationActive = false;
+      return const OperationResult(
+        success: true,
+        message: 'Dry run completed without changing Windows.',
+      );
+    }
     _markBusy(descriptor.id);
     _toggleStates[descriptor.id] = nextValue;
     notifyListeners();
 
     try {
-      final result = await _tweakManager.applyTweak(
-        descriptor.systemKey!,
-        nextValue,
-      );
-      if (!result.success) {
+      if (_operationRegistry?.contains(descriptor.id) != true) {
         _toggleStates[descriptor.id] = previous;
-        return OperationResult(
+        return const OperationResult(
           success: false,
-          message: result.errors.join('\n'),
+          message:
+              'Legacy mutation is blocked until a typed native operation replaces it.',
         );
       }
-
-      if (!_processRunner.isDryRun &&
-          await _tweakManager.detectTweakState(descriptor.systemKey!) !=
-              nextValue) {
+      final desired = nextValue
+          ? (_nativeToggleEnabledValues[descriptor.id] ?? 1)
+          : _nativeToggleDisabledValues[descriptor.id];
+      final plan = await executeNativeRequests(<OperationRequest>[
+        OperationRequest(operationId: descriptor.id, desiredValue: desired),
+      ]);
+      if (plan.status == PlanStatus.dryRunComplete) {
+        _toggleStates[descriptor.id] = previous;
+        return const OperationResult(
+          success: true,
+          message: 'Dry run completed without changing Windows.',
+        );
+      }
+      final item = plan.items.single;
+      if (plan.status != PlanStatus.completed ||
+          item.status != PlanItemStatus.verified) {
         _toggleStates[descriptor.id] = previous;
         return OperationResult(
           success: false,
-          message: 'State verification failed for ${descriptor.title}.',
+          message: item.error ?? item.before.message ?? 'Operation failed.',
         );
       }
 
@@ -557,6 +734,38 @@ class TweakController extends ChangeNotifier {
     }
   }
 
+  Future<OperationPlan> executeNativeRequests(
+    List<OperationRequest> requests,
+  ) async {
+    final engine = _planEngine;
+    if (engine == null || requests.isEmpty) {
+      throw StateError('Native operation engine is unavailable.');
+    }
+    final privileges = requests
+        .map(
+          (request) => engine.registry.resolve(request.operationId).privilege,
+        )
+        .toSet();
+    if (privileges.length != 1) {
+      throw StateError(
+        'User and administrator operations require separate plans.',
+      );
+    }
+    if (privileges.single == OperationPrivilege.administrator &&
+        !_processRunner.isDryRun) {
+      final helper = _elevatedHelperClient;
+      if (helper == null) throw StateError('Elevated helper is unavailable.');
+      return helper.executeNativePlan(
+        requests: requests,
+        user: Platform.environment['USERNAME'] ?? 'current-user',
+        appVersion: _appVersion,
+      );
+    }
+    final plan = await engine.plan(requests);
+    await engine.execute(plan, dryRun: _processRunner.isDryRun);
+    return plan;
+  }
+
   /// Executes a script tweak or toggles a stateful script tweak.
   Future<OperationResult> runScriptAction(
     TweakDescriptor descriptor, {
@@ -568,11 +777,24 @@ class TweakController extends ChangeNotifier {
         message: 'Invalid script tweak descriptor.',
       );
     }
+    if (descriptor.isBlockedLegacyScript) {
+      return const OperationResult(
+        success: false,
+        message:
+            'Legacy payload execution is blocked; use its native or assisted replacement.',
+      );
+    }
     if (_busyPresetCategories.contains(descriptor.category)) {
       return const OperationResult(
         success: false,
         message: 'A preset is being applied to this category.',
       );
+    }
+    if (_nativeToggleEnabledValues.containsKey(descriptor.id)) {
+      return _runNativeToggle(descriptor);
+    }
+    if (_operationRegistry?.contains(descriptor.id) == true) {
+      return _runNativeAction(descriptor);
     }
 
     _markBusy(descriptor.id);
@@ -591,10 +813,111 @@ class TweakController extends ChangeNotifier {
     return _runScriptTweak(descriptor);
   }
 
+  Future<OperationResult> _runNativeAction(TweakDescriptor descriptor) async {
+    final engine = _planEngine;
+    if (engine == null) {
+      return const OperationResult(
+        success: false,
+        message: 'Native operation engine is unavailable.',
+      );
+    }
+    _markBusy(descriptor.id);
+    try {
+      final plan = await engine.plan(<OperationRequest>[
+        OperationRequest(operationId: descriptor.id, desiredValue: true),
+      ]);
+      await engine.execute(plan, dryRun: _processRunner.isDryRun);
+      if (plan.status == PlanStatus.dryRunComplete) {
+        return const OperationResult(
+          success: true,
+          message: 'Dry run completed without changing Windows.',
+        );
+      }
+      final item = plan.items.single;
+      if (plan.status != PlanStatus.completed ||
+          item.status != PlanItemStatus.verified) {
+        return OperationResult(
+          success: false,
+          message: item.error ?? item.before.message ?? 'Operation failed.',
+        );
+      }
+      await _preferences.setBool('executed:${descriptor.id}', true);
+      return const OperationResult(success: true);
+    } catch (error) {
+      return OperationResult(success: false, message: error.toString());
+    } finally {
+      _clearBusy(descriptor.id);
+    }
+  }
+
+  Future<OperationResult> _runNativeToggle(
+    TweakDescriptor descriptor, {
+    bool? target,
+  }) async {
+    final engine = _planEngine;
+    if (engine == null || !engine.registry.contains(descriptor.id)) {
+      return const OperationResult(
+        success: false,
+        message: 'Native operation engine is unavailable.',
+      );
+    }
+    final tweak = descriptor.scriptTweak!;
+    final desired = target ?? !tweak.isApplied;
+    _markBusy(descriptor.id);
+    try {
+      final request = OperationRequest(
+        operationId: descriptor.id,
+        desiredValue: desired
+            ? _nativeToggleEnabledValues[descriptor.id]
+            : _nativeToggleDisabledValues[descriptor.id],
+      );
+      final definition = engine.registry.resolve(descriptor.id);
+      final helper = _elevatedHelperClient;
+      final plan =
+          definition.privilege == OperationPrivilege.administrator &&
+              helper != null &&
+              !_processRunner.isDryRun
+          ? await helper.executeNativePlan(
+              requests: <OperationRequest>[request],
+              user: engine.user,
+              appVersion: engine.appVersion,
+            )
+          : await engine.plan(<OperationRequest>[request]);
+      if (definition.privilege != OperationPrivilege.administrator ||
+          helper == null ||
+          _processRunner.isDryRun) {
+        await engine.execute(plan, dryRun: _processRunner.isDryRun);
+      }
+      if (plan.status == PlanStatus.dryRunComplete) {
+        return const OperationResult(
+          success: true,
+          message: 'Dry run completed without changing Windows.',
+        );
+      }
+      final item = plan.items.single;
+      if (plan.status != PlanStatus.completed ||
+          item.status != PlanItemStatus.verified) {
+        return OperationResult(
+          success: false,
+          message: item.error ?? item.before.message ?? 'Operation failed.',
+        );
+      }
+      tweak.isApplied = desired;
+      return const OperationResult(success: true);
+    } catch (error) {
+      return OperationResult(success: false, message: error.toString());
+    } finally {
+      _clearBusy(descriptor.id);
+    }
+  }
+
   Future<OperationResult> _runScriptTweak(
     TweakDescriptor descriptor, {
     bool? target,
   }) async {
+    if (_nativeToggleEnabledValues.containsKey(descriptor.id)) {
+      return _runNativeToggle(descriptor, target: target);
+    }
     final tweak = descriptor.scriptTweak!;
     final desiredState = tweak.hasState ? target ?? !tweak.isApplied : null;
     if (desiredState == true && !isDescriptorAvailable(descriptor)) {
@@ -855,6 +1178,9 @@ class TweakController extends ChangeNotifier {
       _processRunner.setMode(ProcessExecutionMode.production);
       _automaticUpdateChecksEnabled = true;
       _startWithWindows = false;
+      _expertModeEnabled = false;
+      _themeMode = 'system';
+      _searchQuery = '';
       _localeCode = AppLocaleService.systemCode();
       _needsRestart = false;
       _selectedPresets.clear();
@@ -931,6 +1257,8 @@ class TweakController extends ChangeNotifier {
       _restorePresetSelections();
       _automaticUpdateChecksEnabled =
           _preferences.getBool(_automaticUpdateChecksKey) ?? true;
+      _expertModeEnabled = _preferences.getBool(_expertModeKey) ?? false;
+      _themeMode = _normalizedThemeMode(_preferences.getString(_themeModeKey));
       _localeCode = AppLocaleService.normalize(
         _preferences.getString(_localeCodeKey),
       );

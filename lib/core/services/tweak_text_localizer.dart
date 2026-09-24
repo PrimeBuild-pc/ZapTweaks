@@ -428,6 +428,114 @@ class TweakTextLocalizer {
   static const Map<String, Map<String, (String, String)>>
   _reviewedCopy = <String, Map<String, (String, String)>>{
     'it': <String, (String, String)>{
+      'recovery_repair_bad_tweaks_zoicware': (
+        'Ripara tweak dannosi by zoicware',
+        'Apre la sorgente MIT verificata di RepairBadTweaks; ZapTweaks non include né esegue lo script.',
+      ),
+      'tool_zoicware_suite': (
+        'ZOICWARE',
+        'Apre il progetto MIT ufficiale per prestazioni e qualità d’uso di Windows 11.',
+      ),
+      'tool_zoicware_defender_pro_tools': (
+        'DefenderProTools by zoicware',
+        'Apre il progetto MIT ufficiale per controlli espliciti di Windows Defender.',
+      ),
+      'tool_zoicware_remove_windows_ai': (
+        'RemoveWindowsAI by zoicware',
+        'Apre il progetto MIT ufficiale per esaminare la rimozione di Copilot, Recall e componenti correlati.',
+      ),
+      'tool_zoicware_zscripts': (
+        'zScripts by zoicware',
+        'Apre il repository ufficiale di script PowerShell; il codice senza licenza dichiarata non viene copiato né eseguito.',
+      ),
+      'tool_zoicware_pbo_tuner_2': (
+        'PBOTuner2 by zoicware',
+        'Apre il progetto ufficiale per l’undervolt PBO Ryzen; la stabilità deve essere verificata separatamente.',
+      ),
+      'tool_zoicware_remove_cbs_apps': (
+        'RemoveCBSApps by zoicware',
+        'Apre il progetto MIT ufficiale per Get Started, Windows Backup e Cross Device Resume.',
+      ),
+      'tool_zoicware_power_plan_settings_editor': (
+        'PowerPlanSettingsEditor by zoicware',
+        'Apre l’editor MIT ufficiale; ZapTweaks offre anche Power Settings Explorer integrato.',
+      ),
+      'tool_zoicware_ultimate_disk_cleanup': (
+        'UltimateDiskCleanup by zoicware',
+        'Apre il progetto ufficiale di Pulizia disco con opzioni nascoste; controlla i target prima di eliminare dati.',
+      ),
+      'tool_zoicware_service_manager_plus': (
+        'ServiceManagerPlus by zoicware',
+        'Apre il progetto MIT ufficiale per la gestione avanzata dei servizi Windows.',
+      ),
+      'tool_zoicware_windows_device_remover': (
+        'WindowsDeviceRemover by zoicware',
+        'Apre il progetto MIT ufficiale per rimuovere dispositivi e driver.',
+      ),
+      'tool_zoicware_windows_update_manager': (
+        'WindowsUpdateManager by zoicware',
+        'Apre il progetto ufficiale per la gestione avanzata di Windows Update; il codice non viene incluso.',
+      ),
+      'tool_zoicware_dynamic_min_services': (
+        'DynamicMinServices by zoicware',
+        'Apre il progetto sperimentale ufficiale per ridurre i servizi; il codice non viene incluso.',
+      ),
+      'tool_zoicware_zturbo': (
+        'zTurbo by zoicware',
+        'Apre il progetto ufficiale dello script di ottimizzazione parallela; il codice non viene incluso.',
+      ),
+      'tool_zoicware_override_edid': (
+        'OverrideEDID by zoicware',
+        'Apre il progetto ufficiale per esaminare modifiche al blocco di estensione EDID.',
+      ),
+      'tool_zoicware_hosts_builder': (
+        'HostsBuilder by zoicware',
+        'Apre il progetto ufficiale per creare un file hosts Windows personalizzato.',
+      ),
+      'tool_zoicware_remove_apps_policy_editor': (
+        'RemoveAppsPolicyEditor by zoicware',
+        'Apre l’editor MIT ufficiale della policy RemoveDefaultMicrosoftStorePackages.',
+      ),
+      'tool_zoicware_tweak_fth': (
+        'TweakFTH by zoicware',
+        'Apre il progetto MIT ufficiale per gestire Fault Tolerant Heap.',
+      ),
+      'tool_benchmate': (
+        'BenchMate',
+        'Apre la pagina ufficiale della suite di validazione benchmark; il programma non è incluso.',
+      ),
+      'tool_linpack_xtreme': (
+        'Linpack Xtreme',
+        'Apre la pagina dell’autore ospitata da TechPowerUp per stress test di CPU e memoria.',
+      ),
+      'tool_occt': (
+        'OCCT',
+        'Apre la pagina ufficiale per test di stabilità e stress; il programma non è incluso.',
+      ),
+      'tool_y_cruncher': (
+        'y-cruncher',
+        'Apre la pagina ufficiale del benchmark e stress test per CPU e memoria.',
+      ),
+      'tool_cinebench_2024': (
+        'Cinebench 2024',
+        'Apre la pagina ufficiale Maxon del benchmark CPU e GPU.',
+      ),
+      'tool_memtest86': (
+        'MemTest86',
+        'Apre la pagina ufficiale PassMark del test avviabile per la memoria.',
+      ),
+      'tool_corecycler': (
+        'CoreCycler',
+        'Apre il progetto ufficiale per verificare la stabilità per-core dopo modifiche PBO o Curve Optimizer.',
+      ),
+      'tool_ctt_winutil': (
+        'CTT WinUtil by Chris Titus Tech',
+        'Apre la pagina ufficiale delle release. ZapTweaks non esegue codice PowerShell remoto mutabile.',
+      ),
+      'tool_windows_11_fix_tweaks_kubaam': (
+        'Windows 11 Fix Tweaks by kubaam',
+        'Apre il progetto upstream bloccato per la revisione. ZapTweaks non esegue il file batch tutto-in-uno.',
+      ),
       'game_mode': (
         'Modalità gioco attiva',
         'Attiva Modalità gioco senza modificare Game Bar o Game DVR.',
@@ -538,6 +646,18 @@ class TweakTextLocalizer {
       ),
     },
     'de': <String, (String, String)>{
+      'recovery_repair_bad_tweaks_zoicware': (
+        'Fehlerhafte Tweaks reparieren by zoicware',
+        'Startet die geprüfte MIT-Kopie des interaktiven RepairBadTweaks-Skripts by zoicware.',
+      ),
+      'tool_ctt_winutil': (
+        'CTT WinUtil by Chris Titus Tech',
+        'Öffnet die offizielle Release-Seite. ZapTweaks führt keinen veränderlichen entfernten PowerShell-Code aus.',
+      ),
+      'tool_windows_11_fix_tweaks_kubaam': (
+        'Windows 11 Fix Tweaks by kubaam',
+        'Öffnet das fixierte Upstream-Projekt zur Prüfung. ZapTweaks führt die All-in-One-Batchdatei nicht aus.',
+      ),
       'game_mode': (
         'Spielmodus an',
         'Aktiviert den Windows-Spielmodus, ohne Game Bar oder Game DVR zu ändern.',
@@ -572,6 +692,18 @@ class TweakTextLocalizer {
       ),
     },
     'es': <String, (String, String)>{
+      'recovery_repair_bad_tweaks_zoicware': (
+        'Reparar tweaks dañinos by zoicware',
+        'Inicia la copia MIT verificada del script interactivo RepairBadTweaks by zoicware.',
+      ),
+      'tool_ctt_winutil': (
+        'CTT WinUtil by Chris Titus Tech',
+        'Abre la página oficial de versiones. ZapTweaks no ejecuta código PowerShell remoto mutable.',
+      ),
+      'tool_windows_11_fix_tweaks_kubaam': (
+        'Windows 11 Fix Tweaks by kubaam',
+        'Abre el proyecto upstream fijado para revisarlo. ZapTweaks no ejecuta el archivo por lotes todo en uno.',
+      ),
       'game_mode': (
         'Modo de juego activado',
         'Activa el modo de juego de Windows sin modificar Game Bar ni Game DVR.',
@@ -606,6 +738,18 @@ class TweakTextLocalizer {
       ),
     },
     'fr': <String, (String, String)>{
+      'recovery_repair_bad_tweaks_zoicware': (
+        'Réparer les mauvais tweaks by zoicware',
+        'Lance la copie MIT vérifiée du script interactif RepairBadTweaks by zoicware.',
+      ),
+      'tool_ctt_winutil': (
+        'CTT WinUtil by Chris Titus Tech',
+        'Ouvre la page officielle des versions. ZapTweaks n’exécute aucun code PowerShell distant mutable.',
+      ),
+      'tool_windows_11_fix_tweaks_kubaam': (
+        'Windows 11 Fix Tweaks by kubaam',
+        'Ouvre le projet amont épinglé pour examen. ZapTweaks n’exécute pas le fichier batch tout-en-un.',
+      ),
       'game_mode': (
         'Mode Jeu activé',
         'Active le Mode Jeu Windows sans modifier Game Bar ni Game DVR.',
@@ -640,6 +784,18 @@ class TweakTextLocalizer {
       ),
     },
     'ru': <String, (String, String)>{
+      'recovery_repair_bad_tweaks_zoicware': (
+        'Исправить опасные твики by zoicware',
+        'Запускает проверенную MIT-копию интерактивного скрипта RepairBadTweaks by zoicware.',
+      ),
+      'tool_ctt_winutil': (
+        'CTT WinUtil by Chris Titus Tech',
+        'Открывает официальную страницу выпусков. ZapTweaks не выполняет изменяемый удалённый код PowerShell.',
+      ),
+      'tool_windows_11_fix_tweaks_kubaam': (
+        'Windows 11 Fix Tweaks by kubaam',
+        'Открывает закреплённый исходный проект для проверки. ZapTweaks не запускает универсальный пакетный файл.',
+      ),
       'game_mode': (
         'Игровой режим включён',
         'Включает игровой режим Windows, не изменяя Game Bar и Game DVR.',
@@ -674,6 +830,18 @@ class TweakTextLocalizer {
       ),
     },
     'zh': <String, (String, String)>{
+      'recovery_repair_bad_tweaks_zoicware': (
+        '修复不良调整 by zoicware',
+        '启动经过验证的 MIT 版 RepairBadTweaks 交互脚本 by zoicware。',
+      ),
+      'tool_ctt_winutil': (
+        'CTT WinUtil by Chris Titus Tech',
+        '打开官方发布页面。ZapTweaks 不执行可变的远程 PowerShell 代码。',
+      ),
+      'tool_windows_11_fix_tweaks_kubaam': (
+        'Windows 11 Fix Tweaks by kubaam',
+        '打开固定版本的上游项目以供审查。ZapTweaks 不执行一体化批处理文件。',
+      ),
       'game_mode': ('开启游戏模式', '开启 Windows 游戏模式，不会修改 Game Bar 或 Game DVR。'),
       'gaming_mpo_off': ('禁用多平面叠加 (MPO)', '仅用于诊断显示闪烁或卡顿；需要重启。'),
       'gaming_amd_gpu_safe_profile': (
@@ -1556,12 +1724,12 @@ class TweakTextLocalizer {
         "Sceneggiatura interattiva di Fr33thy.",
       ),
       "setup_startup_apps_7": (
-        "App di avvio (7)",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Impostazioni app di avvio",
+        "Apre la pagina Impostazioni di Windows dedicata alle app di avvio.",
       ),
       "setup_startup_apps_8": (
-        "App di avvio (8)",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "App di avvio in Gestione attività",
+        "Apre la sezione App di avvio di Gestione attività.",
       ),
       "setup_store_settings_script": (
         "Impostazioni del negozio (variante dello script)",
