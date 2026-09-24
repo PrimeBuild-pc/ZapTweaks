@@ -27,7 +27,9 @@ void main() {
     final tabs = File(
       'lib/features/power/presentation/gaming_hub_page.dart',
     ).readAsStringSync();
-    final search = File('lib/app/search_results_page.dart').readAsStringSync();
+    final search = File(
+      'lib/app/search_results_page.dart',
+    ).readAsStringSync().replaceAll('\r\n', '\n');
     final page = File(
       'lib/features/power/presentation/tcp_optimizer_page.dart',
     ).readAsStringSync();
