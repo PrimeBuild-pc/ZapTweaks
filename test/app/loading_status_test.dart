@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -44,14 +46,14 @@ class _FastMetricsSamplingService extends MetricsSamplingService {
 }
 
 class _FakePermissionService extends PermissionService {
-  _FakePermissionService() : super(processRunner: ProcessRunner());
+  _FakePermissionService() : super();
 
   @override
   Future<bool> isRunningElevated() async => false;
 }
 
 class _AdminPermissionService extends PermissionService {
-  _AdminPermissionService() : super(processRunner: ProcessRunner());
+  _AdminPermissionService() : super();
 
   @override
   Future<bool> isRunningElevated() async => true;
@@ -62,6 +64,15 @@ class _FakeHardwareDetectionService extends HardwareDetectionService {
 
   @override
   Future<HardwareProfile> detect() async => HardwareProfile.unknown;
+}
+
+class _BlockingHardwareDetectionService extends HardwareDetectionService {
+  _BlockingHardwareDetectionService() : super(processRunner: ProcessRunner());
+
+  final result = Completer<HardwareProfile>();
+
+  @override
+  Future<HardwareProfile> detect() => result.future;
 }
 
 class _FakeRestorePointService extends RestorePointService {
@@ -233,9 +244,46 @@ void main() {
     expect(controller.hardwareProfile, isA<HardwareProfile>());
   });
 
+  test('interactive shell does not wait for hardware detection', () async {
+    SharedPreferences.setMockInitialValues(<String, Object>{
+      'automaticUpdateChecks': false,
+    });
+    final prefs = await SharedPreferences.getInstance();
+    final runner = _NoopProcessRunner();
+    final hardware = _BlockingHardwareDetectionService();
+    ProcessRunner.configureShared(runner);
+    final controller = TweakController(
+      tweakManager: _FakeTweakManager(),
+      permissionService: _FakePermissionService(),
+      hardwareDetectionService: hardware,
+      safetyGateService: SafetyGateService(
+        permissionService: _FakePermissionService(),
+        restorePointService: _FakeRestorePointService(),
+        preferences: prefs,
+      ),
+      systemActionService: _FakeSystemActionService(),
+      tweakCatalogService: _EmptyTweakCatalogService(),
+      metricsSamplingService: _FastMetricsSamplingService(),
+      preferences: prefs,
+      processRunner: runner,
+      appVersion: '1.3.0',
+    );
+    addTearDown(controller.dispose);
+
+    final initialization = controller.initialize();
+    await Future<void>.delayed(const Duration(milliseconds: 20));
+
+    expect(controller.isLoading, isFalse);
+    expect(hardware.result.isCompleted, isFalse);
+
+    hardware.result.complete(HardwareProfile.unknown);
+    await initialization;
+  });
+
   testWidgets('all navigation sections are reachable', (tester) async {
     SharedPreferences.setMockInitialValues(<String, Object>{
       'automaticUpdateChecks': false,
+      'executionMode': 'dryRun',
     });
     final prefs = await SharedPreferences.getInstance();
     final runner = _NoopProcessRunner();

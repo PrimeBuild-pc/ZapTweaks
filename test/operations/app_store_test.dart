@@ -13,9 +13,28 @@ void main() {
     () async {
       final catalog = await AppStoreCatalog.load(bundle: rootBundle);
       final names = catalog.apps.map((app) => app.name).toSet();
+      final normalizedNames = catalog.apps
+          .map(
+            (app) =>
+                app.name.trim().toLowerCase().replaceAll(RegExp(r'\s+'), ' '),
+          )
+          .toSet();
+      final wingetIds = catalog.apps
+          .map((app) => app.wingetId?.trim().toLowerCase())
+          .whereType<String>()
+          .toList(growable: false);
+      final githubRepositories = catalog.apps
+          .map((app) => app.url)
+          .whereType<Uri>()
+          .where((url) => url.host.toLowerCase() == 'github.com')
+          .map((url) => url.path.replaceFirst(RegExp(r'/$'), '').toLowerCase())
+          .toList(growable: false);
 
       expect(catalog.apps, hasLength(464));
       expect(catalog.apps.map((app) => app.id).toSet(), hasLength(464));
+      expect(normalizedNames, hasLength(464));
+      expect(wingetIds.toSet(), hasLength(wingetIds.length));
+      expect(githubRepositories.toSet(), hasLength(githubRepositories.length));
       expect(
         catalog.apps.every(
           (app) =>
@@ -30,6 +49,21 @@ void main() {
         'by Igor Bushin',
       );
       expect(
+        catalog.apps
+            .singleWhere((app) => app.name == 'OptiScaler Client')
+            .url
+            .toString(),
+        'https://github.com/Optiscaler-Client/Optiscaler-Client',
+      );
+      expect(
+        catalog.apps.singleWhere((app) => app.name == 'RadeonTuner').author,
+        'dumbie',
+      );
+      expect(
+        catalog.apps.singleWhere((app) => app.name == 'Upscale It').author,
+        'NODIX-TECH',
+      );
+      expect(
         names,
         containsAll(<String>[
           'CUDA-Z',
@@ -39,6 +73,15 @@ void main() {
           'Special K',
           'Snappy Driver Installer Origin',
           'Logitech Onboard Memory Manager',
+          'Maxwell II BIOS Tweaker',
+          'OpenMouse',
+          'RadeonTuner',
+          'DLSS 5 Manager',
+          'DLSS Enabler Manager',
+          'Upscale It',
+          'DLSS-NR-on-AMD',
+          'OptiScaler Client',
+          'OpenLogi',
         ]),
       );
     },

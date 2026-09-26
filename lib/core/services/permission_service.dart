@@ -1,22 +1,33 @@
-import 'process_runner.dart';
+import 'dart:ffi';
+
+import 'package:ffi/ffi.dart';
+import 'package:win32/win32.dart';
 
 class PermissionService {
-  PermissionService({required ProcessRunner processRunner})
-    : _processRunner = processRunner;
-
-  final ProcessRunner _processRunner;
+  const PermissionService();
 
   Future<bool> isRunningElevated() async {
-    // `net session` reports failure when the Server service is disabled, even
-    // for an elevated process. Query the current access token instead.
-    final result = await _processRunner.run('powershell', <String>[
-      '-NoProfile',
-      '-NonInteractive',
-      '-Command',
-      r'''$identity = [Security.Principal.WindowsIdentity]::GetCurrent()
-$principal = [Security.Principal.WindowsPrincipal]::new($identity)
-$principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator).ToString().ToLower()''',
-    ]);
-    return result.success && result.stdout.trim().toLowerCase() == 'true';
+    final token = calloc<IntPtr>();
+    final elevation = calloc<Uint32>();
+    final returnedLength = calloc<Uint32>();
+    try {
+      if (OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, token) == 0) {
+        return false;
+      }
+      return GetTokenInformation(
+                token.value,
+                TokenElevation,
+                elevation.cast(),
+                sizeOf<Uint32>(),
+                returnedLength,
+              ) !=
+              0 &&
+          elevation.value != 0;
+    } finally {
+      if (token.value != 0) CloseHandle(token.value);
+      calloc.free(token);
+      calloc.free(elevation);
+      calloc.free(returnedLength);
+    }
   }
 }

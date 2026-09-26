@@ -9,6 +9,7 @@ void main() {
 
   test('parses cpu, gpu and memory counters from script output', () async {
     final service = MetricsSamplingService(
+      preferNative: false,
       processRunner: ProcessRunner(
         mode: ProcessExecutionMode.production,
         processRunDelegate:
@@ -39,8 +40,40 @@ void main() {
     expect(snapshot.vramTotalBytes, 1987654321);
   });
 
+  test(
+    'native sampler returns bounded metrics without starting PowerShell',
+    () async {
+      var processCalls = 0;
+      final service = MetricsSamplingService(
+        processRunner: ProcessRunner(
+          mode: ProcessExecutionMode.production,
+          processRunDelegate:
+              (
+                String executable,
+                List<String> arguments, {
+                bool runInShell = false,
+              }) async {
+                processCalls++;
+                return ProcessResult(1, 1, '', 'unexpected process');
+              },
+        ),
+      );
+      addTearDown(service.dispose);
+
+      final snapshot = await service.sample();
+
+      expect(snapshot.timestamp, isNotNull);
+      expect(snapshot.cpuUsagePercent, inInclusiveRange(0, 100));
+      expect(snapshot.memoryUsagePercent, inInclusiveRange(0, 100));
+      expect(snapshot.memoryTotalBytes, greaterThan(0));
+      expect(processCalls, 0);
+    },
+    skip: !Platform.isWindows,
+  );
+
   test('parses metrics from noisy output taking last valid line', () async {
     final service = MetricsSamplingService(
+      preferNative: false,
       processRunner: ProcessRunner(
         mode: ProcessExecutionMode.production,
         processRunDelegate:

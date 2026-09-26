@@ -24,45 +24,33 @@ void _validateRelativeSegments(List<String> relativeSegments) {
   }
 }
 
-String? resolveResourceFilePath(List<String> relativeSegments) {
+String? _resolveResourcePath(
+  List<String> relativeSegments,
+  bool Function(String path) exists,
+) {
   _validateRelativeSegments(relativeSegments);
-
-  final executableDirectory = path.dirname(Platform.resolvedExecutable);
-  final candidates = <String>[
-    path.joinAll([executableDirectory, 'resources', ...relativeSegments]),
-    path.joinAll([Directory.current.path, 'resources', ...relativeSegments]),
-  ];
-
-  for (final candidate in candidates) {
-    if (File(candidate).existsSync()) {
-      return candidate;
-    }
+  for (final root in <String>[
+    path.dirname(Platform.resolvedExecutable),
+    Directory.current.path,
+  ]) {
+    final candidate = path.joinAll([root, 'resources', ...relativeSegments]);
+    if (exists(candidate)) return candidate;
   }
-
   return null;
 }
+
+String? resolveResourceFilePath(List<String> relativeSegments) =>
+    _resolveResourcePath(relativeSegments, (value) => File(value).existsSync());
 
 String _resourceRelativePath(List<String> relativeSegments) {
   return 'resources\\${path.joinAll(relativeSegments)}';
 }
 
-String? resolveResourceDirectoryPath(List<String> relativeSegments) {
-  _validateRelativeSegments(relativeSegments);
-
-  final executableDirectory = path.dirname(Platform.resolvedExecutable);
-  final candidates = <String>[
-    path.joinAll([executableDirectory, 'resources', ...relativeSegments]),
-    path.joinAll([Directory.current.path, 'resources', ...relativeSegments]),
-  ];
-
-  for (final candidate in candidates) {
-    if (Directory(candidate).existsSync()) {
-      return candidate;
-    }
-  }
-
-  return null;
-}
+String? resolveResourceDirectoryPath(List<String> relativeSegments) =>
+    _resolveResourcePath(
+      relativeSegments,
+      (value) => Directory(value).existsSync(),
+    );
 
 String _resolveToolsRootDirectory() {
   final appData = Platform.environment['APPDATA'];

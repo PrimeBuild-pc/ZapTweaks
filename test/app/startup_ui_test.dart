@@ -19,7 +19,7 @@ import 'package:script_utility/core/tweak_manager.dart';
 import 'package:script_utility/features/tweaks/application/tweak_controller.dart';
 
 class _AdminPermissionService extends PermissionService {
-  _AdminPermissionService() : super(processRunner: ProcessRunner());
+  _AdminPermissionService() : super();
 
   @override
   Future<bool> isRunningElevated() async => true;
@@ -60,7 +60,8 @@ class _NoopProcessRunner extends ProcessRunner {
 }
 
 class _FastMetricsSamplingService extends MetricsSamplingService {
-  _FastMetricsSamplingService() : super(processRunner: _NoopProcessRunner());
+  _FastMetricsSamplingService()
+    : super(processRunner: _NoopProcessRunner(), preferNative: false);
 }
 
 class _EmptyTweakCatalogService extends TweakCatalogService {

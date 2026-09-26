@@ -88,15 +88,11 @@ class TweakController extends ChangeNotifier {
   final OperationExecutor? _elevatedOperationExecutor;
   PlanEngine? _planEngine;
 
-  static const String defaultPreset = 'Default';
-  static const String safePreset = 'Safe';
-  static const String aggressivePreset = 'Aggressive';
   static const String settingsCategory = 'Settings';
 
   static const String _needsRestartKey = 'needsRestart';
   static const String _executionModeKey = 'executionMode';
   static const String _automaticUpdateChecksKey = 'automaticUpdateChecks';
-  static const String _lastSelectedPresetPrefix = 'preset:';
   static const String _expandedCollectionsKey = 'expandedCollections';
   static const String _localeCodeKey = AppLocaleService.preferenceKey;
   static const String _startWithWindowsKey = 'startWithWindows';
@@ -130,7 +126,7 @@ class TweakController extends ChangeNotifier {
 
   final Map<String, bool> _toggleStates = <String, bool>{};
   final Set<String> _busyTweaks = <String>{};
-  final Set<String> _busyPresetCategories = <String>{};
+  final Set<String> _pendingStateTweaks = <String>{};
   List<TweakDescriptor> _catalog = <TweakDescriptor>[];
   Timer? _metricsTicker;
   bool _isSamplingMetrics = false;
@@ -158,9 +154,8 @@ class TweakController extends ChangeNotifier {
 
   String _loadingStatus = 'Initializing...';
 
-  /// Startup steps shown in order on the loading screen. The last four run in
-  /// parallel and tick off as each finishes, so a slow one (hardware detection
-  /// shells out to PowerShell) never looks like a freeze.
+  /// Startup work shown in order; hardware and state checks continue after
+  /// the interactive shell is ready.
   static const List<String> loadingSteps = <String>[
     'Loading preferences...',
     'Loading tweaks catalog...',
@@ -170,7 +165,6 @@ class TweakController extends ChangeNotifier {
     'Reading script tweak states...',
   ];
   final Set<String> _completedLoadingSteps = <String>{};
-  final Map<String, String> _selectedPresets = <String, String>{};
 
   /// "category/collection" keys the user has opened. Collections start closed
   /// so a category page opens as a short, scannable list, and the choice is
@@ -183,7 +177,10 @@ class TweakController extends ChangeNotifier {
   HardwareProfile get hardwareProfile => _hardwareProfile;
   String get selectedCategory => _selectedCategory;
   Map<String, bool> get toggleStates => _toggleStates;
-  Set<String> get busyTweaks => _busyTweaks;
+  Set<String> get busyTweaks => <String>{
+    ..._busyTweaks,
+    ..._pendingStateTweaks,
+  };
   List<String> get categories => TweakCatalogService.oneAppNavigationCategories
       .where((category) => category != 'Expert' || _expertModeEnabled)
       .toList(growable: false);
@@ -203,8 +200,6 @@ class TweakController extends ChangeNotifier {
   bool get isUpdateAvailable => _availableUpdate != null;
   UpdateInfo? get availableUpdate => _availableUpdate;
   String? get updateStatusMessage => _updateStatusMessage;
-  bool isPresetBusy(String category) =>
-      _busyPresetCategories.contains(category);
   bool get isInteractionLocked =>
       _busyTweaks.any(_interactionLockingTweaks.contains);
   String get interactionLockMessage =>
@@ -215,40 +210,9 @@ class TweakController extends ChangeNotifier {
   List<double> get gpuHistory => _gpuHistory;
   List<double> get vramHistory => _vramHistory;
 
-  /// Returns true when a category includes at least one toggle-capable tweak.
-  bool categoryHasToggleableItems(String category, {bool systemOnly = false}) {
-    return categoryTweaks(category).any((descriptor) {
-      if (descriptor.isSystemToggle) {
-        return true;
-      }
-
-      if (systemOnly) {
-        return false;
-      }
-
-      return descriptor.scriptTweak?.hasState ?? false;
-    });
-  }
-
   /// Returns true when an action script has been executed at least once.
   bool wasScriptExecuted(String tweakId) {
     return _preferences.getBool('executed:$tweakId') ?? false;
-  }
-
-  static List<String> availablePresetsForCategory(String category) =>
-      category == 'Home' || category == settingsCategory
-      ? const <String>[defaultPreset]
-      : const <String>[defaultPreset, safePreset, aggressivePreset];
-
-  static bool shouldEnablePreset(String preset, TweakDescriptor descriptor) =>
-      preset == aggressivePreset ||
-      (preset == safePreset && !descriptor.isAggressive);
-
-  List<String> presetsForCategory(String category) =>
-      availablePresetsForCategory(category);
-
-  String selectedPresetForCategory(String category) {
-    return _selectedPresets[category] ?? defaultPreset;
   }
 
   List<TweakDescriptor> categoryTweaks(String category) {
@@ -297,7 +261,6 @@ class TweakController extends ChangeNotifier {
     try {
       _beginLoadingStep('Loading preferences...');
       _restoreExecutionModeFromPreferences();
-      _restorePresetSelections();
       _restoreExpandedCollections();
       _automaticUpdateChecksEnabled =
           _preferences.getBool(_automaticUpdateChecksKey) ?? true;
@@ -307,31 +270,50 @@ class TweakController extends ChangeNotifier {
       _localeCode = AppLocaleService.normalize(
         _preferences.getString(_localeCodeKey) ?? AppLocaleService.systemCode(),
       );
-
+      _needsRestart = _preferences.getBool(_needsRestartKey) ?? false;
       _completeLoadingStep('Loading preferences...');
+
       _beginLoadingStep('Loading tweaks catalog...');
       final adapter = await _legacyCatalogAdapterLoader();
       _catalog = adapter.adapt(_tweakCatalogService.buildCatalog());
+      _pendingStateTweaks.addAll(
+        _catalog
+            .where(
+              (descriptor) =>
+                  descriptor.isSystemToggle ||
+                  descriptor.scriptTweak?.hasState == true,
+            )
+            .map((descriptor) => descriptor.id),
+      );
       unawaited(
         _loggingService.logInfo(
           'Loaded ${_catalog.length} tweak catalog entries.',
           source: 'TweakController',
         ),
       );
-
       _completeLoadingStep('Loading tweaks catalog...');
+
       _beginLoadingStep('Checking administrator rights...');
+      _isAdmin = await _trackLoadingStep(
+        'Checking administrator rights...',
+        _permissionService.isRunningElevated(),
+      );
+
+      _isLoading = false;
+      _loadingStatus = 'Ready';
+      notifyListeners();
+      unawaited(_startMetricsSampling());
+      if (_automaticUpdateChecksEnabled) {
+        unawaited(_checkForUpdatesAfterStartup());
+      }
+
       unawaited(
         _loggingService.logInfo(
-          'Detecting elevation, hardware profile, and current tweak states.',
+          'Detecting hardware profile and current tweak states in background.',
           source: 'TweakController',
         ),
       );
       final futures = await Future.wait<dynamic>(<Future<dynamic>>[
-        _trackLoadingStep(
-          'Checking administrator rights...',
-          _permissionService.isRunningElevated(),
-        ),
         _trackLoadingStep(
           'Detecting hardware...',
           _hardwareDetectionService.detect(),
@@ -346,8 +328,18 @@ class TweakController extends ChangeNotifier {
         ),
       ]);
 
-      _isAdmin = futures[0] as bool;
-      _hardwareProfile = futures[1] as HardwareProfile;
+      _hardwareProfile = futures[0] as HardwareProfile;
+      final detectedStates = futures[1] as Map<String, bool>;
+      for (final descriptor in _catalog.where(
+        (descriptor) => descriptor.isSystemToggle,
+      )) {
+        _toggleStates[descriptor.id] =
+            detectedStates[descriptor.systemKey] ??
+            _preferences.getBool(descriptor.id) ??
+            false;
+        _pendingStateTweaks.remove(descriptor.id);
+      }
+
       if (_operationRegistry != null) {
         _planEngine = PlanEngine(
           registry: _operationRegistry,
@@ -374,33 +366,19 @@ class TweakController extends ChangeNotifier {
           );
         }
       }
-      final detectedStates = futures[2] as Map<String, bool>;
+
       unawaited(
         _loggingService.logInfo(
           'Detection complete: elevation=$_isAdmin, CPU=${_hardwareProfile.cpuName}, GPUs=${_hardwareProfile.gpuNames.length}, system tweaks=${detectedStates.length}.',
           source: 'TweakController',
         ),
       );
-
-      for (final descriptor in _catalog) {
-        if (descriptor.isSystemToggle) {
-          _toggleStates[descriptor.id] =
-              detectedStates[descriptor.systemKey] ??
-              _preferences.getBool(descriptor.id) ??
-              false;
-        }
-      }
-
-      _needsRestart = _preferences.getBool(_needsRestartKey) ?? false;
     } finally {
       _isLoading = false;
+      _pendingStateTweaks.clear();
       _completedLoadingSteps.addAll(loadingSteps);
       _loadingStatus = 'Ready';
       notifyListeners();
-      Future<void>.delayed(Duration.zero, _startMetricsSampling);
-      if (_automaticUpdateChecksEnabled) {
-        Future<void>.delayed(Duration.zero, _checkForUpdatesAfterStartup);
-      }
     }
   }
 
@@ -460,6 +438,9 @@ class TweakController extends ChangeNotifier {
             source: 'TweakController',
           );
           tweak.isApplied = false;
+        } finally {
+          _pendingStateTweaks.remove(tweak.id);
+          notifyListeners();
         }
       }
     }
@@ -610,13 +591,6 @@ class TweakController extends ChangeNotifier {
         message: 'Invalid system tweak descriptor.',
       );
     }
-    if (_busyPresetCategories.contains(descriptor.category)) {
-      return const OperationResult(
-        success: false,
-        message: 'A preset is being applied to this category.',
-      );
-    }
-
     // Mark busy up front: creating a restore point can take a while and the
     // user needs a spinner for the whole operation, not just the apply step.
     if (_processRunner.isDryRun) {
@@ -667,7 +641,7 @@ class TweakController extends ChangeNotifier {
         message: availabilityHint(descriptor),
       );
     }
-    if (_busyTweaks.contains(descriptor.id) || _isSystemOperationActive) {
+    if (busyTweaks.contains(descriptor.id) || _isSystemOperationActive) {
       return const OperationResult(
         success: false,
         message: 'Another system tweak is being applied.',
@@ -784,11 +758,8 @@ class TweakController extends ChangeNotifier {
             'Legacy payload execution is blocked; use its native or assisted replacement.',
       );
     }
-    if (_busyPresetCategories.contains(descriptor.category)) {
-      return const OperationResult(
-        success: false,
-        message: 'A preset is being applied to this category.',
-      );
+    if (busyTweaks.contains(descriptor.id)) {
+      return const OperationResult(success: false, message: 'Tweak is busy.');
     }
     if (_nativeToggleEnabledValues.containsKey(descriptor.id)) {
       return _runNativeToggle(descriptor);
@@ -926,7 +897,7 @@ class TweakController extends ChangeNotifier {
         message: availabilityHint(descriptor),
       );
     }
-    if (_busyTweaks.contains(descriptor.id)) {
+    if (busyTweaks.contains(descriptor.id)) {
       return const OperationResult(success: false, message: 'Tweak is busy.');
     }
 
@@ -961,151 +932,6 @@ class TweakController extends ChangeNotifier {
       return OperationResult(success: false, message: error.toString());
     } finally {
       _clearBusy(descriptor.id);
-    }
-  }
-
-  Future<OperationResult> setAllInCategory(
-    String category,
-    bool enabled, {
-    required Future<bool> Function() confirmRestorePoint,
-  }) async {
-    if (!categoryHasToggleableItems(category, systemOnly: true)) {
-      return const OperationResult(
-        success: false,
-        message: 'Bulk toggle is available only for toggle-based categories.',
-      );
-    }
-    if (_busyPresetCategories.contains(category)) {
-      return const OperationResult(
-        success: false,
-        message: 'A preset is being applied to this category.',
-      );
-    }
-
-    final categoryDescriptors = categoryTweaks(category);
-    if (categoryDescriptors.any((item) => _busyTweaks.contains(item.id))) {
-      return const OperationResult(
-        success: false,
-        message: 'Wait for the current category operation to finish.',
-      );
-    }
-
-    final toggles = categoryDescriptors
-        .where((item) => item.isSystemToggle && isDescriptorAvailable(item))
-        .toList();
-
-    _busyPresetCategories.add(category);
-    notifyListeners();
-    try {
-      final gate = await _safetyGateService.ensureSafety(
-        requireRestorePoint: true,
-        askUserToCreateRestorePoint: confirmRestorePoint,
-      );
-      if (!gate.allowsExecution) {
-        return _mapGateFailure(gate);
-      }
-
-      for (final descriptor in toggles) {
-        if ((_toggleStates[descriptor.id] ?? false) == enabled) {
-          continue;
-        }
-        final result = await _setSystemTweak(descriptor, enabled);
-        if (!result.success) {
-          return result;
-        }
-      }
-      return const OperationResult(success: true);
-    } finally {
-      _busyPresetCategories.remove(category);
-      notifyListeners();
-    }
-  }
-
-  /// Applies a preset profile to all available toggles in a category.
-  Future<OperationResult> applyPresetToCategory(
-    String category,
-    String preset, {
-    required Future<bool> Function() confirmRestorePoint,
-  }) async {
-    if (!availablePresetsForCategory(category).contains(preset)) {
-      return const OperationResult(
-        success: false,
-        message: 'Unknown preset selected.',
-      );
-    }
-    if (_busyPresetCategories.contains(category)) {
-      return const OperationResult(
-        success: false,
-        message: 'A preset is already being applied.',
-      );
-    }
-
-    final categoryDescriptors = categoryTweaks(category);
-    if (categoryDescriptors.any((item) => _busyTweaks.contains(item.id))) {
-      return const OperationResult(
-        success: false,
-        message: 'Wait for the current category operation to finish.',
-      );
-    }
-
-    final descriptors = categoryDescriptors
-        .where(
-          (item) =>
-              (item.isSystemToggle || item.isScriptToggle) &&
-              isDescriptorAvailable(item),
-        )
-        .where((item) {
-          final current = item.isSystemToggle
-              ? (_toggleStates[item.id] ?? false)
-              : item.scriptTweak!.isApplied;
-          return current != shouldEnablePreset(preset, item);
-        })
-        .toList(growable: false);
-
-    _busyPresetCategories.add(category);
-    notifyListeners();
-    try {
-      if (descriptors.isNotEmpty) {
-        final gate = await _safetyGateService.ensureSafety(
-          requireRestorePoint: true,
-          askUserToCreateRestorePoint: confirmRestorePoint,
-        );
-        if (!gate.allowsExecution) {
-          return _mapGateFailure(gate);
-        }
-      }
-
-      final applied = <String>[];
-      for (final descriptor in descriptors) {
-        final target = shouldEnablePreset(preset, descriptor);
-        if (target && !isDescriptorAvailable(descriptor)) {
-          continue;
-        }
-        final result = descriptor.isSystemToggle
-            ? await _setSystemTweak(descriptor, target)
-            : await _runScriptTweak(descriptor, target: target);
-        if (!result.success) {
-          final completed = applied.isEmpty ? 'none' : applied.join(', ');
-          return OperationResult(
-            success: false,
-            message:
-                'Preset partially applied (${applied.length}/${descriptors.length}). '
-                'Completed: $completed. Failed: ${descriptor.title}. '
-                '${result.message ?? ''}',
-          );
-        }
-        applied.add(descriptor.title);
-      }
-
-      _selectedPresets[category] = preset;
-      await _preferences.setString(
-        '$_lastSelectedPresetPrefix$category',
-        preset,
-      );
-      return const OperationResult(success: true);
-    } finally {
-      _busyPresetCategories.remove(category);
-      notifyListeners();
     }
   }
 
@@ -1183,8 +1009,6 @@ class TweakController extends ChangeNotifier {
       _searchQuery = '';
       _localeCode = AppLocaleService.systemCode();
       _needsRestart = false;
-      _selectedPresets.clear();
-      _restorePresetSelections();
       notifyListeners();
       return const OperationResult(success: true);
     } catch (error) {
@@ -1254,7 +1078,6 @@ class TweakController extends ChangeNotifier {
         }
       }
       _restoreExecutionModeFromPreferences();
-      _restorePresetSelections();
       _automaticUpdateChecksEnabled =
           _preferences.getBool(_automaticUpdateChecksKey) ?? true;
       _expertModeEnabled = _preferences.getBool(_expertModeKey) ?? false;
@@ -1415,18 +1238,6 @@ class TweakController extends ChangeNotifier {
       );
   }
 
-  void _restorePresetSelections() {
-    for (final category in categories) {
-      final savedPreset = _preferences.getString(
-        '$_lastSelectedPresetPrefix$category',
-      );
-      final availablePresets = availablePresetsForCategory(category);
-      _selectedPresets[category] = availablePresets.contains(savedPreset)
-          ? savedPreset!
-          : defaultPreset;
-    }
-  }
-
   void _startMetricsTicker() {
     _metricsTicker?.cancel();
     _metricsTicker = Timer.periodic(const Duration(seconds: 2), (_) {
@@ -1476,7 +1287,9 @@ class TweakController extends ChangeNotifier {
   }
 
   List<double> _pushMetricValue(List<double> source, double nextValue) {
-    final target = List<double>.from(source)..add(nextValue);
+    final target = source.isEmpty
+        ? <double>[nextValue, nextValue]
+        : (List<double>.from(source)..add(nextValue));
 
     if (target.length > _maxMetricsPoints) {
       target.removeRange(0, target.length - _maxMetricsPoints);
@@ -1521,6 +1334,7 @@ class TweakController extends ChangeNotifier {
   void dispose() {
     _isDisposed = true;
     _metricsTicker?.cancel();
+    _metricsSamplingService.dispose();
     super.dispose();
   }
 }

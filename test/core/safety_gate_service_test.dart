@@ -11,7 +11,7 @@ import 'package:script_utility/core/services/restore_point_service.dart';
 import 'package:script_utility/core/services/safety_gate_service.dart';
 
 class _FakePermissionService extends PermissionService {
-  _FakePermissionService(this._isAdmin) : super(processRunner: ProcessRunner());
+  _FakePermissionService(this._isAdmin) : super();
 
   final bool _isAdmin;
 

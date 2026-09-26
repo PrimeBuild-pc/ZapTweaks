@@ -1610,7 +1610,8 @@
       "url": "https://www.foxit.com/pdf-reader/",
       "author": "Foxit",
       "sources": [
-        "CTT WinUtil"
+        "CTT WinUtil",
+        "Winhance candidate"
       ]
     },
     {
@@ -1819,17 +1820,6 @@
       ]
     },
     {
-      "id": "app_https_www_foxit_com_pdf_reader",
-      "name": "Foxit PDF Reader",
-      "category": "Document Viewers",
-      "wingetId": null,
-      "url": "https://www.foxit.com/pdf-reader/",
-      "author": "Marco du Plessis",
-      "sources": [
-        "Winhance candidate"
-      ]
-    },
-    {
       "id": "app_microsoft_office",
       "name": "Microsoft 365",
       "category": "Document Viewers",
@@ -1869,17 +1859,6 @@
       "wingetId": "TGRMNSoftware.BulkRenameUtility",
       "url": "https://www.bulkrenameutility.co.uk/",
       "author": "TGRMNSoftware",
-      "sources": [
-        "Winhance candidate"
-      ]
-    },
-    {
-      "id": "app_wssolinfor_crystaldiskinfo",
-      "name": "Crystal Disk Info",
-      "category": "File & Disk Management",
-      "wingetId": "WsSolInfor.CrystalDiskInfo",
-      "url": "https://crystalmark.info/en/software/crystaldiskinfo/",
-      "author": "WsSolInfor",
       "sources": [
         "Winhance candidate"
       ]
@@ -2255,6 +2234,39 @@
       ]
     },
     {
+      "id": "app_https_github_com_nodix_tech_dlss_5_manager",
+      "name": "DLSS 5 Manager",
+      "category": "Gaming & Input",
+      "wingetId": null,
+      "url": "https://github.com/NODIX-TECH/DLSS-5-MANAGER",
+      "author": "NODIX-TECH",
+      "sources": [
+        "Direct request"
+      ]
+    },
+    {
+      "id": "app_https_github_com_nodix_tech_dlss_enabler_manager",
+      "name": "DLSS Enabler Manager",
+      "category": "Gaming & Input",
+      "wingetId": null,
+      "url": "https://github.com/NODIX-TECH/DLSS-ENABLER-MANAGER",
+      "author": "NODIX-TECH",
+      "sources": [
+        "Direct request"
+      ]
+    },
+    {
+      "id": "app_https_github_com_danielblnc_dlss_nr_on_amd",
+      "name": "DLSS-NR-on-AMD",
+      "category": "Gaming & Input",
+      "wingetId": null,
+      "url": "https://github.com/danielblnc/DLSS-NR-on-AMD",
+      "author": "danielblnc",
+      "sources": [
+        "Direct request"
+      ]
+    },
+    {
       "id": "app_https_github_com_optiscaler_optiscaler",
       "name": "OptiScaler",
       "category": "Gaming & Input",
@@ -2270,10 +2282,33 @@
       "name": "OptiScaler Client",
       "category": "Gaming & Input",
       "wingetId": null,
-      "url": "https://github.com/Agustinm28/Optiscaler-Client",
-      "author": "PrimeBuild",
+      "url": "https://github.com/Optiscaler-Client/Optiscaler-Client",
+      "author": "Optiscaler-Client",
       "sources": [
-        "TweakHub"
+        "TweakHub",
+        "Direct request"
+      ]
+    },
+    {
+      "id": "app_https_openmouse_app_landing",
+      "name": "OpenMouse",
+      "category": "Gaming & Input",
+      "wingetId": null,
+      "url": "https://openmouse.app/landing",
+      "author": "OpenMouse Project",
+      "sources": [
+        "Direct request"
+      ]
+    },
+    {
+      "id": "app_https_github_com_aprilnea_openlogi",
+      "name": "OpenLogi",
+      "category": "Gaming & Input",
+      "wingetId": null,
+      "url": "https://github.com/AprilNEA/OpenLogi",
+      "author": "AprilNEA",
+      "sources": [
+        "Direct request"
       ]
     },
     {
@@ -2316,9 +2351,10 @@
       "category": "Gaming & Input",
       "wingetId": null,
       "url": "https://github.com/NODIX-TECH/UPSCALE-IT",
-      "author": "PrimeBuild",
+      "author": "NODIX-TECH",
       "sources": [
-        "TweakHub"
+        "TweakHub",
+        "Direct request"
       ]
     },
     {
@@ -2454,14 +2490,26 @@
       ]
     },
     {
+      "id": "app_https_www_techpowerup_com_download_maxwell_ii_bios_tweaker",
+      "name": "Maxwell II BIOS Tweaker",
+      "category": "GPU & Display",
+      "wingetId": null,
+      "url": "https://www.techpowerup.com/download/maxwell-ii-bios-tweaker/",
+      "author": "TechPowerUp",
+      "sources": [
+        "Direct request"
+      ]
+    },
+    {
       "id": "app_https_github_com_dumbie_radeontuner",
       "name": "RadeonTuner",
       "category": "GPU & Display",
       "wingetId": null,
       "url": "https://github.com/dumbie/RadeonTuner",
-      "author": "PrimeBuild",
+      "author": "dumbie",
       "sources": [
-        "TweakHub"
+        "TweakHub",
+        "Direct request"
       ]
     },
     {
@@ -2864,17 +2912,6 @@
       "category": "Monitoring & Diagnostics",
       "wingetId": null,
       "url": "https://learn.microsoft.com/windows-hardware/drivers/display/using-gpuview",
-      "author": "PrimeBuild",
-      "sources": [
-        "TweakHub"
-      ]
-    },
-    {
-      "id": "app_https_www_hwinfo_com_download",
-      "name": "HWiNFO",
-      "category": "Monitoring & Diagnostics",
-      "wingetId": null,
-      "url": "https://www.hwinfo.com/download/",
       "author": "PrimeBuild",
       "sources": [
         "TweakHub"
@@ -3426,17 +3463,6 @@
       ]
     },
     {
-      "id": "app_https_nmap_org_download_html",
-      "name": "Nmap",
-      "category": "Network",
-      "wingetId": null,
-      "url": "https://nmap.org/download.html",
-      "author": "PrimeBuild",
-      "sources": [
-        "TweakHub"
-      ]
-    },
-    {
       "id": "app_https_www_speedguide_net_downloads_php",
       "name": "TCP Optimizer",
       "category": "Network",
@@ -3597,17 +3623,6 @@
       "wingetId": "OpenAudible.OpenAudible",
       "url": "https://openaudible.org/",
       "author": "OpenAudible",
-      "sources": [
-        "Winhance candidate"
-      ]
-    },
-    {
-      "id": "app_marticliment_unigetui",
-      "name": "UniGetUI",
-      "category": "Other Utilities",
-      "wingetId": "MartiCliment.UniGetUI",
-      "url": "https://www.marticliment.com/unigetui/",
-      "author": "MartiCliment",
       "sources": [
         "Winhance candidate"
       ]
@@ -3800,7 +3815,8 @@
       "url": "https://www.hwinfo.com/",
       "author": "REALiX",
       "sources": [
-        "CTT WinUtil"
+        "CTT WinUtil",
+        "TweakHub"
       ]
     },
     {
@@ -3834,7 +3850,8 @@
       "url": "https://nmap.org/",
       "author": "Insecure",
       "sources": [
-        "CTT WinUtil"
+        "CTT WinUtil",
+        "TweakHub"
       ]
     },
     {
@@ -4495,17 +4512,6 @@
       ]
     },
     {
-      "id": "app_https_github_com_marticliment_unigetui",
-      "name": "UniGetUI",
-      "category": "System Utilities",
-      "wingetId": null,
-      "url": "https://github.com/marticliment/UniGetUI",
-      "author": "PrimeBuild",
-      "sources": [
-        "TweakHub"
-      ]
-    },
-    {
       "id": "app_peterstrick_vivetool_gui",
       "name": "ViVeTool GUI",
       "category": "System Utilities",
@@ -4672,7 +4678,8 @@
       "author": "CrystalDewWorld",
       "sources": [
         "CTT WinUtil",
-        "TweakHub"
+        "TweakHub",
+        "Winhance candidate"
       ]
     },
     {
@@ -5184,7 +5191,9 @@
       "url": "https://devolutions.net/unigetui/",
       "author": "Devolutions",
       "sources": [
-        "CTT WinUtil"
+        "CTT WinUtil",
+        "TweakHub",
+        "Winhance candidate"
       ]
     },
     {

@@ -16,7 +16,7 @@ import 'package:script_utility/core/tweak_manager.dart';
 import 'package:script_utility/features/tweaks/application/tweak_controller.dart';
 
 class _FakePermissionService extends PermissionService {
-  _FakePermissionService() : super(processRunner: ProcessRunner());
+  _FakePermissionService() : super();
 
   @override
   Future<bool> isRunningElevated() async => true;

@@ -126,7 +126,7 @@ Future<void> main(List<String> arguments) async {
     'Application startup sequence started.',
   );
 
-  final permissionService = PermissionService(processRunner: processRunner);
+  const permissionService = PermissionService();
   final restorePointService = RestorePointService(processRunner: processRunner);
   final safetyGateService = SafetyGateService(
     permissionService: permissionService,
