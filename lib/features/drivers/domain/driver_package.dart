@@ -86,15 +86,3 @@ class DriverExport {
     'manifestSha256': manifestSha256,
   };
 }
-
-class TemporaryDriverUpdatePolicy {
-  const TemporaryDriverUpdatePolicy({
-    required this.expiresAt,
-    required this.previousValue,
-  });
-
-  final DateTime expiresAt;
-  final Object? previousValue;
-
-  bool isExpired(DateTime now) => !now.isBefore(expiresAt);
-}

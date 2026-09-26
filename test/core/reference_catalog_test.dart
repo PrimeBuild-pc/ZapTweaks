@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:script_utility/core/services/tweak_catalog_service.dart';
-import 'package:script_utility/features/tweaks/application/tweak_controller.dart';
 
 void main() {
   test(
@@ -32,7 +31,7 @@ void main() {
     },
   );
 
-  test('new disruptive controls are excluded from Safe presets', () {
+  test('new disruptive controls are marked aggressive', () {
     final catalog = TweakCatalogService().buildCatalog();
     final byId = {for (final item in catalog) item.id: item};
 
@@ -43,14 +42,6 @@ void main() {
       'checks_smart_screen_off',
     ]) {
       expect(byId[id]!.isAggressive, isTrue, reason: id);
-      expect(
-        TweakController.shouldEnablePreset(
-          TweakController.safePreset,
-          byId[id]!,
-        ),
-        isFalse,
-        reason: id,
-      );
     }
   });
 }

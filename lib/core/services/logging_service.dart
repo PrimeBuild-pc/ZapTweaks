@@ -3,25 +3,6 @@ import 'dart:io';
 
 import 'package:path/path.dart' as path;
 
-class LogEntry {
-  const LogEntry({
-    required this.timestamp,
-    required this.level,
-    required this.source,
-    required this.message,
-  });
-
-  final DateTime timestamp;
-  final String level;
-  final String source;
-  final String message;
-
-  String toLine() {
-    final time = timestamp.toIso8601String();
-    return '[$time] [$level] [$source] $message';
-  }
-}
-
 class LoggingService {
   LoggingService._();
 
@@ -30,6 +11,7 @@ class LoggingService {
   bool _initialized = false;
   File? _file;
   Future<void>? _initialization;
+  Future<void> _writeQueue = Future<void>.value();
 
   String get logDirectoryPath =>
       path.join(_resolveAppDataPath(), 'ZapTweaks', 'logs');
@@ -51,38 +33,14 @@ class LoggingService {
     _initialized = true;
   }
 
-  Future<void> logInfo(String message, {String source = 'App'}) {
-    return _log(
-      LogEntry(
-        timestamp: DateTime.now(),
-        level: 'INFO',
-        source: source,
-        message: message,
-      ),
-    );
-  }
+  Future<void> logInfo(String message, {String source = 'App'}) =>
+      _log('INFO', source, message);
 
-  Future<void> logWarning(String message, {String source = 'App'}) {
-    return _log(
-      LogEntry(
-        timestamp: DateTime.now(),
-        level: 'WARN',
-        source: source,
-        message: message,
-      ),
-    );
-  }
+  Future<void> logWarning(String message, {String source = 'App'}) =>
+      _log('WARN', source, message);
 
-  Future<void> logError(String message, {String source = 'App'}) {
-    return _log(
-      LogEntry(
-        timestamp: DateTime.now(),
-        level: 'ERROR',
-        source: source,
-        message: message,
-      ),
-    );
-  }
+  Future<void> logError(String message, {String source = 'App'}) =>
+      _log('ERROR', source, message);
 
   Future<void> logCommandExecution({
     required String executable,
@@ -95,48 +53,75 @@ class LoggingService {
     bool dryRun = false,
     String source = 'ProcessRunner',
   }) async {
-    final command = '$executable ${arguments.join(' ')}'.trim();
     final status = timedOut
         ? 'timeout'
         : (dryRun ? 'dry-run simulated' : 'completed');
 
     await logInfo(
-      'Command $status (exitCode=$exitCode, duration=${duration.inMilliseconds}ms): $command',
+      'Command $status (exitCode=$exitCode, duration=${duration.inMilliseconds}ms): '
+      '${_formatCommand(executable, arguments)}',
       source: source,
     );
 
-    final stdOutText = stdout.trim();
-    if (stdOutText.isNotEmpty) {
-      await logInfo('stdout: $stdOutText', source: source);
+    if (stdout.trim().isNotEmpty) {
+      await logInfo('stdout: $stdout', source: source);
     }
-
-    final stdErrText = stderr.trim();
-    if (stdErrText.isNotEmpty) {
-      await logWarning('stderr: $stdErrText', source: source);
+    if (stderr.trim().isNotEmpty) {
+      await logWarning('stderr: $stderr', source: source);
     }
   }
 
-  Future<void> _log(LogEntry entry) async {
-    try {
-      await _appendRawLine(entry.toLine());
-    } on FileSystemException {
-      // Logging must never block a system tweak when the log directory is unavailable.
-    }
+  Future<void> _log(String level, String source, String message) {
+    final line =
+        '[${DateTime.now().toIso8601String()}] [$level] [$source] '
+        '${_bounded(message)}';
+    _writeQueue = _writeQueue.then((_) async {
+      try {
+        await _appendRawLine(line);
+      } on FileSystemException {
+        // Logging must never block a system tweak when storage is unavailable.
+      }
+    });
+    return _writeQueue;
   }
 
   Future<void> _appendRawLine(String line) async {
-    if (!_initialized) {
-      await initialize();
-    }
-
+    if (!_initialized) await initialize();
     await _file?.writeAsString('$line\n', mode: FileMode.append);
+  }
+
+  String _formatCommand(String executable, List<String> arguments) {
+    final safe = <String>[];
+    for (var index = 0; index < arguments.length; index++) {
+      final argument = arguments[index];
+      if (index > 0 &&
+          const <String>{
+            '-command',
+            '-encodedcommand',
+          }.contains(arguments[index - 1].toLowerCase())) {
+        safe.add('<script:${argument.length} chars>');
+      } else {
+        safe.add(
+          argument.length <= 256 ? argument : '${argument.substring(0, 256)}…',
+        );
+      }
+    }
+    return '$executable ${safe.join(' ')}'.trim();
+  }
+
+  String _bounded(String value, [int limit = 4096]) {
+    final singleLine = value
+        .trim()
+        .replaceAll('\r', r'\r')
+        .replaceAll('\n', r'\n');
+    return singleLine.length <= limit
+        ? singleLine
+        : '${singleLine.substring(0, limit)}…';
   }
 
   String _resolveAppDataPath() {
     final appData = Platform.environment['APPDATA'];
-    if (appData != null && appData.trim().isNotEmpty) {
-      return appData;
-    }
+    if (appData != null && appData.trim().isNotEmpty) return appData;
 
     final userProfile = Platform.environment['USERPROFILE'];
     if (userProfile != null && userProfile.trim().isNotEmpty) {

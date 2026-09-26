@@ -1,3 +1,8 @@
+import 'dart:typed_data';
+
+import 'package:win32/win32.dart';
+
+import '../platform/windows/registry_value_store.dart';
 import 'services/process_runner.dart';
 
 class RegistryException implements Exception {
@@ -11,29 +16,15 @@ class RegistryException implements Exception {
 }
 
 class RegistryManager {
+  static const RegistryValueStore _store = WindowsRegistryValueStore();
+
   static Future<int?> readDword(String keyPath, String valueName) async {
     try {
-      final result = await _runRegProcess('reg', [
-        'query',
-        keyPath,
-        '/v',
-        valueName,
-      ]);
-
-      if (result.exitCode != 0) {
+      final value = await _store.read(keyPath, valueName);
+      if (value == null || value.type != REG_DWORD || value.bytes.length < 4) {
         return null;
       }
-
-      final rawValue = _extractQueryValue(
-        result.stdout.toString(),
-        valueName,
-        r'REG_DWORD',
-      );
-      if (rawValue == null) {
-        return null;
-      }
-
-      return _parseDword(rawValue);
+      return ByteData.sublistView(value.bytes).getUint32(0, Endian.little);
     } catch (_) {
       return null;
     }
@@ -41,186 +32,105 @@ class RegistryManager {
 
   static Future<String?> readString(String keyPath, String valueName) async {
     try {
-      final result = await _runRegProcess('reg', [
-        'query',
-        keyPath,
-        '/v',
-        valueName,
-      ]);
-
-      if (result.exitCode != 0) {
+      final value = await _store.read(keyPath, valueName);
+      if (value == null ||
+          (value.type != REG_SZ && value.type != REG_EXPAND_SZ)) {
         return null;
       }
-
-      final rawValue = _extractQueryValue(
-        result.stdout.toString(),
-        valueName,
-        r'REG_(SZ|EXPAND_SZ)',
-      );
-      if (rawValue == null) {
-        return null;
+      final length = value.bytes.length - (value.bytes.length % 2);
+      final data = ByteData.sublistView(value.bytes, 0, length);
+      final units = <int>[
+        for (var offset = 0; offset < length; offset += 2)
+          data.getUint16(offset, Endian.little),
+      ];
+      while (units.isNotEmpty && units.last == 0) {
+        units.removeLast();
       }
-
-      final trimmed = rawValue.trim();
-      if (trimmed.isEmpty || trimmed.toLowerCase() == '(value not set)') {
-        return null;
-      }
-
-      return trimmed;
+      final result = String.fromCharCodes(units).trim();
+      return result.isEmpty ? null : result;
     } catch (_) {
       return null;
     }
   }
 
-  static Future<void> writeDword(
-    String keyPath,
-    String valueName,
-    int value,
-  ) async {
-    final normalizedValue = value.toUnsigned(32);
-    await _runReg(<String>[
-      'add',
-      _quote(keyPath),
-      '/v',
-      _quote(valueName),
-      '/t',
-      'REG_DWORD',
-      '/d',
-      normalizedValue.toString(),
-      '/f',
-    ], operation: 'write REG_DWORD $keyPath/$valueName');
-  }
+  static Future<void> writeDword(String keyPath, String valueName, int value) =>
+      _write(
+        keyPath,
+        valueName,
+        RawRegistryValue(
+          type: REG_DWORD,
+          bytes: Uint8List(4)
+            ..buffer.asByteData().setUint32(
+              0,
+              value.toUnsigned(32),
+              Endian.little,
+            ),
+        ),
+      );
 
   static Future<void> writeString(
     String keyPath,
     String valueName,
     String value,
-  ) async {
-    await _runReg(<String>[
-      'add',
-      _quote(keyPath),
-      '/v',
-      _quote(valueName),
-      '/t',
-      'REG_SZ',
-      '/d',
-      value,
-      '/f',
-    ], operation: 'write REG_SZ $keyPath/$valueName');
+  ) {
+    final units = '$value\u0000'.codeUnits;
+    final bytes = Uint8List(units.length * 2);
+    final data = bytes.buffer.asByteData();
+    for (var index = 0; index < units.length; index++) {
+      data.setUint16(index * 2, units[index], Endian.little);
+    }
+    return _write(
+      keyPath,
+      valueName,
+      RawRegistryValue(type: REG_SZ, bytes: bytes),
+    );
   }
 
   static Future<void> writeBinary(
     String keyPath,
     String valueName,
     String hexValue,
-  ) async {
-    await _runReg(<String>[
-      'add',
-      _quote(keyPath),
-      '/v',
-      _quote(valueName),
-      '/t',
-      'REG_BINARY',
-      '/d',
-      hexValue,
-      '/f',
-    ], operation: 'write REG_BINARY $keyPath/$valueName');
+  ) {
+    final normalized = hexValue.replaceAll(RegExp(r'[^0-9a-fA-F]'), '');
+    if (normalized.length.isOdd || normalized.length != hexValue.length) {
+      throw RegistryException('Invalid REG_BINARY value.');
+    }
+    return _write(
+      keyPath,
+      valueName,
+      RawRegistryValue(
+        type: REG_BINARY,
+        bytes: Uint8List.fromList(<int>[
+          for (var index = 0; index < normalized.length; index += 2)
+            int.parse(normalized.substring(index, index + 2), radix: 16),
+        ]),
+      ),
+    );
   }
 
   static Future<void> deleteValue(String keyPath, String valueName) async {
-    await _runReg(<String>[
-      'delete',
-      _quote(keyPath),
-      '/v',
-      _quote(valueName),
-      '/f',
-    ], operation: 'delete value $keyPath/$valueName');
-  }
-
-  static Future<void> _runReg(
-    List<String> arguments, {
-    required String operation,
-  }) async {
+    if (ProcessRunner.shared.isDryRun) return;
     try {
-      final result = await _runRegProcess('reg.exe', arguments);
-      if (result.exitCode != 0) {
-        final stderr = result.stderr.toString().trim();
-        final stdout = result.stdout.toString().trim();
-        final details = stderr.isNotEmpty
-            ? stderr
-            : (stdout.isNotEmpty ? stdout : 'Unknown registry error');
-
-        throw RegistryException(
-          'Registry operation failed: $operation | $details',
-          exitCode: result.exitCode,
-        );
-      }
-    } catch (e) {
-      throw RegistryException('Unable to execute reg.exe: ${e.toString()}');
+      await _store.delete(keyPath, valueName);
+    } catch (error) {
+      throw RegistryException(
+        'Registry delete failed: $keyPath/$valueName | $error',
+      );
     }
   }
 
-  static Future<CommandResult> _runRegProcess(
-    String executable,
-    List<String> arguments, {
-    bool runInShell = true,
-  }) async {
-    return ProcessRunner.shared.run(
-      executable,
-      arguments,
-      runInShell: runInShell,
-      timeout: const Duration(seconds: 30),
-    );
-  }
-
-  static String _quote(String value) {
-    final escaped = value.replaceAll('"', r'\"');
-    return '"$escaped"';
-  }
-
-  static String? _extractQueryValue(
-    String output,
+  static Future<void> _write(
+    String keyPath,
     String valueName,
-    String typePattern,
-  ) {
-    final exactLineRegex = RegExp(
-      '^\\s*${RegExp.escape(valueName)}\\s+$typePattern\\s+(.+)\$',
-      multiLine: true,
-      caseSensitive: false,
-    );
-
-    final exactLineMatch = exactLineRegex.firstMatch(output);
-    if (exactLineMatch != null) {
-      return exactLineMatch.group(1)?.trim();
+    RawRegistryValue value,
+  ) async {
+    if (ProcessRunner.shared.isDryRun) return;
+    try {
+      await _store.write(keyPath, valueName, value);
+    } catch (error) {
+      throw RegistryException(
+        'Registry write failed: $keyPath/$valueName | $error',
+      );
     }
-
-    final fallbackRegex = RegExp(
-      '$typePattern\\s+(.+)\$',
-      multiLine: true,
-      caseSensitive: false,
-    );
-    final fallbackMatch = fallbackRegex.firstMatch(output);
-    return fallbackMatch?.group(1)?.trim();
-  }
-
-  static int? _parseDword(String rawValue) {
-    final firstToken = rawValue.trim().split(RegExp(r'\s+')).first;
-    final token = firstToken.toLowerCase();
-
-    if (token.startsWith('0x')) {
-      return int.tryParse(token.substring(2), radix: 16);
-    }
-
-    final decimal = int.tryParse(token);
-    if (decimal != null) {
-      return decimal;
-    }
-
-    final bracketedDecimal = RegExp(r'\((\d+)\)').firstMatch(rawValue);
-    if (bracketedDecimal != null) {
-      return int.tryParse(bracketedDecimal.group(1)!);
-    }
-
-    return null;
   }
 }

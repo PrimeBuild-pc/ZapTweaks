@@ -193,12 +193,6 @@ class ProcessRunner {
       return CommandResult(exitCode: -1, stdout: '', stderr: requestError);
     }
 
-    final displayCommand = '$executable ${arguments.join(' ')}'.trim();
-    await _loggingService.logInfo(
-      'Launching command: $displayCommand',
-      source: 'ProcessRunner',
-    );
-
     if (isDryRun) {
       final elapsed = await _simulateDryRunDelay(timeout);
       final response = const CommandResult(
@@ -290,11 +284,6 @@ class ProcessRunner {
       await _loggingService.logWarning(requestError, source: 'ProcessRunner');
       return CommandResult(exitCode: -1, stdout: '', stderr: requestError);
     }
-
-    await _loggingService.logInfo(
-      'Running command: $executable ${arguments.join(' ')}',
-      source: 'ProcessRunner',
-    );
 
     if (isDryRun) {
       final elapsed = await _simulateDryRunDelay(timeout);
