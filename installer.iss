@@ -1,6 +1,6 @@
 ; ZapTweaks Inno Setup script
 #define AppName "ZapTweaks"
-#define AppVersion "1.10.0"
+#define AppVersion "1.11.0"
 #define AppPublisher "PrimeBuild"
 #define AppExeName "ZapTweaks.exe"
 #define SourceDir "build\\windows\\x64\\runner\\Release"
