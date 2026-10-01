@@ -65,8 +65,17 @@ $downloadPath = Join-Path $downloadRoot $assetName
 
 Write-Host "Downloading $assetName ..." -ForegroundColor Cyan
 Invoke-WebRequest -Uri $asset.browser_download_url -OutFile $downloadPath -UseBasicParsing -TimeoutSec 120
-if ((Get-Item -LiteralPath $downloadPath).Length -ne $asset.size -or
-    (Get-FileHash -LiteralPath $downloadPath -Algorithm SHA256).Hash -ne $expectedHash) {
+$stream = [IO.File]::OpenRead($downloadPath)
+$sha256 = [Security.Cryptography.SHA256]::Create()
+try {
+    $observedSize = $stream.Length
+    $observedHash = [BitConverter]::ToString($sha256.ComputeHash($stream)).Replace('-', '').ToLowerInvariant()
+}
+finally {
+    $sha256.Dispose()
+    $stream.Dispose()
+}
+if ($observedSize -ne $asset.size -or $observedHash -ne $expectedHash) {
     Remove-Item -LiteralPath $downloadRoot -Recurse -Force
     throw 'Downloaded release asset failed SHA-256 or size verification.'
 }

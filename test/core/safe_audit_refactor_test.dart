@@ -386,9 +386,50 @@ void main() {
     expect(helper, contains('Wait-Process'));
     expect(helper, contains("'/VERYSILENT'"));
     expect(helper, contains('Start-Process -FilePath'));
-    expect(helper, contains('Get-FileHash'));
+    expect(helper, contains('[Security.Cryptography.SHA256]::Create()'));
+    expect(helper, contains('ComputeHash'));
+    expect(helper, isNot(contains('Get-FileHash')));
     expect(helper, contains('Remove-Item -LiteralPath'));
     expect(secured, 2);
+    if (Platform.isWindows) {
+      Future<ProcessResult> runHelper(String source) {
+        final script =
+            '''
+\$global:launches = 0
+function Get-FileHash { throw 'Hash cmdlet unavailable' }
+function Start-Process { param(\$FilePath, \$ArgumentList, [switch]\$PassThru, [switch]\$Wait)
+  \$global:launches++; [pscustomobject]@{ExitCode=0}
+}
+try { ${source.replaceFirst(RegExp(r'Wait-Process -Id \d+ -ErrorAction SilentlyContinue; '), '')} } catch { Write-Output "GUARDED: \$_" }
+Write-Output "LAUNCHES=\$global:launches"
+''';
+        return Process.run('powershell', [
+          '-NoProfile',
+          '-EncodedCommand',
+          base64Encode([
+            for (final unit in script.codeUnits) ...[unit & 0xff, unit >> 8],
+          ]),
+        ]).timeout(const Duration(seconds: 20));
+      }
+
+      final allowed = await runHelper(helper);
+      expect(allowed.exitCode, 0, reason: '${allowed.stderr}');
+      expect(allowed.stdout.toString(), contains('LAUNCHES=2'));
+      expect((await service.installUpdate(update)).success, isTrue);
+      final installer =
+          (await directory
+                      .list(recursive: true)
+                      .where(
+                        (entry) => entry is File && entry.path.endsWith('.exe'),
+                      )
+                      .toList())
+                  .single
+              as File;
+      await installer.writeAsBytes([1, 2, 4], flush: true);
+      final refused = await runHelper(runner.arguments!.last);
+      expect(refused.stdout.toString(), contains('LAUNCHES=0'));
+      expect(refused.stdout.toString(), contains('GUARDED:'));
+    }
     for (final response in [
       http.Response.bytes([1, 2, 4], 200),
       http.Response.bytes([1, 2], 200),

@@ -51,6 +51,7 @@ function Invoke-WebRequest { param(\$Uri, \$OutFile, [switch]\$UseBasicParsing, 
   [IO.File]::WriteAllBytes(\$OutFile, [byte[]](1,2,3))
 }
 function icacls.exe { \$global:LASTEXITCODE = 0 }
+function Get-FileHash { throw 'Hash cmdlet intentionally unavailable; use .NET SHA256' }
 function Start-Process { param(\$FilePath, [switch]\$Wait) \$global:launches++ }
 try { . '$script' } catch { Write-Output "GUARDED: \$_" }
 Write-Output "LAUNCHES=\$global:launches"
