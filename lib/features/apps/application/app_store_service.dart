@@ -41,7 +41,11 @@ class AppStoreService {
 
   Future<void> openSource(StoreApp app) async {
     final url = app.url;
-    if (url == null || url.scheme != 'https') {
+    if (url == null ||
+        url.scheme != 'https' ||
+        url.host.isEmpty ||
+        url.userInfo.isNotEmpty ||
+        url.port != 443) {
       throw StateError('No verified HTTPS source is available.');
     }
     final result = await _runner.launch('explorer', <String>[url.toString()]);

@@ -7,6 +7,23 @@ import 'package:script_utility/core/operations/winget_package_operation.dart';
 import 'package:script_utility/core/services/process_runner.dart';
 
 void main() {
+  test('legitimate plus-sign package identities remain supported', () async {
+    final operation = WingetPackageOperation(
+      processRunner: ProcessRunner(mode: ProcessExecutionMode.dryRun),
+    );
+    expect(
+      (await operation.supports(
+        const OperationContext(windowsBuild: 26100, edition: 'Pro'),
+        const OperationRequest(
+          operationId: 'app.winget.set',
+          target: 'Notepad++.Notepad++',
+          desiredValue: true,
+        ),
+      )).supported,
+      isTrue,
+    );
+  });
+
   test('winget package operation snapshots, verifies and rolls back', () async {
     var installed = false;
     final runner = ProcessRunner(
@@ -62,13 +79,22 @@ void main() {
         desiredValue: true,
       );
 
-      expect(
-        (await operation.supports(
-          const OperationContext(windowsBuild: 26100, edition: 'Pro'),
-          request,
-        )).supported,
-        isFalse,
-      );
+      for (final candidate in [
+        request,
+        const OperationRequest(
+          operationId: 'app.winget.set',
+          target: '--ignore-security-hash',
+          desiredValue: true,
+        ),
+      ]) {
+        expect(
+          (await operation.supports(
+            const OperationContext(windowsBuild: 26100, edition: 'Pro'),
+            candidate,
+          )).supported,
+          isFalse,
+        );
+      }
     },
   );
 }

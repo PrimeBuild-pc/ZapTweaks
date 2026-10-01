@@ -142,6 +142,7 @@ class TweakController extends ChangeNotifier {
   String? _navigationSearchTerm;
   String _localeCode = AppLocaleService.systemCode();
   bool _isCheckingForUpdates = false;
+  double? _updateDownloadProgress;
   UpdateInfo? _availableUpdate;
   String? _updateStatusMessage;
   bool _isDisposed = false;
@@ -197,6 +198,7 @@ class TweakController extends ChangeNotifier {
   String? get navigationSearchTerm => _navigationSearchTerm;
   String get localeCode => _localeCode;
   bool get isCheckingForUpdates => _isCheckingForUpdates;
+  double? get updateDownloadProgress => _updateDownloadProgress;
   bool get isUpdateAvailable => _availableUpdate != null;
   UpdateInfo? get availableUpdate => _availableUpdate;
   String? get updateStatusMessage => _updateStatusMessage;
@@ -1140,6 +1142,8 @@ class TweakController extends ChangeNotifier {
   }
 
   Future<OperationResult> installAvailableUpdate() {
+    _updateDownloadProgress = null;
+    if (!_isDisposed) notifyListeners();
     final update = _availableUpdate;
     return update == null
         ? Future<OperationResult>.value(
@@ -1148,7 +1152,15 @@ class TweakController extends ChangeNotifier {
               message: 'No update is currently available.',
             ),
           )
-        : _systemActionService.installUpdate(update);
+        : _systemActionService.installUpdate(
+            update,
+            onProgress: (received, total) {
+              _updateDownloadProgress = total == null
+                  ? null
+                  : received / total * 100;
+              if (!_isDisposed) notifyListeners();
+            },
+          );
   }
 
   Future<OperationResult> openAvailableRelease() {
@@ -1257,14 +1269,29 @@ class TweakController extends ChangeNotifier {
       if (_isDisposed) {
         return;
       }
+      if (_latestMetrics.primaryGpuId != snapshot.primaryGpuId) {
+        _gpuHistory = const [];
+        _vramHistory = const [];
+      }
       _latestMetrics = snapshot;
-      _cpuHistory = _pushMetricValue(_cpuHistory, snapshot.cpuUsagePercent);
-      _memoryHistory = _pushMetricValue(
-        _memoryHistory,
-        snapshot.memoryUsagePercent,
-      );
-      _gpuHistory = _pushMetricValue(_gpuHistory, snapshot.gpuUsagePercent);
-      _vramHistory = _pushMetricValue(_vramHistory, snapshot.vramUsagePercent);
+      if (snapshot.cpuAvailable) {
+        _cpuHistory = _pushMetricValue(_cpuHistory, snapshot.cpuUsagePercent);
+      }
+      if (snapshot.memoryAvailable) {
+        _memoryHistory = _pushMetricValue(
+          _memoryHistory,
+          snapshot.memoryUsagePercent,
+        );
+      }
+      if (snapshot.gpuAvailable) {
+        _gpuHistory = _pushMetricValue(_gpuHistory, snapshot.gpuUsagePercent);
+      }
+      if (snapshot.vramAvailable) {
+        _vramHistory = _pushMetricValue(
+          _vramHistory,
+          snapshot.vramUsagePercent,
+        );
+      }
       notifyListeners();
     } finally {
       _isSamplingMetrics = false;

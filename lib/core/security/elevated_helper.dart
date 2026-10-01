@@ -59,7 +59,7 @@ class ElevatedHelperClient {
     DirectorySecurity? secureDirectory,
   }) : _directory = directory,
        _launcher = launcher ?? _launchElevated,
-       _secureDirectory = secureDirectory ?? _applyWindowsAcl;
+       _secureDirectory = secureDirectory ?? applyWindowsAcl;
 
   final Directory _directory;
   final HelperLauncher _launcher;
@@ -253,7 +253,7 @@ class ElevatedHelperClient {
     }
   }
 
-  static Future<void> _applyWindowsAcl(Directory directory) async {
+  static Future<void> applyWindowsAcl(Directory directory) async {
     if (!Platform.isWindows) return;
     final domain = Platform.environment['USERDOMAIN'];
     final user = Platform.environment['USERNAME'];

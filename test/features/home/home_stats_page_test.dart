@@ -8,6 +8,63 @@ import 'package:script_utility/l10n/app_localizations.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
+  testWidgets('GPU selection keeps utilization and VRAM on the same adapter', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      FluentApp(
+        locale: const Locale('it'),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: const HomeStatsPage(
+          hardwareProfile: HardwareProfile.unknown,
+          latestMetrics: SystemMetricsSnapshot(
+            timestamp: null,
+            cpuUsagePercent: 0,
+            memoryUsagePercent: 0,
+            memoryUsedBytes: 0,
+            memoryTotalBytes: 0,
+            gpuUsagePercent: 50,
+            vramUsagePercent: 20,
+            vramUsedBytes: 200,
+            vramTotalBytes: 1000,
+            cpuAvailable: false,
+            memoryAvailable: false,
+            primaryGpuId: 'a',
+            gpus: [
+              GpuMetrics(
+                adapterId: 'a',
+                usagePercent: 50,
+                vramUsedBytes: 200,
+                vramTotalBytes: 1000,
+              ),
+              GpuMetrics(
+                adapterId: 'b',
+                usagePercent: 80,
+                vramUsedBytes: 900,
+                vramTotalBytes: 2000,
+              ),
+            ],
+          ),
+          cpuHistory: [],
+          memoryHistory: [],
+          gpuHistory: [],
+          vramHistory: [],
+        ),
+      ),
+    );
+    expect(find.text('N/D'), findsWidgets);
+    expect(find.text('50.0%'), findsOneWidget);
+    expect(find.text('20.0%'), findsOneWidget);
+    tester.widget<ComboBox<String>>(find.byType(ComboBox<String>)).onChanged!(
+      'b',
+    );
+    await tester.pump();
+    expect(find.text('80.0%'), findsOneWidget);
+    expect(find.text('45.0%'), findsOneWidget);
+    expect(find.text('50.0%'), findsNothing);
+  });
+
   testWidgets('home stats page shows hardware cards and metric labels', (
     tester,
   ) async {

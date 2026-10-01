@@ -11,6 +11,8 @@ permissions:
 jobs:
   release:
     runs-on: windows-2022
+    env:
+      RELEASE_TAG: ${{ github.ref_name }}
 
     steps:
       - name: Checkout
@@ -30,7 +32,7 @@ jobs:
       - name: Validate tag and project version
         shell: pwsh
         run: |
-          $tagVersion = "${{ github.ref_name }}".TrimStart('v')
+          $tagVersion = $env:RELEASE_TAG.TrimStart('v')
           $projectVersion = ((Select-String -Path pubspec.yaml -Pattern '^version:\s*(.+)$').Matches[0].Groups[1].Value).Split('+')[0]
           if ($tagVersion -ne $projectVersion) {
             throw "Tag version $tagVersion does not match pubspec version $projectVersion"
@@ -54,15 +56,27 @@ jobs:
           choco install innosetup -y --no-progress
           & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" installer.iss
 
+      - name: Generate release checksums
+        shell: pwsh
+        run: |
+          $version = $env:RELEASE_TAG.TrimStart('v')
+          @("output/ZapTweaks_Portable.zip", "output/ZapTweaks_Setup_v$version.exe") | ForEach-Object {
+            $hash = (Get-FileHash -LiteralPath $_ -Algorithm SHA256).Hash.ToLowerInvariant()
+            "$hash  $([IO.Path]::GetFileName($_))"
+          } | Set-Content -LiteralPath output/SHA256SUMS.txt -Encoding ascii
+
       - name: Publish GitHub release
         shell: pwsh
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          $version = "${{ github.ref_name }}".TrimStart('v')
-          gh release create "${{ github.ref_name }}" `
+          $version = $env:RELEASE_TAG.TrimStart('v')
+          $notesPath = "docs/releases/v$version.md"
+          $notesArgs = if (Test-Path -LiteralPath $notesPath) { @('--notes-file', $notesPath) } else { @('--generate-notes') }
+          gh release create "$env:RELEASE_TAG" `
             "output/ZapTweaks_Portable.zip" `
             "output/ZapTweaks_Setup_v$version.exe" `
+            "output/SHA256SUMS.txt" `
             --verify-tag `
             --title "ZapTweaks v$version" `
-            --generate-notes
+            @notesArgs

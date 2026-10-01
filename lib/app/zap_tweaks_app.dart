@@ -400,7 +400,8 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
               child: Text(strings.viewRelease),
             ),
             FilledButton(
-              onPressed: update.installerUrl == null
+              onPressed:
+                  update.installerUrl == null || update.installerSha256 == null
                   ? null
                   : () => Navigator.of(context).pop('install'),
               child: Text(strings.updateNow),
@@ -437,12 +438,20 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
         final strings = AppLocalizations.of(context);
         return ContentDialog(
           title: Text(strings.downloadingUpdate),
-          content: Row(
-            children: <Widget>[
-              const ProgressRing(),
-              const SizedBox(width: 12),
-              Expanded(child: Text(strings.downloadingUpdateDescription)),
-            ],
+          content: AnimatedBuilder(
+            animation: widget.controller,
+            builder: (context, _) {
+              final progress = widget.controller.updateDownloadProgress;
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(strings.downloadingUpdateDescription),
+                  const SizedBox(height: 12),
+                  ProgressBar(value: progress),
+                  if (progress != null) Text('${progress.toStringAsFixed(0)}%'),
+                ],
+              );
+            },
           ),
         );
       },

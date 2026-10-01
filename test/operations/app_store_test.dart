@@ -108,6 +108,34 @@ void main() {
     },
   );
 
+  test(
+    'source launch rejects malformed or credential-bearing HTTPS links',
+    () async {
+      final service = AppStoreService(
+        processRunner: ProcessRunner(mode: ProcessExecutionMode.dryRun),
+      );
+      for (final url in [
+        'https:calc.exe',
+        'https://user:password@example.test/tool',
+      ]) {
+        await expectLater(
+          service.openSource(
+            StoreApp(
+              id: 'bad',
+              name: 'Bad',
+              category: 'Test',
+              wingetId: null,
+              url: Uri.parse(url),
+              author: 'Test',
+              sources: ['test'],
+            ),
+          ),
+          throwsStateError,
+        );
+      }
+    },
+  );
+
   test('bulk uninstall preview accepts installed packages only', () {
     final service = AppStoreService(
       processRunner: ProcessRunner(mode: ProcessExecutionMode.dryRun),

@@ -32,9 +32,11 @@ It is not intended to replace common baseline tools such as [CTT WinUtil](https:
 - Apply/revert support and state verification for toggle-based tweaks.
 - Restore-point gate for aggressive operations.
 - Dry-run mode for command validation without system changes.
-- Live CPU, GPU, RAM, and VRAM dashboard.
+- Live CPU and RAM dashboard plus per-adapter GPU/VRAM readings, GPU selection, and explicit unavailable-data states.
 - Bundled diagnostics, installers, scripts, power plans, and recovery tools.
-- Built-in update checks and installer flow.
+- Built-in update checks with official-source validation, streaming download progress, and SHA-256/size verification before installation.
+- App catalog refreshes from this repository without a new app release, with validated metadata, offline cache, and bundled fallback.
+- Multi-app installation/uninstallation plans retain independent snapshots and rollback state.
 - UI language selection for English, Italian, German, Spanish, French, Russian, and Simplified Chinese.
 - 91 bundled power plans with import, activation, and previous-plan restore.
 - Direct access to CTT WinUtil and Winhance for complementary baseline work.
@@ -86,6 +88,12 @@ Install the latest release from an elevated PowerShell window:
 ```powershell
 irm https://raw.githubusercontent.com/PrimeBuild-pc/ZapTweaks/main/scripts/installer-latest.ps1 | iex
 ```
+
+## Catalog and update integrity
+
+The app store, global search, and guided setup share a catalog fetched from this repository's `main` branch. Refresh the app inventory to check for catalog changes. Only validated app metadata, HTTPS links, and package identities are accepted; remote commands or scripts are rejected. A cached or bundled catalog remains available offline. External utilities show requirements/warnings where supplied and are not reported as installed or absent when their state cannot be detected.
+
+The updater and PowerShell installer verify the exact official release asset, its size, and the SHA-256 digest supplied by GitHub's HTTPS release API before launch. The desktop updater also restricts redirects to GitHub asset hosts and rechecks the file immediately before execution. This is integrity verification against GitHub metadata, not Authenticode code signing. Releases include `SHA256SUMS.txt` for manual verification.
 
 ## Safety
 

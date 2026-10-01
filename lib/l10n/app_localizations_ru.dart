@@ -9,6 +9,18 @@ class AppLocalizationsRu extends AppLocalizations {
   AppLocalizationsRu([String locale = 'ru']) : super(locale);
 
   @override
+  String get externalDownload => 'Внешняя загрузка';
+
+  @override
+  String get appRequirements => 'Требования';
+
+  @override
+  String get appWarnings => 'Предупреждения';
+
+  @override
+  String get metricUnavailable => 'Н/Д';
+
+  @override
   String get appTitle => 'ZapTweaks';
 
   @override

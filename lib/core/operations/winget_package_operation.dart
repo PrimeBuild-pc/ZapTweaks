@@ -9,7 +9,7 @@ class WingetPackageOperation implements OperationDefinition {
 
   final ProcessRunner _runner;
   final WindowsAppInventoryService _inventory;
-  static final RegExp _packageId = RegExp(r'^[A-Za-z0-9._-]{1,200}$');
+  static final RegExp _packageId = RegExp(r'^[A-Za-z0-9][A-Za-z0-9._+-]{0,199}$');
 
   String _target(OperationRequest request) {
     final target = request.target;

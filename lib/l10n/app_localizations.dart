@@ -108,6 +108,30 @@ abstract class AppLocalizations {
     Locale('zh'),
   ];
 
+  /// No description provided for @externalDownload.
+  ///
+  /// In en, this message translates to:
+  /// **'External download'**
+  String get externalDownload;
+
+  /// No description provided for @appRequirements.
+  ///
+  /// In en, this message translates to:
+  /// **'Requirements'**
+  String get appRequirements;
+
+  /// No description provided for @appWarnings.
+  ///
+  /// In en, this message translates to:
+  /// **'Warnings'**
+  String get appWarnings;
+
+  /// No description provided for @metricUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'N/A'**
+  String get metricUnavailable;
+
   /// No description provided for @appTitle.
   ///
   /// In en, this message translates to:

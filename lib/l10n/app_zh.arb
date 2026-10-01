@@ -1,5 +1,9 @@
 {
   "@@locale": "zh",
+  "externalDownload": "外部下载",
+  "appRequirements": "系统要求",
+  "appWarnings": "警告",
+  "metricUnavailable": "暂无数据",
   "appTitle": "ZapTweaks",
   "language": "语言",
   "languageDescription": "选择 ZapTweaks 使用的语言。",

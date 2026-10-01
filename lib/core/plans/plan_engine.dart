@@ -149,13 +149,15 @@ class PlanEngine {
 
         final definition = registry.resolve(item.operationId);
         final failedDependency = definition.dependencies.any((dependency) {
-          final dependencyItem = plan.items.cast<PlanItem?>().firstWhere(
-            (candidate) => candidate?.operationId == dependency,
-            orElse: () => null,
+          final dependencyItems = plan.items.where(
+            (candidate) => candidate.operationId == dependency,
           );
-          return dependencyItem == null ||
-              dependencyItem.status == PlanItemStatus.failed ||
-              dependencyItem.status == PlanItemStatus.skipped;
+          return dependencyItems.isEmpty ||
+              dependencyItems.any(
+                (candidate) =>
+                    candidate.status != PlanItemStatus.verified &&
+                    candidate.status != PlanItemStatus.pendingRestart,
+              );
         });
         if (failedDependency) {
           item
@@ -334,13 +336,17 @@ class PlanEngine {
   }
 
   List<OperationRequest> _order(List<OperationRequest> requests) {
-    final byDefinition = <String, OperationRequest>{};
+    final byDefinition = <String, List<OperationRequest>>{};
+    final resources = <(String, String?)>{};
     for (final request in requests) {
       final id = registry.resolve(request.operationId).id;
-      if (byDefinition.containsKey(id)) {
-        throw StateError('Duplicate operation in plan: $id');
+      if (!resources.add((id, request.target?.trim().toLowerCase()))) {
+        throw StateError(
+          'Duplicate operation target in plan: $id/${request.target}',
+        );
       }
-      byDefinition[id] = request;
+      // ponytail: one write per target; same-target settings use separate plans.
+      (byDefinition[id] ??= <OperationRequest>[]).add(request);
     }
     for (final entry in byDefinition.entries) {
       final definition = registry.resolve(entry.key);
@@ -364,7 +370,7 @@ class PlanEngine {
       }
       visiting.remove(id);
       visited.add(id);
-      result.add(byDefinition[id]!);
+      result.addAll(byDefinition[id]!);
     }
 
     for (final id in byDefinition.keys) {
