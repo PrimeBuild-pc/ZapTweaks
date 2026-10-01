@@ -2258,6 +2258,15 @@
     {
       "id": "app_https_github_com_danielblnc_dlss_nr_on_amd",
       "name": "DLSS-NR-on-AMD",
+      "description": "Experimental DLSS 5 Neural Rendering integration for compatible AMD Radeon GPUs.",
+      "requirements": [
+        "AMD Radeon RX 7000/9000, Windows 11 and Adrenalin 26.1.1 or newer.",
+        "A DirectX 12 game with FSR and your own legitimately obtained nvngx_dlssnr.dll version 310.8.0.0."
+      ],
+      "warnings": [
+        "Experimental performance and compatibility; older GPUs are not supported.",
+        "Anti-cheat may block injected DLLs. Do not use in anti-cheat-protected multiplayer games."
+      ],
       "category": "Gaming & Input",
       "wingetId": null,
       "url": "https://github.com/danielblnc/DLSS-NR-on-AMD",
@@ -2443,6 +2452,26 @@
       "author": "PrimeBuild",
       "sources": [
         "TweakHub"
+      ]
+    },
+    {
+      "id": "app_https_github_com_christianp403_spec_nv_uv_play",
+      "name": "NV-UV-Play",
+      "description": "NVIDIA GPU undervolting, per-game profiles and monitoring overlay.",
+      "requirements": [
+        "Windows 11 and an up-to-date NVIDIA driver.",
+        "Desktop GeForce RTX 20/30/40/50 series; notebooks are not supported."
+      ],
+      "warnings": [
+        "Alpha prerelease; validation varies by GPU. Experimental voltage controls can cause instability or hardware damage.",
+        "Do not run alongside MSI Afterburner: GPU voltage settings may conflict."
+      ],
+      "category": "GPU & Display",
+      "wingetId": null,
+      "url": "https://github.com/christianp403-spec/NV-UV-Play/releases",
+      "author": "christianp403-spec",
+      "sources": [
+        "Direct request"
       ]
     },
     {
@@ -3511,7 +3540,7 @@
       "name": "AnyBurn",
       "category": "Optical Disc Tools",
       "wingetId": "PowerSoftware.AnyBurn",
-      "url": "http://www.anyburn.com/",
+      "url": "https://www.anyburn.com/",
       "author": "PowerSoftware",
       "sources": [
         "Winhance candidate"

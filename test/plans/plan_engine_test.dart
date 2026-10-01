@@ -21,6 +21,8 @@ class _MemoryOperation extends OperationDefinition {
     this.declaredRestartImpact = RestartImpact.none,
     this.forcedInspectKind,
     this.operationDomain,
+    this.requiredOperations = const [],
+    this.failTarget,
   });
 
   @override
@@ -35,6 +37,8 @@ class _MemoryOperation extends OperationDefinition {
   final RestartImpact declaredRestartImpact;
   final OperationStateKind? forcedInspectKind;
   final String? operationDomain;
+  final List<String> requiredOperations;
+  final String? failTarget;
   @override
   List<String> get legacyAliases => const <String>[];
 
@@ -42,7 +46,9 @@ class _MemoryOperation extends OperationDefinition {
 
   @override
   Future<void> apply(OperationRequest request) async {
-    if (throwOnApply) throw StateError('fixture failure');
+    if (throwOnApply || (failTarget != null && request.target == failTarget)) {
+      throw StateError('fixture failure');
+    }
     if (request.desiredValue == null) {
       _values.remove(_key(request));
     } else {
@@ -113,7 +119,7 @@ class _MemoryOperation extends OperationDefinition {
   List<String> get conflicts => const <String>[];
 
   @override
-  List<String> get dependencies => const <String>[];
+  List<String> get dependencies => requiredOperations;
 
   @override
   String get descriptionKey => '$id.description';
@@ -153,6 +159,117 @@ class _MemoryOperation extends OperationDefinition {
 }
 
 void main() {
+  test(
+    'multi-target operations retain independent snapshots and rollback',
+    () async {
+      final values = <String, Object?>{};
+      final database = sqlite3.openInMemory();
+      addTearDown(database.close);
+      final store = OperationStore(database);
+      final engine = PlanEngine(
+        registry: OperationRegistry([
+          _MemoryOperation('app.winget.set', OperationScope.app, values),
+        ]),
+        context: const OperationContext(windowsBuild: 26100, edition: 'Pro'),
+        user: 'test',
+        appVersion: 'test',
+        store: store,
+      );
+      final plan = await engine.plan(const [
+        OperationRequest(
+          operationId: 'app.winget.set',
+          target: 'Vendor.One',
+          desiredValue: true,
+        ),
+        OperationRequest(
+          operationId: 'app.winget.set',
+          target: 'Vendor.Two',
+          desiredValue: true,
+        ),
+      ]);
+      await engine.execute(plan);
+      expect(plan.status, PlanStatus.completed);
+      final persisted = store.load(plan.id)!;
+      expect(persisted.items.map((item) => item.request.target), [
+        'Vendor.One',
+        'Vendor.Two',
+      ]);
+      expect(persisted.items.every((item) => item.snapshot != null), isTrue);
+      await engine.rollback(persisted);
+      expect(persisted.status, PlanStatus.rolledBack);
+      expect(values, isEmpty);
+      await expectLater(
+        engine.plan(const [
+          OperationRequest(
+            operationId: 'app.winget.set',
+            target: 'Vendor.One',
+            desiredValue: true,
+          ),
+          OperationRequest(
+            operationId: 'app.winget.set',
+            target: 'vendor.one',
+            desiredValue: false,
+          ),
+        ]),
+        throwsStateError,
+      );
+    },
+  );
+
+  test(
+    'dependencies wait for every target and preserve independent app progress',
+    () async {
+      final values = <String, Object?>{};
+      final engine = PlanEngine(
+        registry: OperationRegistry([
+          _MemoryOperation(
+            'app.prepare',
+            OperationScope.app,
+            values,
+            failTarget: 'bad',
+          ),
+          _MemoryOperation(
+            'app.dependent',
+            OperationScope.app,
+            values,
+            requiredOperations: ['app.prepare'],
+          ),
+          _MemoryOperation('app.independent', OperationScope.app, values),
+        ]),
+        context: const OperationContext(windowsBuild: 26100, edition: 'Pro'),
+        user: 'test',
+        appVersion: 'test',
+      );
+      final plan = await engine.plan(const [
+        OperationRequest(operationId: 'app.dependent', desiredValue: true),
+        OperationRequest(
+          operationId: 'app.prepare',
+          target: 'good',
+          desiredValue: true,
+        ),
+        OperationRequest(
+          operationId: 'app.prepare',
+          target: 'bad',
+          desiredValue: true,
+        ),
+        OperationRequest(operationId: 'app.independent', desiredValue: true),
+      ]);
+      expect(plan.items.map((item) => item.operationId), [
+        'app.prepare',
+        'app.prepare',
+        'app.dependent',
+        'app.independent',
+      ]);
+      await engine.execute(plan);
+      expect(plan.items.map((item) => item.status), [
+        PlanItemStatus.verified,
+        PlanItemStatus.failed,
+        PlanItemStatus.skipped,
+        PlanItemStatus.verified,
+      ]);
+    },
+  );
+
   test(
     'registry, service, power and device operations complete and roll back',
     () async {

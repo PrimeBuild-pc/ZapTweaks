@@ -4,12 +4,16 @@ class UpdateInfo {
     required this.releaseUrl,
     required this.installerUrl,
     required this.releaseNotes,
+    this.installerSha256,
+    this.installerSize,
   });
 
   final String version;
   final String releaseUrl;
   final String? installerUrl;
   final String releaseNotes;
+  final String? installerSha256;
+  final int? installerSize;
 }
 
 class UpdateCheckResult {

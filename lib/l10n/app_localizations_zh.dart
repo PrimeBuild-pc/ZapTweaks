@@ -9,6 +9,18 @@ class AppLocalizationsZh extends AppLocalizations {
   AppLocalizationsZh([String locale = 'zh']) : super(locale);
 
   @override
+  String get externalDownload => '外部下载';
+
+  @override
+  String get appRequirements => '系统要求';
+
+  @override
+  String get appWarnings => '警告';
+
+  @override
+  String get metricUnavailable => '暂无数据';
+
+  @override
   String get appTitle => 'ZapTweaks';
 
   @override

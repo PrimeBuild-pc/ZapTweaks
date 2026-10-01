@@ -9,6 +9,18 @@ class AppLocalizationsFr extends AppLocalizations {
   AppLocalizationsFr([String locale = 'fr']) : super(locale);
 
   @override
+  String get externalDownload => 'Téléchargement externe';
+
+  @override
+  String get appRequirements => 'Configuration requise';
+
+  @override
+  String get appWarnings => 'Avertissements';
+
+  @override
+  String get metricUnavailable => 'N/D';
+
+  @override
   String get appTitle => 'ZapTweaks';
 
   @override

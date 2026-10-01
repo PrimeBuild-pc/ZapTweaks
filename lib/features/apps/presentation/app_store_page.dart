@@ -10,10 +10,18 @@ import '../../tweaks/application/tweak_controller.dart';
 import '../domain/store_app.dart';
 
 class AppStorePage extends StatefulWidget {
-  const AppStorePage({required this.controller, this.initialQuery, super.key});
+  const AppStorePage({
+    required this.controller,
+    this.initialQuery,
+    this.service,
+    this.catalogLoader,
+    super.key,
+  });
 
   final TweakController controller;
   final String? initialQuery;
+  final AppStoreService? service;
+  final Future<AppStoreCatalog> Function()? catalogLoader;
 
   @override
   State<AppStorePage> createState() => _AppStorePageState();
@@ -24,6 +32,7 @@ class _AppStorePageState extends State<AppStorePage> {
   late final TextEditingController _searchController;
   List<StoreApp> _apps = const <StoreApp>[];
   Set<String> _installed = const <String>{};
+  bool _inventoryAvailable = false;
   final _selected = <String>{};
   String _query = '';
   String? _category;
@@ -37,7 +46,8 @@ class _AppStorePageState extends State<AppStorePage> {
     super.initState();
     _query = widget.initialQuery ?? '';
     _searchController = TextEditingController(text: _query);
-    _service = AppStoreService(processRunner: ProcessRunner.shared);
+    _service =
+        widget.service ?? AppStoreService(processRunner: ProcessRunner.shared);
     _load();
   }
 
@@ -53,7 +63,9 @@ class _AppStorePageState extends State<AppStorePage> {
       _message = null;
     });
     try {
-      final catalog = await AppStoreCatalog.load();
+      final catalog =
+          await (widget.catalogLoader?.call() ??
+              AppStoreCatalog.load(refresh: true));
       Set<String> installed;
       var inventoryUnavailable = false;
       try {
@@ -66,12 +78,21 @@ class _AppStorePageState extends State<AppStorePage> {
       setState(() {
         _apps = catalog.apps;
         _installed = installed;
+        _inventoryAvailable = !inventoryUnavailable;
+        if (_category != null &&
+            !_apps.any((app) => app.category == _category)) {
+          _category = null;
+        }
         if (inventoryUnavailable) {
+          _installedOnly = false;
           _message = AppLocalizations.of(context).appInventoryUnavailable;
         }
         _selected.removeWhere(
-          (id) => !_installed.contains(
-            _apps.firstWhere((app) => app.id == id).wingetId?.toLowerCase(),
+          (id) => !_apps.any(
+            (app) =>
+                app.id == id &&
+                app.wingetId != null &&
+                _installed.contains(app.wingetId!.toLowerCase()),
           ),
         );
         _loading = false;
@@ -116,10 +137,11 @@ class _AppStorePageState extends State<AppStorePage> {
                 desiredValue: true,
               ),
             ]);
-        if (plan.status != PlanStatus.completed) {
+        if (plan.status != PlanStatus.completed ||
+            plan.items.single.status == PlanItemStatus.skipped) {
           throw StateError(plan.items.single.error ?? 'Installation failed.');
         }
-        _installed = await _service.installedWingetIds();
+        await _refreshInstalled();
       }
       _message = null;
     } catch (error) {
@@ -129,7 +151,21 @@ class _AppStorePageState extends State<AppStorePage> {
     }
   }
 
+  Future<void> _refreshInstalled() async {
+    try {
+      _installed = await _service.installedWingetIds();
+      _inventoryAvailable = true;
+    } catch (_) {
+      _inventoryAvailable = false;
+      _installed = const {};
+      _installedOnly = false;
+      _selected.clear();
+      rethrow;
+    }
+  }
+
   Future<void> _uninstallSelected() async {
+    if (!_inventoryAvailable) return;
     final apps = _apps.where((app) => _selected.contains(app.id));
     final preview = _service.previewUninstall(apps, _installed);
     if (preview.apps.isEmpty) return;
@@ -167,7 +203,8 @@ class _AppStorePageState extends State<AppStorePage> {
                 desiredValue: false,
               ),
           ]);
-      if (plan.status != PlanStatus.completed) {
+      if (plan.status != PlanStatus.completed ||
+          plan.items.any((item) => item.status == PlanItemStatus.skipped)) {
         _message = plan.items
             .where((item) => item.error != null)
             .map((item) => '${item.request.target}: ${item.error}')
@@ -175,7 +212,7 @@ class _AppStorePageState extends State<AppStorePage> {
       } else {
         _message = null;
       }
-      _installed = await _service.installedWingetIds();
+      await _refreshInstalled();
       _selected.clear();
     } catch (error) {
       _message = error.toString();
@@ -232,11 +269,13 @@ class _AppStorePageState extends State<AppStorePage> {
               Checkbox(
                 checked: _installedOnly,
                 content: Text(strings.installedOnly),
-                onChanged: (value) =>
-                    setState(() => _installedOnly = value ?? false),
+                onChanged: !_inventoryAvailable
+                    ? null
+                    : (value) =>
+                          setState(() => _installedOnly = value ?? false),
               ),
               Button(
-                onPressed: _loading ? null : _load,
+                onPressed: _loading || _busyId != null ? null : _load,
                 child: Text(strings.refreshInventory),
               ),
               FilledButton(
@@ -261,6 +300,8 @@ class _AppStorePageState extends State<AppStorePage> {
           Expanded(
             child: _loading
                 ? const Center(child: ProgressRing())
+                : visible.isEmpty
+                ? Center(child: Text(strings.noSearchResults))
                 : ListView.separated(
                     itemCount: visible.length,
                     separatorBuilder: (_, _) => const Divider(),
@@ -278,7 +319,10 @@ class _AppStorePageState extends State<AppStorePage> {
                             children: <Widget>[
                               Checkbox(
                                 checked: _selected.contains(app.id),
-                                onChanged: installed && _busyId == null
+                                onChanged:
+                                    _inventoryAvailable &&
+                                        installed &&
+                                        _busyId == null
                                     ? (value) => setState(() {
                                         if (value == true) {
                                           _selected.add(app.id);
@@ -303,11 +347,40 @@ class _AppStorePageState extends State<AppStorePage> {
                                     Text(
                                       '${app.attribution} · ${app.category}${app.wingetId == null ? '' : ' · ${app.wingetId}'}',
                                     ),
+                                    if (app.description != null)
+                                      Text(app.description!),
+                                    if (app.requirements.isNotEmpty) ...[
+                                      const SizedBox(height: 6),
+                                      Text(
+                                        strings.appRequirements,
+                                        style: FluentTheme.of(
+                                          context,
+                                        ).typography.bodyStrong,
+                                      ),
+                                      for (final requirement
+                                          in app.requirements)
+                                        Text('• $requirement'),
+                                    ],
+                                    if (app.warnings.isNotEmpty) ...[
+                                      const SizedBox(height: 6),
+                                      Text(
+                                        strings.appWarnings,
+                                        style: FluentTheme.of(
+                                          context,
+                                        ).typography.bodyStrong,
+                                      ),
+                                      for (final warning in app.warnings)
+                                        Text('• $warning'),
+                                    ],
                                   ],
                                 ),
                               ),
                               Text(
-                                installed
+                                app.wingetId == null
+                                    ? strings.externalDownload
+                                    : !_inventoryAvailable
+                                    ? strings.unknown
+                                    : installed
                                     ? strings.installed
                                     : strings.notInstalled,
                               ),
@@ -320,7 +393,12 @@ class _AppStorePageState extends State<AppStorePage> {
                                 )
                               else
                                 Button(
-                                  onPressed: _busyId == null && !installed
+                                  onPressed:
+                                      !_loading &&
+                                          _busyId == null &&
+                                          !installed &&
+                                          (app.wingetId == null ||
+                                              _inventoryAvailable)
                                       ? () => _install(app)
                                       : null,
                                   child: Text(

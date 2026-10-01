@@ -5,7 +5,7 @@ import '../../../../core/models/system_metrics_snapshot.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../widgets/metric_card.dart';
 
-class HomeStatsPage extends StatelessWidget {
+class HomeStatsPage extends StatefulWidget {
   const HomeStatsPage({
     super.key,
     required this.hardwareProfile,
@@ -24,6 +24,13 @@ class HomeStatsPage extends StatelessWidget {
   final List<double> vramHistory;
 
   @override
+  State<HomeStatsPage> createState() => _HomeStatsPageState();
+}
+
+class _HomeStatsPageState extends State<HomeStatsPage> {
+  String? _selectedGpuId;
+
+  @override
   Widget build(BuildContext context) {
     final strings = AppLocalizations.of(context);
     return ListView(
@@ -34,6 +41,30 @@ class HomeStatsPage extends StatelessWidget {
           style: FluentTheme.of(context).typography.title,
         ),
         const SizedBox(height: 16),
+        if (widget.latestMetrics.gpus.isNotEmpty) ...[
+          ComboBox<String>(
+            value:
+                widget.latestMetrics.gpus.any(
+                  (gpu) => gpu.adapterId == _selectedGpuId,
+                )
+                ? _selectedGpuId
+                : widget.latestMetrics.primaryGpuId,
+            items: [
+              for (var i = 0; i < widget.latestMetrics.gpus.length; i++)
+                ComboBoxItem(
+                  value: widget.latestMetrics.gpus[i].adapterId,
+                  child: Tooltip(
+                    message: widget.latestMetrics.gpus[i].adapterId,
+                    child: Text(
+                      widget.latestMetrics.gpus[i].name ?? 'GPU ${i + 1}',
+                    ),
+                  ),
+                ),
+            ],
+            onChanged: (value) => setState(() => _selectedGpuId = value),
+          ),
+          const SizedBox(height: 12),
+        ],
         _buildMetricGrid(context, strings),
         const SizedBox(height: 28),
         Text(
@@ -47,34 +78,65 @@ class HomeStatsPage extends StatelessWidget {
   }
 
   Widget _buildMetricGrid(BuildContext context, AppLocalizations strings) {
+    final latestMetrics = widget.latestMetrics;
+    GpuMetrics? selected;
+    final selection = _selectedGpuId ?? latestMetrics.primaryGpuId;
+    for (final gpu in latestMetrics.gpus) {
+      if (gpu.adapterId == selection) selected = gpu;
+    }
+    final manual =
+        selected != null && selected.adapterId != latestMetrics.primaryGpuId;
+    final gpuAvailable = selected == null
+        ? latestMetrics.gpuAvailable
+        : selected.usagePercent != null;
+    final vramAvailable = selected == null
+        ? latestMetrics.vramAvailable
+        : selected.vramPercent != null;
+    final gpuLabel = selected == null
+        ? latestMetrics.gpuLabel
+        : '${selected.usagePercent?.toStringAsFixed(1)}%';
+    final vramLabel = selected == null
+        ? latestMetrics.vramPercentLabel
+        : '${selected.vramPercent?.toStringAsFixed(1)}%';
+    final vramDetail = selected == null
+        ? latestMetrics.vramDetailLabel
+        : '${((selected.vramUsedBytes ?? 0) / (1024 * 1024 * 1024)).toStringAsFixed(1)} / ${((selected.vramTotalBytes ?? 0) / (1024 * 1024 * 1024)).toStringAsFixed(1)} GB';
     final cards = <MetricCard>[
       MetricCard(
         title: strings.cpuUsage,
-        value: latestMetrics.cpuLabel,
+        value: latestMetrics.cpuAvailable
+            ? latestMetrics.cpuLabel
+            : strings.metricUnavailable,
         subtitle: strings.cpuUsageDescription,
         color: const Color(0xFF4CAF50),
-        history: cpuHistory,
+        history: latestMetrics.cpuAvailable ? widget.cpuHistory : const [],
       ),
       MetricCard(
         title: strings.gpuUsage,
-        value: latestMetrics.gpuLabel,
+        value: gpuAvailable ? gpuLabel : strings.metricUnavailable,
         subtitle: strings.gpuUsageDescription,
         color: const Color(0xFFFF9800),
-        history: gpuHistory,
+        history: gpuAvailable && !manual ? widget.gpuHistory : const [],
       ),
       MetricCard(
         title: strings.vramUsage,
-        value: latestMetrics.vramPercentLabel,
-        subtitle: latestMetrics.vramDetailLabel,
+        value: vramAvailable ? vramLabel : strings.metricUnavailable,
+        subtitle: vramAvailable ? vramDetail : strings.metricUnavailable,
         color: const Color(0xFFE91E63),
-        history: vramHistory,
+        history: vramAvailable && !manual ? widget.vramHistory : const [],
       ),
       MetricCard(
         title: strings.memoryUsage,
-        value: latestMetrics.memoryPercentLabel,
-        subtitle: latestMetrics.memoryDetailLabel,
+        value: latestMetrics.memoryAvailable
+            ? latestMetrics.memoryPercentLabel
+            : strings.metricUnavailable,
+        subtitle: latestMetrics.memoryAvailable
+            ? latestMetrics.memoryDetailLabel
+            : strings.metricUnavailable,
         color: const Color(0xFF03A9F4),
-        history: memoryHistory,
+        history: latestMetrics.memoryAvailable
+            ? widget.memoryHistory
+            : const [],
       ),
     ];
 
@@ -95,6 +157,7 @@ class HomeStatsPage extends StatelessWidget {
   }
 
   Widget _buildHardwareGrid(BuildContext context, AppLocalizations strings) {
+    final hardwareProfile = widget.hardwareProfile;
     final cards = <_HardwareCardData>[
       _HardwareCardData('CPU', hardwareProfile.cpuName),
       _HardwareCardData(

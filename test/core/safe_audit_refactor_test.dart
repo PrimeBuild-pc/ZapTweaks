@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:crypto/crypto.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
@@ -11,6 +12,32 @@ import 'package:script_utility/core/services/system_action_service.dart';
 import 'package:script_utility/core/services/tweak_catalog_service.dart';
 import 'package:script_utility/core/tweak_manager.dart';
 import 'package:script_utility/models/recovered_script_tweaks.dart';
+
+class _ChunkedClient extends http.BaseClient {
+  @override
+  Future<http.StreamedResponse> send(http.BaseRequest request) async {
+    expect(request.followRedirects, isFalse);
+    if (request.url.host == 'github.com') {
+      return http.StreamedResponse(
+        const Stream.empty(),
+        302,
+        headers: {
+          'location':
+              'https://release-assets.githubusercontent.com/verified.exe',
+        },
+      );
+    }
+    expect(request.url.host, 'release-assets.githubusercontent.com');
+    return http.StreamedResponse(
+      Stream.fromIterable([
+        [1],
+        [2, 3],
+      ]),
+      200,
+      contentLength: 3,
+    );
+  }
+}
 
 class _CapturingLaunchRunner extends ProcessRunner {
   String? executable;
@@ -32,6 +59,52 @@ class _CapturingLaunchRunner extends ProcessRunner {
 }
 
 void main() {
+  test(
+    'updater refuses untrusted executables without launching a helper',
+    () async {
+      final runner = _CapturingLaunchRunner();
+      final service = SystemActionService(
+        processRunner: runner,
+        httpClient: MockClient(
+          (_) async => http.Response.bytes([1, 2, 3], 200),
+        ),
+      );
+      final result = await service.installUpdate(
+        const UpdateInfo(
+          version: '9.9.9',
+          releaseUrl: 'https://example.test/release',
+          installerUrl: 'https://example.test/setup.exe',
+          releaseNotes: '',
+        ),
+      );
+      expect(result.success, isFalse);
+      expect(result.shouldExitApp, isFalse);
+      expect(runner.executable, isNull);
+    },
+  );
+
+  test('dry-run updater never downloads or starts an installer', () async {
+    final service = SystemActionService(
+      processRunner: ProcessRunner(mode: ProcessExecutionMode.dryRun),
+      httpClient: MockClient(
+        (_) async => throw StateError('Unexpected download'),
+      ),
+    );
+    final result = await service.installUpdate(
+      UpdateInfo(
+        version: '9.9.9',
+        releaseUrl: '${SystemActionService.releasesPageUrl}/tag/v9.9.9',
+        installerUrl:
+            '${SystemActionService.releasesPageUrl}/download/v9.9.9/ZapTweaks_Setup_v9.9.9.exe',
+        releaseNotes: '',
+        installerSha256: sha256.convert([1, 2, 3]).toString(),
+        installerSize: 3,
+      ),
+    );
+    expect(result.success, isTrue);
+    expect(result.shouldExitApp, isFalse);
+  });
+
   test('safe audit preserves actions and PowerShell encoding', () async {
     final tweaks = createRecoveredScriptTweaks();
     expect(tweaks, hasLength(90));
@@ -182,12 +255,15 @@ void main() {
         return http.Response(
           jsonEncode(<String, Object>{
             'tag_name': 'v1.5.0',
-            'html_url': 'https://example.test/release',
+            'html_url': '${SystemActionService.releasesPageUrl}/tag/v1.5.0',
             'body': 'Release notes',
             'assets': <Object>[
-              <String, String>{
+              <String, Object>{
+                'size': 3,
                 'name': 'ZapTweaks_Setup_v1.5.0.exe',
-                'browser_download_url': 'https://example.test/setup.exe',
+                'browser_download_url':
+                    '${SystemActionService.releasesPageUrl}/download/v1.5.0/ZapTweaks_Setup_v1.5.0.exe',
+                'digest': 'sha256:${sha256.convert([1, 2, 3])}',
               },
             ],
           }),
@@ -198,15 +274,55 @@ void main() {
 
     final result = await service.checkUpdateAvailability(
       currentVersion: '1.4.1',
-      latestReleaseApiUrl: 'https://example.test/latest',
-      releasesPageUrl: 'https://example.test/releases',
+      latestReleaseApiUrl: SystemActionService.latestReleaseApiUrl,
+      releasesPageUrl: SystemActionService.releasesPageUrl,
     );
 
     expect(result.success, isTrue);
     expect(result.hasUpdate, isTrue);
     expect(result.update?.version, '1.5.0');
-    expect(result.update?.installerUrl, 'https://example.test/setup.exe');
+    expect(
+      result.update?.installerUrl,
+      '${SystemActionService.releasesPageUrl}/download/v1.5.0/ZapTweaks_Setup_v1.5.0.exe',
+    );
+    expect(
+      result.update?.installerSha256,
+      sha256.convert([1, 2, 3]).toString(),
+    );
   });
+
+  test(
+    'metadata without an authenticated digest allows manual release access only',
+    () async {
+      final service = SystemActionService(
+        processRunner: _CapturingLaunchRunner(),
+        httpClient: MockClient(
+          (_) async => http.Response(
+            jsonEncode({
+              'tag_name': 'v9.9.9',
+              'assets': [
+                {
+                  'name': 'ZapTweaks_Setup_v9.9.9.exe',
+                  'size': 3,
+                  'browser_download_url':
+                      '${SystemActionService.releasesPageUrl}/download/v9.9.9/ZapTweaks_Setup_v9.9.9.exe',
+                },
+              ],
+            }),
+            200,
+          ),
+        ),
+      );
+      final result = await service.checkUpdateAvailability(
+        currentVersion: '1.0.0',
+        latestReleaseApiUrl: SystemActionService.latestReleaseApiUrl,
+        releasesPageUrl: SystemActionService.releasesPageUrl,
+      );
+      expect(result.hasUpdate, isTrue);
+      expect(result.update!.installerUrl, isNull);
+      expect((await service.openRelease(result.update!)).success, isTrue);
+    },
+  );
 
   test('StarTrinity guide opens its authoritative page', () async {
     final previousRunner = ProcessRunner.shared;
@@ -233,20 +349,36 @@ void main() {
 
   test('automatic installer waits, updates, and reopens the app', () async {
     final runner = _CapturingLaunchRunner();
+    final directory = await Directory.systemTemp.createTemp('update-test-');
+    addTearDown(() => directory.delete(recursive: true));
+    var secured = 0;
     final service = SystemActionService(
       processRunner: runner,
-      httpClient: MockClient((request) async {
-        return http.Response.bytes(<int>[1, 2, 3], 200);
-      }),
+      updatesDirectory: directory,
+      secureDirectory: (_) async {
+        secured++;
+      },
+      httpClient: _ChunkedClient(),
     );
-    const update = UpdateInfo(
-      version: '9.9.9-test',
-      releaseUrl: 'https://example.test/release',
-      installerUrl: 'https://example.test/ZapTweaks_Setup.exe',
+    final update = UpdateInfo(
+      version: '9.9.9',
+      releaseUrl: '${SystemActionService.releasesPageUrl}/tag/v9.9.9',
+      installerUrl:
+          '${SystemActionService.releasesPageUrl}/download/v9.9.9/ZapTweaks_Setup_v9.9.9.exe',
       releaseNotes: '',
+      installerSize: 3,
+      installerSha256: sha256.convert([1, 2, 3]).toString(),
     );
 
-    final result = await service.installUpdate(update);
+    final progress = <int>[];
+    final result = await service.installUpdate(
+      update,
+      onProgress: (received, total) {
+        expect(total, 3);
+        progress.add(received);
+      },
+    );
+    expect(progress, [0, 1, 3]);
     final helper = runner.arguments?.last ?? '';
 
     expect(result.success, isTrue);
@@ -254,9 +386,69 @@ void main() {
     expect(helper, contains('Wait-Process'));
     expect(helper, contains("'/VERYSILENT'"));
     expect(helper, contains('Start-Process -FilePath'));
-    await Directory(
-      '${Directory.systemTemp.path}\\ZapTweaks\\updates\\9.9.9-test',
-    ).delete(recursive: true);
+    expect(helper, contains('[Security.Cryptography.SHA256]::Create()'));
+    expect(helper, contains('ComputeHash'));
+    expect(helper, isNot(contains('Get-FileHash')));
+    expect(helper, contains('Remove-Item -LiteralPath'));
+    expect(secured, 2);
+    if (Platform.isWindows) {
+      Future<ProcessResult> runHelper(String source) {
+        final script =
+            '''
+\$global:launches = 0
+function Get-FileHash { throw 'Hash cmdlet unavailable' }
+function Start-Process { param(\$FilePath, \$ArgumentList, [switch]\$PassThru, [switch]\$Wait)
+  \$global:launches++; [pscustomobject]@{ExitCode=0}
+}
+try { ${source.replaceFirst(RegExp(r'Wait-Process -Id \d+ -ErrorAction SilentlyContinue; '), '')} } catch { Write-Output "GUARDED: \$_" }
+Write-Output "LAUNCHES=\$global:launches"
+''';
+        return Process.run('powershell', [
+          '-NoProfile',
+          '-EncodedCommand',
+          base64Encode([
+            for (final unit in script.codeUnits) ...[unit & 0xff, unit >> 8],
+          ]),
+        ]).timeout(const Duration(seconds: 20));
+      }
+
+      final allowed = await runHelper(helper);
+      expect(allowed.exitCode, 0, reason: '${allowed.stderr}');
+      expect(allowed.stdout.toString(), contains('LAUNCHES=2'));
+      expect((await service.installUpdate(update)).success, isTrue);
+      final installer =
+          (await directory
+                      .list(recursive: true)
+                      .where(
+                        (entry) => entry is File && entry.path.endsWith('.exe'),
+                      )
+                      .toList())
+                  .single
+              as File;
+      await installer.writeAsBytes([1, 2, 4], flush: true);
+      final refused = await runHelper(runner.arguments!.last);
+      expect(refused.stdout.toString(), contains('LAUNCHES=0'));
+      expect(refused.stdout.toString(), contains('GUARDED:'));
+    }
+    for (final response in [
+      http.Response.bytes([1, 2, 4], 200),
+      http.Response.bytes([1, 2], 200),
+      http.Response(
+        '',
+        302,
+        headers: {'location': 'https://evil.example/setup.exe'},
+      ),
+    ]) {
+      final refusedRunner = _CapturingLaunchRunner();
+      final refusing = SystemActionService(
+        processRunner: refusedRunner,
+        updatesDirectory: directory,
+        secureDirectory: (_) async {},
+        httpClient: MockClient((_) async => response),
+      );
+      expect((await refusing.installUpdate(update)).success, isFalse);
+      expect(refusedRunner.executable, isNull);
+    }
   });
 
   test('safe preset excludes security and irreversible actions', () {

@@ -1,5 +1,9 @@
 {
   "@@locale": "it",
+  "externalDownload": "Download esterno",
+  "appRequirements": "Requisiti",
+  "appWarnings": "Avvertenze",
+  "metricUnavailable": "N/D",
   "appTitle": "ZapTweaks",
   "language": "Lingua",
   "languageDescription": "Scegli la lingua usata da ZapTweaks.",

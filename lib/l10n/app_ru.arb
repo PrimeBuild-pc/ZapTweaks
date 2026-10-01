@@ -1,5 +1,9 @@
 {
   "@@locale": "ru",
+  "externalDownload": "Внешняя загрузка",
+  "appRequirements": "Требования",
+  "appWarnings": "Предупреждения",
+  "metricUnavailable": "Н/Д",
   "appTitle": "ZapTweaks",
   "language": "Язык",
   "languageDescription": "Выберите язык ZapTweaks.",
