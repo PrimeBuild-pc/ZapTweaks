@@ -2446,6 +2446,17 @@
       ]
     },
     {
+      "id": "app_https_github_com_christianp403_spec_nv_uv_play",
+      "name": "NV-UV-Play",
+      "category": "GPU & Display",
+      "wingetId": null,
+      "url": "https://github.com/christianp403-spec/NV-UV-Play/releases",
+      "author": "christianp403-spec",
+      "sources": [
+        "Direct request"
+      ]
+    },
+    {
       "id": "app_https_www_techpowerup_com_download_nvidia_nvflash",
       "name": "NVFlash",
       "category": "GPU & Display",

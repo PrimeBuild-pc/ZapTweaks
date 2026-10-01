@@ -30,9 +30,9 @@ void main() {
           .map((url) => url.path.replaceFirst(RegExp(r'/$'), '').toLowerCase())
           .toList(growable: false);
 
-      expect(catalog.apps, hasLength(464));
-      expect(catalog.apps.map((app) => app.id).toSet(), hasLength(464));
-      expect(normalizedNames, hasLength(464));
+      expect(catalog.apps, hasLength(465));
+      expect(catalog.apps.map((app) => app.id).toSet(), hasLength(465));
+      expect(normalizedNames, hasLength(465));
       expect(wingetIds.toSet(), hasLength(wingetIds.length));
       expect(githubRepositories.toSet(), hasLength(githubRepositories.length));
       expect(
@@ -63,6 +63,26 @@ void main() {
         catalog.apps.singleWhere((app) => app.name == 'Upscale It').author,
         'NODIX-TECH',
       );
+      final nvUvPlay = catalog.apps.singleWhere(
+        (app) => app.name == 'NV-UV-Play',
+      );
+      expect(nvUvPlay.category, 'GPU & Display');
+      expect(nvUvPlay.author, 'christianp403-spec');
+      expect(nvUvPlay.wingetId, isNull);
+      expect(
+        nvUvPlay.url.toString(),
+        'https://github.com/christianp403-spec/NV-UV-Play/releases',
+      );
+      final dlssNr = catalog.apps.singleWhere(
+        (app) => app.name == 'DLSS-NR-on-AMD',
+      );
+      expect(dlssNr.category, 'Gaming & Input');
+      expect(dlssNr.author, 'danielblnc');
+      expect(dlssNr.wingetId, isNull);
+      expect(
+        dlssNr.url.toString(),
+        'https://github.com/danielblnc/DLSS-NR-on-AMD',
+      );
       expect(
         names,
         containsAll(<String>[
@@ -76,6 +96,7 @@ void main() {
           'Maxwell II BIOS Tweaker',
           'OpenMouse',
           'RadeonTuner',
+          'NV-UV-Play',
           'DLSS 5 Manager',
           'DLSS Enabler Manager',
           'Upscale It',
