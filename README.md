@@ -13,102 +13,92 @@
     <a href="https://codecov.io/gh/PrimeBuild-pc/ZapTweaks"><img alt="Coverage" src="https://img.shields.io/codecov/c/github/PrimeBuild-pc/ZapTweaks?style=plastic&amp;label=coverage"></a>
   </p>
   <p>
-    <a href="#languages"><img alt="Seven interface languages" src="https://img.shields.io/badge/UI%20languages-7-6f42c1?style=plastic&amp;logo=googletranslate&amp;logoColor=white"></a>
+    <a href="#features"><img alt="Seven interface languages" src="https://img.shields.io/badge/UI%20languages-7-6f42c1?style=plastic&amp;logo=googletranslate&amp;logoColor=white"></a>
     <img alt="Windows 11" src="https://img.shields.io/badge/Windows-11-0078D4?style=plastic&amp;logo=windows&amp;logoColor=white">
     <a href="https://flutter.dev/"><img alt="Flutter" src="https://img.shields.io/badge/Flutter-Dart-02569B?style=plastic&amp;logo=flutter&amp;logoColor=white"></a>
     <a href="LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/license-MIT-2ea44f?style=plastic"></a>
   </p>
 </div>
 
-It is not intended to replace common baseline tools such as [CTT WinUtil](https://github.com/ChrisTitusTech/winutil) or [Winhance](https://github.com/memstechtips/Winhance). Use those for broad setup and debloating, then use ZapTweaks for deeper gaming, latency, hardware, networking, graphics, power, diagnostics, and recovery workflows. Both companion tools can be launched or installed from ZapTweaks itself.
+ZapTweaks is a Windows 11 companion for gaming, latency, hardware, networking, graphics, power, diagnostics and recovery workflows. Every change is previewed, journaled and, where Windows allows it, reversible.
 
-<img width="1400" height="956" alt="ZapTweaks" src="https://github.com/user-attachments/assets/c4c6ca99-89f4-41d7-bce8-40a8f1512e2e" />
+It is not meant to replace baseline tools such as [CTT WinUtil](https://github.com/ChrisTitusTech/winutil) or [Winhance](https://github.com/memstechtips/Winhance). Use those for broad setup and debloating, then use ZapTweaks for the deeper work. Both can be launched or installed from within the app.
 
-## Highlights
+## Gallery
 
-- Fluent UI desktop app built for Windows 11.
-- Advanced gaming, CPU, GPU, networking, timer, power, privacy, and shell controls.
-- Hardware-aware availability for Intel, AMD, and NVIDIA systems.
-- Apply/revert support and state verification for toggle-based tweaks.
-- Restore-point gate for aggressive operations.
-- Dry-run mode for command validation without system changes.
-- Live CPU and RAM dashboard plus per-adapter GPU/VRAM readings, GPU selection, and explicit unavailable-data states.
-- Bundled diagnostics, installers, scripts, power plans, and recovery tools.
-- Built-in update checks with official-source validation, streaming download progress, and SHA-256/size verification before installation.
-- App catalog refreshes from this repository without a new app release, with validated metadata, offline cache, and bundled fallback.
-- Multi-app installation/uninstallation plans retain independent snapshots and rollback state.
-- UI language selection for English, Italian, German, Spanish, French, Russian, and Simplified Chinese.
-- 91 bundled power plans with import, activation, and previous-plan restore.
-- Direct access to CTT WinUtil and Winhance for complementary baseline work.
+<p align="center">
+  <img src="docs/screenshots/gallery.svg" alt="ZapTweaks screenshot gallery: Home, Guided Setup, Apps, Drivers, Gaming &amp; Performance, TCP Optimizer, Windows, Diagnostics &amp; Recovery, Expert and Settings" width="900">
+</p>
 
-## Manual `by Sparkle` controls
+<details>
+<summary>Open the screenshots individually</summary>
 
-- **Windows / Expert → by Sparkle:** explicit appearance/privacy choices and separately confirmed HVCI, RDP policy and allowlisted service controls. No preselected/recommended batch and no automatic service stop or reboot.
-- **Gaming & Performance → TCP Optimizer:** limited manual reference with capability-gated global RSS and optional custom-template variants. Exact journaled originals, read-back, partial-failure recovery and explicit restore—not reset-to-default. No full Sparkle parity or performance promise.
-- **Apps:** mVolt/Sparkle open official project sources only. AppX removal distinguishes account/image scopes, validates fresh protection/dependency metadata and requires opt-in; reinstall links are not rollback.
-- **Diagnostics & Recovery:** journal/history and eligible manual-settings restoration, plus selected frozen UserTemp identities. No Recycle Bin empty-all, Prefetch or Windows Update-cache deletion.
+| | | |
+|---|---|---|
+| [Home](docs/screenshots/home.png) | [Guided Setup](docs/screenshots/guided-setup.png) | [Apps](docs/screenshots/apps.png) |
+| [Drivers](docs/screenshots/drivers.png) | [Gaming &amp; Performance](docs/screenshots/gaming.png) | [TCP Optimizer](docs/screenshots/tcp-optimizer.png) |
+| [Windows](docs/screenshots/windows.png) | [Diagnostics &amp; Recovery](docs/screenshots/diagnostics.png) | [Expert](docs/screenshots/expert.png) |
+| [Settings](docs/screenshots/settings.png) | | |
 
-Defender disabling, forced Edge removal and NVIDIA presets are **not available natively**; only clearly labeled external guidance is provided. No upstream scripts/binaries are executed. See [implementation status](docs/IMPLEMENTATION_STATUS.md) for supported fields, safety limits and checks. The recommended-profile approval gate remains closed.
+</details>
 
-## Languages
+## Features
 
-The interface is available in **English, Italian, German, Spanish, French, Russian, and Simplified Chinese**. Select a language from **Settings**; the choice is saved locally.
+- **Fluent UI for Windows 11** with system, light and dark themes.
+- **Live dashboard:** CPU, RAM, per-adapter GPU and VRAM readings, GPU selection, and explicit "unavailable" states instead of zeros.
+- **Hardware-aware tweaks** for Intel, AMD and NVIDIA systems.
+- **Safe by design:** apply/revert with state verification, a restore-point gate for aggressive operations, dry-run mode and a recovery journal that restores recorded originals rather than defaults.
+- **Guided presets** with a per-PC preview (to do / already set / skipped, with the reason) and an undo.
+- **Power plans:** 91 bundled plans, import/export, a hidden-settings explorer, activation and restore of the previous plan.
+- **Apps and services:** app store, installed-app uninstall queue with leftover scan, optional features, startup apps, processes and a curated service safety list.
+- **Drivers:** Driver Store inventory, signed-package install and export-then-remove for unbound packages.
+- **Networking:** TCP templates, offloads, RSS and QoS policies with before/after diagnostics.
+- **Diagnostics:** hardware monitor, DPC/ISR latency analysis, battery health, SRUM app history and repair tools (DISM, SFC).
+- **Self-updating catalog and app:** the app catalog refreshes without a new release, and updates are verified before installation (see [Integrity](#catalog-and-update-integrity)).
+- **Seven languages:** English, Italian, German, Spanish, French, Russian and Simplified Chinese.
 
-## Categories
+## Sections
 
-- **Home:** live metrics and detected hardware.
-- **Gaming:** latency and game-focused optimizations.
-- **Networking:** TCP, adapter, offload, and power controls.
-- **Power & CPU:** processor policies, boost behavior, timers, and power plans.
-- **Graphics:** driver, display, flip-model, and GPU utility workflows.
-- **Windows:** operating-system behavior and maintenance.
-- **System Checks:** health checks and diagnostics.
-- **Refresh & Recovery:** repair and recovery actions.
-- **Setup:** post-install configuration tools.
-- **Advanced:** expert-only and higher-impact operations.
-- **Privacy:** telemetry and background-content controls.
-- **Visuals:** shell and UI behavior.
-- **Tools:** bundled utilities plus CTT WinUtil and Winhance.
+| Section | What it does |
+|---|---|
+| **Home** | Live metrics and detected hardware. |
+| **Guided Setup** | Presets and a step-by-step setup flow. |
+| **Apps** | App store, installed apps, optional features, startup apps, processes and services. |
+| **Drivers** | Driver Store inventory and assisted vendor flows. |
+| **Gaming & Performance** | Power Settings Explorer, MSI/interrupt affinity, TCP Optimizer and gaming tweaks. |
+| **Windows** | Operating-system, privacy, telemetry and shell tweaks, plus manual controls. |
+| **Diagnostics & Recovery** | Recovery journal, repairs, cleanups, hardware monitor, latency analyzer and app history. |
+| **Expert** | Higher-impact operations and external tools, shown only after explicit manual consent. |
+| **Settings** | Language, theme, start with Windows, Expert and dry-run modes, update checks. |
 
 ## Requirements
 
-- Windows 11 22H2 or newer.
-- Administrator privileges.
-- x64 system.
-
-## Dependencies
-
-- [Flutter](https://flutter.dev/) and [Dart](https://dart.dev/)
-- [`fluent_ui`](https://pub.dev/packages/fluent_ui) for the Windows 11 interface
-- [`flutter_acrylic`](https://pub.dev/packages/flutter_acrylic), [`bitsdojo_window`](https://pub.dev/packages/bitsdojo_window), and [`system_theme`](https://pub.dev/packages/system_theme) for native window integration
-- [`shared_preferences`](https://pub.dev/packages/shared_preferences) for local settings
-- [`http`](https://pub.dev/packages/http) for update checks
-- [`path`](https://pub.dev/packages/path) for filesystem paths
-- [`flutter_test`](https://api.flutter.dev/flutter/flutter_test/) and [`flutter_lints`](https://pub.dev/packages/flutter_lints) for testing and analysis
-
-Version constraints are maintained in [`pubspec.yaml`](pubspec.yaml).
+- Windows 11 22H2 or newer, x64
+- Administrator privileges for operations that change system state
 
 ## Installation
 
-Download the installer or portable package from [GitHub Releases](https://github.com/PrimeBuild-pc/ZapTweaks/releases/latest).
-
-Install the latest release from an elevated PowerShell window:
+Download the installer or the portable package from [GitHub Releases](https://github.com/PrimeBuild-pc/ZapTweaks/releases/latest), or install the latest release from an elevated PowerShell window:
 
 ```powershell
 irm https://raw.githubusercontent.com/PrimeBuild-pc/ZapTweaks/main/scripts/installer-latest.ps1 | iex
 ```
 
-## Catalog and update integrity
-
-The app store, global search, and guided setup share a catalog fetched from this repository's `main` branch. Refresh the app inventory to check for catalog changes. Only validated app metadata, HTTPS links, and package identities are accepted; remote commands or scripts are rejected. A cached or bundled catalog remains available offline. External utilities show requirements/warnings where supplied and are not reported as installed or absent when their state cannot be detected.
-
-The updater and PowerShell installer verify the exact official release asset, its size, and the SHA-256 digest supplied by GitHub's HTTPS release API before launch. The desktop updater also restricts redirects to GitHub asset hosts and rechecks the file immediately before execution. This is integrity verification against GitHub metadata, not Authenticode code signing. Releases include `SHA256SUMS.txt` for manual verification.
-
 ## Safety
 
-ZapTweaks exposes advanced settings that can affect stability, security, power use, and network behavior. Read each description, create restore points when requested, and avoid applying changes you do not understand. NIC and device power-saving toggles create a local backup before changing state. Remote-script actions display a warning before execution.
+ZapTweaks exposes advanced settings that can affect stability, security, power use and network behavior. Read each description, create a restore point when asked, and do not apply changes you do not understand.
 
-VBIOS and NVRAM tools are launcher-only: ZapTweaks does not bundle them, choose firmware images, or run flash commands. See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+- NIC and device power-saving toggles back up their state locally before changing it.
+- Remote-script actions show a warning before they run.
+- Destructive cleanups preview the exact files first and never empty the Recycle Bin or touch system minidumps.
+- Services of installed antivirus, antispyware and firewall products are always kept.
+- VBIOS and NVRAM tools are launcher-only: ZapTweaks does not bundle them, choose firmware images or run flash commands. See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+
+## Catalog and update integrity
+
+The app store, global search and guided setup share a catalog fetched from this repository's `main` branch. Only validated app metadata, HTTPS links and package identities are accepted; remote commands and scripts are rejected. A cached or bundled catalog stays available offline.
+
+The updater and the PowerShell installer verify the exact official release asset, its size and the SHA-256 digest published by GitHub's HTTPS release API before launching it. The desktop updater also restricts redirects to GitHub asset hosts and rechecks the file immediately before execution. This is integrity verification against GitHub metadata, not Authenticode code signing. Each release ships a `SHA256SUMS.txt` for manual verification.
 
 ## Build from source
 
@@ -119,18 +109,24 @@ flutter test
 flutter build windows --release
 ```
 
-The Windows CMake build copies the complete `resources` directory next to the executable. Create the portable package with:
+The Windows CMake build copies the `resources` directory next to the executable. Create the portable package with:
 
 ```powershell
 ./build_portable.ps1 -SkipFlutterBuild
 ```
 
+Release notes live in [`docs/releases`](docs/releases).
+
+## Built with
+
+[Flutter](https://flutter.dev/) and [Dart](https://dart.dev/), [`fluent_ui`](https://pub.dev/packages/fluent_ui), [`flutter_acrylic`](https://pub.dev/packages/flutter_acrylic), [`bitsdojo_window`](https://pub.dev/packages/bitsdojo_window), [`system_theme`](https://pub.dev/packages/system_theme), [`shared_preferences`](https://pub.dev/packages/shared_preferences), [`http`](https://pub.dev/packages/http) and [`path`](https://pub.dev/packages/path). Version constraints are in [`pubspec.yaml`](pubspec.yaml).
+
 ## License
 
-Licensed under the [MIT License](LICENSE). Third-party tools retain their respective licenses.
+Licensed under the [MIT License](LICENSE). Third-party tools keep their respective licenses.
 
 ## Support the project
 
-If ZapTweaks saves you time, you can support its development here:
+If ZapTweaks saves you time, you can support its development:
 
 [![PayPal](https://img.shields.io/badge/Support-PayPal-0070BA?style=plastic&logo=paypal&logoColor=white)](https://paypal.me/PrimeBuildOfficial?country.x=IT&locale.x=it_IT)
