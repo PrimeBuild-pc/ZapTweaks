@@ -27,20 +27,23 @@ It is not meant to replace baseline tools such as [CTT WinUtil](https://github.c
 ## Gallery
 
 <p align="center">
-  <img src="docs/screenshots/gallery.svg" alt="ZapTweaks screenshot gallery: Home, Guided Setup, Apps, Drivers, Gaming &amp; Performance, TCP Optimizer, Windows, Diagnostics &amp; Recovery, Expert and Settings" width="900">
+  <a href="docs/screenshots/home.png"><img src="docs/screenshots/home.png" alt="ZapTweaks Home" width="900"></a>
 </p>
 
-<details>
-<summary>Open the screenshots individually</summary>
+<p align="center">
+  <a href="docs/screenshots/home.png"><img src="docs/screenshots/home.png" alt="Home" title="Home" width="88"></a>
+  <a href="docs/screenshots/guided-setup.png"><img src="docs/screenshots/guided-setup.png" alt="Guided Setup" title="Guided Setup" width="88"></a>
+  <a href="docs/screenshots/apps.png"><img src="docs/screenshots/apps.png" alt="Apps" title="Apps" width="88"></a>
+  <a href="docs/screenshots/drivers.png"><img src="docs/screenshots/drivers.png" alt="Drivers" title="Drivers" width="88"></a>
+  <a href="docs/screenshots/gaming.png"><img src="docs/screenshots/gaming.png" alt="Gaming &amp; Performance" title="Gaming &amp; Performance" width="88"></a>
+  <a href="docs/screenshots/tcp-optimizer.png"><img src="docs/screenshots/tcp-optimizer.png" alt="TCP Optimizer" title="TCP Optimizer" width="88"></a>
+  <a href="docs/screenshots/windows.png"><img src="docs/screenshots/windows.png" alt="Windows" title="Windows" width="88"></a>
+  <a href="docs/screenshots/diagnostics.png"><img src="docs/screenshots/diagnostics.png" alt="Diagnostics &amp; Recovery" title="Diagnostics &amp; Recovery" width="88"></a>
+  <a href="docs/screenshots/expert.png"><img src="docs/screenshots/expert.png" alt="Expert" title="Expert" width="88"></a>
+  <a href="docs/screenshots/settings.png"><img src="docs/screenshots/settings.png" alt="Settings" title="Settings" width="88"></a>
+</p>
 
-| | | |
-|---|---|---|
-| [Home](docs/screenshots/home.png) | [Guided Setup](docs/screenshots/guided-setup.png) | [Apps](docs/screenshots/apps.png) |
-| [Drivers](docs/screenshots/drivers.png) | [Gaming &amp; Performance](docs/screenshots/gaming.png) | [TCP Optimizer](docs/screenshots/tcp-optimizer.png) |
-| [Windows](docs/screenshots/windows.png) | [Diagnostics &amp; Recovery](docs/screenshots/diagnostics.png) | [Expert](docs/screenshots/expert.png) |
-| [Settings](docs/screenshots/settings.png) | | |
-
-</details>
+<p align="center"><sub>Home, Guided Setup, Apps, Drivers, Gaming &amp; Performance, TCP Optimizer, Windows, Diagnostics &amp; Recovery, Expert, Settings — click a thumbnail to open it full size.</sub></p>
 
 ## Features
 
