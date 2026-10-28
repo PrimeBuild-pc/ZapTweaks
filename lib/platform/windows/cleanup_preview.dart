@@ -252,6 +252,21 @@ class CleanupScanner {
   }
 }
 
+/// [path] with 8.3 short names expanded; follows no links.
+String _longPath(String path) {
+  final input = path.toNativeUtf16();
+  final buffer = calloc<Uint16>(32768).cast<Utf16>();
+  try {
+    final length = GetLongPathName(input, buffer, 32768);
+    return length == 0 || length >= 32768
+        ? path
+        : p.normalize(buffer.toDartString());
+  } finally {
+    calloc.free(input);
+    calloc.free(buffer);
+  }
+}
+
 class _CleanupReparsePoint implements Exception {
   @override
   String toString() =>
@@ -309,7 +324,10 @@ class _PinnedCleanupPath {
           resolved = resolved.substring(4);
         }
         canonical = p.normalize(resolved);
-        if (!p.equals(canonical, absolute)) {
+        // 8.3 names (C:\Users\RUNNER~1, long or spaced user names in %TEMP%)
+        // are the same object; links and junctions are refused in _open.
+        if (!p.equals(canonical, absolute) &&
+            !p.equals(canonical, _longPath(absolute))) {
           throw StateError('Non-canonical cleanup path: $absolute');
         }
       } finally {

@@ -311,8 +311,9 @@ if ($monitors.Count -eq 0) {
 
   Future<HardwareProfile> detect() async {
     try {
+      // A CRLF checkout adds a character per line to the command line.
       final output = await _processRunner.runPowerShellForOutput(
-        _detectionScript,
+        _detectionScript.replaceAll('\r', ''),
       );
       final decoded = jsonDecode(output);
       if (decoded is! Map<String, dynamic>) {

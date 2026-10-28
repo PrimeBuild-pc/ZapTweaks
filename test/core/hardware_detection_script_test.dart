@@ -26,7 +26,8 @@ String _readDetectionScript() {
   final end = source.indexOf("''';", start);
   expect(start, greaterThan(opener.length - 1));
   expect(end, greaterThan(start));
-  return source.substring(start, end);
+  // What detect() sends: line endings normalized, whatever the checkout.
+  return source.substring(start, end).replaceAll('\r', '');
 }
 
 void main() {
