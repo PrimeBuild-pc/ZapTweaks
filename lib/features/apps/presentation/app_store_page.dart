@@ -38,6 +38,9 @@ class _AppStorePageState extends State<AppStorePage> {
   String? _category;
   bool _installedOnly = false;
   bool _loading = true;
+
+  /// winget export takes ~10 s: the list shows first, installed state after.
+  bool _checkingInventory = false;
   String? _message;
   String? _busyId;
 
@@ -57,7 +60,7 @@ class _AppStorePageState extends State<AppStorePage> {
     super.dispose();
   }
 
-  Future<void> _load() async {
+  Future<void> _load({bool refresh = false}) async {
     setState(() {
       _loading = true;
       _message = null;
@@ -65,36 +68,16 @@ class _AppStorePageState extends State<AppStorePage> {
     try {
       final catalog =
           await (widget.catalogLoader?.call() ??
-              AppStoreCatalog.load(refresh: true));
-      Set<String> installed;
-      var inventoryUnavailable = false;
-      try {
-        installed = await _service.installedWingetIds();
-      } catch (_) {
-        installed = const <String>{};
-        inventoryUnavailable = true;
-      }
+              AppStoreCatalog.load(refresh: refresh));
       if (!mounted) return;
       setState(() {
         _apps = catalog.apps;
-        _installed = installed;
-        _inventoryAvailable = !inventoryUnavailable;
         if (_category != null &&
             !_apps.any((app) => app.category == _category)) {
           _category = null;
         }
-        if (inventoryUnavailable) {
-          _installedOnly = false;
-          _message = AppLocalizations.of(context).appInventoryUnavailable;
-        }
-        _selected.removeWhere(
-          (id) => !_apps.any(
-            (app) =>
-                app.id == id &&
-                app.wingetId != null &&
-                _installed.contains(app.wingetId!.toLowerCase()),
-          ),
-        );
+        _inventoryAvailable = false;
+        _checkingInventory = true;
         _loading = false;
       });
     } catch (error) {
@@ -103,7 +86,34 @@ class _AppStorePageState extends State<AppStorePage> {
         _message = error.toString();
         _loading = false;
       });
+      return;
     }
+    Set<String> installed;
+    var inventoryUnavailable = false;
+    try {
+      installed = await _service.installedWingetIds();
+    } catch (_) {
+      installed = const <String>{};
+      inventoryUnavailable = true;
+    }
+    if (!mounted) return;
+    setState(() {
+      _installed = installed;
+      _inventoryAvailable = !inventoryUnavailable;
+      _checkingInventory = false;
+      if (inventoryUnavailable) {
+        _installedOnly = false;
+        _message = AppLocalizations.of(context).appInventoryUnavailable;
+      }
+      _selected.removeWhere(
+        (id) => !_apps.any(
+          (app) =>
+              app.id == id &&
+              app.wingetId != null &&
+              _installed.contains(app.wingetId!.toLowerCase()),
+        ),
+      );
+    });
   }
 
   List<StoreApp> get _visible {
@@ -252,6 +262,7 @@ class _AppStorePageState extends State<AppStorePage> {
                 child: ComboBox<String?>(
                   value: _category,
                   isExpanded: true,
+                  placeholder: Text(strings.allCategories),
                   items: <ComboBoxItem<String?>>[
                     ComboBoxItem<String?>(
                       value: null,
@@ -275,7 +286,9 @@ class _AppStorePageState extends State<AppStorePage> {
                           setState(() => _installedOnly = value ?? false),
               ),
               Button(
-                onPressed: _loading || _busyId != null ? null : _load,
+                onPressed: _loading || _checkingInventory || _busyId != null
+                    ? null
+                    : () => _load(refresh: true),
                 child: Text(strings.refreshInventory),
               ),
               FilledButton(
@@ -378,6 +391,8 @@ class _AppStorePageState extends State<AppStorePage> {
                               Text(
                                 app.wingetId == null
                                     ? strings.externalDownload
+                                    : _checkingInventory
+                                    ? strings.checking
                                     : !_inventoryAvailable
                                     ? strings.unknown
                                     : installed

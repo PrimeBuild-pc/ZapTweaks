@@ -132,7 +132,7 @@ void main() {
       for (var index = 0; index < bytes.length; index += 2)
         bytes[index] | (bytes[index + 1] << 8),
     ]);
-    expect(decoded, script);
+    expect(decoded, '${ProcessRunner.powerShellPreamble}$script');
   });
 
   test('elevated PowerShell propagates the child exit code', () async {

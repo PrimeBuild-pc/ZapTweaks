@@ -15,7 +15,6 @@ class HardwareDetectionService {
   /// characters). Keep comments out of the string - they are payload.
   /// `hardware_detection_script_test.dart` fails the build if it grows too far.
   static const String _detectionScript = r'''
-$ProgressPreference = 'SilentlyContinue'
 $ErrorActionPreference = 'SilentlyContinue'
 
 $cpu = Get-CimInstance Win32_Processor | Select-Object -First 1
@@ -67,13 +66,25 @@ $genericNamePattern = '(?i)^(hid[- ]compliant|usb input device|usb composite|gen
 $usbRootCache = @{}
 $productNameCache = @{}
 $primaryProtocolCache = @{}
+$parentOf = @{}
+$propsOf = @{}
+$nameKeys = 'DEVPKEY_Device_BusReportedDeviceDesc','DEVPKEY_Device_FriendlyName','DEVPKEY_Device_DeviceDesc'
+function Get-Props($Ids, $Keys) { $Ids | ForEach-Object { [pscustomobject]@{ InstanceId = $_ } } | Get-PnpDeviceProperty -KeyName $Keys }
+$inputDevices = @(Get-PnpDevice -Class Mouse,Keyboard -PresentOnly)
+$ids = @($inputDevices.InstanceId)
+while ($ids.Count) {
+  $ids = @(Get-Props $ids DEVPKEY_Device_Parent | ForEach-Object {
+    $d = "$($_.Data)"; $parentOf[$_.InstanceId] = $d
+    if ($d -like 'USB\VID_*' -and $d -notmatch '^USB\\VID_[0-9A-Fa-f]{4}&PID_[0-9A-Fa-f]{4}\\' -and -not $parentOf.ContainsKey($d)) { $d }
+  } | Select-Object -Unique)
+}
 
 function Get-UsbRootInstanceId {
   param([string]$InstanceId)
   if ($usbRootCache.ContainsKey($InstanceId)) { return $usbRootCache[$InstanceId] }
   $current = $InstanceId
   for ($i = 0; $i -lt 8; $i++) {
-    $parent = (Get-PnpDeviceProperty -InstanceId $current -KeyName DEVPKEY_Device_Parent -ErrorAction SilentlyContinue).Data
+    $parent = $parentOf[$current]
     if (-not $parent -or $parent -notlike 'USB\VID_*') { break }
     $current = $parent
     if ($current -match '^USB\\VID_[0-9A-Fa-f]{4}&PID_[0-9A-Fa-f]{4}\\') { break }
@@ -87,8 +98,8 @@ function Get-DeviceProductName {
   if ([string]::IsNullOrWhiteSpace($InstanceId)) { return '' }
   if ($productNameCache.ContainsKey($InstanceId)) { return $productNameCache[$InstanceId] }
   $resolved = ''
-  $properties = Get-PnpDeviceProperty -InstanceId $InstanceId -KeyName DEVPKEY_Device_BusReportedDeviceDesc,DEVPKEY_Device_FriendlyName,DEVPKEY_Device_DeviceDesc -ErrorAction SilentlyContinue
-  foreach ($key in @('DEVPKEY_Device_BusReportedDeviceDesc','DEVPKEY_Device_FriendlyName','DEVPKEY_Device_DeviceDesc')) {
+  $properties = $propsOf[$InstanceId]
+  foreach ($key in $nameKeys) {
     $value = "$(($properties | Where-Object { $_.KeyName -eq $key } | Select-Object -First 1).Data)".Trim()
     if ($value -and $value -notmatch $genericNamePattern) { $resolved = $value; break }
   }
@@ -123,7 +134,7 @@ function Get-PrimaryHidProtocol {
 function Get-InputDevices {
   param([string]$DeviceClass)
   $results = [ordered]@{}
-  try { $devices = @(Get-PnpDevice -Class $DeviceClass -PresentOnly -ErrorAction Stop) } catch { $devices = @() }
+  $devices = @($inputDevices | Where-Object { $_.Class -eq $DeviceClass })
   foreach ($device in $devices) {
     if (-not $device.InstanceId) { continue }
     $root = Get-UsbRootInstanceId $device.InstanceId
@@ -151,6 +162,9 @@ function Convert-WmiText {
   if ($null -eq $Characters) { return '' }
   return -join @($Characters | Where-Object { [int]$_ -ne 0 } | ForEach-Object { [char]$_ })
 }
+
+$named = @($inputDevices | ForEach-Object { $_.InstanceId; Get-UsbRootInstanceId $_.InstanceId } | Select-Object -Unique)
+if ($named.Count) { Get-Props $named $nameKeys | Group-Object InstanceId | ForEach-Object { $propsOf[$_.Name] = $_.Group } }
 
 $videoControllers = @(Get-CimInstance Win32_VideoController)
 $gpuNames = @($videoControllers | ForEach-Object { "$($_.Name)".Trim() } | Where-Object { $_ } | Sort-Object -Unique)
@@ -297,8 +311,9 @@ if ($monitors.Count -eq 0) {
 
   Future<HardwareProfile> detect() async {
     try {
+      // A CRLF checkout adds a character per line to the command line.
       final output = await _processRunner.runPowerShellForOutput(
-        _detectionScript,
+        _detectionScript.replaceAll('\r', ''),
       );
       final decoded = jsonDecode(output);
       if (decoded is! Map<String, dynamic>) {

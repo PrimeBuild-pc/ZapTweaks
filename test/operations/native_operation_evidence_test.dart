@@ -32,6 +32,26 @@ void main() {
     }
   });
 
+  test(
+    'the production registry exposes manual Sparkle, exact TCP recovery and scoped cleanup',
+    () {
+      final ids = createNativeOperationCatalog(
+        const WindowsRegistryValueStore(),
+        ProcessRunner(mode: ProcessExecutionMode.dryRun),
+      ).map((operation) => operation.id);
+      expect(
+        ids,
+        containsAll([
+          'sparkle.clock.short_time',
+          'sparkle.security.hvci_configured_off',
+          'network.tcp.snapshot.restore',
+          'cleanup.user_temp',
+        ]),
+      );
+      expect(ids, isNot(contains('sparkle.security.disable_defender')));
+    },
+  );
+
   test('forbidden security bypasses have no native operation', () {
     final ids = createNativeOperationCatalog(
       const WindowsRegistryValueStore(),

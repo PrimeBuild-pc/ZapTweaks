@@ -8,8 +8,9 @@ List<SystemTweak> createHardwareTweaks() {
     ScriptInteractiveTweak(
       id: 'hardware_controller_overclock_script',
       title: 'Controller Overclock',
-      description: 'Interactive script by Fr33thy.',
+      description: 'Interactive script.',
       category: 'Drivers & Installers',
+      author: 'Fr33thy',
       scriptSegments: <String>[
         'interactive_scripts',
         '7 Hardware',

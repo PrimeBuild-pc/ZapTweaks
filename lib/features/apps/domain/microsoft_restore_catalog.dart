@@ -10,6 +10,7 @@ class MicrosoftRestoreIdentity {
   final String source;
 }
 
+// Legacy restore identities only: this catalog never authorizes AppX removal.
 const Map<String, MicrosoftRestoreIdentity> microsoftRestoreCatalog =
     <String, MicrosoftRestoreIdentity>{
       'Microsoft.WindowsStore': MicrosoftRestoreIdentity(
@@ -17,7 +18,7 @@ const Map<String, MicrosoftRestoreIdentity> microsoftRestoreCatalog =
         packageId: '9WZDNCRFJBMP',
         source: 'msstore',
       ),
-      'Microsoft.StickyNotes': MicrosoftRestoreIdentity(
+      'Microsoft.MicrosoftStickyNotes': MicrosoftRestoreIdentity(
         name: 'Sticky Notes',
         packageId: '9NBLGGH4QGHW',
         source: 'msstore',
@@ -72,7 +73,7 @@ const Map<String, MicrosoftRestoreIdentity> microsoftRestoreCatalog =
         packageId: '9PDJDJS743XF',
         source: 'msstore',
       ),
-      'Microsoft.QuickAssist': MicrosoftRestoreIdentity(
+      'MicrosoftCorporationII.QuickAssist': MicrosoftRestoreIdentity(
         name: 'Quick Assist',
         packageId: '9P7BP5VNWKX5',
         source: 'msstore',

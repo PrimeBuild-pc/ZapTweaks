@@ -101,6 +101,40 @@ void main() {
   );
 
   test(
+    'PowerShell fallback reads locale-independent CIM classes, not Get-Counter',
+    () async {
+      late String script;
+      final service = MetricsSamplingService(
+        preferNative: false,
+        processRunner: ProcessRunner(
+          processRunDelegate:
+              (
+                String executable,
+                List<String> arguments, {
+                bool runInShell = false,
+              }) async {
+                script = arguments.last;
+                return ProcessResult(1, 0, '', '');
+              },
+        ),
+      );
+      await service.sample();
+      // Get-Counter paths are localized ("\Motore GPU(*)\..." on Italian Windows).
+      expect(script, isNot(contains('Get-Counter')));
+      expect(
+        script,
+        contains('Win32_PerfFormattedData_GPUPerformanceCounters_GPUEngine'),
+      );
+      expect(
+        script,
+        contains(
+          'Win32_PerfFormattedData_GPUPerformanceCounters_GPUAdapterMemory',
+        ),
+      );
+    },
+  );
+
+  test(
     'missing fallback counters are unavailable, not measured zero',
     () async {
       final service = MetricsSamplingService(

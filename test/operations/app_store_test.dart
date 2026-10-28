@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
+import 'package:http/testing.dart';
 import 'package:script_utility/core/services/process_runner.dart';
 import 'package:script_utility/features/apps/application/app_store_catalog.dart';
 import 'package:script_utility/features/apps/application/app_store_service.dart';
@@ -7,6 +11,38 @@ import 'package:script_utility/features/apps/domain/store_app.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+
+  test(
+    'older remote catalogs cannot remove the two bundled external tools',
+    () async {
+      final remote =
+          jsonDecode(
+                await rootBundle.loadString('assets/catalog/app_catalog.json'),
+              )
+              as Map<String, dynamic>;
+      remote['apps'] = (remote['apps'] as List)
+          .where(
+            (app) => !const {'app_mvolt', 'app_sparkle'}.contains(app['id']),
+          )
+          .toList();
+      final client = MockClient(
+        (_) async => http.Response(jsonEncode(remote), 200),
+      );
+      addTearDown(client.close);
+      final catalog = await AppStoreCatalog.load(
+        bundle: rootBundle,
+        client: client,
+      );
+      expect(catalog.apps, hasLength(467));
+      for (final id in ['app_mvolt', 'app_sparkle']) {
+        final tool = catalog.apps.singleWhere((app) => app.id == id);
+        expect(tool.wingetId, isNull);
+        expect(tool.url?.scheme, 'https');
+        expect(tool.requirements, isNotEmpty);
+        expect(tool.warnings, isNotEmpty);
+      }
+    },
+  );
 
   test(
     'app store freezes unique attributed entries and requested tools',
@@ -30,9 +66,9 @@ void main() {
           .map((url) => url.path.replaceFirst(RegExp(r'/$'), '').toLowerCase())
           .toList(growable: false);
 
-      expect(catalog.apps, hasLength(465));
-      expect(catalog.apps.map((app) => app.id).toSet(), hasLength(465));
-      expect(normalizedNames, hasLength(465));
+      expect(catalog.apps, hasLength(467));
+      expect(catalog.apps.map((app) => app.id).toSet(), hasLength(467));
+      expect(normalizedNames, hasLength(467));
       expect(wingetIds.toSet(), hasLength(wingetIds.length));
       expect(githubRepositories.toSet(), hasLength(githubRepositories.length));
       expect(
@@ -87,6 +123,8 @@ void main() {
         names,
         containsAll(<String>[
           'CUDA-Z',
+          'mVolt',
+          'Sparkle',
           'Universal x86 Tuning Utility',
           'WTools',
           'CompactGUI',

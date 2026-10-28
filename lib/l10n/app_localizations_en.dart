@@ -385,7 +385,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get expertModeDescription =>
-      'Show advanced operations and external tools. Safety restrictions still apply.';
+      'Show advanced operations and external tools only after explicit manual consent. It is off by default; safety restrictions still apply.';
 
   @override
   String get searchOperations => 'Search operations';
@@ -1008,6 +1008,30 @@ class AppLocalizationsEn extends AppLocalizations {
       'No ACPI thermal zones were exposed by this PC.';
 
   @override
+  String get cpuFrequency => 'CPU clock and core parking';
+
+  @override
+  String get cpuFrequencyDescription =>
+      'Takes one sample of the Windows processor performance counters. The effective clock is the base clock × % Processor Performance, the same formula as Task Manager. Use it to check power plan, boost and core parking changes. Read-only.';
+
+  @override
+  String cpuEffectiveClock(Object mhz, Object nominal) {
+    return '$mhz MHz effective · base $nominal MHz';
+  }
+
+  @override
+  String cpuParkedCount(Object parked, Object total) {
+    return '$parked of $total logical processors parked';
+  }
+
+  @override
+  String get cpuParked => 'parked';
+
+  @override
+  String get cpuFrequencySource =>
+      'Source: Processor Information performance counters (Win32_PerfFormattedData_Counters_ProcessorInformation), one sample averaged over the last counter interval. Not a peak clock. Per-core values use one nominal clock, so efficiency cores of hybrid CPUs read high.';
+
+  @override
   String get driverInventory => 'Driver Store inventory';
 
   @override
@@ -1441,4 +1465,1022 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get openRecoveryHistory => 'Open recovery and journal';
+
+  @override
+  String get manualRestoreTitle => 'Restore original manual settings';
+
+  @override
+  String get manualRestoreWarning =>
+      'Restore the recorded originals, not defaults. Changed settings are not overwritten. High-risk settings require Expert mode and UAC. Review the journal after restoration; restart or sign-out requirements still apply.';
+
+  @override
+  String get cleanupUserTemp => 'UserTemp cleanup';
+
+  @override
+  String get cleanupUserTempDescription =>
+      'Review and select exact files in the current user\'s Temp directory. No automatic selection, forced deletion or directory removal.';
+
+  @override
+  String get cleanupSelectFiles => 'Preview and select files';
+
+  @override
+  String get cleanupShaderCache => 'GPU shader cache cleanup';
+
+  @override
+  String get cleanupShaderCacheDescription =>
+      'Previews the DirectX, AMD, NVIDIA and Intel shader caches of the current user, folder by folder, and deletes exactly the files found by that preview. The driver rebuilds them, so the first launch of each game can stutter. Close games first. Not reversible.';
+
+  @override
+  String get cleanupShaderCacheNone => 'No GPU shader cache files were found.';
+
+  @override
+  String get cleanupShaderCacheCompleted =>
+      'The previewed shader cache files were deleted and verified absent.';
+
+  @override
+  String get cleanupPreview => 'Preview';
+
+  @override
+  String get cleanupUserTempNone => 'No UserTemp files found.';
+
+  @override
+  String get cleanupPermanentWarning =>
+      'Permanent deletion. No rollback or permission/lock override. Close applications first. If deletion fails, earlier files may already have been removed.';
+
+  @override
+  String get cleanupUserTempSelectionHint =>
+      'Nothing is selected. Select only files you recognize; files created after this preview are excluded.';
+
+  @override
+  String cleanupPreviewCount(int count, int bytes) {
+    return '$count files, $bytes bytes';
+  }
+
+  @override
+  String get cleanupRecycleUnavailable =>
+      'Recycle Bin cleanup is unavailable: exact item identities cannot be previewed and deleted safely. No empty-all action is performed.';
+
+  @override
+  String get cleanupCrashReports => 'Crash dumps and error reports';
+
+  @override
+  String get cleanupCrashReportsDescription =>
+      'Deletes the crash dumps of your programs (%LOCALAPPDATA%\\CrashDumps) and your Windows Error Reporting archive and queue. Useful after a game or app crashed many times. System minidumps (blue screens) are not touched.';
+
+  @override
+  String get cleanupCrashReportsNone =>
+      'No crash dumps or error reports to delete.';
+
+  @override
+  String get cleanupCrashReportsCompleted =>
+      'Crash dumps and error reports deleted.';
+
+  @override
+  String get cleanupBrowserCache => 'Browser caches';
+
+  @override
+  String get cleanupBrowserCacheDescription =>
+      'Deletes the disk caches of Chrome, Edge, Brave (every profile) and Firefox. Cookies, history, passwords and extensions are not touched; pages load a little slower the first time.';
+
+  @override
+  String get cleanupBrowserCacheNone => 'No browser cache files to delete.';
+
+  @override
+  String get cleanupBrowserCacheCompleted => 'Browser caches deleted.';
+
+  @override
+  String cleanupBrowserRunning(String browsers) {
+    return 'Close $browsers first (also from the system tray: Edge and Chrome can keep running in the background).';
+  }
+
+  @override
+  String thermalZoneLimited(String percent) {
+    return 'firmware limits the CPU to $percent%';
+  }
+
+  @override
+  String get thermalSourceCounters =>
+      'Source: Windows \"Thermal Zone Information\" counters (ACPI zones defined by the firmware, no administrator rights needed). A zone is a sensor the manufacturer chose; it is often not the CPU die.';
+
+  @override
+  String get thermalSourceAcpi =>
+      'Source: MSAcpi_ThermalZoneTemperature (ACPI zones defined by the firmware). A zone is a sensor the manufacturer chose; it is often not the CPU die.';
+
+  @override
+  String get thermalSourceNone =>
+      'The firmware of this PC exposes no ACPI thermal zone (common on desktop boards). Nothing is shown rather than a value that was not measured.';
+
+  @override
+  String get srumTab => 'App history';
+
+  @override
+  String get srumTitle => 'App history (SRUM)';
+
+  @override
+  String get srumDescription =>
+      'Network, CPU and disk use of every program in the last 30 days, as recorded by Windows (System Resource Usage Monitor). Read-only: ZapTweaks reads a shadow copy of the database and deletes it afterwards. Needs administrator rights.';
+
+  @override
+  String get srumRead => 'Read history';
+
+  @override
+  String get srumNotCollectingTitle => 'Windows is not recording app history';
+
+  @override
+  String srumNotCollecting(String status, String startType, String date) {
+    return 'The Diagnostic Policy Service, which records this history, is $status ($startType). The data ends on $date.';
+  }
+
+  @override
+  String get srumNoData => 'No usage recorded in the last 30 days.';
+
+  @override
+  String get srumNetwork => 'Network (sent / received)';
+
+  @override
+  String get srumCpu =>
+      'CPU time (share of all programs; part used in the background)';
+
+  @override
+  String srumCpuShare(String share, String background) {
+    return '$share% · $background% background';
+  }
+
+  @override
+  String get srumUnattributed => 'Not attributed to a program';
+
+  @override
+  String srumSource(String first, String last) {
+    return 'Source: C:\\Windows\\System32\\sru\\SRUDB.dat, records from $first to $last. Windows writes them about once an hour.';
+  }
+
+  @override
+  String get manualControls => 'Manual controls';
+
+  @override
+  String upToDate(String version) {
+    return 'You are running the latest version ($version).';
+  }
+
+  @override
+  String get startCapture => 'Start capture';
+
+  @override
+  String get batteryHealth => 'Battery health';
+
+  @override
+  String get batteryHealthDescription =>
+      'Capacity the battery still holds compared with its design. Read-only.';
+
+  @override
+  String get batteryGood => 'Good';
+
+  @override
+  String get batteryFair => 'Worn';
+
+  @override
+  String get batteryPoor => 'Replace soon';
+
+  @override
+  String get notAvailable => 'Not available';
+
+  @override
+  String get batteryDesigned => 'Design capacity';
+
+  @override
+  String get batteryFullCharge => 'Full charge capacity';
+
+  @override
+  String get batteryWear => 'Wear';
+
+  @override
+  String get batteryCycles => 'Charge cycles';
+
+  @override
+  String get batteryCharge => 'Current charge';
+
+  @override
+  String get batteryOnAc => 'Plugged in';
+
+  @override
+  String get batteryOnBattery => 'On battery';
+
+  @override
+  String get batterySourceWmi =>
+      'Source: root\\wmi BatteryStaticData, BatteryFullChargedCapacity, BatteryCycleCount and BatteryStatus, as reported by the battery firmware.';
+
+  @override
+  String get batterySourceReport =>
+      'Source: powercfg /batteryreport (temporary XML, deleted after reading), as reported by the battery firmware.';
+
+  @override
+  String get appTypeSystem => 'System';
+
+  @override
+  String get appTypeUser => 'User';
+
+  @override
+  String get appTypeStore => 'Store';
+
+  @override
+  String get appSafetyRemovable => 'Can remove';
+
+  @override
+  String get appSafetyCheckFirst => 'Check first';
+
+  @override
+  String get appSafetyKeep => 'Keep it';
+
+  @override
+  String get appReasonSystemComponent => 'Hidden Windows or vendor component.';
+
+  @override
+  String get appReasonProtected => 'Its installer forbids removal.';
+
+  @override
+  String get appReasonUpdate =>
+      'Update of another program: remove that program instead.';
+
+  @override
+  String get appReasonWindowsPart =>
+      'Part of Windows or a framework other apps need.';
+
+  @override
+  String get appReasonSharedDependency =>
+      'Used by other apps (runtime, driver or vendor panel).';
+
+  @override
+  String get appReasonOptionalFeature =>
+      'Optional Windows feature: read what stops working.';
+
+  @override
+  String get appReasonMissingUninstaller => 'No uninstaller registered.';
+
+  @override
+  String get appReasonUserInstalled =>
+      'Installed by you or the PC maker; nothing else depends on it.';
+
+  @override
+  String get appLabelMissingUninstaller => 'No uninstaller';
+
+  @override
+  String get appLabelProtected => 'Protected';
+
+  @override
+  String get appLabelSystemComponent => 'System component';
+
+  @override
+  String get appLabelUpdate => 'Update';
+
+  @override
+  String get filterAll => 'All';
+
+  @override
+  String get filterType => 'Type';
+
+  @override
+  String get filterSafety => 'Safety';
+
+  @override
+  String get filterSource => 'Source';
+
+  @override
+  String get sourceWholePc => 'Whole PC';
+
+  @override
+  String get sortBy => 'Sort';
+
+  @override
+  String get sortSize => 'Size';
+
+  @override
+  String get sortName => 'Name';
+
+  @override
+  String get sortDate => 'Install date';
+
+  @override
+  String appsShown(int count) {
+    return '$count apps';
+  }
+
+  @override
+  String selectionSummary(int count, String size) {
+    return '$count selected · $size';
+  }
+
+  @override
+  String selectionUnknownSizes(int count) {
+    return '$count with unknown size';
+  }
+
+  @override
+  String get appsSource =>
+      'Source: Uninstall registry keys (HKLM 64/32-bit, HKCU), Get-AppxPackage, winget export for reinstall ids. Size: EstimatedSize, otherwise the install folder.';
+
+  @override
+  String get noAppsMatch => 'No app matches these filters.';
+
+  @override
+  String reinstallableVia(String id) {
+    return 'Reinstall: winget $id';
+  }
+
+  @override
+  String get uninstallQueueTitle => 'Uninstall queue';
+
+  @override
+  String get uninstallModeSilent => 'Silent';
+
+  @override
+  String get uninstallModeWindowed => 'Opens its window';
+
+  @override
+  String get uninstallManualNoUninstaller =>
+      'Manual: no uninstaller registered.';
+
+  @override
+  String get uninstallManualUnsafe =>
+      'Manual: the registered command runs a shell or script, so ZapTweaks does not start it.';
+
+  @override
+  String get uninstallManualNotFound =>
+      'Manual: the uninstaller file is missing.';
+
+  @override
+  String uninstallRunningWarning(String processes) {
+    return 'Still running from its folder: $processes. Close it first.';
+  }
+
+  @override
+  String get uninstallSimulate =>
+      'Simulation: plan and show the queue, uninstall nothing';
+
+  @override
+  String get uninstallRestorePointNote =>
+      'A restore point is created first. Programs that open a window run first, one at a time; silent ones follow.';
+
+  @override
+  String get uninstallStart => 'Start uninstalling';
+
+  @override
+  String get restorePointCreating => 'Creating restore point…';
+
+  @override
+  String get restorePointFailed =>
+      'The restore point was not created. System Protection may be off. Nothing has been changed.';
+
+  @override
+  String get restorePointEnableAndRetry =>
+      'Turn on System Protection and retry';
+
+  @override
+  String get queueWaiting => 'Waiting';
+
+  @override
+  String get queueRunning => 'Running';
+
+  @override
+  String get queueDone => 'Done';
+
+  @override
+  String get queueFailed => 'Failed';
+
+  @override
+  String get queueSkipped => 'Skipped';
+
+  @override
+  String get queueSkip => 'Skip';
+
+  @override
+  String get queueStop => 'Stop after the current one';
+
+  @override
+  String get queueSimulated => 'Simulation: nothing was uninstalled.';
+
+  @override
+  String get uninstallStoreAppsHint =>
+      'Store apps in the selection use the Uninstall menu on their row.';
+
+  @override
+  String get leftoverSearch => 'Look for leftovers';
+
+  @override
+  String get leftoverTitle => 'Leftovers';
+
+  @override
+  String get leftoverGood => 'Sure';
+
+  @override
+  String get leftoverMedium => 'Likely';
+
+  @override
+  String get leftoverLow => 'Uncertain';
+
+  @override
+  String get leftoverKindFolder => 'Folder';
+
+  @override
+  String get leftoverKindShortcut => 'Shortcut';
+
+  @override
+  String get leftoverKindRegistry => 'Registry key';
+
+  @override
+  String get leftoverKindRun => 'Startup entry';
+
+  @override
+  String get leftoverKindTask => 'Scheduled task';
+
+  @override
+  String get leftoverKindFirewall => 'Firewall rule';
+
+  @override
+  String get leftoverNone => 'No leftovers found.';
+
+  @override
+  String leftoverRemoveSelected(int count) {
+    return 'Remove selected ($count)';
+  }
+
+  @override
+  String get leftoverBackupNote =>
+      'Only items marked Sure start selected. Before removal, registry keys are exported to .reg, tasks to XML and firewall rules to JSON; files and folders go to the Recycle Bin.';
+
+  @override
+  String leftoverRemoved(String path) {
+    return 'Leftovers removed. Backups: $path';
+  }
+
+  @override
+  String get leftoverRefusedInvalid =>
+      'Not removed: malformed or unsafe entry.';
+
+  @override
+  String get leftoverRefusedOutside =>
+      'Not removed: outside what ZapTweaks may clean here.';
+
+  @override
+  String get leftoverRefusedShared =>
+      'Not removed: shared with Windows or other programs.';
+
+  @override
+  String get orphanFolders => 'Orphan folders';
+
+  @override
+  String get orphanFoldersNote =>
+      'Program Files folders that no installed program points to. A portable tool or a driver kit can look the same, so nothing is selected: check each one first.';
+
+  @override
+  String get openLocation => 'Open location';
+
+  @override
+  String get processesTab => 'Processes';
+
+  @override
+  String get searchProcesses => 'Search processes';
+
+  @override
+  String get sortMemory => 'Memory';
+
+  @override
+  String get sortCpu => 'CPU';
+
+  @override
+  String get processKindWindows => 'Windows';
+
+  @override
+  String get processKindMicrosoft => 'Microsoft app';
+
+  @override
+  String get processKindThirdParty => 'Third party';
+
+  @override
+  String get processCanClose => 'Can close';
+
+  @override
+  String get processLeaveRunning => 'Leave running';
+
+  @override
+  String get processReasonCritical =>
+      'Windows needs it: closing it can sign you out or crash the system.';
+
+  @override
+  String get processReasonWindowsFolder =>
+      'Runs from the Windows folder or is protected.';
+
+  @override
+  String get processReasonService =>
+      'Runs a service: manage it from the Services tab.';
+
+  @override
+  String get processReasonSelf => 'This is ZapTweaks.';
+
+  @override
+  String get processReasonUserApp =>
+      'An app you started: closing it loses unsaved work.';
+
+  @override
+  String get processEnd => 'End process';
+
+  @override
+  String processEndConfirm(String name) {
+    return 'End $name? Anything unsaved in it is lost.';
+  }
+
+  @override
+  String get processEndChanged =>
+      'It had already closed, or its ID now belongs to another process: nothing was ended.';
+
+  @override
+  String get processEndFailed =>
+      'Windows refused to end it. It may run as administrator.';
+
+  @override
+  String get searchOnline => 'Search online';
+
+  @override
+  String get processOnlyClosable => 'Only ones you can close';
+
+  @override
+  String get processNote =>
+      'A snapshot: CPU is a single sample, refresh to read it again. Signatures are checked after the list appears. System processes are never offered for closing.';
+
+  @override
+  String get noProcessesMatch => 'No process matches these filters.';
+
+  @override
+  String signedBy(String signer) {
+    return 'Signed by $signer';
+  }
+
+  @override
+  String get servicesTab => 'Services';
+
+  @override
+  String get searchServices => 'Search services';
+
+  @override
+  String get filterOrigin => 'Origin';
+
+  @override
+  String get originMicrosoft => 'Microsoft';
+
+  @override
+  String get serviceCanDisable => 'Can disable';
+
+  @override
+  String get serviceDependsOnUse => 'Depends on use';
+
+  @override
+  String get serviceKeep => 'Keep it';
+
+  @override
+  String get serviceStartAutomatic => 'Automatic';
+
+  @override
+  String get serviceStartDelayed => 'Automatic (delayed)';
+
+  @override
+  String get serviceStartManual => 'Manual';
+
+  @override
+  String get serviceStartDisabled => 'Disabled';
+
+  @override
+  String get serviceStartBoot => 'Boot';
+
+  @override
+  String get serviceRunning => 'Running';
+
+  @override
+  String get serviceStopped => 'Stopped';
+
+  @override
+  String get serviceSetDisabled => 'Disable';
+
+  @override
+  String get serviceSetManual => 'Set to manual';
+
+  @override
+  String get serviceSetAutomatic => 'Set to automatic';
+
+  @override
+  String serviceChangeTitle(String service) {
+    return 'Change $service';
+  }
+
+  @override
+  String serviceChangeConfirm(String from, String to, String reason) {
+    return 'Start type: $from → $to.\n$reason\nIt applies the next time the service or Windows starts. You can undo it right after.';
+  }
+
+  @override
+  String serviceChanged(String service, String to) {
+    return '$service is now $to.';
+  }
+
+  @override
+  String get serviceUndo => 'Undo';
+
+  @override
+  String get serviceNote =>
+      'Changes ask for administrator rights and take effect at the next start of the service or of Windows. Services Windows needs are never offered; disabling a service that others depend on is refused.';
+
+  @override
+  String get noServicesMatch => 'No service matches these filters.';
+
+  @override
+  String get svcReasonTelemetry =>
+      'Sends usage and diagnostic data to Microsoft. Nothing you use stops working.';
+
+  @override
+  String get svcReasonDeviceManagement =>
+      'Telemetry and work or school device management: only needed if an organization manages this PC.';
+
+  @override
+  String get svcReasonCrashReports =>
+      'Sends crash reports to Microsoft. Crashes are still logged on this PC.';
+
+  @override
+  String get svcReasonRemoteRegistry =>
+      'Lets other computers edit this PC\'s registry over the network. Off by default.';
+
+  @override
+  String get svcReasonOfflineMaps =>
+      'Keeps offline maps up to date for the Maps app.';
+
+  @override
+  String get svcReasonMediaSharing =>
+      'Shares the Windows Media Player library on the network.';
+
+  @override
+  String get svcReasonRetailDemo => 'Shop demo mode. Never needed at home.';
+
+  @override
+  String get svcReasonXbox =>
+      'Without it: Xbox app, Game Pass, cloud saves and Xbox accessories stop working.';
+
+  @override
+  String get svcReasonPrinting =>
+      'Without it: printing stops working, Print to PDF included.';
+
+  @override
+  String get svcReasonBluetooth =>
+      'Without it: Bluetooth devices stop connecting.';
+
+  @override
+  String get svcReasonSearch =>
+      'Without it: search in Start, Settings and File Explorer gets slow and incomplete.';
+
+  @override
+  String get svcReasonSysMain =>
+      'Preloads apps you use often. Without it launches can be slower, mostly on hard disks.';
+
+  @override
+  String get svcReasonTouchKeyboard =>
+      'Without it: touch keyboard, handwriting, the emoji panel and some input methods stop working.';
+
+  @override
+  String get svcReasonLocation =>
+      'Without it: apps and Find my device can no longer get your location.';
+
+  @override
+  String get svcReasonBiometrics =>
+      'Without it: Windows Hello face and fingerprint sign-in stop working.';
+
+  @override
+  String get svcReasonPhone =>
+      'Without it: calls through Phone Link stop working.';
+
+  @override
+  String get svcReasonRemoteDesktop =>
+      'Without it: Remote Desktop into this PC stops working.';
+
+  @override
+  String get svcReasonSmartCard =>
+      'Without it: smart cards and some security keys stop working.';
+
+  @override
+  String get svcReasonParental =>
+      'Without it: Microsoft Family Safety limits are no longer enforced.';
+
+  @override
+  String get svcReasonNfc => 'Without it: NFC and tap-to-pay stop working.';
+
+  @override
+  String get svcReasonHotspot => 'Without it: Mobile hotspot stops working.';
+
+  @override
+  String get svcReasonScanner =>
+      'Without it: scanners and some cameras stop working.';
+
+  @override
+  String get svcReasonCompatibility =>
+      'Without it: Windows no longer offers fixes when an old program fails to run.';
+
+  @override
+  String get svcReasonFax => 'Without it: fax stops working.';
+
+  @override
+  String get svcReasonInsider =>
+      'Without it: Windows Insider preview builds stop arriving.';
+
+  @override
+  String get svcReasonUpdates =>
+      'Windows Update needs it: without it security fixes stop arriving.';
+
+  @override
+  String get svcReasonSecurity =>
+      'Protects this PC (antivirus, firewall, security status).';
+
+  @override
+  String get svcReasonWindowsCore =>
+      'Windows needs it for sound, network, logs or basic system functions.';
+
+  @override
+  String get svcReasonNotReviewed =>
+      'Part of Windows and not reviewed: leave it as it is.';
+
+  @override
+  String get svcReasonDriverService =>
+      'Installed with a driver: leave it unless you know what it does.';
+
+  @override
+  String get svcReasonMicrosoftApp =>
+      'Belongs to a Microsoft app: without it that app may stop working or updating.';
+
+  @override
+  String get svcReasonThirdParty =>
+      'Installed with another program: without it that program may stop working or updating.';
+
+  @override
+  String get serviceStartTypeAction => 'Change startup';
+
+  @override
+  String get presetsTab => 'Presets';
+
+  @override
+  String get presetDebloatName => 'Debloat only';
+
+  @override
+  String get presetDebloatSummary =>
+      'Removes preinstalled Microsoft apps few people use. Nothing else changes.';
+
+  @override
+  String get presetCleanName => 'Clean';
+
+  @override
+  String get presetCleanSummary =>
+      'Debloat, plus telemetry and unused services off and apps that start with Windows for no reason.';
+
+  @override
+  String get presetGamingName => 'Gaming';
+
+  @override
+  String get presetGamingSummary =>
+      'Clean, plus settings for playing: no power throttling of running apps, End task in the taskbar. Xbox stays.';
+
+  @override
+  String get presetPrivacyName => 'Privacy';
+
+  @override
+  String get presetPrivacySummary =>
+      'Clean, plus the privacy settings from Microsoft\'s own guide: advertising ID, tracking, suggestions, diagnostic data to the minimum.';
+
+  @override
+  String get presetCompetitiveName => 'Competitive';
+
+  @override
+  String get presetCompetitiveSummary =>
+      'Removes everything the other presets remove and more: apps many people use, Xbox, printing, launchers at startup, game recording. Plus a clean driver install and WinSux, done by hand.';
+
+  @override
+  String get presetAttention => 'Attention';
+
+  @override
+  String get presetAttentionNote =>
+      'It removes a lot, including things many people use. No FPS, latency or other gain is promised: it is a set of changes, not a measured improvement.';
+
+  @override
+  String get presetGroupApps => 'Apps it removes (current user)';
+
+  @override
+  String get presetGroupServices => 'Services it turns off';
+
+  @override
+  String get presetGroupStartup => 'Startup entries it turns off';
+
+  @override
+  String get presetGroupTweaks => 'Settings';
+
+  @override
+  String get presetGroupThirdParty => 'Third-party scripts and tools';
+
+  @override
+  String get presetGroupRestart => 'Restart';
+
+  @override
+  String get presetGroupReversible => 'What can be undone';
+
+  @override
+  String get presetRestartNeeded =>
+      'Restart afterwards: services and startup entries change at the next start.';
+
+  @override
+  String get presetRestartNone => 'No restart needed.';
+
+  @override
+  String get presetReversibleApps =>
+      'Apps: reinstall them from the Microsoft Store.';
+
+  @override
+  String get presetReversibleSettings =>
+      'Services, startup entries and settings: undo them right after with Undo preset, or later with the restore point created first.';
+
+  @override
+  String get presetReversibleManual =>
+      'Third-party steps are not run by ZapTweaks: follow the author\'s own instructions to undo them.';
+
+  @override
+  String get presetManualWhy =>
+      'Done by hand: the script downloads and runs other files that cannot be pinned to a hash, so ZapTweaks does not run it.';
+
+  @override
+  String get presetManualDriverClean =>
+      'Clean graphics driver install: DDU in Safe Mode, then the latest driver from the vendor.';
+
+  @override
+  String get presetManualWinsux =>
+      'WinSux: Windows debloat and settings in one script.';
+
+  @override
+  String get presetPreview => 'Preview on this PC';
+
+  @override
+  String get presetPreviewLoading =>
+      'Reading apps, services, startup entries and settings…';
+
+  @override
+  String get presetStatusApply => 'To do';
+
+  @override
+  String get presetStatusDone => 'Already set';
+
+  @override
+  String get presetStatusSkipped => 'Skipped';
+
+  @override
+  String get presetStatusManual => 'By hand';
+
+  @override
+  String get presetSkipNotInstalled => 'not installed';
+
+  @override
+  String get presetSkipNotFound => 'not on this PC';
+
+  @override
+  String get presetSkipUnsupported => 'not supported here';
+
+  @override
+  String get presetSkipDuplicate =>
+      'same name twice: only the first is changed';
+
+  @override
+  String presetCounts(int apply, int done, int skipped) {
+    return '$apply to do · $done already set · $skipped skipped';
+  }
+
+  @override
+  String get presetConsent => 'I have read the full list and accept the risk.';
+
+  @override
+  String get presetApply => 'Apply preset';
+
+  @override
+  String get presetApplyNote =>
+      'A restore point is created first; if it fails nothing changes. Administrator changes ask for UAC once.';
+
+  @override
+  String get presetApplying => 'Applying…';
+
+  @override
+  String presetReport(int ok, int failed) {
+    return 'Done: $ok changed, $failed not changed.';
+  }
+
+  @override
+  String get presetUndo => 'Undo preset';
+
+  @override
+  String get presetUndone =>
+      'Preset undone. Removed apps stay removed: reinstall them from the Store.';
+
+  @override
+  String get presetNothingToDo => 'Nothing to do: everything is already set.';
+
+  @override
+  String get presetSaveAs => 'Save as my preset';
+
+  @override
+  String get presetSaveNote =>
+      'Saves the items still ticked. Share the file to export it; put a file in the folder to import it.';
+
+  @override
+  String get presetName => 'Name';
+
+  @override
+  String presetSaved(String path) {
+    return 'Saved: $path';
+  }
+
+  @override
+  String get presetOpenFolder => 'Open presets folder';
+
+  @override
+  String get presetUserTitle => 'My presets';
+
+  @override
+  String presetInvalidFile(String file, String error) {
+    return '$file not loaded: $error';
+  }
+
+  @override
+  String get presetItemPowerThrottling =>
+      'Power throttling of running apps off';
+
+  @override
+  String get presetItemEndTask => 'End task in the taskbar menu';
+
+  @override
+  String get presetItemAdvertisingId => 'Advertising ID off';
+
+  @override
+  String get presetItemLanguageList =>
+      'Websites can\'t read your language list';
+
+  @override
+  String get presetItemAppLaunchTracking =>
+      'Windows doesn\'t track the apps you start';
+
+  @override
+  String get presetItemTailoredExperiences =>
+      'No tailored experiences from diagnostic data';
+
+  @override
+  String get presetItemCloudContent =>
+      'No cloud-optimized content (suggestions)';
+
+  @override
+  String get presetItemDiagnosticData => 'Diagnostic data: required only';
+
+  @override
+  String get presetItemLockScreenOverlay => 'No tips over the lock screen';
+
+  @override
+  String get presetItemLockScreenFacts => 'No fun facts on the lock screen';
+
+  @override
+  String get presetItemGameDvr => 'Game Bar game recording off';
+
+  @override
+  String get presetSkipHasDependents =>
+      'Other services depend on it, so Windows does not allow disabling it.';
+
+  @override
+  String get settingsGeneral => 'General';
+
+  @override
+  String get settingsModes => 'Modes';
+
+  @override
+  String get settingsMaintenance => 'Maintenance';
+
+  @override
+  String get settingsAbout => 'About';
+
+  @override
+  String get openLogFolderDescription =>
+      'Session logs with every command ZapTweaks ran.';
+
+  @override
+  String get redetectSystemStateDescription =>
+      'Read the hardware and the state of every tweak again.';
+
+  @override
+  String get profileTitle => 'Settings profile';
+
+  @override
+  String get profileDescription =>
+      'Save ZapTweaks preferences to a file or load them from one.';
+
+  @override
+  String get resetAppSettingsDescription =>
+      'Back to default ZapTweaks preferences. Windows is not changed.';
+
+  @override
+  String get expertModeOn => 'On';
+
+  @override
+  String get expertModeOff => 'Off';
 }

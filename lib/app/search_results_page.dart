@@ -84,6 +84,18 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                 'tcp optimizer winspar qos dscp congestion autotuning ecn rsc rss throughput latency jitter packet loss rete',
               ),
               _SearchDestination(
+                strings.manualControls,
+                'Windows',
+                1,
+                'sparkle clock seconds menu delay lock screen search orologio secondi ricerca',
+              ),
+              _SearchDestination(
+                'Expert · ${strings.manualControls}',
+                'Expert',
+                1,
+                'sparkle services defender hvci memory integrity rdp edge nvidia servizi sicurezza',
+              ),
+              _SearchDestination(
                 strings.recovery,
                 'Diagnostics & Recovery',
                 0,
@@ -152,7 +164,10 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                     title: item.title,
                     subtitle: item.category,
                     onPressed: () => widget.controller.navigateTo(
-                      item.category,
+                      item.category == 'Expert' &&
+                              !widget.controller.expertModeEnabled
+                          ? TweakController.settingsCategory
+                          : item.category,
                       tab: item.tab,
                     ),
                   ),
@@ -187,12 +202,13 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
     final strings = AppLocalizations.of(context);
     final locked =
         item.category == 'Expert' && !widget.controller.expertModeEnabled;
+    final author = item.scriptTweak?.author;
     return _resultCard(
       context,
       title: item.title,
-      subtitle: locked
-          ? '${item.category} · ${strings.searchExpertRequired}'
-          : '${item.category} · ${item.collection}',
+      subtitle:
+          '${item.category} · ${locked ? strings.searchExpertRequired : item.collection}'
+          '${author == null ? '' : ' · by $author'}',
       onPressed: () => widget.controller.navigateTo(
         locked ? TweakController.settingsCategory : item.category,
         tab: item.category == 'Drivers' ? 1 : 0,

@@ -14,6 +14,7 @@ import '../../../core/models/tweak_descriptor.dart';
 import '../../../core/models/update_info.dart';
 import '../../../core/operations/operation.dart';
 import '../../../core/operations/operation_registry.dart';
+import '../../../core/operations/sparkle_operations.dart';
 import '../../../core/persistence/operation_store.dart';
 import '../../../core/plans/operation_plan.dart';
 import '../../../core/plans/plan_engine.dart';
@@ -145,6 +146,7 @@ class TweakController extends ChangeNotifier {
   double? _updateDownloadProgress;
   UpdateInfo? _availableUpdate;
   String? _updateStatusMessage;
+  bool _isUpToDate = false;
   bool _isDisposed = false;
 
   SystemMetricsSnapshot _latestMetrics = SystemMetricsSnapshot.empty;
@@ -192,6 +194,7 @@ class TweakController extends ChangeNotifier {
   bool get automaticUpdateChecksEnabled => _automaticUpdateChecksEnabled;
   bool get startWithWindows => _startWithWindows;
   bool get expertModeEnabled => _expertModeEnabled;
+  OperationStore? get operationJournal => _operationStore;
   String get themeMode => _themeMode;
   String get searchQuery => _searchQuery;
   int get navigationTab => _navigationTab;
@@ -202,6 +205,9 @@ class TweakController extends ChangeNotifier {
   bool get isUpdateAvailable => _availableUpdate != null;
   UpdateInfo? get availableUpdate => _availableUpdate;
   String? get updateStatusMessage => _updateStatusMessage;
+
+  /// True after a successful check found no newer release.
+  bool get isUpToDate => _isUpToDate;
   bool get isInteractionLocked =>
       _busyTweaks.any(_interactionLockingTweaks.contains);
   String get interactionLockMessage =>
@@ -244,7 +250,8 @@ class TweakController extends ChangeNotifier {
       }
       final haystack =
           '${descriptor.id} ${descriptor.title} ${descriptor.description} '
-          '${descriptor.category} ${descriptor.collection}';
+          '${descriptor.category} ${descriptor.collection} '
+          '${descriptor.scriptTweak?.author ?? ''}';
       if (!SearchMatcher.matches(query, haystack)) continue;
       final resolved = descriptor.aliasTarget == null
           ? descriptor
@@ -710,6 +717,64 @@ class TweakController extends ChangeNotifier {
     }
   }
 
+  bool canRestoreManualPlan(OperationPlan plan) =>
+      const {
+        PlanStatus.completed,
+        PlanStatus.rollbackConflict,
+      }.contains(plan.status) &&
+      plan.items.isNotEmpty &&
+      plan.items.any((item) => item.status != PlanItemStatus.rolledBack) &&
+      plan.items.every(
+        (item) =>
+            item.request.operationId == item.operationId &&
+            (item.operationId.startsWith('sparkle.') ||
+                (item.operationId == 'service.start.configure' &&
+                    sparkleManualServices.contains(item.request.target))) &&
+            item.snapshot != null &&
+            item.written != null &&
+            const {
+              PlanItemStatus.verified,
+              PlanItemStatus.pendingRestart,
+              PlanItemStatus.rollbackConflict,
+              PlanItemStatus.rolledBack,
+            }.contains(item.status),
+      );
+
+  Future<OperationPlan> restoreManualPlan(String planId) async {
+    final engine = _planEngine;
+    final plan = _operationStore?.load(planId);
+    if (engine == null || plan == null || !canRestoreManualPlan(plan)) {
+      throw StateError('No supported, verified manual plan to restore.');
+    }
+    if (plan.items.any(
+          (item) =>
+              engine.registry.resolve(item.operationId).risk ==
+              OperationRisk.high,
+        ) &&
+        !_expertModeEnabled) {
+      throw StateError(
+        'Expert mode is required to restore high-risk settings.',
+      );
+    }
+    if (plan.items.any(
+      (item) =>
+          engine.registry.resolve(item.operationId).rollbackCapability !=
+          RollbackCapability.exact,
+    )) {
+      throw StateError('This manual plan has no exact rollback.');
+    }
+    final restored = await engine.rollback(plan);
+    if (restored.status == PlanStatus.rolledBack) {
+      restored.restartRequired = restored.items.any(
+        (item) =>
+            engine.registry.resolve(item.operationId).restartImpact ==
+            RestartImpact.reboot,
+      );
+      _operationStore!.save(restored);
+    }
+    return restored;
+  }
+
   Future<OperationPlan> executeNativeRequests(
     List<OperationRequest> requests,
   ) async {
@@ -740,6 +805,39 @@ class TweakController extends ChangeNotifier {
     final plan = await engine.plan(requests);
     await engine.execute(plan, dryRun: _processRunner.isDryRun);
     return plan;
+  }
+
+  /// Read-only preview: support and current state of each request, without
+  /// planning, executing or journaling anything.
+  Future<List<({SupportResult support, OperationState before})>>
+  inspectNativeRequests(List<OperationRequest> requests) async {
+    final engine = _planEngine;
+    if (engine == null) {
+      throw StateError('Native operation engine is unavailable.');
+    }
+    return <({SupportResult support, OperationState before})>[
+      for (final request in requests)
+        await () async {
+          final definition = engine.registry.resolve(request.operationId);
+          final support = await definition.supports(engine.context, request);
+          return (
+            support: support,
+            before: support.supported
+                ? await definition.inspect(request)
+                : const OperationState(OperationStateKind.notApplicable),
+          );
+        }(),
+    ];
+  }
+
+  /// Undoes a plan this session just applied (preset report). Items without
+  /// an exact rollback, such as removed apps, are left as they are.
+  Future<OperationPlan> rollbackAppliedPlan(OperationPlan plan) async {
+    final engine = _planEngine;
+    if (engine == null) {
+      throw StateError('Native operation engine is unavailable.');
+    }
+    return engine.rollback(plan);
   }
 
   /// Executes a script tweak or toggles a stateful script tweak.
@@ -1119,6 +1217,7 @@ class TweakController extends ChangeNotifier {
     }
 
     _isCheckingForUpdates = true;
+    _isUpToDate = false;
     _updateStatusMessage = 'Checking for updates...';
     notifyListeners();
     try {
@@ -1131,6 +1230,7 @@ class TweakController extends ChangeNotifier {
       if (result.success) {
         _availableUpdate = result.update;
       }
+      _isUpToDate = result.success && result.update == null;
       _updateStatusMessage = result.message;
       return result;
     } finally {

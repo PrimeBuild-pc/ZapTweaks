@@ -1,3 +1,9 @@
+import 'dart:convert';
+
+import 'package:crypto/crypto.dart';
+
+import '../../features/apps/domain/appx_candidate_policy.dart';
+import '../../features/apps/domain/microsoft_restore_catalog.dart';
 import '../services/process_runner.dart';
 import 'operation.dart';
 
@@ -6,27 +12,46 @@ class AppxRemovalOperation implements OperationDefinition {
     required this.id,
     required this.systemScopes,
     required ProcessRunner processRunner,
-  }) : _runner = processRunner;
+    Map<String, MicrosoftRestoreIdentity> allowedPackages =
+        microsoftRestoreCatalog,
+  }) : _runner = processRunner,
+       _allowedPackages = Map<String, MicrosoftRestoreIdentity>.unmodifiable(
+         allowedPackages,
+       );
 
   @override
   final String id;
   final bool systemScopes;
   final ProcessRunner _runner;
-
-  static final RegExp _packageName = RegExp(r'^[A-Za-z0-9_.-]{1,200}$');
+  final Map<String, MicrosoftRestoreIdentity> _allowedPackages;
 
   String _target(OperationRequest request) {
     final target = request.target;
-    if (target == null || !_packageName.hasMatch(target)) {
-      throw StateError('Invalid AppX package identity.');
+    if (target == null || appxCandidatePolicy[target]?.removable != true) {
+      throw StateError('AppX package is protected or inventory-only.');
     }
     return target;
+  }
+
+  MicrosoftRestoreIdentity? _identity(OperationRequest request) =>
+      _allowedPackages[_target(request)] ??
+      appxCandidatePolicy[_target(request)]!.restore;
+
+  void _validate(OperationRequest request) {
+    if (request.operationId != id ||
+        request.desiredValue != null ||
+        request.parameters.length != 1 ||
+        !request.parameters.containsKey('scope')) {
+      throw StateError('Invalid AppX removal request.');
+    }
+    _target(request);
+    _scope(request);
   }
 
   String _scope(OperationRequest request) {
     final scope = request.parameters['scope'];
     final allowed = systemScopes
-        ? const <String>{'allUsers', 'provisioned'}
+        ? const <String>{'allUsers', 'provisioned', 'allUsersAndProvisioned'}
         : const <String>{'currentUser'};
     if (scope is! String || !allowed.contains(scope)) {
       throw StateError('Invalid AppX removal scope.');
@@ -34,11 +59,25 @@ class AppxRemovalOperation implements OperationDefinition {
     return scope;
   }
 
-  String _query(OperationRequest request) {
-    final target = _target(request);
-    return _scope(request) == 'provisioned'
-        ? "@(Get-AppxProvisionedPackage -Online -ErrorAction Stop | Where-Object DisplayName -EQ '$target').Count"
-        : "@(Get-AppxPackage -Name '$target'${systemScopes ? ' -AllUsers' : ''} -ErrorAction Stop).Count";
+  String _query(OperationRequest request) => appxInventoryScript(
+    allUsers: systemScopes,
+    provisioned: _scope(request) != 'allUsers' && systemScopes,
+  );
+
+  Future<({String json, List<Map<String, dynamic>> targets})> _preflight(
+    OperationRequest request,
+  ) async {
+    _validate(request);
+    final json = (await _runner.runPowerShellForOutput(_query(request))).trim();
+    final inventory = Map<String, dynamic>.from(jsonDecode(json) as Map);
+    return (
+      json: json,
+      targets: validateAppxRemovalInventory(
+        inventory,
+        _target(request),
+        _scope(request),
+      ),
+    );
   }
 
   @override
@@ -47,8 +86,7 @@ class AppxRemovalOperation implements OperationDefinition {
     OperationRequest request,
   ) async {
     try {
-      _target(request);
-      _scope(request);
+      _validate(request);
       return context.architecture == 'x64' && context.windowsBuild >= 22000
           ? const SupportResult.supported()
           : const SupportResult.unsupported('Requires Windows 11 x64.');
@@ -60,16 +98,8 @@ class AppxRemovalOperation implements OperationDefinition {
   @override
   Future<OperationState> inspect(OperationRequest request) async {
     try {
-      final count = int.tryParse(
-        (await _runner.runPowerShellForOutput(_query(request))).trim(),
-      );
-      if (count == null) {
-        return const OperationState(
-          OperationStateKind.error,
-          message: 'Unable to read AppX package state.',
-        );
-      }
-      return count == 0
+      final result = await _preflight(request);
+      return result.targets.isEmpty
           ? const OperationState(OperationStateKind.absent)
           : OperationState(
               OperationStateKind.configured,
@@ -85,6 +115,7 @@ class AppxRemovalOperation implements OperationDefinition {
 
   @override
   Future<OperationSnapshot> captureSnapshot(OperationRequest request) async {
+    _validate(request);
     final before = await inspect(request);
     if (before.kind == OperationStateKind.error) {
       throw StateError(before.message ?? 'Unable to snapshot AppX package.');
@@ -94,6 +125,9 @@ class AppxRemovalOperation implements OperationDefinition {
       data: <String, Object?>{
         'package': _target(request),
         'scope': _scope(request),
+        'restorePackageId': _identity(request)?.packageId,
+        'restoreSource': _identity(request)?.source,
+        'rollbackAvailable': false,
       },
       expectedAfterRollback: before,
     );
@@ -101,17 +135,28 @@ class AppxRemovalOperation implements OperationDefinition {
 
   @override
   Future<void> apply(OperationRequest request) async {
-    final target = _target(request);
+    final preflight = await _preflight(request);
     final scope = _scope(request);
-    final script = switch (scope) {
-      'currentUser' =>
-        "Get-AppxPackage -Name '$target' -ErrorAction Stop | Remove-AppxPackage -ErrorAction Stop",
-      'allUsers' =>
-        "Get-AppxPackage -Name '$target' -AllUsers -ErrorAction Stop | Remove-AppxPackage -AllUsers -ErrorAction Stop",
-      'provisioned' =>
-        "Get-AppxProvisionedPackage -Online -ErrorAction Stop | Where-Object DisplayName -EQ '$target' | ForEach-Object { Remove-AppxProvisionedPackage -Online -PackageName \$_.PackageName -ErrorAction Stop | Out-Null }",
-      _ => throw StateError('Invalid AppX removal scope.'),
-    };
+    final expected = sha256.convert(utf8.encode(preflight.json)).toString();
+    // Requery both scopes in the mutation process before the first write.
+    final script =
+        '''
+\$ErrorActionPreference = 'Stop'
+\$actual = (& { ${_query(request)} } | Out-String).Trim()
+\$sha = [Security.Cryptography.SHA256]::Create()
+try {
+  \$actualHash = [BitConverter]::ToString(\$sha.ComputeHash([Text.Encoding]::UTF8.GetBytes(\$actual))).Replace('-', '').ToLowerInvariant()
+} finally { \$sha.Dispose() }
+if (\$actualHash -cne '$expected') { throw 'AppX inventory changed after preflight; nothing removed.' }
+${preflight.targets.map((row) {
+          if (row.containsKey('PackageName')) {
+            return "if (@(Get-AppxProvisionedPackage -Online -ErrorAction Stop | Where-Object { \$_.PackageName -ceq '${row['PackageName']}' }).Count -gt 0) { Remove-AppxProvisionedPackage -Online -PackageName '${row['PackageName']}' -ErrorAction Stop | Out-Null }";
+          }
+          final users = scope == 'allUsersAndProvisioned' || scope == 'allUsers' ? '-AllUsers' : '';
+          // Removing a bundle may also remove a later captured main-package identity.
+          return "if (@(Get-AppxPackage $users -PackageTypeFilter All -ErrorAction Stop | Where-Object { \$_.PackageFullName -ceq '${row['PackageFullName']}' }).Count -gt 0) { Remove-AppxPackage -Package '${row['PackageFullName']}' $users -ErrorAction Stop }";
+        }).join('\n')}
+''';
     await _runner.runPowerShellScript(script);
   }
 
@@ -127,7 +172,7 @@ class AppxRemovalOperation implements OperationDefinition {
   );
 
   @override
-  int get version => 1;
+  int get version => 2;
   @override
   List<String> get legacyAliases => const <String>[];
   @override

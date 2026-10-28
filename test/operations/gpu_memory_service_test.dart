@@ -25,35 +25,6 @@ void main() {
     expect(snapshot.samples, 2);
   });
 
-  test(
-    'firmware thermal snapshot converts tenths Kelvin through JSON',
-    () async {
-      final service = WindowsThermalSensorService(
-        processRunner: ProcessRunner(
-          processRunDelegate:
-              (executable, arguments, {runInShell = false}) async =>
-                  ProcessResult(1, 0, '{"celsius":[42.5,51]}', ''),
-        ),
-      );
-
-      final snapshot = await service.capture();
-
-      expect(snapshot.celsius, <double>[42.5, 51]);
-    },
-  );
-
-  test('firmware thermal snapshot rejects physically invalid data', () async {
-    final service = WindowsThermalSensorService(
-      processRunner: ProcessRunner(
-        processRunDelegate:
-            (executable, arguments, {runInShell = false}) async =>
-                ProcessResult(1, 0, '{"celsius":[999]}', ''),
-      ),
-    );
-
-    expect(service.capture(), throwsFormatException);
-  });
-
   test('GPU memory snapshot rejects negative counter data', () async {
     final service = WindowsGpuMemoryService(
       processRunner: ProcessRunner(

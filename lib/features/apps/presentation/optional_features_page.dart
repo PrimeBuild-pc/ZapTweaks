@@ -1,5 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 
+import '../../../app/widgets/ui_kit.dart';
 import '../../../core/operations/operation.dart';
 import '../../../core/plans/operation_plan.dart';
 import '../../../core/security/elevated_helper.dart';
@@ -46,27 +47,14 @@ class _OptionalFeaturesPageState extends State<OptionalFeaturesPage> {
 
   Future<void> _setEnabled(WindowsOptionalFeature feature, bool enabled) async {
     final strings = AppLocalizations.of(context);
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (context) => ContentDialog(
-        title: Text(strings.confirmOptionalFeatureChange),
-        content: Text(
-          strings.confirmOptionalFeatureChangeMessage(
-            feature.name,
-            enabled ? strings.enable : strings.disable,
-          ),
-        ),
-        actions: <Widget>[
-          Button(
-            onPressed: () => Navigator.pop(context, false),
-            child: Text(strings.cancel),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: Text(strings.continueAction),
-          ),
-        ],
+    final confirmed = await confirmAction(
+      context,
+      title: strings.confirmOptionalFeatureChange,
+      message: strings.confirmOptionalFeatureChangeMessage(
+        feature.name,
+        enabled ? strings.enable : strings.disable,
       ),
+      confirmLabel: strings.continueAction,
     );
     if (confirmed != true) return;
     setState(() => _loading = true);

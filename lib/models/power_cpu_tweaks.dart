@@ -33,12 +33,15 @@ abstract class _PowerCpuSystemTweak extends SystemTweak {
     super.requiredCpuVendor,
   }) : super(category: 'Power & CPU');
 
+  // powercfg directly: a PowerShell around it costs ~1.5 s per check.
   Future<String> _getActiveScheme() async {
-    final output = await runPowerShellForOutput(r'''
-$line = powercfg /getactivescheme | Out-String
-if ($line -match '([0-9a-fA-F-]{36})') { $matches[1] }
-''');
-    return output.trim().toLowerCase();
+    final result = await ProcessRunner.shared.run('powercfg', <String>[
+      '/getactivescheme',
+    ]);
+    return RegExp(
+          r'[0-9a-fA-F-]{36}',
+        ).firstMatch(result.stdout)?.group(0)?.toLowerCase() ??
+        '';
   }
 
   Future<List<int>> _readPowercfgValues(String alias) async {
@@ -47,9 +50,12 @@ if ($line -match '([0-9a-fA-F-]{36})') { $matches[1] }
       return const <int>[];
     }
 
-    final output = await runPowerShellForOutput(
-      'powercfg /query $scheme sub_processor $alias',
-    );
+    final output = (await ProcessRunner.shared.run('powercfg', <String>[
+      '/qh', // also lists hidden settings (PERFCHECK, IDLEDEMOTE...)
+      scheme,
+      'sub_processor',
+      alias,
+    ])).stdout;
     final localizedValues = RegExp(r'0x([0-9a-fA-F]{1,8})')
         .allMatches(output)
         .map((match) {
@@ -128,17 +134,8 @@ if ($schemes.Contains($ultimateGuid)) {
   }
 
   @override
-  Future<bool> checkState() async {
-    final active = (await runPowerShellForOutput(r'''
-$line = powercfg /getactivescheme | Out-String
-if ($line -match '([0-9a-fA-F-]{36})') {
-  $matches[1]
-}
-''')).toLowerCase();
-
-    final applied = active == _customUltimateGuid;
-    return applied;
-  }
+  Future<bool> checkState() async =>
+      await _getActiveScheme() == _customUltimateGuid;
 }
 
 class FastStartupHibernateTweak extends _PowerCpuSystemTweak {
@@ -293,8 +290,8 @@ class CpuCoreParkingTweak extends _PowerCpuSystemTweak {
 
   @override
   Future<bool> checkState() async {
-    final minValues = await _readCurrentPowerValues('CPMINCORES');
-    final maxValues = await _readCurrentPowerValues('CPMAXCORES');
+    final minValues = await _readPowercfgValues('CPMINCORES');
+    final maxValues = await _readPowercfgValues('CPMAXCORES');
     final minAttributes = await RegistryManager.readDword(
       _minCoreAttributesKey,
       'Attributes',
@@ -312,47 +309,6 @@ class CpuCoreParkingTweak extends _PowerCpuSystemTweak {
 
     final applied = hasFullMin && hasFullMax && attributesUnhidden;
     return applied;
-  }
-
-  Future<List<int>> _readCurrentPowerValues(String settingAlias) async {
-    final output = await runPowerShellForOutput(
-      r'''
-$line = powercfg /getactivescheme | Out-String
-if ($line -match '([0-9a-fA-F-]{36})') {
-  $scheme = $matches[1]
-  powercfg /query $scheme sub_processor __SETTING_ALIAS__ | Out-String
-}
-'''
-          .replaceAll('__SETTING_ALIAS__', settingAlias),
-    );
-
-    final values = <int>[];
-    for (final line in output.split(RegExp(r'\r?\n'))) {
-      final currentMatch = RegExp(
-        r'Current\s+(AC|DC)\s+Power\s+Setting\s+Index:\s+0x([0-9a-fA-F]+)',
-      ).firstMatch(line);
-      if (currentMatch == null) {
-        continue;
-      }
-
-      final parsed = int.tryParse(currentMatch.group(2) ?? '', radix: 16);
-      if (parsed != null) {
-        values.add(parsed);
-      }
-    }
-
-    if (values.isNotEmpty) {
-      return values;
-    }
-
-    final localizedValues = RegExp(r'0x([0-9a-fA-F]{1,8})')
-        .allMatches(output)
-        .map((match) => int.tryParse(match.group(1)!, radix: 16))
-        .whereType<int>()
-        .toList(growable: false);
-    return localizedValues.length < 2
-        ? const <int>[]
-        : localizedValues.sublist(localizedValues.length - 2);
   }
 }
 
@@ -494,10 +450,10 @@ class CpuIdlePromoteDemoteTweak extends _PowerCpuSystemTweak {
 $line = powercfg /getactivescheme | Out-String
 if ($line -match '([0-9a-fA-F-]{36})') {
   $scheme = $matches[1]
-  powercfg /setacvalueindex $scheme sub_processor IDLEDEMOTETHR 100 | Out-Null
-  powercfg /setdcvalueindex $scheme sub_processor IDLEDEMOTETHR 100 | Out-Null
-  powercfg /setacvalueindex $scheme sub_processor IDLEPROMOTETHR 100 | Out-Null
-  powercfg /setdcvalueindex $scheme sub_processor IDLEPROMOTETHR 100 | Out-Null
+  powercfg /setacvalueindex $scheme sub_processor IDLEDEMOTE 100 | Out-Null
+  powercfg /setdcvalueindex $scheme sub_processor IDLEDEMOTE 100 | Out-Null
+  powercfg /setacvalueindex $scheme sub_processor IDLEPROMOTE 100 | Out-Null
+  powercfg /setdcvalueindex $scheme sub_processor IDLEPROMOTE 100 | Out-Null
   powercfg /setactive $scheme | Out-Null
 }
 ''', elevated: true);
@@ -509,10 +465,10 @@ if ($line -match '([0-9a-fA-F-]{36})') {
 $line = powercfg /getactivescheme | Out-String
 if ($line -match '([0-9a-fA-F-]{36})') {
   $scheme = $matches[1]
-  powercfg /setacvalueindex $scheme sub_processor IDLEDEMOTETHR 40 | Out-Null
-  powercfg /setdcvalueindex $scheme sub_processor IDLEDEMOTETHR 40 | Out-Null
-  powercfg /setacvalueindex $scheme sub_processor IDLEPROMOTETHR 60 | Out-Null
-  powercfg /setdcvalueindex $scheme sub_processor IDLEPROMOTETHR 60 | Out-Null
+  powercfg /setacvalueindex $scheme sub_processor IDLEDEMOTE 40 | Out-Null
+  powercfg /setdcvalueindex $scheme sub_processor IDLEDEMOTE 20 | Out-Null
+  powercfg /setacvalueindex $scheme sub_processor IDLEPROMOTE 60 | Out-Null
+  powercfg /setdcvalueindex $scheme sub_processor IDLEPROMOTE 40 | Out-Null
   powercfg /setactive $scheme | Out-Null
 }
 ''', elevated: true);
@@ -520,8 +476,8 @@ if ($line -match '([0-9a-fA-F-]{36})') {
 
   @override
   Future<bool> checkState() async {
-    final demote = await _readPowercfgValues('IDLEDEMOTETHR');
-    final promote = await _readPowercfgValues('IDLEPROMOTETHR');
+    final demote = await _readPowercfgValues('IDLEDEMOTE');
+    final promote = await _readPowercfgValues('IDLEPROMOTE');
     final applied =
         demote.length == 2 &&
         promote.length == 2 &&

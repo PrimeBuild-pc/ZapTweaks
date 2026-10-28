@@ -233,14 +233,17 @@ class PowerSchemesRestoreDefaultsOperation implements OperationDefinition {
     if (domain == null || user == null) {
       throw StateError('Unable to identify the power backup owner.');
     }
-    final result = await Process.run('icacls.exe', <String>[
-      directory.path,
-      '/inheritance:r',
-      '/grant:r',
-      '$domain\\$user:(OI)(CI)F',
-      '*S-1-5-18:(OI)(CI)F',
-      '*S-1-5-32-544:(OI)(CI)F',
-    ]);
+    final result = await Process.run(
+      ProcessRunner.resolveSystemExecutable('icacls.exe'),
+      <String>[
+        directory.path,
+        '/inheritance:r',
+        '/grant:r',
+        '$domain\\$user:(OI)(CI)F',
+        '*S-1-5-18:(OI)(CI)F',
+        '*S-1-5-32-544:(OI)(CI)F',
+      ],
+    );
     if (result.exitCode != 0) {
       throw StateError('Unable to secure the power backup directory.');
     }

@@ -429,7 +429,7 @@ class TweakTextLocalizer {
   _reviewedCopy = <String, Map<String, (String, String)>>{
     'it': <String, (String, String)>{
       'recovery_repair_bad_tweaks_zoicware': (
-        'Ripara tweak dannosi by zoicware',
+        'Ripara tweak dannosi',
         'Apre la sorgente MIT verificata di RepairBadTweaks; ZapTweaks non include né esegue lo script.',
       ),
       'tool_zoicware_suite': (
@@ -437,67 +437,67 @@ class TweakTextLocalizer {
         'Apre il progetto MIT ufficiale per prestazioni e qualità d’uso di Windows 11.',
       ),
       'tool_zoicware_defender_pro_tools': (
-        'DefenderProTools by zoicware',
+        'DefenderProTools',
         'Apre il progetto MIT ufficiale per controlli espliciti di Windows Defender.',
       ),
       'tool_zoicware_remove_windows_ai': (
-        'RemoveWindowsAI by zoicware',
+        'RemoveWindowsAI',
         'Apre il progetto MIT ufficiale per esaminare la rimozione di Copilot, Recall e componenti correlati.',
       ),
       'tool_zoicware_zscripts': (
-        'zScripts by zoicware',
+        'zScripts',
         'Apre il repository ufficiale di script PowerShell; il codice senza licenza dichiarata non viene copiato né eseguito.',
       ),
       'tool_zoicware_pbo_tuner_2': (
-        'PBOTuner2 by zoicware',
+        'PBOTuner2',
         'Apre il progetto ufficiale per l’undervolt PBO Ryzen; la stabilità deve essere verificata separatamente.',
       ),
       'tool_zoicware_remove_cbs_apps': (
-        'RemoveCBSApps by zoicware',
+        'RemoveCBSApps',
         'Apre il progetto MIT ufficiale per Get Started, Windows Backup e Cross Device Resume.',
       ),
       'tool_zoicware_power_plan_settings_editor': (
-        'PowerPlanSettingsEditor by zoicware',
+        'PowerPlanSettingsEditor',
         'Apre l’editor MIT ufficiale; ZapTweaks offre anche Power Settings Explorer integrato.',
       ),
       'tool_zoicware_ultimate_disk_cleanup': (
-        'UltimateDiskCleanup by zoicware',
+        'UltimateDiskCleanup',
         'Apre il progetto ufficiale di Pulizia disco con opzioni nascoste; controlla i target prima di eliminare dati.',
       ),
       'tool_zoicware_service_manager_plus': (
-        'ServiceManagerPlus by zoicware',
+        'ServiceManagerPlus',
         'Apre il progetto MIT ufficiale per la gestione avanzata dei servizi Windows.',
       ),
       'tool_zoicware_windows_device_remover': (
-        'WindowsDeviceRemover by zoicware',
+        'WindowsDeviceRemover',
         'Apre il progetto MIT ufficiale per rimuovere dispositivi e driver.',
       ),
       'tool_zoicware_windows_update_manager': (
-        'WindowsUpdateManager by zoicware',
+        'WindowsUpdateManager',
         'Apre il progetto ufficiale per la gestione avanzata di Windows Update; il codice non viene incluso.',
       ),
       'tool_zoicware_dynamic_min_services': (
-        'DynamicMinServices by zoicware',
+        'DynamicMinServices',
         'Apre il progetto sperimentale ufficiale per ridurre i servizi; il codice non viene incluso.',
       ),
       'tool_zoicware_zturbo': (
-        'zTurbo by zoicware',
+        'zTurbo',
         'Apre il progetto ufficiale dello script di ottimizzazione parallela; il codice non viene incluso.',
       ),
       'tool_zoicware_override_edid': (
-        'OverrideEDID by zoicware',
+        'OverrideEDID',
         'Apre il progetto ufficiale per esaminare modifiche al blocco di estensione EDID.',
       ),
       'tool_zoicware_hosts_builder': (
-        'HostsBuilder by zoicware',
+        'HostsBuilder',
         'Apre il progetto ufficiale per creare un file hosts Windows personalizzato.',
       ),
       'tool_zoicware_remove_apps_policy_editor': (
-        'RemoveAppsPolicyEditor by zoicware',
+        'RemoveAppsPolicyEditor',
         'Apre l’editor MIT ufficiale della policy RemoveDefaultMicrosoftStorePackages.',
       ),
       'tool_zoicware_tweak_fth': (
-        'TweakFTH by zoicware',
+        'TweakFTH',
         'Apre il progetto MIT ufficiale per gestire Fault Tolerant Heap.',
       ),
       'tool_benchmate': (
@@ -529,11 +529,11 @@ class TweakTextLocalizer {
         'Apre il progetto ufficiale per verificare la stabilità per-core dopo modifiche PBO o Curve Optimizer.',
       ),
       'tool_ctt_winutil': (
-        'CTT WinUtil by Chris Titus Tech',
+        'CTT WinUtil',
         'Apre la pagina ufficiale delle release. ZapTweaks non esegue codice PowerShell remoto mutabile.',
       ),
       'tool_windows_11_fix_tweaks_kubaam': (
-        'Windows 11 Fix Tweaks by kubaam',
+        'Windows 11 Fix Tweaks',
         'Apre il progetto upstream bloccato per la revisione. ZapTweaks non esegue il file batch tutto-in-uno.',
       ),
       'game_mode': (
@@ -647,15 +647,15 @@ class TweakTextLocalizer {
     },
     'de': <String, (String, String)>{
       'recovery_repair_bad_tweaks_zoicware': (
-        'Fehlerhafte Tweaks reparieren by zoicware',
-        'Startet die geprüfte MIT-Kopie des interaktiven RepairBadTweaks-Skripts by zoicware.',
+        'Fehlerhafte Tweaks reparieren',
+        'Startet die geprüfte MIT-Kopie des interaktiven RepairBadTweaks-Skripts.',
       ),
       'tool_ctt_winutil': (
-        'CTT WinUtil by Chris Titus Tech',
+        'CTT WinUtil',
         'Öffnet die offizielle Release-Seite. ZapTweaks führt keinen veränderlichen entfernten PowerShell-Code aus.',
       ),
       'tool_windows_11_fix_tweaks_kubaam': (
-        'Windows 11 Fix Tweaks by kubaam',
+        'Windows 11 Fix Tweaks',
         'Öffnet das fixierte Upstream-Projekt zur Prüfung. ZapTweaks führt die All-in-One-Batchdatei nicht aus.',
       ),
       'game_mode': (
@@ -693,15 +693,15 @@ class TweakTextLocalizer {
     },
     'es': <String, (String, String)>{
       'recovery_repair_bad_tweaks_zoicware': (
-        'Reparar tweaks dañinos by zoicware',
-        'Inicia la copia MIT verificada del script interactivo RepairBadTweaks by zoicware.',
+        'Reparar tweaks dañinos',
+        'Inicia la copia MIT verificada del script interactivo RepairBadTweaks.',
       ),
       'tool_ctt_winutil': (
-        'CTT WinUtil by Chris Titus Tech',
+        'CTT WinUtil',
         'Abre la página oficial de versiones. ZapTweaks no ejecuta código PowerShell remoto mutable.',
       ),
       'tool_windows_11_fix_tweaks_kubaam': (
-        'Windows 11 Fix Tweaks by kubaam',
+        'Windows 11 Fix Tweaks',
         'Abre el proyecto upstream fijado para revisarlo. ZapTweaks no ejecuta el archivo por lotes todo en uno.',
       ),
       'game_mode': (
@@ -739,15 +739,15 @@ class TweakTextLocalizer {
     },
     'fr': <String, (String, String)>{
       'recovery_repair_bad_tweaks_zoicware': (
-        'Réparer les mauvais tweaks by zoicware',
-        'Lance la copie MIT vérifiée du script interactif RepairBadTweaks by zoicware.',
+        'Réparer les mauvais tweaks',
+        'Lance la copie MIT vérifiée du script interactif RepairBadTweaks.',
       ),
       'tool_ctt_winutil': (
-        'CTT WinUtil by Chris Titus Tech',
+        'CTT WinUtil',
         'Ouvre la page officielle des versions. ZapTweaks n’exécute aucun code PowerShell distant mutable.',
       ),
       'tool_windows_11_fix_tweaks_kubaam': (
-        'Windows 11 Fix Tweaks by kubaam',
+        'Windows 11 Fix Tweaks',
         'Ouvre le projet amont épinglé pour examen. ZapTweaks n’exécute pas le fichier batch tout-en-un.',
       ),
       'game_mode': (
@@ -785,15 +785,15 @@ class TweakTextLocalizer {
     },
     'ru': <String, (String, String)>{
       'recovery_repair_bad_tweaks_zoicware': (
-        'Исправить опасные твики by zoicware',
-        'Запускает проверенную MIT-копию интерактивного скрипта RepairBadTweaks by zoicware.',
+        'Исправить опасные твики',
+        'Запускает проверенную MIT-копию интерактивного скрипта RepairBadTweaks.',
       ),
       'tool_ctt_winutil': (
-        'CTT WinUtil by Chris Titus Tech',
+        'CTT WinUtil',
         'Открывает официальную страницу выпусков. ZapTweaks не выполняет изменяемый удалённый код PowerShell.',
       ),
       'tool_windows_11_fix_tweaks_kubaam': (
-        'Windows 11 Fix Tweaks by kubaam',
+        'Windows 11 Fix Tweaks',
         'Открывает закреплённый исходный проект для проверки. ZapTweaks не запускает универсальный пакетный файл.',
       ),
       'game_mode': (
@@ -831,15 +831,15 @@ class TweakTextLocalizer {
     },
     'zh': <String, (String, String)>{
       'recovery_repair_bad_tweaks_zoicware': (
-        '修复不良调整 by zoicware',
-        '启动经过验证的 MIT 版 RepairBadTweaks 交互脚本 by zoicware。',
+        '修复不良调整',
+        '启动经过验证的 MIT 版 RepairBadTweaks 交互脚本。',
       ),
       'tool_ctt_winutil': (
-        'CTT WinUtil by Chris Titus Tech',
+        'CTT WinUtil',
         '打开官方发布页面。ZapTweaks 不执行可变的远程 PowerShell 代码。',
       ),
       'tool_windows_11_fix_tweaks_kubaam': (
-        'Windows 11 Fix Tweaks by kubaam',
+        'Windows 11 Fix Tweaks',
         '打开固定版本的上游项目以供审查。ZapTweaks 不执行一体化批处理文件。',
       ),
       'game_mode': ('开启游戏模式', '开启 Windows 游戏模式，不会修改 Game Bar 或 Game DVR。'),
@@ -1185,54 +1185,39 @@ class TweakTextLocalizer {
         "Separazione priorità Win32 (giochi)",
         "Imposta Win32PrioritySeparation su 26 (hex 0x1a): dà la priorità al tempo della CPU dell'app in primo piano. Tweak di gioco classico per una latenza di input inferiore.",
       ),
-      "graphics_amd_settings": (
-        "Impostazioni AMD",
-        "Sceneggiatura interattiva di Fr33thy.",
-      ),
+      "graphics_amd_settings": ("Impostazioni AMD", "Script interattivo."),
       "graphics_cpp_runtime": (
         "Runtime Visual C++ all-in-one",
         "Installa i runtime Visual C++ dal 2005 al 2022 (x86 e x64) con un’unica azione.",
       ),
       "graphics_directx": (
         "Tempo di esecuzione di DirectX",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
-      "graphics_driver_clean": (
-        "Autista pulito",
-        "Sceneggiatura interattiva di Fr33thy.",
-      ),
+      "graphics_driver_clean": ("Autista pulito", "Script interattivo."),
       "graphics_driver_install_debloat_settings": (
         "Installazione driver Debloat e impostazioni",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
       "graphics_driver_install_latest": (
         "Installazione driver più recente",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
-      "graphics_hags_windowed": (
-        "HAGS Finestrato",
-        "Sceneggiatura interattiva di Fr33thy.",
-      ),
-      "graphics_hdcp": ("HDCP", "Sceneggiatura interattiva di Fr33thy."),
-      "graphics_intel_settings": (
-        "Impostazioni Intel",
-        "Sceneggiatura interattiva di Fr33thy.",
-      ),
+      "graphics_hags_windowed": ("HAGS Finestrato", "Script interattivo."),
+      "graphics_hdcp": ("HDCP", "Script interattivo."),
+      "graphics_intel_settings": ("Impostazioni Intel", "Script interattivo."),
       "graphics_msi_mode_script": (
         "Modalità MSI (variante dello script)",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
       "graphics_nvidia_settings": (
         "Impostazioni NVIDIA",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
-      "graphics_p0_state": (
-        "Stato P0",
-        "Sceneggiatura interattiva di Fr33thy.",
-      ),
+      "graphics_p0_state": ("Stato P0", "Script interattivo."),
       "graphics_resolution_refresh_rate": (
         "Frequenza di aggiornamento della risoluzione",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
       "windows_auto_reboot_after_bsod_off": (
         "Riavvio automatico dopo la disattivazione di BSOD",
@@ -1268,145 +1253,133 @@ class TweakTextLocalizer {
       ),
       "windows_autoruns_startup_tasks_apps_check": (
         "Attività di avvio e verifica delle app con esecuzione automatica",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
       "windows_bloatware_script": (
         "Bloatware (variante dello script)",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
       "windows_bloatware_legacy_apps_check_script": (
         "Controllo delle app legacy Bloatware (variante dello script)",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
       "windows_bloatware_legacy_features_check_script": (
         "Controllo delle funzionalità legacy di Bloatware (variante dello script)",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
       "windows_bloatware_taskmgr_check_script": (
         "Bloatware TaskMgr Check (variante dello script)",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
       "windows_bloatware_uwp_apps_check_script": (
         "Controllo delle app UWP bloatware (variante dello script)",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
       "windows_bloatware_uwp_features_check_script": (
         "Controllo delle funzionalità UWP di Bloatware (variante dello script)",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
-      "windows_cleanup": ("Pulizia", "Sceneggiatura interattiva di Fr33thy."),
+      "windows_cleanup": ("Pulizia", "Script interattivo."),
       "windows_context_menu_script": (
         "Menu contestuale (variante dello script)",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
       "windows_control_panel_settings_script": (
         "Impostazioni del pannello di controllo (variante dello script)",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
       "windows_copilot_script": (
         "Copilota (variante dello script)",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
       "windows_core_isolation_script": (
         "Isolamento del core (variante dello script)",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
       "windows_defender_optimize": (
         "Ottimizzazione difensore",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
       "windows_device_manager_power_savings_wake": (
         "Gestione dispositivi Risparmio energetico e riattivazione",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
       "windows_edge_webview_script": (
         "Edge e WebView (variante dello script)",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
       "windows_gamebar_script": (
         "Barra di gioco (variante dello script)",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
-      "windows_gamemode": (
-        "Modalità di gioco",
-        "Sceneggiatura interattiva di Fr33thy.",
-      ),
-      "windows_loudness_eq": (
-        "EQ del volume",
-        "Sceneggiatura interattiva di Fr33thy.",
-      ),
+      "windows_gamemode": ("Modalità di gioco", "Script interattivo."),
+      "windows_loudness_eq": ("EQ del volume", "Script interattivo."),
       "windows_nvme_faster_driver": (
         "Driver NVME più veloce",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
       "windows_network_adapter_power_savings_script": (
         "Adattatore di rete Risparmio energetico e riattivazione (variante script)",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
       "windows_network_ipv4_only_script": (
         "Solo rete IPv4 (variante script)",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
       "windows_notepad_settings": (
         "Impostazioni del blocco note",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
       "windows_pointer_precision_script": (
         "Precisione del puntatore (variante dello script)",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
       "windows_power_plan_script": (
         "Piano di alimentazione (variante dello script)",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
-      "windows_restore_point": (
-        "Punto di ripristino",
-        "Sceneggiatura interattiva di Fr33thy.",
-      ),
-      "windows_scaling": (
-        "Ridimensionamento",
-        "Sceneggiatura interattiva di Fr33thy.",
-      ),
+      "windows_restore_point": ("Punto di ripristino", "Script interattivo."),
+      "windows_scaling": ("Ridimensionamento", "Script interattivo."),
       "windows_signout_lockscreen_wallpaper_black": (
         "Sfondo della schermata di blocco per l'uscita nero",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
-      "windows_sound": ("Suono", "Sceneggiatura interattiva di Fr33thy."),
+      "windows_sound": ("Suono", "Script interattivo."),
       "windows_start_menu_layout_script": (
         "Layout del menu Start (variante dello script)",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
       "windows_start_menu_shortcuts_script": (
         "Scorciatoie del menu Start (variante dello script)",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
       "windows_start_menu_taskbar_script": (
         "Barra delle applicazioni del menu Start (variante dello script)",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
       "windows_theme_black_script": (
         "Tema Nero (variante dello script)",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
       "windows_timer_resolution_script": (
         "Risoluzione timer (variante script)",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
       "windows_uac_script": (
         "UAC (variante dello script)",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
       "windows_user_account_pictures_black": (
         "Immagini dell'account utente nere",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
       "windows_widgets_script": (
         "Widget (variante dello script)",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
       "windows_write_cache_buffer_flushing": (
         "Scrivere lo svuotamento del buffer della cache",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
       "checks_core_isolation_off": (
         "Isolamento del nucleo Integrità della memoria disattivata",
@@ -1446,39 +1419,33 @@ class TweakTextLocalizer {
       ),
       "check_bios_settings": (
         "Guida alle impostazioni del BIOS",
-        "Script di guida interattiva del BIOS di Fr33thy.",
+        "Script di guida interattiva del BIOS.",
       ),
       "check_bios_update": (
         "Ricerca aggiornamento BIOS",
-        "Apre lo script di ricerca della scheda madre di Fr33thy.",
+        "Apre lo script di ricerca della scheda madre.",
       ),
       "check_cpu_test": (
         "Prova della CPU",
-        "Script interattivo per lo stress test di Fr33thy.",
+        "Script interattivo per lo stress test.",
       ),
-      "check_gpu_check": (
-        "Controllo GPU",
-        "Script diagnostico interattivo di Fr33thy.",
-      ),
+      "check_gpu_check": ("Controllo GPU", "Script diagnostico interattivo."),
       "check_gpu_test": (
         "Prova della GPU",
-        "Script interattivo per lo stress test di Fr33thy.",
+        "Script interattivo per lo stress test.",
       ),
       "check_hw_info": (
         "Informazioni sull'hardware",
-        "Script interattivo di informazioni sull'hardware di Fr33thy.",
+        "Script interattivo di informazioni sull'hardware.",
       ),
-      "check_ram_check": (
-        "Controllo RAM",
-        "Script diagnostico interattivo di Fr33thy.",
-      ),
+      "check_ram_check": ("Controllo RAM", "Script diagnostico interattivo."),
       "check_ram_test": (
         "Prova della RAM",
-        "Script interattivo per lo stress test di Fr33thy.",
+        "Script interattivo per lo stress test.",
       ),
       "check_space_check": (
         "Controllo dello spazio",
-        "Script diagnostico interattivo di Fr33thy.",
+        "Script diagnostico interattivo.",
       ),
       "service_diagtrack_off": (
         "Esperienze utente connesse e telemetria disattivate",
@@ -1604,26 +1571,14 @@ class TweakTextLocalizer {
         "Servizio di rete Xbox Live disattivato",
         "Disabilita il servizio di rete Xbox Live e ripristina l'esatto stato di avvio precedente una volta ripristinato.",
       ),
-      "refresh_account_local": (
-        "Conto locale",
-        "Sceneggiatura interattiva di Fr33thy.",
-      ),
-      "refresh_autounattend": (
-        "Assenza automatica",
-        "Sceneggiatura interattiva di Fr33thy.",
-      ),
+      "refresh_account_local": ("Conto locale", "Script interattivo."),
+      "refresh_autounattend": ("Assenza automatica", "Script interattivo."),
       "refresh_factory_reset": (
         "Ripristino delle impostazioni di fabbrica",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
-      "refresh_network_driver": (
-        "Driver di rete",
-        "Sceneggiatura interattiva di Fr33thy.",
-      ),
-      "refresh_reinstall": (
-        "Reinstallare",
-        "Sceneggiatura interattiva di Fr33thy.",
-      ),
+      "refresh_network_driver": ("Driver di rete", "Script interattivo."),
+      "refresh_reinstall": ("Reinstallare", "Script interattivo."),
       "restore_clipchamp_clipchamp": (
         "Ripristina Clipchamp",
         "Installa Clipchamp dalle origini dei pacchetti Windows configurati.",
@@ -1692,36 +1647,36 @@ class TweakTextLocalizer {
         "Ripristina il provider di identità Xbox",
         "Installa Xbox Identity Provider dalle origini del pacchetto Windows configurate.",
       ),
-      "refresh_to_bios": ("Al BIOS", "Sceneggiatura interattiva di Fr33thy."),
+      "refresh_to_bios": ("Al BIOS", "Script interattivo."),
       "refresh_updates_drivers_block": (
         "Aggiorna il blocco dei driver",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
       "setup_activation_script": (
         "Attivazione (variante dello script)",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
       "setup_background_apps_script": (
         "App in background (variante dello script)",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
-      "setup_bitlocker": ("BitLocker", "Sceneggiatura interattiva di Fr33thy."),
+      "setup_bitlocker": ("BitLocker", "Script interattivo."),
       "setup_convert_home_to_pro": (
         "Converti Home in Pro",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
       "setup_date_language_region_time": (
         "Data Lingua Regione Ora",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
       "setup_edge_settings_script": (
         "Impostazioni dei bordi (variante dello script)",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
-      "setup_keys": ("Chiavi", "Sceneggiatura interattiva di Fr33thy."),
+      "setup_keys": ("Chiavi", "Script interattivo."),
       "setup_memory_compression_script": (
         "Compressione della memoria (variante dello script)",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
       "setup_startup_apps_7": (
         "Impostazioni app di avvio",
@@ -1733,12 +1688,9 @@ class TweakTextLocalizer {
       ),
       "setup_store_settings_script": (
         "Impostazioni del negozio (variante dello script)",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
-      "setup_updates_pause": (
-        "Pausa aggiornamenti",
-        "Sceneggiatura interattiva di Fr33thy.",
-      ),
+      "setup_updates_pause": ("Pausa aggiornamenti", "Script interattivo."),
       "bcd_optimizations": (
         "Ottimizzazioni di avvio avanzate",
         "Ottimizza BCD e percorso di avvio per ridurre il sovraccarico.",
@@ -1753,77 +1705,68 @@ class TweakTextLocalizer {
       ),
       "advanced_core_1_thread_1": (
         "Nucleo 1 Discussione 1",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
       "advanced_dep_script": (
         "Prevenzione esecuzione dati (variante dello script)",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
-      "advanced_defender": (
-        "Difensore",
-        "Sceneggiatura interattiva di Fr33thy.",
-      ),
+      "advanced_defender": ("Difensore", "Script interattivo."),
       "advanced_driver_whql_secure_boot_bypass": (
         "Bypass di avvio sicuro del driver WHQL",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
       "advanced_file_download_security_warning": (
         "Avviso di sicurezza per il download del file",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
       "advanced_firewall_script": (
         "Firewall (variante dello script)",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
       "advanced_hardware_composed_flip_script": (
         "Flip indipendente composto da hardware (variante dello script)",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
       "advanced_hardware_legacy_flip_script": (
         "Flip legacy hardware (variante dello script)",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
       "advanced_keyboard_shortcuts": (
         "Scorciatoie da tastiera",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
       "advanced_mmagent_features_script": (
         "Funzionalità di MMAgent (variante dello script)",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
       "advanced_mpo_script": (
         "MPO (variante dello script)",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
       "tool_nvidia_nvflash_download": (
         "Scarica NVIDIA NV Flash",
         "Apre i download di TechPowerUp NVFlash. ZapTweaks non seleziona mai una ROM né esegue comandi flash.",
       ),
-      "advanced_priority": (
-        "Priorità",
-        "Sceneggiatura interattiva di Fr33thy.",
-      ),
-      "advanced_rebar_force": (
-        "Forza dell'armatura",
-        "Sceneggiatura interattiva di Fr33thy.",
-      ),
+      "advanced_priority": ("Priorità", "Script interattivo."),
+      "advanced_rebar_force": ("Forza dell'armatura", "Script interattivo."),
       "tool_scewin_gui_releases": (
         "Rilasci SCEWIN-GUI",
         "Apre le versioni SCEWIN-GUI con licenza MIT. Modifica i file NVRAM SCEWIN/AMISCE; non include SCEWIN stesso.",
       ),
-      "advanced_smt_ht": ("SMTHT", "Sceneggiatura interattiva di Fr33thy."),
-      "advanced_services": ("Servizi", "Sceneggiatura interattiva di Fr33thy."),
+      "advanced_smt_ht": ("SMTHT", "Script interattivo."),
+      "advanced_services": ("Servizi", "Script interattivo."),
       "advanced_spectre_meltdown_script": (
         "Spettro Meltdown (variante della sceneggiatura)",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
       "advanced_start_search_shell_mobsync": (
         "Avvia la ricerca Shell Mobsync",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
       "advanced_ulps_script": (
         "ULPS (variante dello script)",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
       "toggle_activity_history_off": (
         "Cronologia attività disattivata",
@@ -1870,8 +1813,8 @@ class TweakTextLocalizer {
         "Rimuove solo le app di rigonfiamento UWP selezionate preservando i componenti di base di Store e Xbox.",
       ),
       "tool_winsux_debloat": (
-        "WinSux di Fr33hty",
-        "Esegue il comando remoto di debloat WinSux di Fr33hty. Azione invasiva senza ripristino in-app.",
+        "WinSux",
+        "Apre la sorgente ufficiale di WinSux. ZapTweaks non esegue mai lo script remoto modificabile.",
       ),
       "ui_background_apps_off": (
         "App in background disattivate",
@@ -1939,7 +1882,7 @@ class TweakTextLocalizer {
       ),
       "hardware_background_polling_rate_cap_script": (
         "Limite velocità polling in background (variante dello script)",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
       "tool_fix_tools_battery_report": (
         "Rapporto sulla batteria",
@@ -1963,7 +1906,7 @@ class TweakTextLocalizer {
       ),
       "installers_cru_sre": (
         "Programma di installazione dello script CRU SRE",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
       "tool_fix_tools_change_name": (
         "Cambia nome",
@@ -1975,11 +1918,11 @@ class TweakTextLocalizer {
       ),
       "hardware_controller_overclock_script": (
         "Overclock del controller",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
       "hardware_controller_polling_rate_script": (
         "Test della velocità di polling del controller",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
       "tool_device_cleanup_folder": (
         "Pulizia del dispositivo",
@@ -2024,11 +1967,11 @@ class TweakTextLocalizer {
       ),
       "tool_import_disable_advanced_services_profile": (
         "Importa Disabilita profilo servizi avanzati",
-        "Importa il profilo di disabilitazione definitiva dei servizi avanzati dal file .reg in bundle di Sapphire.",
+        "Importa il profilo di disabilitazione definitiva dei servizi avanzati dal file .reg in bundle.",
       ),
       "tool_import_minimal_services_profile": (
         "Importa il profilo dei servizi minimi",
-        "Importa la policy di avvio del servizio minima dal file .reg in bundle di Sapphire.",
+        "Importa la policy di avvio del servizio minima dal file .reg in bundle.",
       ),
       "tool_sysinternals_suite_winget": (
         "Installa la suite Sysinternals",
@@ -2042,10 +1985,7 @@ class TweakTextLocalizer {
         "Installa Winhance",
         "Installa Winhance con Winget per la personalizzazione comune di Windows e l'ottimizzazione di base.",
       ),
-      "installers_menu": (
-        "Menù Installatori",
-        "Sceneggiatura interattiva di Fr33thy.",
-      ),
+      "installers_menu": ("Menù Installatori", "Script interattivo."),
       "tool_winget_interactive_uninstaller": (
         "Programma di disinstallazione dell'app interattiva",
         "Elenca le applicazioni Winget installate in un terminale in modo da poterne selezionare una da rimuovere.",
@@ -2060,7 +2000,7 @@ class TweakTextLocalizer {
       ),
       "installers_msi_afterburner": (
         "Programma di installazione dello script MSI Afterburner",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
       "tool_msi_util_folder": (
         "Utilità MSI v3",
@@ -2072,7 +2012,7 @@ class TweakTextLocalizer {
       ),
       "installers_more_clock_tool": (
         "Altro programma di installazione dello script dello strumento Orologio",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
       "tool_more_power_tool_setup": (
         "Altroprogramma di installazione di PowerTool",
@@ -2088,7 +2028,7 @@ class TweakTextLocalizer {
       ),
       "hardware_mouse_polling_rate_test_script": (
         "Test della velocità di polling del mouse",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
       "tool_nvidia_profile_inspector_nip_profile": (
         "Profili NVIDIA Profile Inspector (.nip)",
@@ -2100,7 +2040,7 @@ class TweakTextLocalizer {
       ),
       "installers_nvidia_profile_inspector": (
         "Programma di installazione dello script NVIDIA Profile Inspector",
-        "Sceneggiatura interattiva di Fr33thy.",
+        "Script interattivo.",
       ),
       "tool_fix_tools_permessi": (
         "Permessi",
@@ -2148,7 +2088,7 @@ class TweakTextLocalizer {
       ),
       "tool_ctt_winutil": (
         "Esegui CTT WinUtil",
-        "Apre Chris Titus Tech WinUtil per attività comuni di configurazione, riparazione e ottimizzazione di base di Windows.",
+        "Apre WinUtil per attività comuni di configurazione, riparazione e ottimizzazione di base di Windows.",
       ),
       "tool_fix_tools_sfc_dism": (
         "SFC e DISM",
@@ -2560,51 +2500,39 @@ class TweakTextLocalizer {
         "Win32-Prioritätstrennung (Gaming)",
         "Setzt Win32PrioritySeparation auf 26 (hex 0x1a) – priorisiert die CPU-Zeit der Vordergrund-App. Klassische Gaming-Optimierung für geringere Eingabelatenz.",
       ),
-      "graphics_amd_settings": (
-        "AMD-Einstellungen",
-        "Interaktives Skript von Fr33thy.",
-      ),
+      "graphics_amd_settings": ("AMD-Einstellungen", "Interaktives Skript."),
       "graphics_cpp_runtime": (
         "Visual C++ All-in-One-Laufzeitpakete",
         "Installiert die Visual-C++-Laufzeitpakete 2005–2022 (x86 und x64) in einer Aktion.",
       ),
-      "graphics_directx": (
-        "DirectX-Laufzeit",
-        "Interaktives Skript von Fr33thy.",
-      ),
-      "graphics_driver_clean": (
-        "Treiber sauber",
-        "Interaktives Skript von Fr33thy.",
-      ),
+      "graphics_directx": ("DirectX-Laufzeit", "Interaktives Skript."),
+      "graphics_driver_clean": ("Treiber sauber", "Interaktives Skript."),
       "graphics_driver_install_debloat_settings": (
         "Treiberinstallation, Debloat und Einstellungen",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
       "graphics_driver_install_latest": (
         "Neueste Treiberinstallation",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
-      "graphics_hags_windowed": (
-        "HAGS mit Fenster",
-        "Interaktives Skript von Fr33thy.",
-      ),
-      "graphics_hdcp": ("HDCP", "Interaktives Skript von Fr33thy."),
+      "graphics_hags_windowed": ("HAGS mit Fenster", "Interaktives Skript."),
+      "graphics_hdcp": ("HDCP", "Interaktives Skript."),
       "graphics_intel_settings": (
         "Intel-Einstellungen",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
       "graphics_msi_mode_script": (
         "MSI-Modus (Skriptvariante)",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
       "graphics_nvidia_settings": (
         "NVIDIA-Einstellungen",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
-      "graphics_p0_state": ("P0-Zustand", "Interaktives Skript von Fr33thy."),
+      "graphics_p0_state": ("P0-Zustand", "Interaktives Skript."),
       "graphics_resolution_refresh_rate": (
         "Auflösungsaktualisierungsrate",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
       "windows_auto_reboot_after_bsod_off": (
         "Automatischer Neustart nach BSOD-Aus",
@@ -2640,139 +2568,133 @@ class TweakTextLocalizer {
       ),
       "windows_autoruns_startup_tasks_apps_check": (
         "Startup-Aufgaben und Apps-Prüfung werden automatisch ausgeführt",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
       "windows_bloatware_script": (
         "Bloatware (Skriptvariante)",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
       "windows_bloatware_legacy_apps_check_script": (
         "Überprüfung älterer Bloatware-Apps (Skriptvariante)",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
       "windows_bloatware_legacy_features_check_script": (
         "Überprüfung der Bloatware-Legacy-Funktionen (Skriptvariante)",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
       "windows_bloatware_taskmgr_check_script": (
         "Bloatware TaskMgr Check (Skriptvariante)",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
       "windows_bloatware_uwp_apps_check_script": (
         "Überprüfung von Bloatware-UWP-Apps (Skriptvariante)",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
       "windows_bloatware_uwp_features_check_script": (
         "Überprüfung der Bloatware-UWP-Funktionen (Skriptvariante)",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
-      "windows_cleanup": ("Aufräumen", "Interaktives Skript von Fr33thy."),
+      "windows_cleanup": ("Aufräumen", "Interaktives Skript."),
       "windows_context_menu_script": (
         "Kontextmenü (Script-Variante)",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
       "windows_control_panel_settings_script": (
         "Systemsteuerungseinstellungen (Skriptvariante)",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
       "windows_copilot_script": (
         "Copilot (Skriptvariante)",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
       "windows_core_isolation_script": (
         "Kernisolation (Skriptvariante)",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
       "windows_defender_optimize": (
         "Defender optimieren",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
       "windows_device_manager_power_savings_wake": (
         "Gerätemanager Energiesparen und Aufwecken",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
       "windows_edge_webview_script": (
         "Edge & WebView (Skriptvariante)",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
       "windows_gamebar_script": (
         "Gamebar (Skriptvariante)",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
-      "windows_gamemode": ("Spielmodus", "Interaktives Skript von Fr33thy."),
-      "windows_loudness_eq": (
-        "Lautstärke-EQ",
-        "Interaktives Skript von Fr33thy.",
-      ),
+      "windows_gamemode": ("Spielmodus", "Interaktives Skript."),
+      "windows_loudness_eq": ("Lautstärke-EQ", "Interaktives Skript."),
       "windows_nvme_faster_driver": (
         "NVME-Schneller-Treiber",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
       "windows_network_adapter_power_savings_script": (
         "Energieeinsparung und Aktivierung des Netzwerkadapters (Skriptvariante)",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
       "windows_network_ipv4_only_script": (
         "Nur Netzwerk IPv4 (Skriptvariante)",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
       "windows_notepad_settings": (
         "Notepad-Einstellungen",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
       "windows_pointer_precision_script": (
         "Zeigergenauigkeit (Skriptvariante)",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
       "windows_power_plan_script": (
         "Energieplan (Skriptvariante)",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
       "windows_restore_point": (
         "Wiederherstellungspunkt",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
-      "windows_scaling": ("Skalierung", "Interaktives Skript von Fr33thy."),
+      "windows_scaling": ("Skalierung", "Interaktives Skript."),
       "windows_signout_lockscreen_wallpaper_black": (
         "Abmelden Lockscreen Wallpaper Schwarz",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
-      "windows_sound": ("Ton", "Interaktives Skript von Fr33thy."),
+      "windows_sound": ("Ton", "Interaktives Skript."),
       "windows_start_menu_layout_script": (
         "Startmenü-Layout (Skriptvariante)",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
       "windows_start_menu_shortcuts_script": (
         "Startmenü-Verknüpfungen (Skriptvariante)",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
       "windows_start_menu_taskbar_script": (
         "Startmenü-Taskleiste (Skriptvariante)",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
       "windows_theme_black_script": (
         "Thema Schwarz (Skriptvariante)",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
       "windows_timer_resolution_script": (
         "Timer-Auflösung (Skriptvariante)",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
-      "windows_uac_script": (
-        "UAC (Skriptvariante)",
-        "Interaktives Skript von Fr33thy.",
-      ),
+      "windows_uac_script": ("UAC (Skriptvariante)", "Interaktives Skript."),
       "windows_user_account_pictures_black": (
         "Benutzerkontobilder schwarz",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
       "windows_widgets_script": (
         "Widgets (Skriptvariante)",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
       "windows_write_cache_buffer_flushing": (
         "Leeren des Schreib-Cache-Puffers",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
       "checks_core_isolation_off": (
         "Kernisolationsspeicherintegrität aus",
@@ -2812,40 +2734,19 @@ class TweakTextLocalizer {
       ),
       "check_bios_settings": (
         "BIOS-Einstellungshandbuch",
-        "Interaktives BIOS-Anleitungsskript von Fr33thy.",
+        "Interaktives BIOS-Anleitungsskript.",
       ),
       "check_bios_update": (
         "BIOS-Update-Suche",
-        "Öffnet das Motherboard-Suchskript von Fr33thy.",
+        "Öffnet das Motherboard-Suchskript.",
       ),
-      "check_cpu_test": (
-        "CPU-Test",
-        "Interaktives Stresstest-Skript von Fr33thy.",
-      ),
-      "check_gpu_check": (
-        "GPU-Check",
-        "Interaktives Diagnoseskript von Fr33thy.",
-      ),
-      "check_gpu_test": (
-        "GPU-Test",
-        "Interaktives Stresstest-Skript von Fr33thy.",
-      ),
-      "check_hw_info": (
-        "HW-Info",
-        "Interaktives Hardware-Info-Skript von Fr33thy.",
-      ),
-      "check_ram_check": (
-        "RAM-Check",
-        "Interaktives Diagnoseskript von Fr33thy.",
-      ),
-      "check_ram_test": (
-        "RAM-Test",
-        "Interaktives Stresstest-Skript von Fr33thy.",
-      ),
-      "check_space_check": (
-        "Platzkontrolle",
-        "Interaktives Diagnoseskript von Fr33thy.",
-      ),
+      "check_cpu_test": ("CPU-Test", "Interaktives Stresstest-Skript."),
+      "check_gpu_check": ("GPU-Check", "Interaktives Diagnoseskript."),
+      "check_gpu_test": ("GPU-Test", "Interaktives Stresstest-Skript."),
+      "check_hw_info": ("HW-Info", "Interaktives Hardware-Info-Skript."),
+      "check_ram_check": ("RAM-Check", "Interaktives Diagnoseskript."),
+      "check_ram_test": ("RAM-Test", "Interaktives Stresstest-Skript."),
+      "check_space_check": ("Platzkontrolle", "Interaktives Diagnoseskript."),
       "service_diagtrack_off": (
         "Vernetzte Benutzererfahrungen und Telemetrie aus",
         "Deaktiviert verbundene Benutzererfahrungen und Telemetrie und stellt beim Zurücksetzen den genauen vorherigen Startstatus wieder her.",
@@ -2970,26 +2871,14 @@ class TweakTextLocalizer {
         "Xbox Live-Netzwerkdienst deaktiviert",
         "Deaktiviert den Xbox Live-Netzwerkdienst und stellt beim Zurücksetzen den genauen vorherigen Startstatus wieder her.",
       ),
-      "refresh_account_local": (
-        "Konto lokal",
-        "Interaktives Skript von Fr33thy.",
-      ),
+      "refresh_account_local": ("Konto lokal", "Interaktives Skript."),
       "refresh_autounattend": (
         "Automatisch unbeaufsichtigt",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
-      "refresh_factory_reset": (
-        "Werksreset",
-        "Interaktives Skript von Fr33thy.",
-      ),
-      "refresh_network_driver": (
-        "Netzwerktreiber",
-        "Interaktives Skript von Fr33thy.",
-      ),
-      "refresh_reinstall": (
-        "Neu installieren",
-        "Interaktives Skript von Fr33thy.",
-      ),
+      "refresh_factory_reset": ("Werksreset", "Interaktives Skript."),
+      "refresh_network_driver": ("Netzwerktreiber", "Interaktives Skript."),
+      "refresh_reinstall": ("Neu installieren", "Interaktives Skript."),
       "restore_clipchamp_clipchamp": (
         "Clipchamp wiederherstellen",
         "Installiert Clipchamp von den konfigurierten Windows-Paketquellen.",
@@ -3058,53 +2947,44 @@ class TweakTextLocalizer {
         "Stellen Sie den Xbox-Identitätsanbieter wieder her",
         "Installiert den Xbox-Identitätsanbieter von den konfigurierten Windows-Paketquellen.",
       ),
-      "refresh_to_bios": ("Zum BIOS", "Interaktives Skript von Fr33thy."),
+      "refresh_to_bios": ("Zum BIOS", "Interaktives Skript."),
       "refresh_updates_drivers_block": (
         "Aktualisiert den Treiberblock",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
       "setup_activation_script": (
         "Aktivierung (Script-Variante)",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
       "setup_background_apps_script": (
         "Hintergrund-Apps (Skriptvariante)",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
-      "setup_bitlocker": ("BitLocker", "Interaktives Skript von Fr33thy."),
+      "setup_bitlocker": ("BitLocker", "Interaktives Skript."),
       "setup_convert_home_to_pro": (
         "Konvertieren Sie Home in Pro",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
       "setup_date_language_region_time": (
         "Datum Sprache Region Uhrzeit",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
       "setup_edge_settings_script": (
         "Kanteneinstellungen (Skriptvariante)",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
-      "setup_keys": ("Schlüssel", "Interaktives Skript von Fr33thy."),
+      "setup_keys": ("Schlüssel", "Interaktives Skript."),
       "setup_memory_compression_script": (
         "Speicherkomprimierung (Skriptvariante)",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
-      "setup_startup_apps_7": (
-        "Startup-Apps (7)",
-        "Interaktives Skript von Fr33thy.",
-      ),
-      "setup_startup_apps_8": (
-        "Startup-Apps (8)",
-        "Interaktives Skript von Fr33thy.",
-      ),
+      "setup_startup_apps_7": ("Startup-Apps (7)", "Interaktives Skript."),
+      "setup_startup_apps_8": ("Startup-Apps (8)", "Interaktives Skript."),
       "setup_store_settings_script": (
         "Store-Einstellungen (Script-Variante)",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
-      "setup_updates_pause": (
-        "Updates pausieren",
-        "Interaktives Skript von Fr33thy.",
-      ),
+      "setup_updates_pause": ("Updates pausieren", "Interaktives Skript."),
       "bcd_optimizations": (
         "Erweiterte Boot-Optimierungen",
         "Passen Sie BCD und Boot-Pfad an, um den Overhead zu reduzieren.",
@@ -3117,77 +2997,59 @@ class TweakTextLocalizer {
         "AMDVBFlash-Download",
         "Öffnet TechPowerUp AMDVBFlash-Downloads. ZapTweaks wählt niemals ein ROM aus oder führt Flash-Befehle aus.",
       ),
-      "advanced_core_1_thread_1": (
-        "Kern 1 Thread 1",
-        "Interaktives Skript von Fr33thy.",
-      ),
+      "advanced_core_1_thread_1": ("Kern 1 Thread 1", "Interaktives Skript."),
       "advanced_dep_script": (
         "Datenausführungsverhinderung (Skriptvariante)",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
-      "advanced_defender": ("Verteidiger", "Interaktives Skript von Fr33thy."),
+      "advanced_defender": ("Verteidiger", "Interaktives Skript."),
       "advanced_driver_whql_secure_boot_bypass": (
         "Treiber WHQL Secure Boot Bypass",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
       "advanced_file_download_security_warning": (
         "Sicherheitswarnung beim Dateidownload",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
       "advanced_firewall_script": (
         "Firewall (Skriptvariante)",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
       "advanced_hardware_composed_flip_script": (
         "Hardware-komponierter unabhängiger Flip (Skriptvariante)",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
       "advanced_hardware_legacy_flip_script": (
         "Hardware Legacy Flip (Skriptvariante)",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
-      "advanced_keyboard_shortcuts": (
-        "Tastaturkürzel",
-        "Interaktives Skript von Fr33thy.",
-      ),
+      "advanced_keyboard_shortcuts": ("Tastaturkürzel", "Interaktives Skript."),
       "advanced_mmagent_features_script": (
         "MMAgent-Funktionen (Skriptvariante)",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
-      "advanced_mpo_script": (
-        "MPO (Skriptvariante)",
-        "Interaktives Skript von Fr33thy.",
-      ),
+      "advanced_mpo_script": ("MPO (Skriptvariante)", "Interaktives Skript."),
       "tool_nvidia_nvflash_download": (
         "NVIDIA NVFlash-Download",
         "Öffnet TechPowerUp NVFlash-Downloads. ZapTweaks wählt niemals ein ROM aus oder führt Flash-Befehle aus.",
       ),
-      "advanced_priority": ("Priorität", "Interaktives Skript von Fr33thy."),
-      "advanced_rebar_force": (
-        "Bewehrungskraft",
-        "Interaktives Skript von Fr33thy.",
-      ),
+      "advanced_priority": ("Priorität", "Interaktives Skript."),
+      "advanced_rebar_force": ("Bewehrungskraft", "Interaktives Skript."),
       "tool_scewin_gui_releases": (
         "SCEWIN-GUI-Versionen",
         "Öffnet die MIT-lizenzierten SCEWIN-GUI-Versionen. Es bearbeitet SCEWIN/AMISCE NVRAM-Dateien; SCEWIN selbst ist darin nicht enthalten.",
       ),
-      "advanced_smt_ht": ("SMT HT", "Interaktives Skript von Fr33thy."),
-      "advanced_services": (
-        "Dienstleistungen",
-        "Interaktives Skript von Fr33thy.",
-      ),
+      "advanced_smt_ht": ("SMT HT", "Interaktives Skript."),
+      "advanced_services": ("Dienstleistungen", "Interaktives Skript."),
       "advanced_spectre_meltdown_script": (
         "Spectre Meltdown (Skriptvariante)",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
       "advanced_start_search_shell_mobsync": (
         "Starten Sie Search Shell Mobsync",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
-      "advanced_ulps_script": (
-        "ULPS (Skriptvariante)",
-        "Interaktives Skript von Fr33thy.",
-      ),
+      "advanced_ulps_script": ("ULPS (Skriptvariante)", "Interaktives Skript."),
       "toggle_activity_history_off": (
         "Aktivitätsverlauf aus",
         "Verhindert, dass Windows den Aktivitätsverlauf veröffentlicht und hochlädt.",
@@ -3233,8 +3095,8 @@ class TweakTextLocalizer {
         "Entfernt nur ausgewählte UWP-Bloat-Apps, während Store- und Xbox-Basiskomponenten erhalten bleiben.",
       ),
       "tool_winsux_debloat": (
-        "WinSux von Fr33hty",
-        "Führt den Remote-WinSux-Debloat-Befehl von Fr33hty aus. Invasive Aktion ohne In-App-Rückgängigmachung.",
+        "WinSux",
+        "Öffnet die offizielle WinSux-Quelle. ZapTweaks führt das veränderliche Remote-Skript nie aus.",
       ),
       "ui_background_apps_off": (
         "Hintergrund-Apps aus",
@@ -3302,7 +3164,7 @@ class TweakTextLocalizer {
       ),
       "hardware_background_polling_rate_cap_script": (
         "Obergrenze der Hintergrundabfragerate (Skriptvariante)",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
       "tool_fix_tools_battery_report": (
         "Batteriebericht",
@@ -3326,7 +3188,7 @@ class TweakTextLocalizer {
       ),
       "installers_cru_sre": (
         "CRU SRE-Skript-Installationsprogramm",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
       "tool_fix_tools_change_name": ("Namen ändern", "Fix Tools-Hilfsskript."),
       "tool_cleanmgrplus_folder": (
@@ -3335,11 +3197,11 @@ class TweakTextLocalizer {
       ),
       "hardware_controller_overclock_script": (
         "Controller-Übertaktung",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
       "hardware_controller_polling_rate_script": (
         "Controller-Abfrageratentest",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
       "tool_device_cleanup_folder": (
         "Gerätebereinigung",
@@ -3384,11 +3246,11 @@ class TweakTextLocalizer {
       ),
       "tool_import_disable_advanced_services_profile": (
         "Importieren Sie das Profil „Erweiterte Dienste deaktivieren“.",
-        "Importiert das Profil zur dauerhaften Deaktivierung erweiterter Dienste aus der gebündelten .reg-Datei von Sapphire.",
+        "Importiert das Profil zur dauerhaften Deaktivierung erweiterter Dienste aus der gebündelten .reg-Datei.",
       ),
       "tool_import_minimal_services_profile": (
         "Minimales Serviceprofil importieren",
-        "Importiert minimale Dienststartrichtlinien aus der gebündelten .reg-Datei von Sapphire.",
+        "Importiert minimale Dienststartrichtlinien aus der gebündelten .reg-Datei.",
       ),
       "tool_sysinternals_suite_winget": (
         "Installieren Sie die Sysinternals Suite",
@@ -3402,10 +3264,7 @@ class TweakTextLocalizer {
         "Installieren Sie Winhance",
         "Installiert Winhance mit Winget für allgemeine Windows-Anpassungen und Basisoptimierung.",
       ),
-      "installers_menu": (
-        "Installateur-Menü",
-        "Interaktives Skript von Fr33thy.",
-      ),
+      "installers_menu": ("Installateur-Menü", "Interaktives Skript."),
       "tool_winget_interactive_uninstaller": (
         "Interaktives App-Deinstallationsprogramm",
         "Listet installierte Winget-Anwendungen in einem Terminal auf, sodass Sie eine zum Entfernen auswählen können.",
@@ -3420,7 +3279,7 @@ class TweakTextLocalizer {
       ),
       "installers_msi_afterburner": (
         "MSI Afterburner Script Installer",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
       "tool_msi_util_folder": (
         "MSI-Dienstprogramm v3",
@@ -3432,7 +3291,7 @@ class TweakTextLocalizer {
       ),
       "installers_more_clock_tool": (
         "Mehr Clock Tool Script Installer",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
       "tool_more_power_tool_setup": (
         "MorePowerTool-Installationsprogramm",
@@ -3448,7 +3307,7 @@ class TweakTextLocalizer {
       ),
       "hardware_mouse_polling_rate_test_script": (
         "Maus-Polling-Rate-Test",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
       "tool_nvidia_profile_inspector_nip_profile": (
         "NVIDIA Profile Inspector-Profile (.nip)",
@@ -3460,7 +3319,7 @@ class TweakTextLocalizer {
       ),
       "installers_nvidia_profile_inspector": (
         "NVIDIA Profile Inspector-Skriptinstallationsprogramm",
-        "Interaktives Skript von Fr33thy.",
+        "Interaktives Skript.",
       ),
       "tool_fix_tools_permessi": (
         "Permessi",
@@ -3508,7 +3367,7 @@ class TweakTextLocalizer {
       ),
       "tool_ctt_winutil": (
         "Führen Sie CTT WinUtil aus",
-        "Öffnet Chris Titus Tech WinUtil für allgemeine Windows-Einrichtungs-, Reparatur- und Basisoptimierungsaufgaben.",
+        "Öffnet WinUtil für allgemeine Windows-Einrichtungs-, Reparatur- und Basisoptimierungsaufgaben.",
       ),
       "tool_fix_tools_sfc_dism": (
         "SFC & DISM",
@@ -3920,51 +3779,39 @@ class TweakTextLocalizer {
         "Separación de prioridad Win32 (juegos)",
         "Establece Win32PrioritySeparation en 26 (hexadecimal 0x1a): prioriza el tiempo de CPU de la aplicación en primer plano. Ajuste de juego clásico para una menor latencia de entrada.",
       ),
-      "graphics_amd_settings": (
-        "Configuración de AMD",
-        "Guión interactivo de Fr33thy.",
-      ),
+      "graphics_amd_settings": ("Configuración de AMD", "Script interactivo."),
       "graphics_cpp_runtime": (
         "Runtimes Visual C++ todo en uno",
         "Instala los runtimes de Visual C++ de 2005 a 2022 (x86 y x64) en una sola acción.",
       ),
       "graphics_directx": (
         "Tiempo de ejecución de DirectX",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
-      "graphics_driver_clean": (
-        "Conductor limpio",
-        "Guión interactivo de Fr33thy.",
-      ),
+      "graphics_driver_clean": ("Conductor limpio", "Script interactivo."),
       "graphics_driver_install_debloat_settings": (
         "Configuración y descarga de instalación del controlador",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
       "graphics_driver_install_latest": (
         "Instalación del controlador más reciente",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
-      "graphics_hags_windowed": (
-        "HAGS con ventana",
-        "Guión interactivo de Fr33thy.",
-      ),
-      "graphics_hdcp": ("HDCP", "Guión interactivo de Fr33thy."),
-      "graphics_intel_settings": (
-        "Configuración Intel",
-        "Guión interactivo de Fr33thy.",
-      ),
+      "graphics_hags_windowed": ("HAGS con ventana", "Script interactivo."),
+      "graphics_hdcp": ("HDCP", "Script interactivo."),
+      "graphics_intel_settings": ("Configuración Intel", "Script interactivo."),
       "graphics_msi_mode_script": (
         "Modo MSI (variante de script)",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
       "graphics_nvidia_settings": (
         "Configuración de NVIDIA",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
-      "graphics_p0_state": ("Estado P0", "Guión interactivo de Fr33thy."),
+      "graphics_p0_state": ("Estado P0", "Script interactivo."),
       "graphics_resolution_refresh_rate": (
         "Resolución Tasa de actualización",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
       "windows_auto_reboot_after_bsod_off": (
         "Reinicio automático después de desactivar BSOD",
@@ -4000,139 +3847,133 @@ class TweakTextLocalizer {
       ),
       "windows_autoruns_startup_tasks_apps_check": (
         "Comprobación de aplicaciones y tareas de inicio de ejecución automática",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
       "windows_bloatware_script": (
         "Bloatware (variante de script)",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
       "windows_bloatware_legacy_apps_check_script": (
         "Comprobación de aplicaciones heredadas de Bloatware (variante de script)",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
       "windows_bloatware_legacy_features_check_script": (
         "Verificación de características heredadas de Bloatware (variante de script)",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
       "windows_bloatware_taskmgr_check_script": (
         "Comprobación de Bloatware TaskMgr (variante de script)",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
       "windows_bloatware_uwp_apps_check_script": (
         "Comprobación de aplicaciones Bloatware UWP (variante de script)",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
       "windows_bloatware_uwp_features_check_script": (
         "Comprobación de funciones de Bloatware UWP (variante de script)",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
-      "windows_cleanup": ("limpieza", "Guión interactivo de Fr33thy."),
+      "windows_cleanup": ("limpieza", "Script interactivo."),
       "windows_context_menu_script": (
         "Menú contextual (variante de script)",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
       "windows_control_panel_settings_script": (
         "Configuración del panel de control (variante de script)",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
       "windows_copilot_script": (
         "Copiloto (variante de guión)",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
       "windows_core_isolation_script": (
         "Aislamiento del núcleo (variante de script)",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
       "windows_defender_optimize": (
         "Optimizar defensor",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
       "windows_device_manager_power_savings_wake": (
         "Administrador de dispositivos Ahorro de energía y activación",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
       "windows_edge_webview_script": (
         "Edge y WebView (variante de script)",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
       "windows_gamebar_script": (
         "Barra de juego (variante de script)",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
-      "windows_gamemode": ("Modo de juego", "Guión interactivo de Fr33thy."),
+      "windows_gamemode": ("Modo de juego", "Script interactivo."),
       "windows_loudness_eq": (
         "Ecualizador de sonoridad",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
       "windows_nvme_faster_driver": (
         "Controlador NVME más rápido",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
       "windows_network_adapter_power_savings_script": (
         "Ahorro de energía y reactivación del adaptador de red (variante de script)",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
       "windows_network_ipv4_only_script": (
         "Red IPv4 únicamente (variante de script)",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
       "windows_notepad_settings": (
         "Configuración del Bloc de notas",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
       "windows_pointer_precision_script": (
         "Precisión del puntero (variante de script)",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
       "windows_power_plan_script": (
         "Plan de energía (variante de script)",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
-      "windows_restore_point": (
-        "Punto de restauración",
-        "Guión interactivo de Fr33thy.",
-      ),
-      "windows_scaling": ("Escalado", "Guión interactivo de Fr33thy."),
+      "windows_restore_point": ("Punto de restauración", "Script interactivo."),
+      "windows_scaling": ("Escalado", "Script interactivo."),
       "windows_signout_lockscreen_wallpaper_black": (
         "Fondo de Pantalla de Bloqueo Negro",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
-      "windows_sound": ("sonido", "Guión interactivo de Fr33thy."),
+      "windows_sound": ("sonido", "Script interactivo."),
       "windows_start_menu_layout_script": (
         "Diseño del menú Inicio (variante de script)",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
       "windows_start_menu_shortcuts_script": (
         "Accesos directos del menú Inicio (variante de script)",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
       "windows_start_menu_taskbar_script": (
         "Barra de tareas del menú Inicio (variante de script)",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
       "windows_theme_black_script": (
         "Tema negro (variante de guión)",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
       "windows_timer_resolution_script": (
         "Resolución del temporizador (variante de script)",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
-      "windows_uac_script": (
-        "UAC (variante de guión)",
-        "Guión interactivo de Fr33thy.",
-      ),
+      "windows_uac_script": ("UAC (variante de guión)", "Script interactivo."),
       "windows_user_account_pictures_black": (
         "Imágenes de cuentas de usuario en negro",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
       "windows_widgets_script": (
         "Widgets (variante de script)",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
       "windows_write_cache_buffer_flushing": (
         "Escritura de vaciado del búfer de caché",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
       "checks_core_isolation_off": (
         "Integridad de la memoria de aislamiento central desactivada",
@@ -4172,39 +4013,39 @@ class TweakTextLocalizer {
       ),
       "check_bios_settings": (
         "Guía de configuración del BIOS",
-        "Script de guía de BIOS interactivo de Fr33thy.",
+        "Script de guía de BIOS interactivo.",
       ),
       "check_bios_update": (
         "Búsqueda de actualización de BIOS",
-        "Abre el script de búsqueda de la placa base de Fr33thy.",
+        "Abre el script de búsqueda de la placa base.",
       ),
       "check_cpu_test": (
         "Prueba de CPU",
-        "Guión interactivo de prueba de estrés de Fr33thy.",
+        "Script interactivo de prueba de estrés.",
       ),
       "check_gpu_check": (
         "Comprobación de GPU",
-        "Guión de diagnóstico interactivo de Fr33thy.",
+        "Script de diagnóstico interactivo.",
       ),
       "check_gpu_test": (
         "Prueba de GPU",
-        "Guión interactivo de prueba de estrés de Fr33thy.",
+        "Script interactivo de prueba de estrés.",
       ),
       "check_hw_info": (
         "Información de hardware",
-        "Guión de información de hardware interactivo de Fr33thy.",
+        "Script de información de hardware interactivo.",
       ),
       "check_ram_check": (
         "Comprobación de RAM",
-        "Guión de diagnóstico interactivo de Fr33thy.",
+        "Script de diagnóstico interactivo.",
       ),
       "check_ram_test": (
         "Prueba de RAM",
-        "Guión interactivo de prueba de estrés de Fr33thy.",
+        "Script interactivo de prueba de estrés.",
       ),
       "check_space_check": (
         "Comprobación de espacio",
-        "Guión de diagnóstico interactivo de Fr33thy.",
+        "Script de diagnóstico interactivo.",
       ),
       "service_diagtrack_off": (
         "Experiencias de usuario conectado y telemetría desactivadas",
@@ -4330,23 +4171,17 @@ class TweakTextLocalizer {
         "Servicio de red Xbox Live desactivado",
         "Deshabilita el servicio de red Xbox Live y restaura su estado de inicio anterior exacto cuando se revierte.",
       ),
-      "refresh_account_local": (
-        "Cuenta Local",
-        "Guión interactivo de Fr33thy.",
-      ),
+      "refresh_account_local": ("Cuenta Local", "Script interactivo."),
       "refresh_autounattend": (
         "desatendencia automática",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
       "refresh_factory_reset": (
         "Restablecimiento de fábrica",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
-      "refresh_network_driver": (
-        "Controlador de red",
-        "Guión interactivo de Fr33thy.",
-      ),
-      "refresh_reinstall": ("Reinstalar", "Guión interactivo de Fr33thy."),
+      "refresh_network_driver": ("Controlador de red", "Script interactivo."),
+      "refresh_reinstall": ("Reinstalar", "Script interactivo."),
       "restore_clipchamp_clipchamp": (
         "Restaurar Clipchamp",
         "Instala Clipchamp desde las fuentes de paquetes de Windows configuradas.",
@@ -4415,52 +4250,52 @@ class TweakTextLocalizer {
         "Restaurar proveedor de identidad de Xbox",
         "Instala Xbox Identity Provider desde las fuentes de paquetes de Windows configuradas.",
       ),
-      "refresh_to_bios": ("A la BIOS", "Guión interactivo de Fr33thy."),
+      "refresh_to_bios": ("A la BIOS", "Script interactivo."),
       "refresh_updates_drivers_block": (
         "Bloque de controladores de actualizaciones",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
       "setup_activation_script": (
         "Activación (variante de script)",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
       "setup_background_apps_script": (
         "Aplicaciones en segundo plano (variante de script)",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
-      "setup_bitlocker": ("BitLocker", "Guión interactivo de Fr33thy."),
+      "setup_bitlocker": ("BitLocker", "Script interactivo."),
       "setup_convert_home_to_pro": (
         "Convertir casa a profesional",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
       "setup_date_language_region_time": (
         "Fecha Idioma Región Hora",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
       "setup_edge_settings_script": (
         "Configuración de borde (variante de script)",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
-      "setup_keys": ("llaves", "Guión interactivo de Fr33thy."),
+      "setup_keys": ("llaves", "Script interactivo."),
       "setup_memory_compression_script": (
         "Compresión de memoria (variante de script)",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
       "setup_startup_apps_7": (
         "Aplicaciones de inicio (7)",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
       "setup_startup_apps_8": (
         "Aplicaciones de inicio (8)",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
       "setup_store_settings_script": (
         "Configuración de la tienda (variante de script)",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
       "setup_updates_pause": (
         "Actualizaciones en pausa",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
       "bcd_optimizations": (
         "Optimizaciones de arranque avanzadas",
@@ -4474,73 +4309,67 @@ class TweakTextLocalizer {
         "Descarga AMDVBFlash",
         "Abre las descargas de TechPowerUp AMDVBFlash. ZapTweaks nunca selecciona una ROM ni ejecuta comandos flash.",
       ),
-      "advanced_core_1_thread_1": (
-        "Núcleo 1 Hilo 1",
-        "Guión interactivo de Fr33thy.",
-      ),
+      "advanced_core_1_thread_1": ("Núcleo 1 Hilo 1", "Script interactivo."),
       "advanced_dep_script": (
         "Prevención de ejecución de datos (variante de script)",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
-      "advanced_defender": ("Defensor", "Guión interactivo de Fr33thy."),
+      "advanced_defender": ("Defensor", "Script interactivo."),
       "advanced_driver_whql_secure_boot_bypass": (
         "Omisión de arranque seguro del controlador WHQL",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
       "advanced_file_download_security_warning": (
         "Advertencia de seguridad de descarga de archivos",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
       "advanced_firewall_script": (
         "Cortafuegos (variante de script)",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
       "advanced_hardware_composed_flip_script": (
         "Flip independiente compuesto por hardware (variante de script)",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
       "advanced_hardware_legacy_flip_script": (
         "Hardware Legacy Flip (variante de script)",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
       "advanced_keyboard_shortcuts": (
         "Atajos de teclado",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
       "advanced_mmagent_features_script": (
         "Funciones de MMAgent (variante de script)",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
-      "advanced_mpo_script": (
-        "MPO (variante de guión)",
-        "Guión interactivo de Fr33thy.",
-      ),
+      "advanced_mpo_script": ("MPO (variante de guión)", "Script interactivo."),
       "tool_nvidia_nvflash_download": (
         "Descarga NVFlash de NVIDIA",
         "Abre las descargas de TechPowerUp NVFlash. ZapTweaks nunca selecciona una ROM ni ejecuta comandos flash.",
       ),
-      "advanced_priority": ("Prioridad", "Guión interactivo de Fr33thy."),
+      "advanced_priority": ("Prioridad", "Script interactivo."),
       "advanced_rebar_force": (
         "Fuerza de barra de refuerzo",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
       "tool_scewin_gui_releases": (
         "Lanzamientos de SCEWIN-GUI",
         "Abre las versiones de SCEWIN-GUI con licencia del MIT. Edita archivos SCEWIN/AMISCE NVRAM; no incluye al propio SCEWIN.",
       ),
-      "advanced_smt_ht": ("SMT HT", "Guión interactivo de Fr33thy."),
-      "advanced_services": ("Servicios", "Guión interactivo de Fr33thy."),
+      "advanced_smt_ht": ("SMT HT", "Script interactivo."),
+      "advanced_services": ("Servicios", "Script interactivo."),
       "advanced_spectre_meltdown_script": (
         "Spectre Meltdown (variante de guión)",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
       "advanced_start_search_shell_mobsync": (
         "Iniciar búsqueda Shell Mobsync",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
       "advanced_ulps_script": (
         "ULPS (variante de guión)",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
       "toggle_activity_history_off": (
         "Historial de actividad desactivado",
@@ -4587,8 +4416,8 @@ class TweakTextLocalizer {
         "Elimina solo las aplicaciones bloat seleccionadas para UWP y al mismo tiempo conserva los componentes básicos de la Tienda y Xbox.",
       ),
       "tool_winsux_debloat": (
-        "WinSux de Fr33hty",
-        "Ejecuta el comando de desbloqueo WinSux remoto de Fr33hty. Acción invasiva sin reversión en la aplicación.",
+        "WinSux",
+        "Abre la fuente oficial de WinSux. ZapTweaks nunca ejecuta su script remoto modificable.",
       ),
       "ui_background_apps_off": (
         "Aplicaciones en segundo plano desactivadas",
@@ -4656,7 +4485,7 @@ class TweakTextLocalizer {
       ),
       "hardware_background_polling_rate_cap_script": (
         "Límite de tasa de sondeo en segundo plano (variante de script)",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
       "tool_fix_tools_battery_report": (
         "Informe de batería",
@@ -4680,7 +4509,7 @@ class TweakTextLocalizer {
       ),
       "installers_cru_sre": (
         "Instalador de scripts CRU SRE",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
       "tool_fix_tools_change_name": (
         "Cambiar nombre",
@@ -4692,11 +4521,11 @@ class TweakTextLocalizer {
       ),
       "hardware_controller_overclock_script": (
         "Overclock del controlador",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
       "hardware_controller_polling_rate_script": (
         "Prueba de tasa de sondeo del controlador",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
       "tool_device_cleanup_folder": (
         "Limpieza del dispositivo",
@@ -4741,11 +4570,11 @@ class TweakTextLocalizer {
       ),
       "tool_import_disable_advanced_services_profile": (
         "Importar Deshabilitar perfil de servicios avanzados",
-        "Importa el perfil de desactivación completa de servicios avanzados desde el archivo .reg incluido por Sapphire.",
+        "Importa el perfil de desactivación completa de servicios avanzados desde el archivo .reg incluido.",
       ),
       "tool_import_minimal_services_profile": (
         "Importar perfil de servicios mínimos",
-        "Importa una política de inicio de servicio mínima desde un archivo .reg incluido por Sapphire.",
+        "Importa una política de inicio de servicio mínima desde un archivo .reg incluido.",
       ),
       "tool_sysinternals_suite_winget": (
         "Instalar la suite Sysinternals",
@@ -4759,10 +4588,7 @@ class TweakTextLocalizer {
         "Instalar Winhance",
         "Instala Winhance con Winget para la personalización común de Windows y la optimización básica.",
       ),
-      "installers_menu": (
-        "Menú de instaladores",
-        "Guión interactivo de Fr33thy.",
-      ),
+      "installers_menu": ("Menú de instaladores", "Script interactivo."),
       "tool_winget_interactive_uninstaller": (
         "Desinstalador de aplicaciones interactivas",
         "Enumera las aplicaciones Winget instaladas en una terminal para que pueda seleccionar una y eliminarla.",
@@ -4777,7 +4603,7 @@ class TweakTextLocalizer {
       ),
       "installers_msi_afterburner": (
         "Instalador de secuencias de comandos MSI Afterburner",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
       "tool_msi_util_folder": (
         "Utilidad MSI v3",
@@ -4789,7 +4615,7 @@ class TweakTextLocalizer {
       ),
       "installers_more_clock_tool": (
         "Más instalador de scripts de la herramienta de reloj",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
       "tool_more_power_tool_setup": (
         "MásInstalador PowerTool",
@@ -4805,7 +4631,7 @@ class TweakTextLocalizer {
       ),
       "hardware_mouse_polling_rate_test_script": (
         "Prueba de tasa de sondeo del mouse",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
       "tool_nvidia_profile_inspector_nip_profile": (
         "Perfiles de NVIDIA Profile Inspector (.nip)",
@@ -4817,7 +4643,7 @@ class TweakTextLocalizer {
       ),
       "installers_nvidia_profile_inspector": (
         "Instalador de secuencias de comandos del inspector de perfiles NVIDIA",
-        "Guión interactivo de Fr33thy.",
+        "Script interactivo.",
       ),
       "tool_fix_tools_permessi": (
         "Permessi",
@@ -4865,7 +4691,7 @@ class TweakTextLocalizer {
       ),
       "tool_ctt_winutil": (
         "Ejecute CTT WinUtil",
-        "Abre Chris Titus Tech WinUtil para tareas comunes de configuración, reparación y optimización básica de Windows.",
+        "Abre WinUtil para tareas comunes de configuración, reparación y optimización básica de Windows.",
       ),
       "tool_fix_tools_sfc_dism": (
         "SFC y DISM",
@@ -5274,51 +5100,33 @@ class TweakTextLocalizer {
         "Séparation des priorités Win32 (Jeux)",
         "Définit Win32PrioritySeparation sur 26 (hex 0x1a) - donne la priorité au temps CPU de l'application de premier plan. Ajustement de jeu classique pour une latence d'entrée plus faible.",
       ),
-      "graphics_amd_settings": (
-        "Paramètres AMD",
-        "Script interactif de Fr33thy.",
-      ),
+      "graphics_amd_settings": ("Paramètres AMD", "Script interactif."),
       "graphics_cpp_runtime": (
         "Runtimes Visual C++ tout-en-un",
         "Installe les runtimes Visual C++ 2005 à 2022 (x86 et x64) en une seule action.",
       ),
-      "graphics_directx": (
-        "Exécution DirectX",
-        "Script interactif de Fr33thy.",
-      ),
-      "graphics_driver_clean": (
-        "Pilote propre",
-        "Script interactif de Fr33thy.",
-      ),
+      "graphics_directx": ("Exécution DirectX", "Script interactif."),
+      "graphics_driver_clean": ("Pilote propre", "Script interactif."),
       "graphics_driver_install_debloat_settings": (
         "Débloat et paramètres d'installation du pilote",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
       "graphics_driver_install_latest": (
         "Dernière installation du pilote",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
-      "graphics_hags_windowed": (
-        "HAGS avec fenêtre",
-        "Script interactif de Fr33thy.",
-      ),
-      "graphics_hdcp": ("HDCP", "Script interactif de Fr33thy."),
-      "graphics_intel_settings": (
-        "Paramètres Intel",
-        "Script interactif de Fr33thy.",
-      ),
+      "graphics_hags_windowed": ("HAGS avec fenêtre", "Script interactif."),
+      "graphics_hdcp": ("HDCP", "Script interactif."),
+      "graphics_intel_settings": ("Paramètres Intel", "Script interactif."),
       "graphics_msi_mode_script": (
         "Mode MSI (variante de script)",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
-      "graphics_nvidia_settings": (
-        "Paramètres NVIDIA",
-        "Script interactif de Fr33thy.",
-      ),
-      "graphics_p0_state": ("État P0", "Script interactif de Fr33thy."),
+      "graphics_nvidia_settings": ("Paramètres NVIDIA", "Script interactif."),
+      "graphics_p0_state": ("État P0", "Script interactif."),
       "graphics_resolution_refresh_rate": (
         "Taux de rafraîchissement de la résolution",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
       "windows_auto_reboot_after_bsod_off": (
         "Redémarrage automatique après la désactivation du BSOD",
@@ -5354,139 +5162,130 @@ class TweakTextLocalizer {
       ),
       "windows_autoruns_startup_tasks_apps_check": (
         "Exécution automatique des tâches de démarrage et vérification des applications",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
       "windows_bloatware_script": (
         "Bloatware (variante de script)",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
       "windows_bloatware_legacy_apps_check_script": (
         "Vérification des applications héritées de Bloatware (variante de script)",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
       "windows_bloatware_legacy_features_check_script": (
         "Vérification des fonctionnalités héritées de Bloatware (variante de script)",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
       "windows_bloatware_taskmgr_check_script": (
         "Vérification de Bloatware TaskMgr (variante de script)",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
       "windows_bloatware_uwp_apps_check_script": (
         "Vérification des applications Bloatware UWP (variante de script)",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
       "windows_bloatware_uwp_features_check_script": (
         "Vérification des fonctionnalités de Bloatware UWP (variante de script)",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
-      "windows_cleanup": ("Nettoyage", "Script interactif de Fr33thy."),
+      "windows_cleanup": ("Nettoyage", "Script interactif."),
       "windows_context_menu_script": (
         "Menu contextuel (variante de script)",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
       "windows_control_panel_settings_script": (
         "Paramètres du panneau de configuration (variante de script)",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
       "windows_copilot_script": (
         "Copilote (variante de script)",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
       "windows_core_isolation_script": (
         "Isolation de base (variante de script)",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
       "windows_defender_optimize": (
         "Défenseur Optimiser",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
       "windows_device_manager_power_savings_wake": (
         "Gestionnaire de périphériques Économies d'énergie et réveil",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
       "windows_edge_webview_script": (
         "Edge et WebView (variante de script)",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
       "windows_gamebar_script": (
         "Barre de jeu (variante de script)",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
-      "windows_gamemode": ("Mode de jeu", "Script interactif de Fr33thy."),
-      "windows_loudness_eq": (
-        "Égalisation du volume",
-        "Script interactif de Fr33thy.",
-      ),
+      "windows_gamemode": ("Mode de jeu", "Script interactif."),
+      "windows_loudness_eq": ("Égalisation du volume", "Script interactif."),
       "windows_nvme_faster_driver": (
         "Pilote NVME plus rapide",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
       "windows_network_adapter_power_savings_script": (
         "Économies d'énergie et réveil de l'adaptateur réseau (variante de script)",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
       "windows_network_ipv4_only_script": (
         "Réseau IPv4 uniquement (variante de script)",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
       "windows_notepad_settings": (
         "Paramètres du bloc-notes",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
       "windows_pointer_precision_script": (
         "Précision du pointeur (variante de script)",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
       "windows_power_plan_script": (
         "Plan d'alimentation (variante de script)",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
-      "windows_restore_point": (
-        "Point de restauration",
-        "Script interactif de Fr33thy.",
-      ),
-      "windows_scaling": ("Mise à l'échelle", "Script interactif de Fr33thy."),
+      "windows_restore_point": ("Point de restauration", "Script interactif."),
+      "windows_scaling": ("Mise à l'échelle", "Script interactif."),
       "windows_signout_lockscreen_wallpaper_black": (
         "Déconnexion Lockscreen Fond D'écran Noir",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
-      "windows_sound": ("Son", "Script interactif de Fr33thy."),
+      "windows_sound": ("Son", "Script interactif."),
       "windows_start_menu_layout_script": (
         "Disposition du menu Démarrer (variante de script)",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
       "windows_start_menu_shortcuts_script": (
         "Raccourcis du menu Démarrer (variante de script)",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
       "windows_start_menu_taskbar_script": (
         "Barre des tâches du menu Démarrer (variante de script)",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
       "windows_theme_black_script": (
         "Thème Noir (variante de script)",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
       "windows_timer_resolution_script": (
         "Résolution de la minuterie (variante de script)",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
-      "windows_uac_script": (
-        "UAC (variante de script)",
-        "Script interactif de Fr33thy.",
-      ),
+      "windows_uac_script": ("UAC (variante de script)", "Script interactif."),
       "windows_user_account_pictures_black": (
         "Photos du compte utilisateur Noir",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
       "windows_widgets_script": (
         "Widgets (variante de script)",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
       "windows_write_cache_buffer_flushing": (
         "Vidage du tampon de cache d'écriture",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
       "checks_core_isolation_off": (
         "Intégrité de la mémoire d'isolation du cœur désactivée",
@@ -5526,39 +5325,33 @@ class TweakTextLocalizer {
       ),
       "check_bios_settings": (
         "Guide des paramètres du BIOS",
-        "Script interactif de guidage du BIOS par Fr33thy.",
+        "Script interactif de guidage du BIOS.",
       ),
       "check_bios_update": (
         "Recherche de mise à jour du BIOS",
-        "Ouvre le script de recherche de carte mère par Fr33thy.",
+        "Ouvre le script de recherche de carte mère.",
       ),
       "check_cpu_test": (
         "Test du processeur",
-        "Script de test de stress interactif par Fr33thy.",
+        "Script de test de stress interactif.",
       ),
       "check_gpu_check": (
         "Vérification du GPU",
-        "Script de diagnostic interactif par Fr33thy.",
+        "Script de diagnostic interactif.",
       ),
-      "check_gpu_test": (
-        "Test GPU",
-        "Script de test de stress interactif par Fr33thy.",
-      ),
+      "check_gpu_test": ("Test GPU", "Script de test de stress interactif."),
       "check_hw_info": (
         "Informations matérielles",
-        "Script interactif d'informations sur le matériel par Fr33thy.",
+        "Script interactif d'informations sur le matériel.",
       ),
       "check_ram_check": (
         "Vérification de la RAM",
-        "Script de diagnostic interactif par Fr33thy.",
+        "Script de diagnostic interactif.",
       ),
-      "check_ram_test": (
-        "Test de RAM",
-        "Script de test de stress interactif par Fr33thy.",
-      ),
+      "check_ram_test": ("Test de RAM", "Script de test de stress interactif."),
       "check_space_check": (
         "Vérification de l'espace",
-        "Script de diagnostic interactif par Fr33thy.",
+        "Script de diagnostic interactif.",
       ),
       "service_diagtrack_off": (
         "Expériences utilisateur connectées et télémétrie désactivées",
@@ -5684,23 +5477,17 @@ class TweakTextLocalizer {
         "Service réseau Xbox Live désactivé",
         "Désactive le service réseau Xbox Live et restaure son état de démarrage précédent exact une fois rétabli.",
       ),
-      "refresh_account_local": (
-        "Compte local",
-        "Script interactif de Fr33thy.",
-      ),
+      "refresh_account_local": ("Compte local", "Script interactif."),
       "refresh_autounattend": (
         "Sans surveillance automatique",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
       "refresh_factory_reset": (
         "Réinitialisation d'usine",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
-      "refresh_network_driver": (
-        "Pilote réseau",
-        "Script interactif de Fr33thy.",
-      ),
-      "refresh_reinstall": ("Réinstaller", "Script interactif de Fr33thy."),
+      "refresh_network_driver": ("Pilote réseau", "Script interactif."),
+      "refresh_reinstall": ("Réinstaller", "Script interactif."),
       "restore_clipchamp_clipchamp": (
         "Restaurer Clipchamp",
         "Installe Clipchamp à partir des sources de packages Windows configurées.",
@@ -5769,53 +5556,50 @@ class TweakTextLocalizer {
         "Restaurer le fournisseur d'identité Xbox",
         "Installe le fournisseur d'identité Xbox à partir des sources de packages Windows configurées.",
       ),
-      "refresh_to_bios": ("Vers le BIOS", "Script interactif de Fr33thy."),
+      "refresh_to_bios": ("Vers le BIOS", "Script interactif."),
       "refresh_updates_drivers_block": (
         "Bloc de pilotes de mises à jour",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
       "setup_activation_script": (
         "Activation (variante de script)",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
       "setup_background_apps_script": (
         "Applications en arrière-plan (variante de script)",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
-      "setup_bitlocker": ("BitLocker", "Script interactif de Fr33thy."),
+      "setup_bitlocker": ("BitLocker", "Script interactif."),
       "setup_convert_home_to_pro": (
         "Convertir la maison en Pro",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
       "setup_date_language_region_time": (
         "Date Langue Région Heure",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
       "setup_edge_settings_script": (
         "Paramètres Edge (variante de script)",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
-      "setup_keys": ("Clés", "Script interactif de Fr33thy."),
+      "setup_keys": ("Clés", "Script interactif."),
       "setup_memory_compression_script": (
         "Compression de mémoire (variante de script)",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
       "setup_startup_apps_7": (
         "Applications de démarrage (7)",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
       "setup_startup_apps_8": (
         "Applications de démarrage (8)",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
       "setup_store_settings_script": (
         "Paramètres du magasin (variante de script)",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
-      "setup_updates_pause": (
-        "Pause des mises à jour",
-        "Script interactif de Fr33thy.",
-      ),
+      "setup_updates_pause": ("Pause des mises à jour", "Script interactif."),
       "bcd_optimizations": (
         "Optimisations de démarrage avancées",
         "Ajustez le BCD et le chemin de démarrage pour réduire les frais généraux.",
@@ -5828,73 +5612,67 @@ class TweakTextLocalizer {
         "Téléchargement AMDVBFlash",
         "Ouvre les téléchargements TechPowerUp AMDVBFlash. ZapTweaks ne sélectionne jamais de ROM ni n'exécute de commandes flash.",
       ),
-      "advanced_core_1_thread_1": (
-        "Noyau 1 Fil 1",
-        "Script interactif de Fr33thy.",
-      ),
+      "advanced_core_1_thread_1": ("Noyau 1 Fil 1", "Script interactif."),
       "advanced_dep_script": (
         "Prévention de l'exécution des données (variante de script)",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
-      "advanced_defender": ("Défenseur", "Script interactif de Fr33thy."),
+      "advanced_defender": ("Défenseur", "Script interactif."),
       "advanced_driver_whql_secure_boot_bypass": (
         "Pilote WHQL Secure Boot Bypass",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
       "advanced_file_download_security_warning": (
         "Avertissement de sécurité pour le téléchargement de fichiers",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
       "advanced_firewall_script": (
         "Pare-feu (variante de script)",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
       "advanced_hardware_composed_flip_script": (
         "Flip indépendant composé de matériel (variante de script)",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
       "advanced_hardware_legacy_flip_script": (
         "Retournement matériel hérité (variante de script)",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
       "advanced_keyboard_shortcuts": (
         "Raccourcis clavier",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
       "advanced_mmagent_features_script": (
         "Fonctionnalités MMAgent (variante de script)",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
-      "advanced_mpo_script": (
-        "MPO (variante de script)",
-        "Script interactif de Fr33thy.",
-      ),
+      "advanced_mpo_script": ("MPO (variante de script)", "Script interactif."),
       "tool_nvidia_nvflash_download": (
         "Téléchargement NVIDIA NVFlash",
         "Ouvre les téléchargements TechPowerUp NVFlash. ZapTweaks ne sélectionne jamais de ROM ni n'exécute de commandes flash.",
       ),
-      "advanced_priority": ("Priorité", "Script interactif de Fr33thy."),
+      "advanced_priority": ("Priorité", "Script interactif."),
       "advanced_rebar_force": (
         "Force des barres d'armature",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
       "tool_scewin_gui_releases": (
         "Versions de SCEWIN-GUI",
         "Ouvre les versions SCEWIN-GUI sous licence MIT. Il édite les fichiers SCEWIN/AMISCE NVRAM ; il n'inclut pas SCEWIN lui-même.",
       ),
-      "advanced_smt_ht": ("SMT HT", "Script interactif de Fr33thy."),
-      "advanced_services": ("Prestations", "Script interactif de Fr33thy."),
+      "advanced_smt_ht": ("SMT HT", "Script interactif."),
+      "advanced_services": ("Prestations", "Script interactif."),
       "advanced_spectre_meltdown_script": (
         "Spectre Meltdown (variante de script)",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
       "advanced_start_search_shell_mobsync": (
         "Démarrer la recherche Shell Mobsync",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
       "advanced_ulps_script": (
         "ULPS (variante de script)",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
       "toggle_activity_history_off": (
         "Historique d'activité désactivé",
@@ -5941,8 +5719,8 @@ class TweakTextLocalizer {
         "Supprime uniquement les applications UWP bloat sélectionnées tout en préservant les composants de base Store et Xbox.",
       ),
       "tool_winsux_debloat": (
-        "WinSux par Fr33hty",
-        "Exécute la commande WinSux debloat à distance de Fr33hty. Action invasive sans retour dans l'application.",
+        "WinSux",
+        "Ouvre la source officielle de WinSux. ZapTweaks n’exécute jamais son script distant modifiable.",
       ),
       "ui_background_apps_off": (
         "Applications en arrière-plan désactivées",
@@ -6010,7 +5788,7 @@ class TweakTextLocalizer {
       ),
       "hardware_background_polling_rate_cap_script": (
         "Plafond du taux d'interrogation en arrière-plan (variante de script)",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
       "tool_fix_tools_battery_report": (
         "Rapport de batterie",
@@ -6034,7 +5812,7 @@ class TweakTextLocalizer {
       ),
       "installers_cru_sre": (
         "Programme d'installation de scripts CRU SRE",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
       "tool_fix_tools_change_name": (
         "Changer le nom",
@@ -6046,11 +5824,11 @@ class TweakTextLocalizer {
       ),
       "hardware_controller_overclock_script": (
         "Overclocking du contrôleur",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
       "hardware_controller_polling_rate_script": (
         "Test de taux d'interrogation du contrôleur",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
       "tool_device_cleanup_folder": (
         "Nettoyage de l'appareil",
@@ -6095,11 +5873,11 @@ class TweakTextLocalizer {
       ),
       "tool_import_disable_advanced_services_profile": (
         "Importer Désactiver le profil des services avancés",
-        "Importe le profil de désactivation matérielle des services avancés à partir du fichier .reg fourni par Sapphire.",
+        "Importe le profil de désactivation matérielle des services avancés à partir du fichier .reg fourni.",
       ),
       "tool_import_minimal_services_profile": (
         "Importer un profil de services minimaux",
-        "Importe la politique de démarrage de service minimale à partir du fichier .reg fourni par Sapphire.",
+        "Importe la politique de démarrage de service minimale à partir du fichier .reg fourni.",
       ),
       "tool_sysinternals_suite_winget": (
         "Installer la suite Sysinternals",
@@ -6113,10 +5891,7 @@ class TweakTextLocalizer {
         "Installer Winhance",
         "Installe Winhance avec Winget pour une personnalisation Windows courante et une optimisation de base.",
       ),
-      "installers_menu": (
-        "Menu Installateurs",
-        "Script interactif de Fr33thy.",
-      ),
+      "installers_menu": ("Menu Installateurs", "Script interactif."),
       "tool_winget_interactive_uninstaller": (
         "Programme de désinstallation d'applications interactives",
         "Répertorie les applications Winget installées dans un terminal afin que vous puissiez en sélectionner une à supprimer.",
@@ -6131,7 +5906,7 @@ class TweakTextLocalizer {
       ),
       "installers_msi_afterburner": (
         "Programme d'installation du script MSI Afterburner",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
       "tool_msi_util_folder": (
         "Utilitaire MSI v3",
@@ -6143,7 +5918,7 @@ class TweakTextLocalizer {
       ),
       "installers_more_clock_tool": (
         "Plus d'installation de script d'outil d'horloge",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
       "tool_more_power_tool_setup": (
         "Installateur MorePowerTool",
@@ -6159,7 +5934,7 @@ class TweakTextLocalizer {
       ),
       "hardware_mouse_polling_rate_test_script": (
         "Test de taux d'interrogation de la souris",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
       "tool_nvidia_profile_inspector_nip_profile": (
         "Profils NVIDIA Profile Inspector (.nip)",
@@ -6171,7 +5946,7 @@ class TweakTextLocalizer {
       ),
       "installers_nvidia_profile_inspector": (
         "Programme d'installation du script de l'inspecteur de profil NVIDIA",
-        "Script interactif de Fr33thy.",
+        "Script interactif.",
       ),
       "tool_fix_tools_permessi": (
         "Permessi",
@@ -6219,7 +5994,7 @@ class TweakTextLocalizer {
       ),
       "tool_ctt_winutil": (
         "Exécutez CTT WinUtil",
-        "Ouvre Chris Titus Tech WinUtil pour les tâches courantes de configuration, de réparation et d'optimisation de base de Windows.",
+        "Ouvre WinUtil pour les tâches courantes de configuration, de réparation et d'optimisation de base de Windows.",
       ),
       "tool_fix_tools_sfc_dism": (
         "SFC et DISM",
@@ -6622,54 +6397,33 @@ class TweakTextLocalizer {
         "Разделение приоритетов Win32 (игры)",
         "Устанавливает для Win32PrioritySeparation значение 26 (шестнадцатеричное 0x1a) — определяет приоритет процессорного времени приложения на переднем плане. Классический игровой твик для снижения задержки ввода.",
       ),
-      "graphics_amd_settings": (
-        "Настройки AMD",
-        "Интерактивный сценарий от Fr33thy.",
-      ),
+      "graphics_amd_settings": ("Настройки AMD", "Интерактивный скрипт."),
       "graphics_cpp_runtime": (
         "Пакет сред выполнения Visual C++",
         "Устанавливает среды выполнения Visual C++ 2005–2022 (x86 и x64) одним действием.",
       ),
-      "graphics_directx": (
-        "Среда выполнения DirectX",
-        "Интерактивный сценарий от Fr33thy.",
-      ),
-      "graphics_driver_clean": (
-        "Драйвер чистый",
-        "Интерактивный сценарий от Fr33thy.",
-      ),
+      "graphics_directx": ("Среда выполнения DirectX", "Интерактивный скрипт."),
+      "graphics_driver_clean": ("Драйвер чистый", "Интерактивный скрипт."),
       "graphics_driver_install_debloat_settings": (
         "Установка драйверов, разблокировка и настройки",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
       "graphics_driver_install_latest": (
         "Установка драйвера последняя",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
-      "graphics_hags_windowed": (
-        "HAGS с окнами",
-        "Интерактивный сценарий от Fr33thy.",
-      ),
-      "graphics_hdcp": ("HDCP", "Интерактивный сценарий от Fr33thy."),
-      "graphics_intel_settings": (
-        "Настройки Intel",
-        "Интерактивный сценарий от Fr33thy.",
-      ),
+      "graphics_hags_windowed": ("HAGS с окнами", "Интерактивный скрипт."),
+      "graphics_hdcp": ("HDCP", "Интерактивный скрипт."),
+      "graphics_intel_settings": ("Настройки Intel", "Интерактивный скрипт."),
       "graphics_msi_mode_script": (
         "Режим MSI (вариант сценария)",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
-      "graphics_nvidia_settings": (
-        "Настройки NVIDIA",
-        "Интерактивный сценарий от Fr33thy.",
-      ),
-      "graphics_p0_state": (
-        "Состояние P0",
-        "Интерактивный сценарий от Fr33thy.",
-      ),
+      "graphics_nvidia_settings": ("Настройки NVIDIA", "Интерактивный скрипт."),
+      "graphics_p0_state": ("Состояние P0", "Интерактивный скрипт."),
       "graphics_resolution_refresh_rate": (
         "Частота обновления разрешения",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
       "windows_auto_reboot_after_bsod_off": (
         "Автоматическая перезагрузка после BSOD выключена",
@@ -6705,142 +6459,133 @@ class TweakTextLocalizer {
       ),
       "windows_autoruns_startup_tasks_apps_check": (
         "Задачи автозапуска и проверка приложений",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
       "windows_bloatware_script": (
         "Раздутое ПО (вариант сценария)",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
       "windows_bloatware_legacy_apps_check_script": (
         "Проверка устаревших приложений на наличие вредоносного ПО (вариант сценария)",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
       "windows_bloatware_legacy_features_check_script": (
         "Проверка устаревших функций раздутого ПО (вариант сценария)",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
       "windows_bloatware_taskmgr_check_script": (
         "Проверка раздутого ПО TaskMgr (вариант сценария)",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
       "windows_bloatware_uwp_apps_check_script": (
         "Проверка приложений UWP для раздутого ПО (вариант сценария)",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
       "windows_bloatware_uwp_features_check_script": (
         "Проверка функций раздутого ПО UWP (вариант сценария)",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
-      "windows_cleanup": ("Очистка", "Интерактивный сценарий от Fr33thy."),
+      "windows_cleanup": ("Очистка", "Интерактивный скрипт."),
       "windows_context_menu_script": (
         "Контекстное меню (вариант сценария)",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
       "windows_control_panel_settings_script": (
         "Настройки панели управления (вариант сценария)",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
       "windows_copilot_script": (
         "Второй пилот (вариант сценария)",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
       "windows_core_isolation_script": (
         "Изоляция ядра (вариант сценария)",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
       "windows_defender_optimize": (
         "Оптимизация защитника",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
       "windows_device_manager_power_savings_wake": (
         "Диспетчер устройств: энергосбережение и пробуждение",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
       "windows_edge_webview_script": (
         "Edge и WebView (вариант сценария)",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
       "windows_gamebar_script": (
         "Игровая панель (вариант сценария)",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
-      "windows_gamemode": ("Режим игры", "Интерактивный сценарий от Fr33thy."),
-      "windows_loudness_eq": (
-        "Эквалайзер громкости",
-        "Интерактивный сценарий от Fr33thy.",
-      ),
+      "windows_gamemode": ("Режим игры", "Интерактивный скрипт."),
+      "windows_loudness_eq": ("Эквалайзер громкости", "Интерактивный скрипт."),
       "windows_nvme_faster_driver": (
         "NVME более быстрый драйвер",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
       "windows_network_adapter_power_savings_script": (
         "Энергосбережение и пробуждение сетевого адаптера (вариант сценария)",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
       "windows_network_ipv4_only_script": (
         "Только сеть IPv4 (вариант сценария)",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
       "windows_notepad_settings": (
         "Настройки блокнота",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
       "windows_pointer_precision_script": (
         "Точность указателя (вариант сценария)",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
       "windows_power_plan_script": (
         "План электропитания (вариант сценария)",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
       "windows_restore_point": (
         "Точка восстановления",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
-      "windows_scaling": (
-        "Масштабирование",
-        "Интерактивный сценарий от Fr33thy.",
-      ),
+      "windows_scaling": ("Масштабирование", "Интерактивный скрипт."),
       "windows_signout_lockscreen_wallpaper_black": (
         "Выход Обои для экрана блокировки Черный",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
-      "windows_sound": ("Звук", "Интерактивный сценарий от Fr33thy."),
+      "windows_sound": ("Звук", "Интерактивный скрипт."),
       "windows_start_menu_layout_script": (
         "Макет меню «Пуск» (вариант сценария)",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
       "windows_start_menu_shortcuts_script": (
         "Ярлыки меню «Пуск» (вариант сценария)",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
       "windows_start_menu_taskbar_script": (
         "Панель задач меню «Пуск» (вариант сценария)",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
       "windows_theme_black_script": (
         "Черная тема (вариант сценария)",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
       "windows_timer_resolution_script": (
         "Разрешение таймера (вариант сценария)",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
-      "windows_uac_script": (
-        "UAC (вариант сценария)",
-        "Интерактивный сценарий от Fr33thy.",
-      ),
+      "windows_uac_script": ("UAC (вариант сценария)", "Интерактивный скрипт."),
       "windows_user_account_pictures_black": (
         "Изображения учетной записи пользователя черные",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
       "windows_widgets_script": (
         "Виджеты (вариант сценария)",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
       "windows_write_cache_buffer_flushing": (
         "Запись очистки буфера кэша",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
       "checks_core_isolation_off": (
         "Изоляция ядра. Целостность памяти выключена.",
@@ -6880,39 +6625,39 @@ class TweakTextLocalizer {
       ),
       "check_bios_settings": (
         "Руководство по настройке BIOS",
-        "Сценарий интерактивного руководства по BIOS от Fr33thy.",
+        "Скрипт интерактивного руководства по BIOS.",
       ),
       "check_bios_update": (
         "Поиск обновлений BIOS",
-        "Открывает скрипт поиска материнской платы от Fr33thy.",
+        "Открывает скрипт поиска материнской платы.",
       ),
       "check_cpu_test": (
         "Тест процессора",
-        "Интерактивный скрипт стресс-теста от Fr33thy.",
+        "Интерактивный скрипт стресс-теста.",
       ),
       "check_gpu_check": (
         "Проверка графического процессора",
-        "Интерактивный диагностический скрипт от Fr33thy.",
+        "Интерактивный диагностический скрипт.",
       ),
       "check_gpu_test": (
         "Тест графического процессора",
-        "Интерактивный скрипт стресс-теста от Fr33thy.",
+        "Интерактивный скрипт стресс-теста.",
       ),
       "check_hw_info": (
         "Информация об оборудовании",
-        "Интерактивный сценарий информации об оборудовании от Fr33thy.",
+        "Интерактивный скрипт информации об оборудовании.",
       ),
       "check_ram_check": (
         "Проверка оперативной памяти",
-        "Интерактивный диагностический скрипт от Fr33thy.",
+        "Интерактивный диагностический скрипт.",
       ),
       "check_ram_test": (
         "Тест оперативной памяти",
-        "Интерактивный скрипт стресс-теста от Fr33thy.",
+        "Интерактивный скрипт стресс-теста.",
       ),
       "check_space_check": (
         "Проверка пространства",
-        "Интерактивный диагностический скрипт от Fr33thy.",
+        "Интерактивный диагностический скрипт.",
       ),
       "service_diagtrack_off": (
         "Взаимодействие с подключенными пользователями и телеметрия отключены",
@@ -7040,24 +6785,15 @@ class TweakTextLocalizer {
       ),
       "refresh_account_local": (
         "Учетная запись локальная",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
-      "refresh_autounattend": (
-        "Автоавтономка",
-        "Интерактивный сценарий от Fr33thy.",
-      ),
+      "refresh_autounattend": ("Автоавтономка", "Интерактивный скрипт."),
       "refresh_factory_reset": (
         "Сброс к заводским настройкам",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
-      "refresh_network_driver": (
-        "Сетевой драйвер",
-        "Интерактивный сценарий от Fr33thy.",
-      ),
-      "refresh_reinstall": (
-        "Переустановить",
-        "Интерактивный сценарий от Fr33thy.",
-      ),
+      "refresh_network_driver": ("Сетевой драйвер", "Интерактивный скрипт."),
+      "refresh_reinstall": ("Переустановить", "Интерактивный скрипт."),
       "restore_clipchamp_clipchamp": (
         "Восстановить Clipchamp",
         "Устанавливает Clipchamp из настроенных источников пакетов Windows.",
@@ -7126,53 +6862,50 @@ class TweakTextLocalizer {
         "Восстановить поставщика удостоверений Xbox",
         "Устанавливает поставщика удостоверений Xbox из настроенных источников пакетов Windows.",
       ),
-      "refresh_to_bios": ("В БИОС", "Интерактивный сценарий от Fr33thy."),
+      "refresh_to_bios": ("В БИОС", "Интерактивный скрипт."),
       "refresh_updates_drivers_block": (
         "Блокировка драйверов обновлений",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
       "setup_activation_script": (
         "Активация (вариант сценария)",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
       "setup_background_apps_script": (
         "Фоновые приложения (вариант сценария)",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
-      "setup_bitlocker": ("БитЛоккер", "Интерактивный сценарий от Fr33thy."),
+      "setup_bitlocker": ("БитЛоккер", "Интерактивный скрипт."),
       "setup_convert_home_to_pro": (
         "Превратить дом в профессионал",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
       "setup_date_language_region_time": (
         "Дата Язык Регион Время",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
       "setup_edge_settings_script": (
         "Настройки Edge (вариант сценария)",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
-      "setup_keys": ("Ключи", "Интерактивный сценарий от Fr33thy."),
+      "setup_keys": ("Ключи", "Интерактивный скрипт."),
       "setup_memory_compression_script": (
         "Сжатие памяти (вариант сценария)",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
       "setup_startup_apps_7": (
         "Приложения для запуска (7)",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
       "setup_startup_apps_8": (
         "Стартап-приложения (8)",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
       "setup_store_settings_script": (
         "Настройки магазина (вариант сценария)",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
-      "setup_updates_pause": (
-        "Обновления Пауза",
-        "Интерактивный сценарий от Fr33thy.",
-      ),
+      "setup_updates_pause": ("Обновления Пауза", "Интерактивный скрипт."),
       "bcd_optimizations": (
         "Расширенная оптимизация загрузки",
         "Настройте BCD и путь загрузки для снижения накладных расходов.",
@@ -7185,73 +6918,67 @@ class TweakTextLocalizer {
         "Скачать AMDVBFlash",
         "Открывает загрузки TechPowerUp AMDVBFlash. ZapTweaks никогда не выбирает ПЗУ и не запускает команды прошивки.",
       ),
-      "advanced_core_1_thread_1": (
-        "Ядро 1 Поток 1",
-        "Интерактивный сценарий от Fr33thy.",
-      ),
+      "advanced_core_1_thread_1": ("Ядро 1 Поток 1", "Интерактивный скрипт."),
       "advanced_dep_script": (
         "Предотвращение выполнения данных (вариант сценария)",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
-      "advanced_defender": ("Защитник", "Интерактивный сценарий от Fr33thy."),
+      "advanced_defender": ("Защитник", "Интерактивный скрипт."),
       "advanced_driver_whql_secure_boot_bypass": (
         "Обход безопасной загрузки драйвера WHQL",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
       "advanced_file_download_security_warning": (
         "Предупреждение безопасности загрузки файла",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
       "advanced_firewall_script": (
         "Брандмауэр (вариант сценария)",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
       "advanced_hardware_composed_flip_script": (
         "Аппаратный составной независимый флип (вариант сценария)",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
       "advanced_hardware_legacy_flip_script": (
         "Аппаратное обеспечение Legacy Flip (вариант сценария)",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
       "advanced_keyboard_shortcuts": (
         "Сочетания клавиш",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
       "advanced_mmagent_features_script": (
         "Возможности MMAgent (вариант сценария)",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
       "advanced_mpo_script": (
         "MPO (вариант сценария)",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
       "tool_nvidia_nvflash_download": (
         "Загрузка NVIDIA NVFlash",
         "Открывает загрузки TechPowerUp NVFlash. ZapTweaks никогда не выбирает ПЗУ и не запускает команды прошивки.",
       ),
-      "advanced_priority": ("Приоритет", "Интерактивный сценарий от Fr33thy."),
-      "advanced_rebar_force": (
-        "Арматура Форс",
-        "Интерактивный сценарий от Fr33thy.",
-      ),
+      "advanced_priority": ("Приоритет", "Интерактивный скрипт."),
+      "advanced_rebar_force": ("Арматура Форс", "Интерактивный скрипт."),
       "tool_scewin_gui_releases": (
         "Релизы SCEWIN-GUI",
         "Открывает выпуски SCEWIN-GUI, лицензированные MIT. Он редактирует файлы SCEWIN/AMISCE NVRAM; он не включает сам SCEWIN.",
       ),
-      "advanced_smt_ht": ("СМТ ХТ", "Интерактивный сценарий от Fr33thy."),
-      "advanced_services": ("Услуги", "Интерактивный сценарий от Fr33thy."),
+      "advanced_smt_ht": ("СМТ ХТ", "Интерактивный скрипт."),
+      "advanced_services": ("Услуги", "Интерактивный скрипт."),
       "advanced_spectre_meltdown_script": (
         "Spectre Meltdown (вариант сценария)",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
       "advanced_start_search_shell_mobsync": (
         "Начать поиск Shell Mobsync",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
       "advanced_ulps_script": (
         "ULPS (вариант сценария)",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
       "toggle_activity_history_off": (
         "История активности выключена",
@@ -7298,8 +7025,8 @@ class TweakTextLocalizer {
         "Удаляет только выбранные раздутые приложения UWP, сохраняя при этом базовые компоненты Store и Xbox.",
       ),
       "tool_winsux_debloat": (
-        "WinSux от Fr33hty",
-        "Запускает команду удаленной разблокировки WinSux Fr33hty. Инвазивное действие без возврата в приложение.",
+        "WinSux",
+        "Открывает официальный источник WinSux. ZapTweaks никогда не запускает изменяемый удалённый скрипт.",
       ),
       "ui_background_apps_off": (
         "Фоновые приложения выключены",
@@ -7367,7 +7094,7 @@ class TweakTextLocalizer {
       ),
       "hardware_background_polling_rate_cap_script": (
         "Ограничение частоты фонового опроса (вариант сценария)",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
       "tool_fix_tools_battery_report": (
         "Отчет о батарее",
@@ -7391,7 +7118,7 @@ class TweakTextLocalizer {
       ),
       "installers_cru_sre": (
         "Установщик сценариев CRU SRE",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
       "tool_fix_tools_change_name": (
         "Изменить имя",
@@ -7403,11 +7130,11 @@ class TweakTextLocalizer {
       ),
       "hardware_controller_overclock_script": (
         "Разгон контроллера",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
       "hardware_controller_polling_rate_script": (
         "Тест скорости опроса контроллера",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
       "tool_device_cleanup_folder": (
         "Очистка устройства",
@@ -7455,11 +7182,11 @@ class TweakTextLocalizer {
       ),
       "tool_import_disable_advanced_services_profile": (
         "Импортировать профиль отключения расширенных служб",
-        "Импортирует профиль жесткого отключения расширенных служб из прилагаемого файла .reg от Sapphire.",
+        "Импортирует профиль жесткого отключения расширенных служб из прилагаемого файла .reg.",
       ),
       "tool_import_minimal_services_profile": (
         "Импортировать профиль минимальных служб",
-        "Импортирует минимальную политику запуска служб из прилагаемого REG-файла от Sapphire.",
+        "Импортирует минимальную политику запуска служб из прилагаемого REG-файла.",
       ),
       "tool_sysinternals_suite_winget": (
         "Установите пакет Sysinternals",
@@ -7473,10 +7200,7 @@ class TweakTextLocalizer {
         "Установить Винханс",
         "Устанавливает Winhance вместе с Winget для общей настройки Windows и базовой оптимизации.",
       ),
-      "installers_menu": (
-        "Меню установщиков",
-        "Интерактивный сценарий от Fr33thy.",
-      ),
+      "installers_menu": ("Меню установщиков", "Интерактивный скрипт."),
       "tool_winget_interactive_uninstaller": (
         "Интерактивный деинсталлятор приложений",
         "Перечисляет установленные приложения Winget в терминале, чтобы вы могли выбрать одно из них для удаления.",
@@ -7491,7 +7215,7 @@ class TweakTextLocalizer {
       ),
       "installers_msi_afterburner": (
         "Установщик сценариев MSI Afterburner",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
       "tool_msi_util_folder": (
         "Утилита MSI v3",
@@ -7503,7 +7227,7 @@ class TweakTextLocalizer {
       ),
       "installers_more_clock_tool": (
         "Дополнительный установщик скриптов Clock Tool",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
       "tool_more_power_tool_setup": (
         "ПодробнееУстановщик PowerTool",
@@ -7519,7 +7243,7 @@ class TweakTextLocalizer {
       ),
       "hardware_mouse_polling_rate_test_script": (
         "Тест скорости опроса мыши",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
       "tool_nvidia_profile_inspector_nip_profile": (
         "Профили NVIDIA Profile Inspector (.nip)",
@@ -7531,7 +7255,7 @@ class TweakTextLocalizer {
       ),
       "installers_nvidia_profile_inspector": (
         "Установщик сценариев NVIDIA Profile Inspector",
-        "Интерактивный сценарий от Fr33thy.",
+        "Интерактивный скрипт.",
       ),
       "tool_fix_tools_permessi": (
         "Пермесси",
@@ -7579,7 +7303,7 @@ class TweakTextLocalizer {
       ),
       "tool_ctt_winutil": (
         "Запустите CTT WinUtil.",
-        "Открывает Chris Titus Tech WinUtil для выполнения распространенных задач по установке, восстановлению и базовой оптимизации Windows.",
+        "Открывает WinUtil для выполнения распространенных задач по установке, восстановлению и базовой оптимизации Windows.",
       ),
       "tool_fix_tools_sfc_dism": (
         "SFC и DISM",
@@ -7847,25 +7571,22 @@ class TweakTextLocalizer {
         "Win32 优先级分离（游戏）",
         "将 Win32PrioritySeparation 设置为 26（十六进制 0x1a） - 优先考虑前台应用程序 CPU 时间。经典游戏调整可降低输入延迟。",
       ),
-      "graphics_amd_settings": ("AMD 设置", "Fr33thy 的互动脚本。"),
+      "graphics_amd_settings": ("AMD 设置", "互动脚本。"),
       "graphics_cpp_runtime": (
         "Visual C++ 一体化运行库",
         "一键安装 Visual C++ 2005–2022 运行库（x86 和 x64）。",
       ),
-      "graphics_directx": ("DirectX运行时", "Fr33thy 的互动脚本。"),
-      "graphics_driver_clean": ("驱动清洁", "Fr33thy 的互动脚本。"),
-      "graphics_driver_install_debloat_settings": (
-        "驱动程序安装膨胀和设置",
-        "Fr33thy 的互动脚本。",
-      ),
-      "graphics_driver_install_latest": ("驱动程序安装最新", "Fr33thy 的互动脚本。"),
-      "graphics_hags_windowed": ("HAGS 窗口式", "Fr33thy 的互动脚本。"),
-      "graphics_hdcp": ("HDCP", "Fr33thy 的互动脚本。"),
-      "graphics_intel_settings": ("英特尔设置", "Fr33thy 的互动脚本。"),
-      "graphics_msi_mode_script": ("MSI 模式（脚本变体）", "Fr33thy 的互动脚本。"),
-      "graphics_nvidia_settings": ("NVIDIA 设置", "Fr33thy 的互动脚本。"),
-      "graphics_p0_state": ("P0状态", "Fr33thy 的互动脚本。"),
-      "graphics_resolution_refresh_rate": ("分辨率刷新率", "Fr33thy 的互动脚本。"),
+      "graphics_directx": ("DirectX运行时", "互动脚本。"),
+      "graphics_driver_clean": ("驱动清洁", "互动脚本。"),
+      "graphics_driver_install_debloat_settings": ("驱动程序安装膨胀和设置", "互动脚本。"),
+      "graphics_driver_install_latest": ("驱动程序安装最新", "互动脚本。"),
+      "graphics_hags_windowed": ("HAGS 窗口式", "互动脚本。"),
+      "graphics_hdcp": ("HDCP", "互动脚本。"),
+      "graphics_intel_settings": ("英特尔设置", "互动脚本。"),
+      "graphics_msi_mode_script": ("MSI 模式（脚本变体）", "互动脚本。"),
+      "graphics_nvidia_settings": ("NVIDIA 设置", "互动脚本。"),
+      "graphics_p0_state": ("P0状态", "互动脚本。"),
+      "graphics_resolution_refresh_rate": ("分辨率刷新率", "互动脚本。"),
       "windows_auto_reboot_after_bsod_off": (
         "BSOD 关闭后自动重新启动",
         "在屏幕上保留停止代码，而不是在崩溃后自动重新启动。",
@@ -7883,76 +7604,61 @@ class TweakTextLocalizer {
       "toggle_storage_sense_off": ("存储感应关闭", "禁用自动临时文件清理。"),
       "system_responsiveness": ("系统响应能力", "减少 UI 延迟和任务超时值。"),
       "windows_update": ("Windows 更新行为", "调整以游戏为中心的工作流程的更新行为。"),
-      "windows_autoruns_startup_tasks_apps_check": (
-        "自动运行启动任务和应用程序检查",
-        "Fr33thy 的互动脚本。",
-      ),
-      "windows_bloatware_script": ("英国媒体报道软件（脚本变体）", "Fr33thy 的互动脚本。"),
+      "windows_autoruns_startup_tasks_apps_check": ("自动运行启动任务和应用程序检查", "互动脚本。"),
+      "windows_bloatware_script": ("英国媒体报道软件（脚本变体）", "互动脚本。"),
       "windows_bloatware_legacy_apps_check_script": (
         "Bloatware 旧版应用程序检查（脚本变体）",
-        "Fr33thy 的互动脚本。",
+        "互动脚本。",
       ),
       "windows_bloatware_legacy_features_check_script": (
         "Bloatware 遗留功能检查（脚本变体）",
-        "Fr33thy 的互动脚本。",
+        "互动脚本。",
       ),
       "windows_bloatware_taskmgr_check_script": (
         "Bloatware TaskMgr 检查（脚本变体）",
-        "Fr33thy 的互动脚本。",
+        "互动脚本。",
       ),
       "windows_bloatware_uwp_apps_check_script": (
         "Bloatware UWP 应用检查（脚本变体）",
-        "Fr33thy 的互动脚本。",
+        "互动脚本。",
       ),
       "windows_bloatware_uwp_features_check_script": (
         "Bloatware UWP 功能检查（脚本变体）",
-        "Fr33thy 的互动脚本。",
+        "互动脚本。",
       ),
-      "windows_cleanup": ("清理", "Fr33thy 的互动脚本。"),
-      "windows_context_menu_script": ("上下文菜单（脚本变体）", "Fr33thy 的互动脚本。"),
-      "windows_control_panel_settings_script": (
-        "控制面板设置（脚本变体）",
-        "Fr33thy 的互动脚本。",
-      ),
-      "windows_copilot_script": ("副驾驶（脚本变体）", "Fr33thy 的互动脚本。"),
-      "windows_core_isolation_script": ("核心隔离（脚本变体）", "Fr33thy 的互动脚本。"),
-      "windows_defender_optimize": ("后卫优化", "Fr33thy 的互动脚本。"),
-      "windows_device_manager_power_savings_wake": (
-        "设备管理器节能和唤醒",
-        "Fr33thy 的互动脚本。",
-      ),
-      "windows_edge_webview_script": ("Edge 和 WebView（脚本变体）", "Fr33thy 的互动脚本。"),
-      "windows_gamebar_script": ("游戏栏（脚本变体）", "Fr33thy 的互动脚本。"),
-      "windows_gamemode": ("游戏模式", "Fr33thy 的互动脚本。"),
-      "windows_loudness_eq": ("响度均衡器", "Fr33thy 的互动脚本。"),
-      "windows_nvme_faster_driver": ("NVME 更快的驱动程序", "Fr33thy 的互动脚本。"),
+      "windows_cleanup": ("清理", "互动脚本。"),
+      "windows_context_menu_script": ("上下文菜单（脚本变体）", "互动脚本。"),
+      "windows_control_panel_settings_script": ("控制面板设置（脚本变体）", "互动脚本。"),
+      "windows_copilot_script": ("副驾驶（脚本变体）", "互动脚本。"),
+      "windows_core_isolation_script": ("核心隔离（脚本变体）", "互动脚本。"),
+      "windows_defender_optimize": ("后卫优化", "互动脚本。"),
+      "windows_device_manager_power_savings_wake": ("设备管理器节能和唤醒", "互动脚本。"),
+      "windows_edge_webview_script": ("Edge 和 WebView（脚本变体）", "互动脚本。"),
+      "windows_gamebar_script": ("游戏栏（脚本变体）", "互动脚本。"),
+      "windows_gamemode": ("游戏模式", "互动脚本。"),
+      "windows_loudness_eq": ("响度均衡器", "互动脚本。"),
+      "windows_nvme_faster_driver": ("NVME 更快的驱动程序", "互动脚本。"),
       "windows_network_adapter_power_savings_script": (
         "网络适配器节能和唤醒（脚本变体）",
-        "Fr33thy 的互动脚本。",
+        "互动脚本。",
       ),
-      "windows_network_ipv4_only_script": ("仅网络 IPv4（脚本变体）", "Fr33thy 的互动脚本。"),
-      "windows_notepad_settings": ("记事本设置", "Fr33thy 的互动脚本。"),
-      "windows_pointer_precision_script": ("指针精度（脚本变体）", "Fr33thy 的互动脚本。"),
-      "windows_power_plan_script": ("电源计划（脚本变体）", "Fr33thy 的互动脚本。"),
-      "windows_restore_point": ("还原点", "Fr33thy 的互动脚本。"),
-      "windows_scaling": ("缩放", "Fr33thy 的互动脚本。"),
-      "windows_signout_lockscreen_wallpaper_black": (
-        "退出锁屏壁纸黑色",
-        "Fr33thy 的互动脚本。",
-      ),
-      "windows_sound": ("声音", "Fr33thy 的互动脚本。"),
-      "windows_start_menu_layout_script": ("开始菜单布局（脚本变体）", "Fr33thy 的互动脚本。"),
-      "windows_start_menu_shortcuts_script": (
-        "开始菜单快捷方式（脚本变体）",
-        "Fr33thy 的互动脚本。",
-      ),
-      "windows_start_menu_taskbar_script": ("开始菜单任务栏（脚本变体）", "Fr33thy 的互动脚本。"),
-      "windows_theme_black_script": ("主题黑色（脚本变体）", "Fr33thy 的互动脚本。"),
-      "windows_timer_resolution_script": ("计时器分辨率（脚本变体）", "Fr33thy 的互动脚本。"),
-      "windows_uac_script": ("UAC（脚本变体）", "Fr33thy 的互动脚本。"),
-      "windows_user_account_pictures_black": ("用户帐户图片黑色", "Fr33thy 的互动脚本。"),
-      "windows_widgets_script": ("小部件（脚本变体）", "Fr33thy 的互动脚本。"),
-      "windows_write_cache_buffer_flushing": ("写入缓存缓冲区刷新", "Fr33thy 的互动脚本。"),
+      "windows_network_ipv4_only_script": ("仅网络 IPv4（脚本变体）", "互动脚本。"),
+      "windows_notepad_settings": ("记事本设置", "互动脚本。"),
+      "windows_pointer_precision_script": ("指针精度（脚本变体）", "互动脚本。"),
+      "windows_power_plan_script": ("电源计划（脚本变体）", "互动脚本。"),
+      "windows_restore_point": ("还原点", "互动脚本。"),
+      "windows_scaling": ("缩放", "互动脚本。"),
+      "windows_signout_lockscreen_wallpaper_black": ("退出锁屏壁纸黑色", "互动脚本。"),
+      "windows_sound": ("声音", "互动脚本。"),
+      "windows_start_menu_layout_script": ("开始菜单布局（脚本变体）", "互动脚本。"),
+      "windows_start_menu_shortcuts_script": ("开始菜单快捷方式（脚本变体）", "互动脚本。"),
+      "windows_start_menu_taskbar_script": ("开始菜单任务栏（脚本变体）", "互动脚本。"),
+      "windows_theme_black_script": ("主题黑色（脚本变体）", "互动脚本。"),
+      "windows_timer_resolution_script": ("计时器分辨率（脚本变体）", "互动脚本。"),
+      "windows_uac_script": ("UAC（脚本变体）", "互动脚本。"),
+      "windows_user_account_pictures_black": ("用户帐户图片黑色", "互动脚本。"),
+      "windows_widgets_script": ("小部件（脚本变体）", "互动脚本。"),
+      "windows_write_cache_buffer_flushing": ("写入缓存缓冲区刷新", "互动脚本。"),
       "checks_core_isolation_off": (
         "核心隔离内存完整性关闭",
         "通过 DeviceGuard 注册表方案禁用 HVCI 内存完整性。",
@@ -7977,15 +7683,15 @@ class TweakTextLocalizer {
         "易受攻击的驱动程序阻止列表已关闭",
         "禁用 Microsoft 的易受攻击的驱动程序阻止列表。这会削弱内核保护并需要重新启动。",
       ),
-      "check_bios_settings": ("BIOS 设置指南", "Fr33thy 的交互式 BIOS 指导脚本。"),
-      "check_bios_update": ("BIOS 更新搜索", "打开 Fr33thy 的主板搜索脚本。"),
-      "check_cpu_test": ("CPU测试", "Fr33thy 的交互式压力测试脚本。"),
-      "check_gpu_check": ("GPU检查", "Fr33thy 的交互式诊断脚本。"),
-      "check_gpu_test": ("GPU测试", "Fr33thy 的交互式压力测试脚本。"),
-      "check_hw_info": ("硬件信息", "Fr33thy 的交互式硬件信息脚本。"),
-      "check_ram_check": ("内存检查", "Fr33thy 的交互式诊断脚本。"),
-      "check_ram_test": ("内存测试", "Fr33thy 的交互式压力测试脚本。"),
-      "check_space_check": ("空间检查", "Fr33thy 的交互式诊断脚本。"),
+      "check_bios_settings": ("BIOS 设置指南", "交互式 BIOS 指导脚本。"),
+      "check_bios_update": ("BIOS 更新搜索", "打开 主板搜索脚本。"),
+      "check_cpu_test": ("CPU测试", "交互式压力测试脚本。"),
+      "check_gpu_check": ("GPU检查", "交互式诊断脚本。"),
+      "check_gpu_test": ("GPU测试", "交互式压力测试脚本。"),
+      "check_hw_info": ("硬件信息", "交互式硬件信息脚本。"),
+      "check_ram_check": ("内存检查", "交互式诊断脚本。"),
+      "check_ram_test": ("内存测试", "交互式压力测试脚本。"),
+      "check_space_check": ("空间检查", "交互式诊断脚本。"),
       "service_diagtrack_off": ("互联用户体验和遥测关闭", "禁用连接的用户体验和遥测，并在恢复时恢复其之前的启动状态。"),
       "service_pimindexmaintenancesvc_off": (
         "联系数据关闭",
@@ -8062,11 +7768,11 @@ class TweakTextLocalizer {
         "Xbox Live 网络服务关闭",
         "禁用 Xbox Live 网络服务并在恢复时恢复其之前的启动状态。",
       ),
-      "refresh_account_local": ("本地账户", "Fr33thy 的互动脚本。"),
-      "refresh_autounattend": ("自动无人值守", "Fr33thy 的互动脚本。"),
-      "refresh_factory_reset": ("恢复出厂设置", "Fr33thy 的互动脚本。"),
-      "refresh_network_driver": ("网络驱动程序", "Fr33thy 的互动脚本。"),
-      "refresh_reinstall": ("重新安装", "Fr33thy 的互动脚本。"),
+      "refresh_account_local": ("本地账户", "互动脚本。"),
+      "refresh_autounattend": ("自动无人值守", "互动脚本。"),
+      "refresh_factory_reset": ("恢复出厂设置", "互动脚本。"),
+      "refresh_network_driver": ("网络驱动程序", "互动脚本。"),
+      "refresh_reinstall": ("重新安装", "互动脚本。"),
       "restore_clipchamp_clipchamp": (
         "恢复 Clipchamp",
         "从配置的 Windows 包源安装 Clipchamp。",
@@ -8126,67 +7832,52 @@ class TweakTextLocalizer {
         "恢复 Xbox 身份提供商",
         "从配置的 Windows 包源安装 Xbox 身份提供程序。",
       ),
-      "refresh_to_bios": ("至BIOS", "Fr33thy 的互动脚本。"),
-      "refresh_updates_drivers_block": ("更新驱动程序块", "Fr33thy 的互动脚本。"),
-      "setup_activation_script": ("激活（脚本变体）", "Fr33thy 的互动脚本。"),
-      "setup_background_apps_script": ("后台应用程序（脚本变体）", "Fr33thy 的互动脚本。"),
-      "setup_bitlocker": ("比特锁", "Fr33thy 的互动脚本。"),
-      "setup_convert_home_to_pro": ("将家庭版转换为专业版", "Fr33thy 的互动脚本。"),
-      "setup_date_language_region_time": ("日期 语言 地区 时间", "Fr33thy 的互动脚本。"),
-      "setup_edge_settings_script": ("边缘设置（脚本变体）", "Fr33thy 的互动脚本。"),
-      "setup_keys": ("按键", "Fr33thy 的互动脚本。"),
-      "setup_memory_compression_script": ("内存压缩（脚本变体）", "Fr33thy 的互动脚本。"),
-      "setup_startup_apps_7": ("启动应用程序 (7)", "Fr33thy 的互动脚本。"),
-      "setup_startup_apps_8": ("启动应用程序 (8)", "Fr33thy 的互动脚本。"),
-      "setup_store_settings_script": ("商店设置（脚本变体）", "Fr33thy 的互动脚本。"),
-      "setup_updates_pause": ("更新暂停", "Fr33thy 的互动脚本。"),
+      "refresh_to_bios": ("至BIOS", "互动脚本。"),
+      "refresh_updates_drivers_block": ("更新驱动程序块", "互动脚本。"),
+      "setup_activation_script": ("激活（脚本变体）", "互动脚本。"),
+      "setup_background_apps_script": ("后台应用程序（脚本变体）", "互动脚本。"),
+      "setup_bitlocker": ("比特锁", "互动脚本。"),
+      "setup_convert_home_to_pro": ("将家庭版转换为专业版", "互动脚本。"),
+      "setup_date_language_region_time": ("日期 语言 地区 时间", "互动脚本。"),
+      "setup_edge_settings_script": ("边缘设置（脚本变体）", "互动脚本。"),
+      "setup_keys": ("按键", "互动脚本。"),
+      "setup_memory_compression_script": ("内存压缩（脚本变体）", "互动脚本。"),
+      "setup_startup_apps_7": ("启动应用程序 (7)", "互动脚本。"),
+      "setup_startup_apps_8": ("启动应用程序 (8)", "互动脚本。"),
+      "setup_store_settings_script": ("商店设置（脚本变体）", "互动脚本。"),
+      "setup_updates_pause": ("更新暂停", "互动脚本。"),
       "bcd_optimizations": ("高级启动优化", "调整 BCD 和引导路径以减少开销。"),
       "services_disable": ("诊断服务", "限制诊断服务活动以实现精益概况。"),
       "tool_amdvbflash_download": (
         "AMDVBFlash下载",
         "打开 TechPowerUp AMDVBFlash 下载。 ZapTweaks 从不选择 ROM 或运行闪存命令。",
       ),
-      "advanced_core_1_thread_1": ("核心 1 线程 1", "Fr33thy 的互动脚本。"),
-      "advanced_dep_script": ("数据执行预防（脚本变体）", "Fr33thy 的互动脚本。"),
-      "advanced_defender": ("后卫", "Fr33thy 的互动脚本。"),
-      "advanced_driver_whql_secure_boot_bypass": (
-        "驱动程序 WHQL 安全启动绕过",
-        "Fr33thy 的互动脚本。",
-      ),
-      "advanced_file_download_security_warning": ("文件下载安全警告", "Fr33thy 的互动脚本。"),
-      "advanced_firewall_script": ("防火墙（脚本变体）", "Fr33thy 的互动脚本。"),
-      "advanced_hardware_composed_flip_script": (
-        "硬件组成的独立翻转（脚本变体）",
-        "Fr33thy 的互动脚本。",
-      ),
-      "advanced_hardware_legacy_flip_script": (
-        "硬件旧版翻转（脚本变体）",
-        "Fr33thy 的互动脚本。",
-      ),
-      "advanced_keyboard_shortcuts": ("键盘快捷键", "Fr33thy 的互动脚本。"),
-      "advanced_mmagent_features_script": (
-        "MMAgent 功能（脚本变体）",
-        "Fr33thy 的互动脚本。",
-      ),
-      "advanced_mpo_script": ("MPO（脚本变体）", "Fr33thy 的互动脚本。"),
+      "advanced_core_1_thread_1": ("核心 1 线程 1", "互动脚本。"),
+      "advanced_dep_script": ("数据执行预防（脚本变体）", "互动脚本。"),
+      "advanced_defender": ("后卫", "互动脚本。"),
+      "advanced_driver_whql_secure_boot_bypass": ("驱动程序 WHQL 安全启动绕过", "互动脚本。"),
+      "advanced_file_download_security_warning": ("文件下载安全警告", "互动脚本。"),
+      "advanced_firewall_script": ("防火墙（脚本变体）", "互动脚本。"),
+      "advanced_hardware_composed_flip_script": ("硬件组成的独立翻转（脚本变体）", "互动脚本。"),
+      "advanced_hardware_legacy_flip_script": ("硬件旧版翻转（脚本变体）", "互动脚本。"),
+      "advanced_keyboard_shortcuts": ("键盘快捷键", "互动脚本。"),
+      "advanced_mmagent_features_script": ("MMAgent 功能（脚本变体）", "互动脚本。"),
+      "advanced_mpo_script": ("MPO（脚本变体）", "互动脚本。"),
       "tool_nvidia_nvflash_download": (
         "NVIDIA NVFlash 下载",
         "打开 TechPowerUp NVFlash 下载。 ZapTweaks 从不选择 ROM 或运行闪存命令。",
       ),
-      "advanced_priority": ("优先级", "Fr33thy 的互动脚本。"),
-      "advanced_rebar_force": ("钢筋力", "Fr33thy 的互动脚本。"),
+      "advanced_priority": ("优先级", "互动脚本。"),
+      "advanced_rebar_force": ("钢筋力", "互动脚本。"),
       "tool_scewin_gui_releases": (
         "SCEWIN-GUI 版本",
         "打开 MIT 许可的 SCEWIN-GUI 版本。它编辑SCEWIN/AMISCE NVRAM文件；它不包括 SCEWIN 本身。",
       ),
-      "advanced_smt_ht": ("表面贴装技术", "Fr33thy 的互动脚本。"),
-      "advanced_services": ("服务", "Fr33thy 的互动脚本。"),
-      "advanced_spectre_meltdown_script": ("幽灵崩溃（脚本变体）", "Fr33thy 的互动脚本。"),
-      "advanced_start_search_shell_mobsync": (
-        "开始搜索 Shell Mobsync",
-        "Fr33thy 的互动脚本。",
-      ),
-      "advanced_ulps_script": ("ULPS（脚本变体）", "Fr33thy 的互动脚本。"),
+      "advanced_smt_ht": ("表面贴装技术", "互动脚本。"),
+      "advanced_services": ("服务", "互动脚本。"),
+      "advanced_spectre_meltdown_script": ("幽灵崩溃（脚本变体）", "互动脚本。"),
+      "advanced_start_search_shell_mobsync": ("开始搜索 Shell Mobsync", "互动脚本。"),
+      "advanced_ulps_script": ("ULPS（脚本变体）", "互动脚本。"),
       "toggle_activity_history_off": ("活动历史记录关闭", "阻止 Windows 发布和上传活动历史记录。"),
       "privacy_consumer_content": (
         "消费者内容和自动应用程序建议",
@@ -8211,8 +7902,8 @@ class TweakTextLocalizer {
         "仅删除选定的 UWP 膨胀应用程序，同时保留商店和 Xbox 基础组件。",
       ),
       "tool_winsux_debloat": (
-        "Fr33hty 的 WinSux",
-        "运行 Fr33hty 的远程 WinSux debloat 命令。侵入性操作，没有应用内恢复。",
+        "WinSux",
+        "打开 WinSux 的官方源码。ZapTweaks 从不执行其可变的远程脚本。",
       ),
       "ui_background_apps_off": ("后台应用程序关闭", "通过 AppPrivacy 策略阻止后台应用程序执行。"),
       "toggle_center_taskbar_icons": ("中心任务栏图标", "使用 Windows 11 居中任务栏图标对齐方式。"),
@@ -8242,10 +7933,7 @@ class TweakTextLocalizer {
         "关闭 = 解锁后台轮询。恢复恢复默认行为。",
       ),
       "tool_autoruns_folder": ("自动运行", "启动和计划任务分析器套件。"),
-      "hardware_background_polling_rate_cap_script": (
-        "后台轮询率上限（脚本变体）",
-        "Fr33thy 的互动脚本。",
-      ),
+      "hardware_background_polling_rate_cap_script": ("后台轮询率上限（脚本变体）", "互动脚本。"),
       "tool_fix_tools_battery_report": ("电池报告", "修复工具诊断脚本。"),
       "tool_device_tweaker_script": (
         "Device Tweaker (LLG x LLC)",
@@ -8257,11 +7945,11 @@ class TweakTextLocalizer {
       ),
       "tool_cpuz_folder": ("CPU-Z", "CPU 和内存信息实用程序。"),
       "tool_cru_folder": ("克鲁格鲁", "用于显示模式的自定义分辨率实用程序。"),
-      "installers_cru_sre": ("CRU SRE 脚本安装程序", "Fr33thy 的互动脚本。"),
+      "installers_cru_sre": ("CRU SRE 脚本安装程序", "互动脚本。"),
       "tool_fix_tools_change_name": ("更改姓名", "修复工具帮助程序脚本。"),
       "tool_cleanmgrplus_folder": ("清洁管理器+", "扩展磁盘清理和临时文件管理实用程序。"),
-      "hardware_controller_overclock_script": ("控制器超频", "Fr33thy 的互动脚本。"),
-      "hardware_controller_polling_rate_script": ("控制器轮询率测试", "Fr33thy 的互动脚本。"),
+      "hardware_controller_overclock_script": ("控制器超频", "互动脚本。"),
+      "hardware_controller_polling_rate_script": ("控制器轮询率测试", "互动脚本。"),
       "tool_device_cleanup_folder": ("设备清理", "从 Windows 中清除虚拟/不存在的设备条目。"),
       "tool_dismpp_folder": ("忧郁++", "高级 DISM 和维修操作工具包。"),
       "tool_winslopr_releases": (
@@ -8281,11 +7969,11 @@ class TweakTextLocalizer {
       "tool_hwinfo_folder": ("HWiNFO", "系统传感器和硬件遥测套件。"),
       "tool_import_disable_advanced_services_profile": (
         "导入禁用高级服务配置文件",
-        "从 Sapphire 捆绑的 .reg 文件导入高级服务硬禁用配置文件。",
+        "从捆绑的 .reg 文件导入高级服务硬禁用配置文件。",
       ),
       "tool_import_minimal_services_profile": (
         "导入最小服务配置文件",
-        "从 Sapphire 捆绑的 .reg 文件中导入最小服务启动策略。",
+        "从捆绑的 .reg 文件中导入最小服务启动策略。",
       ),
       "tool_sysinternals_suite_winget": (
         "安装 Sysinternals 套件",
@@ -8299,24 +7987,21 @@ class TweakTextLocalizer {
         "安装Winhance",
         "安装 Winhance 和 Winget 以进行常见的 Windows 自定义和基线优化。",
       ),
-      "installers_menu": ("安装人员菜单", "Fr33thy 的互动脚本。"),
+      "installers_menu": ("安装人员菜单", "互动脚本。"),
       "tool_winget_interactive_uninstaller": (
         "交互式应用程序卸载程序",
         "列出终端中已安装的 Winget 应用程序，以便您可以选择要删除的应用程序。",
       ),
       "tool_interrupt_affinity_policy": ("中断亲和性策略工具", "中断关联和 IRQ 策略调整实用程序。"),
       "tool_msi_afterburner_setup": ("MSI 加力燃烧器安装程序", "GPU 超频和监控安装程序。"),
-      "installers_msi_afterburner": (
-        "MSI Afterburner 脚本安装程序",
-        "Fr33thy 的互动脚本。",
-      ),
+      "installers_msi_afterburner": ("MSI Afterburner 脚本安装程序", "互动脚本。"),
       "tool_msi_util_folder": ("MSI 实用程序 v3", "消息信号中断策略实用程序。"),
       "tool_more_clock_tool": ("更多时钟工具", "AMD 时钟/电压控制实用程序。"),
-      "installers_more_clock_tool": ("更多时钟工具脚本安装程序", "Fr33thy 的互动脚本。"),
+      "installers_more_clock_tool": ("更多时钟工具脚本安装程序", "互动脚本。"),
       "tool_more_power_tool_setup": ("更多PowerTool安装程序", "AMD 功率表调整安装程序。"),
       "tool_mouse_flat_curve": ("鼠标平坦曲线", "应用平坦的鼠标加速曲线设置。"),
       "tool_mouse_movement_recorder": ("鼠标移动记录器", "检查有效的鼠标轮询行为。"),
-      "hardware_mouse_polling_rate_test_script": ("鼠标轮询率测试", "Fr33thy 的互动脚本。"),
+      "hardware_mouse_polling_rate_test_script": ("鼠标轮询率测试", "互动脚本。"),
       "tool_nvidia_profile_inspector_nip_profile": (
         "NVIDIA Profile Inspector 配置文件 (.nip)",
         "选择内置配置文件，并使用 NVIDIA Profile Inspector 直接导入。",
@@ -8325,10 +8010,7 @@ class TweakTextLocalizer {
         "NVIDIA 配置文件检查器",
         "高级 NVIDIA 配置文件编辑器。",
       ),
-      "installers_nvidia_profile_inspector": (
-        "NVIDIA 配置文件检查器脚本安装程序",
-        "Fr33thy 的互动脚本。",
-      ),
+      "installers_nvidia_profile_inspector": ("NVIDIA 配置文件检查器脚本安装程序", "互动脚本。"),
       "tool_fix_tools_permessi": ("佩尔梅西", "修复工具权限修复脚本。"),
       "tool_polling_rate_tester_app": ("轮询率测试仪应用程序", "专用鼠标轮询率验证实用程序。"),
       "tool_controller_polling": ("投票工具", "控制器轮询率测量工具。"),
@@ -8345,7 +8027,7 @@ class TweakTextLocalizer {
       "tool_fix_tools_ripristina_anteprime": ("里普里斯蒂娜·安泰普莱姆", "修复工具缩略图缓存修复脚本。"),
       "tool_ctt_winutil": (
         "运行 CTT WinUtil",
-        "打开 Chris Titus Tech WinUtil 以执行常见的 Windows 设置、修复和基线优化任务。",
+        "打开 WinUtil 以执行常见的 Windows 设置、修复和基线优化任务。",
       ),
       "tool_fix_tools_sfc_dism": ("证监会及DISM", "修复工具完整性和图像修复脚本。"),
       "tool_star_ethernet_analyzer_folder": ("星型以太网分析仪", "以太网和抖动诊断工具包。"),
@@ -8426,13 +8108,23 @@ class TweakTextLocalizer {
           "Configure ITR": "Configura ITR",
           "Import": "Importa",
           "Install": "Installa",
-          "Open": "Aperto",
-          "Open Discord": "Apri Discordia",
-          "Open Download": "Apri Scarica",
-          "Open Releases": "Rilasci aperti",
+          "Open": "Apri",
+          "Open Author Source": "Apri la fonte dell’autore",
+          "Open Authoritative Page": "Apri la pagina ufficiale",
+          "Open Discord": "Apri Discord",
+          "Open Download": "Apri il download",
+          "Open Official Download": "Apri il download ufficiale",
+          "Open Official Page": "Apri la pagina ufficiale",
+          "Open Official Project": "Apri il progetto ufficiale",
+          "Open Official Source": "Apri la fonte ufficiale",
+          "Open Pinned Source": "Apri la fonte fissata",
+          "Open Publisher Download": "Apri il download dell’editore",
+          "Open Releases": "Apri le release",
+          "Open releases": "Apri le release",
+          "Open source": "Apri la fonte",
           "Play Video": "Riproduci video",
           "Restore": "Ripristina",
-          "Run": "Corri",
+          "Run": "Esegui",
           "Run Script": "Esegui script",
           "Run Tool": "Esegui strumento",
           "Run WinSux": "Esegui WinSux",

@@ -15,12 +15,14 @@ import '../features/diagnostics/presentation/diagnostics_hub_page.dart';
 import '../features/drivers/presentation/drivers_hub_page.dart';
 import '../features/power/presentation/gaming_hub_page.dart';
 import '../features/home/presentation/pages/home_stats_page.dart';
-import '../features/setup/presentation/guided_setup_page.dart';
+import '../features/setup/presentation/setup_hub_page.dart';
 import '../features/tweaks/application/tweak_controller.dart';
 import '../features/tweaks/presentation/pages/tweaks_page.dart';
+import '../features/windows/presentation/sparkle_hub_page.dart';
 import 'app_theme.dart';
 import 'search_results_page.dart';
 import 'settings_page.dart';
+import 'widgets/ui_kit.dart';
 import 'widgets/windows_title_bar.dart';
 
 class ZapTweaksApp extends StatefulWidget {
@@ -494,6 +496,26 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
   }
 
   Widget _buildCategoryBody(BuildContext context, String category) {
+    final body = _buildCategoryContent(context, category);
+    // Home, Settings, search and the loading view draw their own title.
+    if (widget.controller.isLoading ||
+        widget.controller.searchQuery.trim().isNotEmpty ||
+        category == 'Home' ||
+        category == TweakController.settingsCategory) {
+      return body;
+    }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: <Widget>[
+        PageTitle(
+          AppLocaleService.category(widget.controller.localeCode, category),
+        ),
+        Expanded(child: body),
+      ],
+    );
+  }
+
+  Widget _buildCategoryContent(BuildContext context, String category) {
     if (widget.controller.isLoading) {
       return _buildLoadingView(context);
     }
@@ -510,7 +532,7 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
     }
 
     if (category == 'Guided Setup') {
-      return GuidedSetupPage(controller: widget.controller);
+      return SetupHubPage(controller: widget.controller);
     }
 
     if (category == 'Apps') {
@@ -551,6 +573,16 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
         onCheckForUpdates: () => _checkForUpdates(showUpdateDialog: false),
         onInstallUpdate: _installAvailableUpdate,
         onViewRelease: _viewAvailableRelease,
+      );
+    }
+
+    if (category == 'Windows' || category == 'Expert') {
+      return SparkleHubPage(
+        key: ValueKey(category),
+        controller: widget.controller,
+        category: category,
+        initialIndex: widget.controller.navigationTab,
+        onSafetyPrompt: _showConfirmDialog,
       );
     }
 
@@ -658,6 +690,7 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
       memoryHistory: widget.controller.memoryHistory,
       gpuHistory: widget.controller.gpuHistory,
       vramHistory: widget.controller.vramHistory,
+      header: ExpertModeCard(controller: widget.controller),
     );
   }
 
@@ -723,32 +756,14 @@ class _ZapTweaksAppState extends State<ZapTweaksApp> {
       return false;
     }
 
-    final result = await showDialog<bool>(
-      context: dialogContext,
-      builder: (dialogContext) {
-        return ContentDialog(
-          title: Text(title),
-          content: Text(message),
-          actions: <Widget>[
-            Button(
-              onPressed: () => Navigator.of(dialogContext).pop(false),
-              child: Text(
-                cancelLabel ?? AppLocalizations.of(dialogContext).cancel,
-              ),
-            ),
-            FilledButton(
-              onPressed: () => Navigator.of(dialogContext).pop(true),
-              child: Text(
-                confirmLabel ??
-                    AppLocalizations.of(dialogContext).continueAction,
-              ),
-            ),
-          ],
-        );
-      },
+    return confirmAction(
+      dialogContext,
+      title: title,
+      message: message,
+      confirmLabel:
+          confirmLabel ?? AppLocalizations.of(dialogContext).continueAction,
+      cancelLabel: cancelLabel,
     );
-
-    return result ?? false;
   }
 
   void _showAboutDialog() {

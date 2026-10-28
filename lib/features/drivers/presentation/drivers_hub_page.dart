@@ -1,5 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 
+import '../../../app/widgets/ui_kit.dart';
+
 import '../../../l10n/app_localizations.dart';
 import '../../tweaks/application/tweak_controller.dart';
 import 'driver_assisted_page.dart';
@@ -31,10 +33,9 @@ class _DriversHubPageState extends State<DriversHubPage> {
   @override
   Widget build(BuildContext context) {
     final strings = AppLocalizations.of(context);
-    return TabView(
+    return SectionTabView(
       currentIndex: _index,
       onChanged: (index) => setState(() => _index = index),
-      closeButtonVisibility: CloseButtonVisibilityMode.never,
       tabs: <Tab>[
         Tab(
           text: Text(strings.driverInventory),

@@ -48,19 +48,19 @@ void main() {
     );
 
     final ctt = catalog.singleWhere((item) => item.id == 'tool_ctt_winutil');
-    expect(ctt.title, contains('by Chris Titus Tech'));
+    expect(ctt.scriptTweak?.author, 'Chris Titus Tech');
     expect(ctt.scriptTweak, isA<ExternalUrlLauncherTweak>());
 
     final w11Fix = catalog.singleWhere(
       (item) => item.id == 'tool_windows_11_fix_tweaks_kubaam',
     );
-    expect(w11Fix.title, contains('by kubaam'));
+    expect(w11Fix.scriptTweak?.author, 'kubaam');
     expect(w11Fix.scriptTweak, isA<ExternalUrlLauncherTweak>());
 
     final repair = catalog.singleWhere(
       (item) => item.id == 'recovery_repair_bad_tweaks_zoicware',
     );
-    expect(repair.title, contains('by zoicware'));
+    expect(repair.scriptTweak?.author, 'zoicware');
     expect(repair.scriptTweak, isA<ExternalUrlLauncherTweak>());
 
     final profileImport = catalog.singleWhere(

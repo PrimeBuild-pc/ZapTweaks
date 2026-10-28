@@ -34,7 +34,7 @@ void main() {
           expect(request.url.scheme, 'https');
           expect(request.url.host, 'raw.githubusercontent.com');
           expect(request.followRedirects, isFalse);
-          return http.Response(jsonEncode(payload), 200);
+          return http.Response.bytes(utf8.encode(jsonEncode(payload)), 200);
         }),
         cacheFile: cache,
       );
@@ -59,7 +59,9 @@ void main() {
         mutation((bad['apps'] as List).last as Map<String, dynamic>);
         final fallback = await AppStoreCatalog.load(
           bundle: rootBundle,
-          client: MockClient((_) async => http.Response(jsonEncode(bad), 200)),
+          client: MockClient(
+            (_) async => http.Response.bytes(utf8.encode(jsonEncode(bad)), 200),
+          ),
           cacheFile: cache,
         );
         expect(fallback.apps.last.name, 'New remote tool');
@@ -71,7 +73,9 @@ void main() {
       ]) {
         final fallback = await AppStoreCatalog.load(
           bundle: rootBundle,
-          client: MockClient((_) async => http.Response(jsonEncode(bad), 200)),
+          client: MockClient(
+            (_) async => http.Response.bytes(utf8.encode(jsonEncode(bad)), 200),
+          ),
           cacheFile: cache,
         );
         expect(fallback.apps.last.name, 'New remote tool');
@@ -83,7 +87,43 @@ void main() {
         client: MockClient((_) async => http.Response('invalid', 200)),
         cacheFile: cache,
       );
-      expect(bundled.apps, hasLength(465));
+      expect(bundled.apps, hasLength(467));
     },
   );
+
+  test('a published catalog older than the bundled one is ignored', () async {
+    final dir = await Directory.systemTemp.createTemp('catalog-old-');
+    addTearDown(() => dir.delete(recursive: true));
+    final cache = File('${dir.path}/catalog.json');
+    final payload =
+        jsonDecode(
+              await rootBundle.loadString('assets/catalog/app_catalog.json'),
+            )
+            as Map<String, dynamic>;
+    final bundledRevision =
+        (payload['generatedFrom'] as Map<String, dynamic>)['revision'] as int;
+    expect(bundledRevision, greaterThan(0));
+    // What main serves until this build's catalog is merged: no revision.
+    (payload['generatedFrom'] as Map<String, dynamic>).remove('revision');
+    (payload['apps'] as List).first['author'] = 'Stale author';
+    final stale = jsonEncode(payload);
+    final catalog = await AppStoreCatalog.load(
+      bundle: rootBundle,
+      client: MockClient(
+        (_) async => http.Response.bytes(utf8.encode(stale), 200),
+      ),
+      cacheFile: cache,
+    );
+    expect(catalog.revision, bundledRevision);
+    expect(catalog.apps.first.author, isNot('Stale author'));
+    expect(await cache.exists(), isFalse);
+
+    await cache.writeAsString(stale);
+    final offline = await AppStoreCatalog.load(
+      bundle: rootBundle,
+      client: MockClient((_) async => throw const SocketException('offline')),
+      cacheFile: cache,
+    );
+    expect(offline.apps.first.author, isNot('Stale author'));
+  });
 }

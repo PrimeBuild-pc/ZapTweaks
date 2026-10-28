@@ -49,6 +49,9 @@ class WindowsServiceInfo {
     required this.account,
     required this.dependencies,
     required this.processId,
+    this.dependents = const <String>[],
+    this.binaryPath = '',
+    this.serviceType = 0x10,
   });
 
   final String name;
@@ -58,7 +61,14 @@ class WindowsServiceInfo {
   final int state;
   final String account;
   final List<String> dependencies;
+  final List<String> dependents;
   final int processId;
+
+  /// Command line from the service configuration (may be quoted, with args).
+  final String binaryPath;
+
+  /// SERVICE_* type bits: 0x10/0x20 Win32 services, 0x1/0x2 drivers.
+  final int serviceType;
 }
 
 abstract interface class ServiceConfigurationStore {
@@ -89,7 +99,9 @@ class ServiceControlManager implements ServiceConfigurationStore {
       final service = OpenService(
         manager,
         namePointer,
-        _serviceQueryConfig | SERVICE_QUERY_STATUS,
+        _serviceQueryConfig |
+            SERVICE_QUERY_STATUS |
+            SERVICE_ENUMERATE_DEPENDENTS,
       );
       if (service == 0) _throwLastError('OpenService $name');
       try {
@@ -115,7 +127,10 @@ class ServiceControlManager implements ServiceConfigurationStore {
             state: status.ref.dwCurrentState,
             account: _string(config.ref.lpServiceStartName),
             dependencies: _multiString(config.ref.lpDependencies),
+            dependents: _queryDependents(service),
             processId: status.ref.dwProcessId,
+            binaryPath: _string(config.ref.lpBinaryPathName),
+            serviceType: config.ref.dwServiceType,
           );
         } finally {
           calloc.free(config.cast<Uint8>());
@@ -188,6 +203,52 @@ class ServiceControlManager implements ServiceConfigurationStore {
     } finally {
       calloc.free(pointer);
       CloseServiceHandle(manager);
+    }
+  }
+
+  static List<String> _queryDependents(int service) {
+    final needed = calloc<Uint32>();
+    final count = calloc<Uint32>();
+    try {
+      if (EnumDependentServices(
+            service,
+            SERVICE_STATE_ALL,
+            nullptr,
+            0,
+            needed,
+            count,
+          ) !=
+          FALSE) {
+        return const <String>[];
+      }
+      // Dart/FFI transitions may clobber LastError; the required buffer size is authoritative.
+      if (needed.value == 0) {
+        _throwLastError('EnumDependentServices size');
+      }
+      final buffer = calloc<Uint8>(needed.value);
+      try {
+        final entries = buffer.cast<ENUM_SERVICE_STATUS>();
+        if (EnumDependentServices(
+              service,
+              SERVICE_STATE_ALL,
+              entries,
+              needed.value,
+              needed,
+              count,
+            ) ==
+            FALSE) {
+          _throwLastError('EnumDependentServices');
+        }
+        return <String>[
+          for (var i = 0; i < count.value; i++)
+            _string((entries + i).ref.lpServiceName),
+        ];
+      } finally {
+        calloc.free(buffer);
+      }
+    } finally {
+      calloc.free(needed);
+      calloc.free(count);
     }
   }
 

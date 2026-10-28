@@ -1,11 +1,15 @@
 import 'package:fluent_ui/fluent_ui.dart';
 
+import '../../../app/widgets/ui_kit.dart';
+
 import '../../../features/tweaks/application/tweak_controller.dart';
 import '../../../features/tweaks/presentation/pages/tweaks_page.dart';
 import '../../../l10n/app_localizations.dart';
 import 'app_inventory_page.dart';
 import 'app_store_page.dart';
 import 'optional_features_page.dart';
+import 'process_list_page.dart';
+import 'service_list_page.dart';
 import 'startup_apps_page.dart';
 
 class AppsHubPage extends StatefulWidget {
@@ -38,16 +42,15 @@ class _AppsHubPageState extends State<AppsHubPage> {
   @override
   void initState() {
     super.initState();
-    _index = widget.initialIndex.clamp(0, 4);
+    _index = widget.initialIndex.clamp(0, 6);
   }
 
   @override
   Widget build(BuildContext context) {
     final strings = AppLocalizations.of(context);
-    return TabView(
+    return SectionTabView(
       currentIndex: _index,
       onChanged: (index) => setState(() => _index = index),
-      closeButtonVisibility: CloseButtonVisibilityMode.never,
       tabs: <Tab>[
         Tab(
           text: Text(strings.appStore),
@@ -79,6 +82,19 @@ class _AppsHubPageState extends State<AppsHubPage> {
             controller: widget.controller,
             category: 'Apps',
             onSafetyPrompt: widget.onSafetyPrompt,
+          ),
+        ),
+        // New tabs go last so existing initialIndex links keep working.
+        Tab(
+          text: Text(strings.processesTab),
+          icon: const Icon(FluentIcons.task_manager),
+          body: const ProcessListPage(),
+        ),
+        Tab(
+          text: Text(strings.servicesTab),
+          icon: const Icon(FluentIcons.settings),
+          body: ServiceListPage(
+            execute: widget.controller.executeNativeRequests,
           ),
         ),
       ],

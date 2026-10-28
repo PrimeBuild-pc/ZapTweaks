@@ -34,6 +34,7 @@ import 'features/apps/application/windows_optional_feature_service.dart';
 import 'features/tweaks/application/tweak_controller.dart';
 import 'legacy/adapters/legacy_catalog_adapter.dart';
 import 'platform/windows/registry_value_store.dart';
+import 'platform/windows/srum_history_service.dart';
 import 'platform/windows/windows_version.dart';
 
 Future<OperationStore> _openOperationStore() async {
@@ -82,6 +83,7 @@ Future<void> main(List<String> arguments) async {
             createNativeOperationCatalog(
               const WindowsRegistryValueStore(),
               processRunner,
+              journal: operationStore,
             ),
           ),
           operationContext: OperationContext(
@@ -95,6 +97,9 @@ Future<void> main(List<String> arguments) async {
           optionalFeatureInventory: WindowsOptionalFeatureService(
             processRunner: processRunner,
           ).scan,
+          srumHistory: WindowsSrumHistoryService(
+            processRunner: processRunner,
+          ).collect,
         ).run(
           File(utf8.decode(base64Url.decode(arguments[1]))),
           arguments[2],
@@ -119,6 +124,7 @@ Future<void> main(List<String> arguments) async {
     createNativeOperationCatalog(
       const WindowsRegistryValueStore(),
       processRunner,
+      journal: operationStore,
     ),
   );
 

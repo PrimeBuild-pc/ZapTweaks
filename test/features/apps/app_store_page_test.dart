@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/services.dart';
@@ -99,4 +101,51 @@ void main() {
       expect(tester.takeException(), isNull);
     },
   );
+
+  testWidgets('the list shows before winget answers', (tester) async {
+    tester.view.physicalSize = const Size(1280, 820);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    final winget = Completer<Set<String>>();
+    final service = _SlowInventory(winget.future);
+    final controller = _Controller();
+    addTearDown(controller.dispose);
+    await tester.pumpWidget(
+      FluentApp(
+        locale: const Locale('en'),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: AppStorePage(
+          controller: controller,
+          service: service,
+          catalogLoader: () async => const AppStoreCatalog([
+            StoreApp(
+              id: 'one',
+              name: 'One',
+              category: 'Test',
+              wingetId: 'Vendor.One',
+              url: null,
+              author: 'Vendor',
+              sources: ['test'],
+            ),
+          ]),
+        ),
+      ),
+    );
+    await tester.pump();
+    await tester.pump();
+    expect(find.text('One'), findsOneWidget);
+    expect(find.text('Checking...'), findsOneWidget);
+    winget.complete({'vendor.one'});
+    await tester.pumpAndSettle();
+    expect(find.text('Installed'), findsOneWidget);
+  });
+}
+
+class _SlowInventory extends _Inventory {
+  _SlowInventory(this.pending);
+  final Future<Set<String>> pending;
+  @override
+  Future<Set<String>> installedWingetIds() => pending;
 }

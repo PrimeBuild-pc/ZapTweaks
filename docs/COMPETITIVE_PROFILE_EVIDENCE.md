@@ -1,6 +1,20 @@
 # Competitive profile evidence gate
 
-No competitive profile is published or recommended. This file defines the evidence and benchmark package required before the separate owner approval in Phase 8.
+## Status (27 Oct 2026)
+
+The **Competitive** preset exists, approved by the owner on 22 Oct 2026, as a *set of changes he chose*, not as a measured improvement. ZapTweaks makes **no FPS, latency or other performance claim** for it:
+
+- the UI shows no gain number, an "Attention" risk badge, the full list of what it removes and an explicit consent checkbox;
+- every automated item is a typed native operation with preview, snapshot and read-back (rules 1, 2, 4, 5, 6 below still apply);
+- rule 3 (benefit evidence) is **not** met and is not claimed: items keep `benefitEvidence` `unverified`/`inferred`;
+- rule 7 holds: no security protection is touched (Defender, firewall, HVCI/VBS, UAC, SmartScreen and Windows Update stay as they are);
+- third-party steps (Fr33thy's clean driver install and WinSux) are shown with author and links but **not run**: their scripts download and execute files that cannot be pinned to a hash.
+
+The definition lives in `lib/features/presets/domain/preset_catalog.dart`. The benchmark protocol below remains the future work needed before anything is ever described as faster.
+
+## Original gate
+
+No competitive profile was to be published or recommended until the package below existed. That still applies to any *recommended* or *performance-claiming* profile.
 
 ## Candidate operation policy
 
@@ -14,7 +28,7 @@ An operation may enter a candidate profile only when all of these are true:
 6. Apply, read-back verification and rollback pass without changing values outside the declared operation.
 7. Security protections are not disabled, directly or indirectly.
 
-Current result: **no approved candidate set**. The catalog contains useful operations with inferred or unverified benefit, but there is not yet enough benchmark evidence to label a combination competitive.
+Current result: **no benchmark-approved candidate set** (the Competitive preset above makes no performance claim). The catalog contains useful operations with inferred or unverified benefit, but there is not yet enough benchmark evidence to label a combination competitive.
 
 ## Benchmark protocol
 
@@ -58,4 +72,4 @@ Before owner approval, provide:
 - EN/IT screenshots in light/dark themes and tested scaling values;
 - an explicit list of excluded security-reducing operations.
 
-Until that package is complete and separately approved, ZapTweaks must keep recommended competitive profiles absent.
+Until that package is complete and separately approved, ZapTweaks must not present any profile, Competitive included, as a performance improvement.

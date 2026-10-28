@@ -3,6 +3,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import '../core/services/app_locale_service.dart';
 import '../features/tweaks/application/tweak_controller.dart';
 import '../l10n/app_localizations.dart';
+import 'widgets/ui_kit.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({
@@ -34,319 +35,223 @@ class _SettingsPageState extends State<SettingsPage> {
     final update = controller.availableUpdate;
     final strings = AppLocalizations.of(context);
 
-    return ListView(
-      padding: const EdgeInsets.all(20),
+    Widget action(String label, Future<dynamic> Function() run) => Button(
+      onPressed: _isRunningOperation ? null : () => _runOperation(context, run),
+      child: Text(label),
+    );
+
+    final String updateStatus;
+    if (update != null) {
+      updateStatus = '${strings.updateAvailable}: ${update.version}';
+    } else if (controller.isCheckingForUpdates) {
+      updateStatus = strings.checkingForUpdates;
+    } else if (controller.isUpToDate) {
+      updateStatus = strings.upToDate(controller.appVersion);
+    } else {
+      updateStatus = controller.updateStatusMessage ?? strings.checkNow;
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        Text(strings.settings, style: FluentTheme.of(context).typography.title),
-        const SizedBox(height: 16),
-        Card(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(strings.language),
-                      const SizedBox(height: 3),
-                      Text(strings.languageDescription),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: 16),
-                ComboBox<String>(
-                  value: controller.localeCode,
-                  items: <ComboBoxItem<String>>[
-                    for (final code in AppLocaleService.supportedCodes)
-                      ComboBoxItem<String>(
-                        value: code,
-                        child: Text(AppLocaleService.nativeNames[code]!),
-                      ),
-                  ],
-                  onChanged: (code) {
-                    if (code != null) {
-                      controller.setLocaleCode(code);
-                    }
-                  },
-                ),
-              ],
-            ),
-          ),
-        ),
-        const SizedBox(height: 12),
-        Card(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(strings.appearance),
-                      const SizedBox(height: 3),
-                      Text(strings.appearanceDescription),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: 16),
-                ComboBox<String>(
-                  value: controller.themeMode,
-                  items: <ComboBoxItem<String>>[
-                    ComboBoxItem<String>(
-                      value: 'system',
-                      child: Text(strings.themeSystem),
+        PageTitle(strings.settings),
+        Expanded(
+          child: ListView(
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+            children: <Widget>[
+              SettingsSection(
+                title: strings.settingsGeneral,
+                children: <Widget>[
+                  SettingsCard(
+                    icon: FluentIcons.locale_language,
+                    title: strings.language,
+                    description: strings.languageDescription,
+                    trailing: ComboBox<String>(
+                      value: controller.localeCode,
+                      items: <ComboBoxItem<String>>[
+                        for (final code in AppLocaleService.supportedCodes)
+                          ComboBoxItem<String>(
+                            value: code,
+                            child: Text(AppLocaleService.nativeNames[code]!),
+                          ),
+                      ],
+                      onChanged: (code) {
+                        if (code != null) controller.setLocaleCode(code);
+                      },
                     ),
-                    ComboBoxItem<String>(
-                      value: 'light',
-                      child: Text(strings.themeLight),
-                    ),
-                    ComboBoxItem<String>(
-                      value: 'dark',
-                      child: Text(strings.themeDark),
-                    ),
-                  ],
-                  onChanged: (value) {
-                    if (value != null) controller.setThemeMode(value);
-                  },
-                ),
-              ],
-            ),
-          ),
-        ),
-        const SizedBox(height: 12),
-        Card(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(strings.expertMode),
-                      const SizedBox(height: 3),
-                      Text(strings.expertModeDescription),
-                    ],
                   ),
-                ),
-                ToggleSwitch(
-                  checked: controller.expertModeEnabled,
-                  onChanged: controller.setExpertModeEnabled,
-                ),
-              ],
-            ),
-          ),
-        ),
-        const SizedBox(height: 12),
-        Card(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(strings.startWithWindows),
-                      SizedBox(height: 3),
-                      Text(strings.startWithWindowsDescription),
-                    ],
-                  ),
-                ),
-                ToggleSwitch(
-                  checked: controller.startWithWindows,
-                  onChanged: (enabled) =>
-                      controller.setStartWithWindows(enabled),
-                ),
-              ],
-            ),
-          ),
-        ),
-        const SizedBox(height: 12),
-        Card(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: <Widget>[
-                Button(
-                  onPressed: _isRunningOperation
-                      ? null
-                      : () => _runOperation(context, controller.openLogFolder),
-                  child: Text(strings.openLogFolder),
-                ),
-                Button(
-                  onPressed: _isRunningOperation
-                      ? null
-                      : () => _runOperation(
-                          context,
-                          controller.redetectSystemState,
+                  SettingsCard(
+                    icon: FluentIcons.color,
+                    title: strings.appearance,
+                    description: strings.appearanceDescription,
+                    trailing: ComboBox<String>(
+                      value: controller.themeMode,
+                      items: <ComboBoxItem<String>>[
+                        ComboBoxItem<String>(
+                          value: 'system',
+                          child: Text(strings.themeSystem),
                         ),
-                  child: Text(strings.redetectSystemState),
-                ),
-                Button(
-                  onPressed: _isRunningOperation
-                      ? null
-                      : () => _runOperation(context, controller.exportProfile),
-                  child: Text(strings.exportProfile),
-                ),
-                Button(
-                  onPressed: _isRunningOperation
-                      ? null
-                      : () => _runOperation(context, controller.importProfile),
-                  child: Text(strings.importProfile),
-                ),
-                Button(
-                  onPressed: _isRunningOperation
-                      ? null
-                      : () =>
-                            _runOperation(context, controller.resetAppSettings),
-                  child: Text(strings.resetAppSettings),
-                ),
-                if (_isRunningOperation)
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 4, vertical: 8),
-                    child: SizedBox(
-                      width: 18,
-                      height: 18,
-                      child: ProgressRing(strokeWidth: 2),
+                        ComboBoxItem<String>(
+                          value: 'light',
+                          child: Text(strings.themeLight),
+                        ),
+                        ComboBoxItem<String>(
+                          value: 'dark',
+                          child: Text(strings.themeDark),
+                        ),
+                      ],
+                      onChanged: (value) {
+                        if (value != null) controller.setThemeMode(value);
+                      },
                     ),
                   ),
-              ],
-            ),
-          ),
-        ),
-        const SizedBox(height: 12),
-        Card(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  strings.updates,
-                  style: FluentTheme.of(context).typography.subtitle,
-                ),
-                const SizedBox(height: 12),
-                Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(strings.automaticUpdateNotifications),
-                          SizedBox(height: 3),
-                          Text(strings.automaticUpdateDescription),
-                        ],
-                      ),
+                  SettingsCard(
+                    icon: FluentIcons.power_button,
+                    title: strings.startWithWindows,
+                    description: strings.startWithWindowsDescription,
+                    trailing: ToggleSwitch(
+                      checked: controller.startWithWindows,
+                      onChanged: (enabled) =>
+                          controller.setStartWithWindows(enabled),
                     ),
-                    ToggleSwitch(
+                  ),
+                ],
+              ),
+              SettingsSection(
+                title: strings.settingsModes,
+                children: <Widget>[
+                  ExpertModeCard(controller: controller),
+                  SettingsCard(
+                    icon: FluentIcons.test_beaker,
+                    title: strings.dryRunMode,
+                    description: strings.dryRunDescription,
+                    trailing: ToggleSwitch(
+                      checked: controller.isDryRunMode,
+                      onChanged: controller.setDryRunMode,
+                    ),
+                  ),
+                ],
+              ),
+              SettingsSection(
+                title: strings.updates,
+                children: <Widget>[
+                  SettingsCard(
+                    icon: FluentIcons.ringer,
+                    title: strings.automaticUpdateNotifications,
+                    description: strings.automaticUpdateDescription,
+                    trailing: ToggleSwitch(
                       checked: controller.automaticUpdateChecksEnabled,
                       onChanged: controller.setAutomaticUpdateChecksEnabled,
                     ),
-                  ],
-                ),
-                const SizedBox(height: 14),
-                if (update != null)
-                  InfoBar(
-                    title: Text(
-                      '${strings.updateAvailable}: ${update.version}',
-                    ),
-                    content: Text(strings.updateAvailableDescription),
-                    severity: InfoBarSeverity.success,
-                    isLong: true,
-                  )
-                else if (controller.updateStatusMessage != null)
-                  Text(controller.updateStatusMessage!),
-                const SizedBox(height: 14),
-                Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: <Widget>[
-                    Button(
-                      onPressed: controller.isCheckingForUpdates
-                          ? null
-                          : widget.onCheckForUpdates,
-                      child: controller.isCheckingForUpdates
-                          ? Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                SizedBox(
-                                  width: 14,
-                                  height: 14,
-                                  child: ProgressRing(strokeWidth: 2),
-                                ),
-                                SizedBox(width: 8),
-                                Text(strings.checking),
-                              ],
-                            )
-                          : Text(strings.checkNow),
-                    ),
-                    if (update != null) ...<Widget>[
-                      Button(
-                        onPressed: widget.onViewRelease,
-                        child: Text(strings.viewRelease),
-                      ),
-                      FilledButton(
-                        onPressed: update.installerUrl == null
-                            ? null
-                            : widget.onInstallUpdate,
-                        child: Text(strings.updateNow),
-                      ),
-                    ],
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
-        const SizedBox(height: 12),
-        Card(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              children: <Widget>[
-                const Icon(FluentIcons.info),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(strings.applicationVersion),
-                      const SizedBox(height: 3),
-                      Text('ZapTweaks v${controller.appVersion}'),
-                    ],
                   ),
-                ),
-              ],
-            ),
-          ),
-        ),
-        const SizedBox(height: 12),
-        Card(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(strings.dryRunMode),
-                      SizedBox(height: 3),
-                      Text(strings.dryRunDescription),
-                    ],
+                  SettingsCard(
+                    icon: FluentIcons.sync,
+                    title: updateStatus,
+                    description: update != null
+                        ? strings.updateAvailableDescription
+                        : null,
+                    trailing: Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: <Widget>[
+                        if (update != null) ...<Widget>[
+                          Button(
+                            onPressed: widget.onViewRelease,
+                            child: Text(strings.viewRelease),
+                          ),
+                          FilledButton(
+                            onPressed: update.installerUrl == null
+                                ? null
+                                : widget.onInstallUpdate,
+                            child: Text(strings.updateNow),
+                          ),
+                        ],
+                        Button(
+                          onPressed: controller.isCheckingForUpdates
+                              ? null
+                              : widget.onCheckForUpdates,
+                          child: controller.isCheckingForUpdates
+                              ? Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    const SizedBox(
+                                      width: 14,
+                                      height: 14,
+                                      child: ProgressRing(strokeWidth: 2),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Text(strings.checking),
+                                  ],
+                                )
+                              : Text(strings.checkNow),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                ToggleSwitch(
-                  checked: controller.isDryRunMode,
-                  onChanged: controller.setDryRunMode,
-                ),
-              ],
-            ),
+                ],
+              ),
+              SettingsSection(
+                title: strings.settingsMaintenance,
+                children: <Widget>[
+                  SettingsCard(
+                    icon: FluentIcons.folder_open,
+                    title: strings.openLogFolder,
+                    description: strings.openLogFolderDescription,
+                    trailing: action(
+                      strings.openLogFolder,
+                      controller.openLogFolder,
+                    ),
+                  ),
+                  SettingsCard(
+                    icon: FluentIcons.refresh,
+                    title: strings.redetectSystemState,
+                    description: strings.redetectSystemStateDescription,
+                    trailing: action(
+                      strings.redetectSystemState,
+                      controller.redetectSystemState,
+                    ),
+                  ),
+                  SettingsCard(
+                    icon: FluentIcons.save,
+                    title: strings.profileTitle,
+                    description: strings.profileDescription,
+                    trailing: Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: <Widget>[
+                        action(strings.exportProfile, controller.exportProfile),
+                        action(strings.importProfile, controller.importProfile),
+                      ],
+                    ),
+                  ),
+                  SettingsCard(
+                    icon: FluentIcons.reset,
+                    title: strings.resetAppSettings,
+                    description: strings.resetAppSettingsDescription,
+                    trailing: _isRunningOperation
+                        ? const SizedBox(
+                            width: 18,
+                            height: 18,
+                            child: ProgressRing(strokeWidth: 2),
+                          )
+                        : action(
+                            strings.resetAppSettings,
+                            controller.resetAppSettings,
+                          ),
+                  ),
+                ],
+              ),
+              SettingsSection(
+                title: strings.settingsAbout,
+                children: <Widget>[
+                  SettingsCard(
+                    icon: FluentIcons.info,
+                    title: 'ZapTweaks v${controller.appVersion}',
+                    description: strings.aboutDescription,
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
       ],
@@ -379,6 +284,35 @@ class _SettingsPageState extends State<SettingsPage> {
         action: IconButton(
           icon: const Icon(FluentIcons.clear),
           onPressed: close,
+        ),
+      ),
+    );
+  }
+}
+
+/// Expert mode switch, shown on Home and in Settings so it is easy to find.
+class ExpertModeCard extends StatelessWidget {
+  const ExpertModeCard({required this.controller, super.key});
+
+  final TweakController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    final strings = AppLocalizations.of(context);
+    return ListenableBuilder(
+      listenable: controller,
+      builder: (context, _) => SettingsCard(
+        icon: FluentIcons.developer_tools,
+        title: strings.expertMode,
+        description: strings.expertModeDescription,
+        trailing: ToggleSwitch(
+          checked: controller.expertModeEnabled,
+          onChanged: controller.setExpertModeEnabled,
+          content: Text(
+            controller.expertModeEnabled
+                ? strings.expertModeOn
+                : strings.expertModeOff,
+          ),
         ),
       ),
     );

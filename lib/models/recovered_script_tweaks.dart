@@ -139,9 +139,10 @@ List<SystemTweak> createRecoveredScriptTweaks() {
               'Opens the Startup apps section in Task Manager.',
             '!graphics_cpp_runtime' =>
               'Installs Visual C++ 2005-2022 runtimes (x86 and x64) in one action.',
-            _ => 'Interactive script by Fr33thy.',
+            _ => 'Interactive script.',
           },
           category: fields[2],
+          author: 'Fr33thy',
           scriptSegments: fields[3].split('/'),
           actionLabel:
               fields[0] == '!graphics_directx' ||

@@ -147,16 +147,18 @@ try {
   $total = [int64]$os.TotalVisibleMemorySize * 1024
   $memory = @{ used = [Math]::Max([int64]0, $total - [int64]$os.FreePhysicalMemory * 1024); total = $total }
 } catch {}
-function Read-Counters([string]$counter) {
+# CIM perf classes are locale independent; counter paths are translated.
+function Read-Perf([string]$class, [string]$property) {
   try {
-    @( (Get-Counter $counter -ErrorAction Stop).CounterSamples | Where-Object Status -EQ 0 | ForEach-Object {
-      @{ name = $_.InstanceName; value = [double]$_.CookedValue }
+    @(Get-CimInstance $class -ErrorAction Stop | Where-Object { $null -ne $_.$property } | ForEach-Object {
+      @{ name = $_.Name; value = [double]$_.$property }
     })
   } catch { @() }
 }
-$gpu = @(Read-Counters '\GPU Engine(*)\Utilization Percentage')
-$usage = @(Read-Counters '\GPU Adapter Memory(*)\Dedicated Usage')
-$limits = @(Read-Counters '\GPU Adapter Memory(*)\Dedicated Limit')
+$gpu = @(Read-Perf 'Win32_PerfFormattedData_GPUPerformanceCounters_GPUEngine' 'UtilizationPercentage')
+$usage = @(Read-Perf 'Win32_PerfFormattedData_GPUPerformanceCounters_GPUAdapterMemory' 'DedicatedUsage')
+# The CIM class has no Dedicated Limit; totals come from DXGI in Dart.
+$limits = @()
 @{ cpu = $cpu; memory = $memory; gpu = $gpu; usage = $usage; limits = $limits } | ConvertTo-Json -Compress -Depth 5
 ''';
     final result = await _processRunner.run('powershell', [

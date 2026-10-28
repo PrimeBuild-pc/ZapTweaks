@@ -1,8 +1,11 @@
 import 'dart:async';
 
+import '../../../app/widgets/ui_kit.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 
 import '../../../core/operations/operation.dart';
+import '../../../core/operations/tcp_optimizer_operations.dart';
+import '../../../core/persistence/operation_store.dart';
 import '../../../core/plans/operation_plan.dart';
 import '../../../core/services/process_runner.dart';
 import '../../../l10n/app_localizations.dart';
@@ -13,9 +16,10 @@ import '../../../platform/windows/tcp_optimizer_service.dart';
 import '../../tweaks/application/tweak_controller.dart';
 
 class TcpOptimizerPage extends StatefulWidget {
-  const TcpOptimizerPage({required this.controller, super.key});
+  const TcpOptimizerPage({required this.controller, this.journal, super.key});
 
   final TweakController controller;
+  final OperationStore? journal;
 
   @override
   State<TcpOptimizerPage> createState() => _TcpOptimizerPageState();
@@ -152,6 +156,287 @@ class _TcpOptimizerPageState extends State<TcpOptimizerPage> {
         desiredValue: value,
       ),
     );
+  }
+
+  // Kept bilingual here until the shared-locale owner registers the handoff keys.
+  String _presetText(String key) {
+    const text = <String, (String, String)>{
+      'tcpPresetTitle': ('Manual network preset', 'Preset rete manuale'),
+      'tcpPresetDescription': (
+        'Limited subset of network settings. No recommendation or speed claim. Only exactly restorable native configuration fields are included; connection/adapter effective state is not inferred.',
+        'Sottoinsieme limitato delle impostazioni di rete. Nessuna raccomandazione o promessa di velocità. Include solo configurazioni native ripristinabili esattamente; non presume lo stato effettivo di connessioni o adattatori.',
+      ),
+      'tcpPresetHighRisk': (
+        'High risk · Administrator · May interrupt connectivity. All originals are journaled before any write. On failure, every attempted write is restored in reverse order; conflicts remain visible in recovery history.',
+        'Rischio alto · Amministratore · Può interrompere la connettività. Tutti gli originali sono salvati nel journal prima di scrivere. In caso di errore, ogni scrittura tentata viene ripristinata in ordine inverso; i conflitti restano visibili nella cronologia di ripristino.',
+      ),
+      'tcpPresetNoTemplate': (
+        'Leave templates unchanged',
+        'Non modificare i template',
+      ),
+      'tcpPresetTemplateChoice': (
+        'Optional explicit custom template (no default)',
+        'Template custom opzionale ed esplicito (nessuna preselezione)',
+      ),
+      'tcpPresetTemplateVariant': (
+        'Explicit per-template variant; not equivalent to global settings.',
+        'Variante esplicita per-template; non equivale alle impostazioni globali.',
+      ),
+      'tcpPresetIncluded': ('Included', 'Incluso'),
+      'tcpPresetExcluded': ('Excluded', 'Escluso'),
+      'tcpPresetGlobalScopeUnavailable': (
+        'No exactly reversible global API in this implementation; a per-template field is not equivalent.',
+        'Nessuna API globale esattamente reversibile in questa implementazione; un valore per-template non è equivalente.',
+      ),
+      'tcpPresetInternetReadOnly': (
+        'Internet congestion is read-only here. InternetCustom is not substituted.',
+        'La congestione di Internet è in sola lettura qui. InternetCustom non viene sostituito.',
+      ),
+      'tcpPresetExactStateUnavailable': (
+        'Missing, unsupported, managed, Default/inherited or incomplete configured state: no write.',
+        'Stato configurato mancante, non supportato, gestito, Default/ereditato o incompleto: nessuna scrittura.',
+      ),
+      'tcpPresetApiUnavailable': (
+        'No typed exact snapshot/setter for this global option.',
+        'Nessuno snapshot/setter tipizzato esatto per questa opzione globale.',
+      ),
+      'tcpPresetCustomReadOnly': (
+        'Custom ICW is not a validated writable Windows 11 client field.',
+        'ICW Custom non è un campo scrivibile convalidato sul client Windows 11.',
+      ),
+      'tcpRecoveryTitle': (
+        'Restore an original TCP journal value',
+        'Ripristina un valore TCP originale dal journal',
+      ),
+      'tcpRecoveryDescription': (
+        'Select one attempted operation. Restore resolves the original from the trusted journal, checks current drift and saves a new recoverable plan. No reset or default value is used.',
+        'Seleziona una operazione tentata. Il ripristino risolve l’originale dal journal fidato, controlla il drift corrente e salva un nuovo piano ripristinabile. Non usa reset o valori predefiniti.',
+      ),
+      'tcpRecoveryUnavailable': (
+        'TCP journal recovery is not connected in this build.',
+        'Il ripristino TCP dal journal non è collegato in questa build.',
+      ),
+      'tcpConfiguredState': ('Configured', 'Configurato'),
+      'tcpEffectiveState': ('Effective (if exposed)', 'Effettivo (se esposto)'),
+      'tcpConfigurationStore': (
+        'Configuration source',
+        'Fonte della configurazione',
+      ),
+    };
+    final pair = text[key]!;
+    return Localizations.localeOf(context).languageCode == 'it'
+        ? pair.$2
+        : pair.$1;
+  }
+
+  Future<void> _previewSparklePreset() async {
+    setState(() {
+      _busy = 'sparklePreset';
+      _message = null;
+    });
+    try {
+      final inventory = await _tcp.inventory();
+      String? template;
+      var options = TcpSparklePreset.preview(inventory);
+      final templates =
+          inventory
+              .where((state) => state.template.endsWith('Custom'))
+              .map((state) => state.template)
+              .toSet()
+              .toList()
+            ..sort();
+      if (!mounted) return;
+      final strings = AppLocalizations.of(context);
+      final approved = await showDialog<bool>(
+        context: context,
+        builder: (context) => StatefulBuilder(
+          builder: (context, updateDialog) => ContentDialog(
+            constraints: const BoxConstraints(maxWidth: 680),
+            title: Text(_presetText('tcpPresetTitle')),
+            content: SizedBox(
+              height: 420,
+              child: ListView(
+                children: [
+                  Text(_presetText('tcpPresetDescription')),
+                  const SizedBox(height: 12),
+                  InfoLabel(
+                    label: _presetText('tcpPresetTemplateChoice'),
+                    child: ComboBox<String>(
+                      value: template,
+                      placeholder: Text(_presetText('tcpPresetTemplateChoice')),
+                      isExpanded: true,
+                      items: [
+                        ComboBoxItem(
+                          value: '',
+                          child: Text(_presetText('tcpPresetNoTemplate')),
+                        ),
+                        for (final name in templates)
+                          ComboBoxItem(value: name, child: Text(name)),
+                      ],
+                      onChanged: (value) => updateDialog(() {
+                        template = value == null || value.isEmpty
+                            ? null
+                            : value;
+                        options = TcpSparklePreset.preview(
+                          inventory,
+                          template: template,
+                        );
+                      }),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  InfoBar(
+                    title: Text(_presetText('tcpPresetHighRisk')),
+                    severity: InfoBarSeverity.warning,
+                  ),
+                  const SizedBox(height: 12),
+                  for (final option in options)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 12),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '${_presetText(option.included ? 'tcpPresetIncluded' : 'tcpPresetExcluded')}: ${option.target} → ${option.value}',
+                          ),
+                          if (!option.included ||
+                              option.reasonKey == 'tcpPresetTemplateVariant')
+                            Text(_presetText(option.reasonKey)),
+                          if (option.included) ...[
+                            for (final state in inventory.where(
+                              (item) => item.target == option.target,
+                            ))
+                              Text(
+                                '${_presetText('tcpConfiguredState')}: ${state.configuredValue}\n'
+                                '${_presetText('tcpEffectiveState')}: ${state.effectiveValue ?? '—'}\n'
+                                '${_presetText('tcpConfigurationStore')}: ${state.configurationStore} · ${state.inheritance}',
+                              ),
+                          ],
+                        ],
+                      ),
+                    ),
+                ],
+              ),
+            ),
+            actions: [
+              Button(
+                onPressed: () => Navigator.pop(context, false),
+                child: Text(strings.cancel),
+              ),
+              FilledButton(
+                onPressed: options.any((item) => item.included)
+                    ? () => Navigator.pop(context, true)
+                    : null,
+                child: Text(strings.apply),
+              ),
+            ],
+          ),
+        ),
+      );
+      if (approved == true && mounted) {
+        await _executeRequests(TcpSparklePreset.requests(options));
+      }
+    } catch (error) {
+      if (mounted) setState(() => _message = error.toString());
+    } finally {
+      if (mounted) setState(() => _busy = null);
+    }
+  }
+
+  Future<void> _previewTcpRecovery() async {
+    final journal = widget.journal;
+    if (journal == null) return;
+    setState(() {
+      _busy = 'tcpRecovery';
+      _message = null;
+    });
+    try {
+      final inventory = await _tcp.inventory();
+      final candidates = <(OperationRequest, String)>[];
+      final rows = journal.database.select(
+        'SELECT DISTINCT plan_id FROM plan_items WHERE operation_id=? ORDER BY plan_id',
+        ['network.tcp.setting.configure'],
+      );
+      for (final row in rows) {
+        final plan = journal.load(row['plan_id'] as String)!;
+        for (var index = plan.items.length - 1; index >= 0; index--) {
+          final item = plan.items[index];
+          final snapshot = item.snapshot;
+          if (item.operationId != 'network.tcp.setting.configure' ||
+              item.written == null ||
+              snapshot == null ||
+              snapshot.data['schema'] != 2 ||
+              item.status == PlanItemStatus.rolledBack) {
+            continue;
+          }
+          final states = inventory.where(
+            (state) => state.target == item.request.target,
+          );
+          if (states.length != 1 ||
+              !states.single.exactlyRestorable ||
+              (states.single.value != item.written!.value &&
+                  states.single.value !=
+                      snapshot.expectedAfterRollback.value)) {
+            continue;
+          }
+          candidates.add((
+            OperationRequest(
+              operationId: 'network.tcp.snapshot.restore',
+              target: item.request.target,
+              desiredValue: snapshot.expectedAfterRollback.value,
+              parameters: {
+                'planId': plan.id,
+                'sequence': index,
+                'digest': snapshot.data['digest'],
+              },
+            ),
+            '${plan.createdAt.toLocal()} · ${plan.id}\n${item.request.target}: ${states.single.configuredValue} → ${snapshot.expectedAfterRollback.value}',
+          ));
+        }
+      }
+      if (!mounted) return;
+      final strings = AppLocalizations.of(context);
+      final selected = await showDialog<OperationRequest>(
+        context: context,
+        builder: (context) => ContentDialog(
+          constraints: const BoxConstraints(maxWidth: 680),
+          title: Text(_presetText('tcpRecoveryTitle')),
+          content: SizedBox(
+            height: 420,
+            child: ListView(
+              children: [
+                Text(_presetText('tcpRecoveryDescription')),
+                const SizedBox(height: 12),
+                InfoBar(
+                  title: Text(_presetText('tcpPresetHighRisk')),
+                  severity: InfoBarSeverity.warning,
+                ),
+                if (candidates.isEmpty) Text(strings.noSearchResults),
+                for (final candidate in candidates)
+                  ListTile(
+                    title: Text(candidate.$2),
+                    trailing: Button(
+                      onPressed: () => Navigator.pop(context, candidate.$1),
+                      child: Text(strings.apply),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          actions: [
+            Button(
+              onPressed: () => Navigator.pop(context),
+              child: Text(strings.cancel),
+            ),
+          ],
+        ),
+      );
+      if (selected != null && mounted) await _execute(selected);
+    } catch (error) {
+      if (mounted) setState(() => _message = error.toString());
+    } finally {
+      if (mounted) setState(() => _busy = null);
+    }
   }
 
   Future<void> _showAdapterRss() async {
@@ -425,22 +710,12 @@ class _TcpOptimizerPageState extends State<TcpOptimizerPage> {
 
   Future<void> _deleteQos(QosPolicy policy) async {
     final strings = AppLocalizations.of(context);
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (context) => ContentDialog(
-        title: Text(strings.qosDelete),
-        content: Text('${strings.qosDeleteConfirm}\n\n${policy.name}'),
-        actions: <Widget>[
-          Button(
-            onPressed: () => Navigator.pop(context, false),
-            child: Text(strings.cancel),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: Text(strings.qosDelete),
-          ),
-        ],
-      ),
+    final confirmed = await confirmAction(
+      context,
+      title: strings.qosDelete,
+      message: '${strings.qosDeleteConfirm}\n\n${policy.name}',
+      confirmLabel: strings.qosDelete,
+      destructive: true,
     );
     if (confirmed == true) {
       await _execute(
@@ -453,18 +728,25 @@ class _TcpOptimizerPageState extends State<TcpOptimizerPage> {
     }
   }
 
-  Future<void> _execute(OperationRequest request) async {
+  Future<void> _execute(OperationRequest request) =>
+      _executeRequests([request]);
+
+  Future<void> _executeRequests(List<OperationRequest> requests) async {
     setState(() {
-      _busy = request.target;
+      _busy = requests.first.target;
       _message = null;
     });
     try {
-      final plan = await widget.controller.executeNativeRequests(
-        <OperationRequest>[request],
-      );
+      final plan = await widget.controller.executeNativeRequests(requests);
       if (plan.status != PlanStatus.completed ||
-          plan.items.single.status != PlanItemStatus.verified) {
-        throw StateError(plan.items.single.error ?? 'Operation failed.');
+          plan.items.any(
+            (item) =>
+                item.status != PlanItemStatus.verified &&
+                !(item.status == PlanItemStatus.skipped && item.error == null),
+          )) {
+        throw StateError(
+          '${plan.status.name}\n${plan.items.map((item) => item.error).whereType<String>().join('\n')}',
+        );
       }
       await _load();
       if (mounted) {
@@ -551,6 +833,19 @@ class _TcpOptimizerPageState extends State<TcpOptimizerPage> {
           ),
         ],
         const SizedBox(height: 18),
+        Button(
+          onPressed: !_loading && _busy == null ? _previewSparklePreset : null,
+          child: Text(_presetText('tcpPresetTitle')),
+        ),
+        const SizedBox(height: 8),
+        Button(
+          onPressed: !_loading && _busy == null && widget.journal != null
+              ? _previewTcpRecovery
+              : null,
+          child: Text(_presetText('tcpRecoveryTitle')),
+        ),
+        if (widget.journal == null) Text(_presetText('tcpRecoveryUnavailable')),
+        const SizedBox(height: 12),
         _sectionHeader(strings.tcpGlobal),
         ...globals.map((setting) => _settingTile(strings, setting)),
         Button(
@@ -640,19 +935,26 @@ class _TcpOptimizerPageState extends State<TcpOptimizerPage> {
     );
   }
 
-  Widget _settingTile(AppLocalizations strings, TcpSettingState setting) =>
-      Card(
-        child: ListTile(
-          title: Text(_fieldName(strings, setting.field)),
-          subtitle: Text('${setting.template} · ${setting.value}'),
-          trailing: Button(
-            onPressed: setting.writable && _busy == null
-                ? () => _configureTcp(setting)
-                : null,
-            child: Text(strings.tcpConfigure),
-          ),
-        ),
-      );
+  Widget _settingTile(
+    AppLocalizations strings,
+    TcpSettingState setting,
+  ) => Card(
+    child: ListTile(
+      title: Text(_fieldName(strings, setting.field)),
+      subtitle: Text(
+        '${setting.template} · ${setting.value}\n'
+        '${_presetText('tcpConfiguredState')}: ${setting.configuredValue ?? '—'} · '
+        '${_presetText('tcpEffectiveState')}: ${setting.effectiveValue ?? '—'}\n'
+        '${_presetText('tcpConfigurationStore')}: ${setting.configurationStore ?? '—'} · ${setting.inheritance}',
+      ),
+      trailing: Button(
+        onPressed: setting.exactlyRestorable && _busy == null
+            ? () => _configureTcp(setting)
+            : null,
+        child: Text(strings.tcpConfigure),
+      ),
+    ),
+  );
 
   Widget _qosTile(AppLocalizations strings, QosPolicy policy) => Card(
     child: ListTile(
