@@ -565,7 +565,7 @@ class TcpSnapshotRestoreOperation extends TcpSettingOperation {
   ) async {
     try {
       await _checkSourceDrift(request);
-      return super.supports(context, request);
+      return await super.supports(context, request);
     } catch (error) {
       return SupportResult.unsupported(error.toString());
     }
