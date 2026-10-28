@@ -36,7 +36,12 @@ void main() {
       late ShaderCacheCleanupOperation operation;
 
       setUp(() async {
-        sandbox = await Directory.systemTemp.createTemp('zap-shader-test-');
+        // Long form: %TEMP% can be an 8.3 path (RUNNER~1 on CI).
+        sandbox = Directory(
+          cleanupRootPath(
+            await Directory.systemTemp.createTemp('zap-shader-test-'),
+          ),
+        );
         amd = await Directory(
           p.join(sandbox.path, 'AMD', 'DxcCache'),
         ).create(recursive: true);

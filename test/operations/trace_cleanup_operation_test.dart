@@ -55,7 +55,12 @@ void main() {
       late File trace;
 
       setUp(() async {
-        sandbox = await Directory.systemTemp.createTemp('zap-cleanup-test-');
+        // Long form: %TEMP% can be an 8.3 path (RUNNER~1 on CI).
+        sandbox = Directory(
+          cleanupRootPath(
+            await Directory.systemTemp.createTemp('zap-cleanup-test-'),
+          ),
+        );
         directory = await Directory('${sandbox.path}/traces').create();
         trace = await File(
           '${directory.path}/trace.etl',

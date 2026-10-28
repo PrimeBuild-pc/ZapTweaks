@@ -56,7 +56,12 @@ void main() {
       late Directory profile;
 
       setUp(() async {
-        sandbox = await Directory.systemTemp.createTemp('zap-roots-test-');
+        // Long form: %TEMP% can be an 8.3 path (RUNNER~1 on CI).
+        sandbox = Directory(
+          cleanupRootPath(
+            await Directory.systemTemp.createTemp('zap-roots-test-'),
+          ),
+        );
         dumps = await Directory(
           p.join(sandbox.path, 'CrashDumps'),
         ).create(recursive: true);

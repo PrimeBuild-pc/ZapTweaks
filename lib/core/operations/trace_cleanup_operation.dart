@@ -359,7 +359,7 @@ abstract class FixedRootsCleanupOperation extends TraceCleanupOperation {
 
   Directory? _match(List<Directory> list, CleanupCandidate candidate) {
     for (final root in list) {
-      if (p.equals(p.normalize(root.absolute.path), candidate.rootCanonical)) {
+      if (p.equals(cleanupRootPath(root), candidate.rootCanonical)) {
         return root;
       }
     }

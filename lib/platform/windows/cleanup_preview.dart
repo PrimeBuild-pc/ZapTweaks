@@ -96,7 +96,7 @@ class CleanupScanner {
   }) async {
     final candidates = <CleanupCandidate>[];
     final errors = <String>[];
-    final root = p.normalize(directory.absolute.path);
+    final root = cleanupRootPath(directory);
     if (!Platform.isWindows) {
       return CleanupPreview(
         [],
@@ -178,7 +178,7 @@ class CleanupScanner {
   }
 
   void validatePath(Directory directory, CleanupCandidate candidate) {
-    final root = p.normalize(directory.absolute.path);
+    final root = cleanupRootPath(directory);
     final path = candidate.path;
     if (!p.isAbsolute(path) ||
         path != p.normalize(path) ||
@@ -194,7 +194,10 @@ class CleanupScanner {
 
   bool isAbsent(Directory directory, CleanupCandidate candidate) {
     validatePath(directory, candidate);
-    final root = _PinnedCleanupPath(directory.absolute.path, directory: true);
+    final root = _PinnedCleanupPath(
+      cleanupRootPath(directory),
+      directory: true,
+    );
     _PinnedCleanupPath? parent;
     final name = candidate.path.toNativeUtf16();
     try {
@@ -223,7 +226,10 @@ class CleanupScanner {
     bool delete = false,
   }) {
     validatePath(directory, candidate);
-    final root = _PinnedCleanupPath(directory.absolute.path, directory: true);
+    final root = _PinnedCleanupPath(
+      cleanupRootPath(directory),
+      directory: true,
+    );
     try {
       if (!p.equals(root.canonical, candidate.rootCanonical) ||
           root.objectIdentity != candidate.rootIdentity) {
@@ -251,6 +257,11 @@ class CleanupScanner {
     }
   }
 }
+
+/// Absolute, normalized root with 8.3 short names expanded, so a %TEMP%
+/// like C:\Users\RUNNER~1\... matches the canonical paths of its files.
+String cleanupRootPath(Directory directory) =>
+    _longPath(p.normalize(directory.absolute.path));
 
 /// [path] with 8.3 short names expanded; follows no links.
 String _longPath(String path) {
