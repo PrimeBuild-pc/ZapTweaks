@@ -1,8 +1,11 @@
 import 'package:fluent_ui/fluent_ui.dart';
 
+import '../../../app/widgets/ui_kit.dart';
+
 import '../../../l10n/app_localizations.dart';
 import '../../tweaks/application/tweak_controller.dart';
 import '../../tweaks/presentation/pages/tweaks_page.dart';
+import 'app_history_page.dart';
 import 'dpc_latency_page.dart';
 import 'hardware_monitor_page.dart';
 import 'recovery_page.dart';
@@ -35,21 +38,23 @@ class _DiagnosticsHubPageState extends State<DiagnosticsHubPage> {
   @override
   void initState() {
     super.initState();
-    _index = widget.initialIndex.clamp(0, 3);
+    _index = widget.initialIndex.clamp(0, 4);
   }
 
   @override
   Widget build(BuildContext context) {
     final strings = AppLocalizations.of(context);
-    return TabView(
+    return SectionTabView(
       currentIndex: _index,
       onChanged: (index) => setState(() => _index = index),
-      closeButtonVisibility: CloseButtonVisibilityMode.never,
       tabs: <Tab>[
         Tab(
           text: Text(strings.recovery),
           icon: const Icon(FluentIcons.repair),
-          body: RecoveryPage(controller: widget.controller),
+          body: RecoveryPage(
+            controller: widget.controller,
+            journal: widget.controller.operationJournal,
+          ),
         ),
         Tab(
           text: Text(strings.hardwareMonitor),
@@ -58,7 +63,7 @@ class _DiagnosticsHubPageState extends State<DiagnosticsHubPage> {
         ),
         Tab(
           text: Text(strings.dpcLatencyAnalyzer),
-          icon: const Icon(FluentIcons.speed_high),
+          icon: const Icon(FluentIcons.timer),
           body: DpcLatencyPage(controller: widget.controller),
         ),
         Tab(
@@ -69,6 +74,12 @@ class _DiagnosticsHubPageState extends State<DiagnosticsHubPage> {
             category: 'Diagnostics & Recovery',
             onSafetyPrompt: widget.onSafetyPrompt,
           ),
+        ),
+        // Appended: search results open tabs by index.
+        Tab(
+          text: Text(strings.srumTab),
+          icon: const Icon(FluentIcons.history),
+          body: const AppHistoryPage(),
         ),
       ],
     );

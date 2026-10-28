@@ -18,7 +18,12 @@ void main() {
         jsonDecode(File(file).readAsStringSync()) as Map<String, dynamic>;
 
     final english = messages('lib/l10n/app_en.arb');
-    final featureKeys = english.keys.skipWhile((key) => key != 'tcpOptimizer');
+    final keys = english.keys.toList();
+    final start = keys.indexOf('tcpOptimizer');
+    final end = keys.indexOf('openRecoveryHistory');
+    expect(start, greaterThanOrEqualTo(0));
+    expect(end, greaterThanOrEqualTo(start));
+    final featureKeys = keys.sublist(start, end + 1);
     for (final locale in <String>['de', 'es', 'fr', 'it', 'ru', 'zh']) {
       final translated = messages('lib/l10n/app_$locale.arb');
       for (final key in featureKeys) {

@@ -1,5 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 
+import '../../../../app/widgets/ui_kit.dart';
 import '../../../../l10n/app_localizations.dart';
 
 class TweakSwitchTile extends StatelessWidget {
@@ -14,6 +15,7 @@ class TweakSwitchTile extends StatelessWidget {
     this.details,
     this.warning,
     this.unavailableReason,
+    this.author,
   });
 
   final String title;
@@ -24,6 +26,7 @@ class TweakSwitchTile extends StatelessWidget {
   final String? details;
   final String? warning;
   final String? unavailableReason;
+  final String? author;
   final Future<void> Function(bool next) onChanged;
 
   @override
@@ -45,6 +48,10 @@ class TweakSwitchTile extends StatelessWidget {
                       title,
                       style: FluentTheme.of(context).typography.bodyStrong,
                     ),
+                    if (author != null) ...<Widget>[
+                      const SizedBox(height: 4),
+                      AttributionBadge(author!),
+                    ],
                     const SizedBox(height: 4),
                     Text(description),
                   ],

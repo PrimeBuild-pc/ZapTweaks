@@ -9,6 +9,20 @@ import 'logging_service.dart';
 
 enum ProcessExecutionMode { production, dryRun }
 
+/// [value] without PowerShell 7 module folders. Started from a pwsh 7
+/// terminal, Windows PowerShell inherits them first and fails to load
+/// Microsoft.PowerShell.Security (Get-Acl, Get-FileHash, signatures).
+/// Windows PowerShell's own folders are named `WindowsPowerShell`.
+String withoutPowerShell7Modules(String value) => value
+    .split(';')
+    .where((entry) {
+      final folder = entry.trim().toLowerCase();
+      return folder.isNotEmpty &&
+          (!folder.contains('powershell') ||
+              folder.contains('windowspowershell'));
+    })
+    .join(';');
+
 typedef ProcessRunDelegate =
     Future<ProcessResult> Function(
       String executable,
@@ -21,6 +35,7 @@ typedef ProcessStartDelegate =
       String executable,
       List<String> arguments, {
       bool runInShell,
+      Map<String, String>? environment,
     });
 
 class CommandResult {
@@ -413,16 +428,53 @@ class ProcessRunner {
     );
   }
 
+  /// A bare tool name is looked up first in the folder of ZapTweaks.exe, which a portable copy shares with the user:
+  /// a planted powershell.exe there would run with the elevated helper's rights. Windows tools resolve to their real
+  /// location; anything else (winget, pwsh) keeps its name.
+  static String resolveSystemExecutable(
+    String executable, {
+    String? windowsDirectory,
+    bool Function(String path)? exists,
+  }) {
+    if (!Platform.isWindows && windowsDirectory == null) return executable;
+    if (executable.contains(r'\') || executable.contains('/')) {
+      return executable;
+    }
+    final windows =
+        windowsDirectory ?? Platform.environment['SystemRoot'] ?? r'C:\Windows';
+    final name = executable.toLowerCase().endsWith('.exe')
+        ? executable
+        : '$executable.exe';
+    if (name.toLowerCase() == 'powershell.exe') {
+      return '$windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe';
+    }
+    final found = exists ?? (String path) => File(path).existsSync();
+    for (final candidate in <String>[
+      '$windows\\System32\\$name',
+      '$windows\\$name',
+    ]) {
+      if (found(candidate)) return candidate;
+    }
+    return executable;
+  }
+
   Future<CommandResult> _runCancellable(
     String executable,
     List<String> arguments, {
     required bool runInShell,
     required Duration timeout,
   }) async {
+    final resolved = resolveSystemExecutable(executable);
+    final modules = Platform.environment['PSModulePath'];
     final process = await _processStartDelegate(
-      executable,
+      resolved,
       arguments,
       runInShell: runInShell,
+      environment:
+          modules != null &&
+              path.basename(resolved).toLowerCase().startsWith('powershell')
+          ? <String, String>{'PSModulePath': withoutPowerShell7Modules(modules)}
+          : null,
     ).timeout(timeout);
     final stdoutFuture = _collectOutput(process.stdout);
     final stderrFuture = _collectOutput(process.stderr);
@@ -458,7 +510,7 @@ class ProcessRunner {
   Future<void> _terminateProcessTree(Process process) async {
     if (Platform.isWindows) {
       try {
-        await Process.run('taskkill', <String>[
+        await Process.run(resolveSystemExecutable('taskkill'), <String>[
           '/PID',
           process.pid.toString(),
           '/T',
@@ -558,8 +610,13 @@ class ProcessRunner {
     );
   }
 
+  /// Progress records (Get-CimInstance, Get-NetAdapter...) cost time and
+  /// reach stderr as CLIXML noise in every log line.
+  static const powerShellPreamble =
+      "\$ProgressPreference = 'SilentlyContinue'\n";
+
   String _encodePowerShellScript(String script) {
-    final units = script.codeUnits;
+    final units = '$powerShellPreamble$script'.codeUnits;
     final bytes = Uint8List(units.length * 2);
     for (var i = 0; i < units.length; i++) {
       bytes[i * 2] = units[i] & 0xFF;

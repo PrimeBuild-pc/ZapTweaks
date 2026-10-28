@@ -6,10 +6,11 @@ List<SystemTweak> createProgramToolTweaks() {
     // Core launcher actions (non-executable resources)
     ExternalUrlLauncherTweak(
       id: 'recovery_repair_bad_tweaks_zoicware',
-      title: 'Repair Bad Tweaks by zoicware',
+      title: 'Repair Bad Tweaks',
       description:
           'Opens the pinned MIT-licensed upstream source; the script is not bundled or executed by ZapTweaks.',
       category: 'Refresh & Recovery',
+      author: 'zoicware',
       url:
           'https://github.com/zoicware/RepairBadTweaks/tree/0afa349ba7dca7a44eb8a5e64de1a38ae12f71a5',
       actionLabel: 'Open Pinned Source',
@@ -20,150 +21,167 @@ List<SystemTweak> createProgramToolTweaks() {
       description:
           'Opens the official MIT-licensed Windows 11 performance and quality-of-life utility project.',
       category: 'Drivers & Installers',
+      author: 'zoicware',
       url: 'https://github.com/zoicware/ZOICWARE',
       actionLabel: 'Open Official Project',
     ),
     ExternalUrlLauncherTweak(
       id: 'tool_zoicware_defender_pro_tools',
-      title: 'DefenderProTools by zoicware',
+      title: 'DefenderProTools',
       description:
           'Opens the official MIT-licensed project for explicit Windows Defender controls. Nothing is downloaded or executed automatically.',
       category: 'Drivers & Installers',
+      author: 'zoicware',
       url: 'https://github.com/zoicware/DefenderProTools',
       actionLabel: 'Open Official Project',
     ),
     ExternalUrlLauncherTweak(
       id: 'tool_zoicware_remove_windows_ai',
-      title: 'RemoveWindowsAI by zoicware',
+      title: 'RemoveWindowsAI',
       description:
           'Opens the official MIT-licensed project for reviewing removal of Copilot, Recall, and related components.',
       category: 'Drivers & Installers',
+      author: 'zoicware',
       url: 'https://github.com/zoicware/RemoveWindowsAI',
       actionLabel: 'Open Official Project',
     ),
     ExternalUrlLauncherTweak(
       id: 'tool_zoicware_zscripts',
-      title: 'zScripts by zoicware',
+      title: 'zScripts',
       description:
           'Opens the official miscellaneous PowerShell scripts repository. No license is declared, so ZapTweaks does not copy or execute its code.',
       category: 'Drivers & Installers',
+      author: 'zoicware',
       url: 'https://github.com/zoicware/zScripts',
       actionLabel: 'Open Official Project',
     ),
     ExternalUrlLauncherTweak(
       id: 'tool_zoicware_pbo_tuner_2',
-      title: 'PBOTuner2 by zoicware',
+      title: 'PBOTuner2',
       description:
           'Opens the official Ryzen PBO undervolt automation project. Firmware tuning remains external and requires independent stability testing.',
       category: 'Drivers & Installers',
+      author: 'zoicware',
       url: 'https://github.com/zoicware/PBOTuner2',
       actionLabel: 'Open Official Project',
     ),
     ExternalUrlLauncherTweak(
       id: 'tool_zoicware_remove_cbs_apps',
-      title: 'RemoveCBSApps by zoicware',
+      title: 'RemoveCBSApps',
       description:
           'Opens the official MIT-licensed project for Get Started, Windows Backup, and Cross Device Resume controls.',
       category: 'Drivers & Installers',
+      author: 'zoicware',
       url: 'https://github.com/zoicware/RemoveCBSApps',
       actionLabel: 'Open Official Project',
     ),
     ExternalUrlLauncherTweak(
       id: 'tool_zoicware_power_plan_settings_editor',
-      title: 'PowerPlanSettingsEditor by zoicware',
+      title: 'PowerPlanSettingsEditor',
       description:
           'Opens the official MIT-licensed editor. ZapTweaks also provides its own integrated Power Settings Explorer.',
       category: 'Drivers & Installers',
+      author: 'zoicware',
       url: 'https://github.com/zoicware/PowerPlanSettingsEditor',
       actionLabel: 'Open Official Project',
     ),
     ExternalUrlLauncherTweak(
       id: 'tool_zoicware_ultimate_disk_cleanup',
-      title: 'UltimateDiskCleanup by zoicware',
+      title: 'UltimateDiskCleanup',
       description:
           'Opens the official Windows Disk Cleanup project with hidden options. Review targets before deleting data.',
       category: 'Drivers & Installers',
+      author: 'zoicware',
       url: 'https://github.com/zoicware/UltimateDiskCleanup',
       actionLabel: 'Open Official Project',
     ),
     ExternalUrlLauncherTweak(
       id: 'tool_zoicware_service_manager_plus',
-      title: 'ServiceManagerPlus by zoicware',
+      title: 'ServiceManagerPlus',
       description:
           'Opens the official MIT-licensed advanced Windows service manager project.',
       category: 'Drivers & Installers',
+      author: 'zoicware',
       url: 'https://github.com/zoicware/ServiceManagerPlus',
       actionLabel: 'Open Official Project',
     ),
     ExternalUrlLauncherTweak(
       id: 'tool_zoicware_windows_device_remover',
-      title: 'WindowsDeviceRemover by zoicware',
+      title: 'WindowsDeviceRemover',
       description:
           'Opens the official MIT-licensed device and driver removal project. ZapTweaks keeps driver removal capability-gated.',
       category: 'Drivers & Installers',
+      author: 'zoicware',
       url: 'https://github.com/zoicware/WindowsDeviceRemover',
       actionLabel: 'Open Official Project',
     ),
     ExternalUrlLauncherTweak(
       id: 'tool_zoicware_windows_update_manager',
-      title: 'WindowsUpdateManager by zoicware',
+      title: 'WindowsUpdateManager',
       description:
           'Opens the official advanced Windows Update manager project; its code is not bundled because no license is declared.',
       category: 'Drivers & Installers',
+      author: 'zoicware',
       url: 'https://github.com/zoicware/WindowsUpdateManager',
       actionLabel: 'Open Official Project',
     ),
     ExternalUrlLauncherTweak(
       id: 'tool_zoicware_dynamic_min_services',
-      title: 'DynamicMinServices by zoicware',
+      title: 'DynamicMinServices',
       description:
           'Opens the official experimental service-reduction project. No license is declared and no code is bundled.',
       category: 'Drivers & Installers',
+      author: 'zoicware',
       url: 'https://github.com/zoicware/DynamicMinServices',
       actionLabel: 'Open Official Project',
     ),
     ExternalUrlLauncherTweak(
       id: 'tool_zoicware_zturbo',
-      title: 'zTurbo by zoicware',
+      title: 'zTurbo',
       description:
           'Opens the official parallel optimization script project. No license is declared and no code is bundled.',
       category: 'Drivers & Installers',
+      author: 'zoicware',
       url: 'https://github.com/zoicware/zTurbo',
       actionLabel: 'Open Official Project',
     ),
     ExternalUrlLauncherTweak(
       id: 'tool_zoicware_override_edid',
-      title: 'OverrideEDID by zoicware',
+      title: 'OverrideEDID',
       description:
           'Opens the official project for reviewing EDID extension-block changes related to app startup stutter.',
       category: 'Drivers & Installers',
+      author: 'zoicware',
       url: 'https://github.com/zoicware/OverrideEDID',
       actionLabel: 'Open Official Project',
     ),
     ExternalUrlLauncherTweak(
       id: 'tool_zoicware_hosts_builder',
-      title: 'HostsBuilder by zoicware',
+      title: 'HostsBuilder',
       description:
           'Opens the official custom Windows hosts-file builder project. No license is declared and no code is bundled.',
       category: 'Drivers & Installers',
+      author: 'zoicware',
       url: 'https://github.com/zoicware/HostsBuilder',
       actionLabel: 'Open Official Project',
     ),
     ExternalUrlLauncherTweak(
       id: 'tool_zoicware_remove_apps_policy_editor',
-      title: 'RemoveAppsPolicyEditor by zoicware',
+      title: 'RemoveAppsPolicyEditor',
       description:
           'Opens the official MIT-licensed Windows 11 RemoveDefaultMicrosoftStorePackages policy editor.',
       category: 'Drivers & Installers',
+      author: 'zoicware',
       url: 'https://github.com/zoicware/RemoveAppsPolicyEditor',
       actionLabel: 'Open Official Project',
     ),
     ExternalUrlLauncherTweak(
       id: 'tool_zoicware_tweak_fth',
-      title: 'TweakFTH by zoicware',
+      title: 'TweakFTH',
       description:
           'Opens the official MIT-licensed Fault Tolerant Heap management project.',
       category: 'Drivers & Installers',
+      author: 'zoicware',
       url: 'https://github.com/zoicware/TweakFTH',
       actionLabel: 'Open Official Project',
     ),
@@ -173,6 +191,7 @@ List<SystemTweak> createProgramToolTweaks() {
       description:
           'Opens the official benchmark validation suite download page. The application is not bundled.',
       category: 'Drivers & Installers',
+      author: 'BenchMate',
       url: 'https://benchmate.org/',
       actionLabel: 'Open Official Download',
     ),
@@ -182,6 +201,7 @@ List<SystemTweak> createProgramToolTweaks() {
       description:
           'Opens the publisher download page hosted by TechPowerUp for CPU and memory stress testing.',
       category: 'Drivers & Installers',
+      author: 'Regeneration',
       url: 'https://www.techpowerup.com/download/linpack-xtreme/',
       actionLabel: 'Open Publisher Download',
     ),
@@ -191,6 +211,7 @@ List<SystemTweak> createProgramToolTweaks() {
       description:
           'Opens the official stability and stress-testing download page. The application is not bundled.',
       category: 'Drivers & Installers',
+      author: 'OCBASE',
       url: 'https://www.ocbase.com/download',
       actionLabel: 'Open Official Download',
     ),
@@ -200,6 +221,7 @@ List<SystemTweak> createProgramToolTweaks() {
       description:
           'Opens the official CPU and memory benchmark and stress-test page.',
       category: 'Drivers & Installers',
+      author: 'Alexander J. Yee',
       url: 'https://www.numberworld.org/y-cruncher/',
       actionLabel: 'Open Official Download',
     ),
@@ -209,6 +231,7 @@ List<SystemTweak> createProgramToolTweaks() {
       description:
           'Opens Maxon’s official CPU and GPU benchmark download page.',
       category: 'Drivers & Installers',
+      author: 'Maxon',
       url: 'https://www.maxon.net/en/downloads/cinebench-2024-downloads',
       actionLabel: 'Open Official Download',
     ),
@@ -218,6 +241,7 @@ List<SystemTweak> createProgramToolTweaks() {
       description:
           'Opens PassMark’s official bootable memory-test download page.',
       category: 'Drivers & Installers',
+      author: 'PassMark Software',
       url: 'https://www.memtest86.com/download.htm',
       actionLabel: 'Open Official Download',
     ),
@@ -227,6 +251,7 @@ List<SystemTweak> createProgramToolTweaks() {
       description:
           'Opens the official project for per-core Ryzen stability testing after PBO or Curve Optimizer changes.',
       category: 'Drivers & Installers',
+      author: 'sp00n',
       url: 'https://github.com/sp00n/corecycler',
       actionLabel: 'Open Official Project',
     ),
@@ -242,8 +267,9 @@ List<SystemTweak> createProgramToolTweaks() {
       id: 'tool_import_minimal_services_profile',
       title: 'Import Minimal Services Profile',
       description:
-          'Imports minimal service startup policy from bundled .reg file by Sapphire.',
+          'Imports minimal service startup policy from a bundled .reg file.',
       category: 'Drivers & Installers',
+      author: 'Sapphire',
       registrySegments: <String>['minimal_services.reg'],
       isAggressive: true,
     ),
@@ -251,8 +277,9 @@ List<SystemTweak> createProgramToolTweaks() {
       id: 'tool_import_disable_advanced_services_profile',
       title: 'Import Disable Advanced Services Profile',
       description:
-          'Imports advanced services hard-disable profile from bundled .reg file by Sapphire.',
+          'Imports advanced services hard-disable profile from a bundled .reg file.',
       category: 'Drivers & Installers',
+      author: 'Sapphire',
       registrySegments: <String>['disable_advanced_services.reg'],
       isAggressive: true,
     ),
@@ -262,6 +289,7 @@ List<SystemTweak> createProgramToolTweaks() {
       description:
           'Opens the public Beyond Performance Discord channel that distributes Device Tweaker.',
       category: 'Drivers & Installers',
+      author: 'Beyond Performance',
       url: 'https://discord.gg/eGmDd28m4k',
       actionLabel: 'Open Discord',
       isAggressive: true,
@@ -274,6 +302,7 @@ List<SystemTweak> createProgramToolTweaks() {
       description:
           'Opens the author-provided distribution channel; the mutable script is not bundled.',
       category: 'Drivers & Installers',
+      author: 'Beyond Performance',
       url: 'https://discord.gg/eGmDd28m4k',
       actionLabel: 'Open Author Source',
     ),
@@ -283,6 +312,7 @@ List<SystemTweak> createProgramToolTweaks() {
       description:
           'Opens the MIT-licensed SCEWIN-GUI releases. It edits SCEWIN/AMISCE NVRAM files; it does not include SCEWIN itself.',
       category: 'Advanced Scripts',
+      author: 'eskezje',
       url: 'https://github.com/eskezje/SCEWIN-GUI/releases',
       actionLabel: 'Open Releases',
       isAggressive: true,
@@ -295,6 +325,7 @@ List<SystemTweak> createProgramToolTweaks() {
       description:
           'Opens TechPowerUp NVFlash downloads. ZapTweaks never selects a ROM or runs flash commands.',
       category: 'Advanced Scripts',
+      author: 'NVIDIA',
       url: 'https://www.techpowerup.com/download/nvidia-nvflash/',
       actionLabel: 'Open Download',
       isAggressive: true,
@@ -307,6 +338,7 @@ List<SystemTweak> createProgramToolTweaks() {
       description:
           'Opens TechPowerUp AMDVBFlash downloads. ZapTweaks never selects a ROM or runs flash commands.',
       category: 'Advanced Scripts',
+      author: 'AMD',
       url: 'https://www.techpowerup.com/download/amdvbflash/',
       actionLabel: 'Open Download',
       isAggressive: true,
@@ -319,6 +351,7 @@ List<SystemTweak> createProgramToolTweaks() {
       description:
           'Opens the official Winslopr releases page on GitHub in your browser.',
       category: 'Drivers & Installers',
+      author: 'Belim (Builtbybel)',
       url: 'https://github.com/builtbybel/Winslopr/releases',
       actionLabel: 'Open Releases',
     ),
@@ -435,20 +468,22 @@ List<SystemTweak> createProgramToolTweaks() {
     ),
     ExternalUrlLauncherTweak(
       id: 'tool_windows_11_fix_tweaks_kubaam',
-      title: 'Windows 11 Fix Tweaks by kubaam',
+      title: 'Windows 11 Fix Tweaks',
       description:
           'Opens the pinned upstream project for review. Its all-in-one batch file is not executed by ZapTweaks.',
       category: 'Drivers & Installers',
+      author: 'kubaam',
       url:
           'https://github.com/kubaam/Windows-11-Fix-Tweaks/tree/8da4fe0251f3c46aec6434e38e7a92f06307313a',
       actionLabel: 'Open source',
     ),
     ExternalUrlLauncherTweak(
       id: 'tool_ctt_winutil',
-      title: 'CTT WinUtil by Chris Titus Tech',
+      title: 'CTT WinUtil',
       description:
           'Opens the official WinUtil releases page. ZapTweaks never executes mutable remote PowerShell code.',
       category: 'Drivers & Installers',
+      author: 'Chris Titus Tech',
       url: 'https://github.com/ChrisTitusTech/winutil/releases',
       actionLabel: 'Open releases',
     ),
@@ -475,10 +510,11 @@ List<SystemTweak> createProgramToolTweaks() {
     ),
     ExternalUrlLauncherTweak(
       id: 'tool_winsux_debloat',
-      title: 'WinSux by Fr33hty',
+      title: 'WinSux',
       description:
           'Opens the official WinSux source. ZapTweaks never executes its mutable remote script.',
       category: 'Privacy & Bloatware',
+      author: 'Fr33thy',
       url: 'https://github.com/FR33THYFR33THY/WinSux',
       actionLabel: 'Open Official Source',
     ),
@@ -490,6 +526,7 @@ List<SystemTweak> createProgramToolTweaks() {
       description:
           'Opens the authoritative download or documentation page; the binary is not bundled.',
       category: 'Drivers & Installers',
+      author: 'Coderbag',
       url: 'https://coderbag.com/product/quickcpu',
       actionLabel: 'Open Authoritative Page',
     ),
@@ -499,6 +536,7 @@ List<SystemTweak> createProgramToolTweaks() {
       description:
           'Opens the authoritative download or documentation page; the binary is not bundled.',
       category: 'Drivers & Installers',
+      author: 'MarkC',
       url:
           'https://donewmouseaccel.blogspot.com/2010/03/markc-windows-7-mouse-acceleration-fix.html',
       actionLabel: 'Open Authoritative Page',
@@ -509,6 +547,7 @@ List<SystemTweak> createProgramToolTweaks() {
       description:
           'Opens the authoritative download or documentation page; the binary is not bundled.',
       category: 'Drivers & Installers',
+      author: 'MarkC',
       url:
           'https://donewmouseaccel.blogspot.com/2010/03/markc-windows-7-mouse-acceleration-fix.html',
       actionLabel: 'Open Authoritative Page',
@@ -519,6 +558,7 @@ List<SystemTweak> createProgramToolTweaks() {
       description:
           'Opens the official download page; the binary is not bundled.',
       category: 'Drivers & Installers',
+      author: 'SweetLow',
       url: 'https://github.com/LordOfMice/hidusbf/releases',
       actionLabel: 'Open Official Download',
     ),
@@ -538,6 +578,7 @@ List<SystemTweak> createProgramToolTweaks() {
       description:
           'Opens the authoritative download or documentation page; the binary is not bundled.',
       category: 'Drivers & Installers',
+      author: 'mbk1969',
       url:
           'https://forums.guru3d.com/threads/windows-power-plan-settings-explorer-utility.416058/',
       actionLabel: 'Open Authoritative Page',
@@ -558,6 +599,7 @@ List<SystemTweak> createProgramToolTweaks() {
       description:
           'Opens the official download page; the binary is not bundled.',
       category: 'Drivers & Installers',
+      author: 'TechPowerUp',
       url: 'https://www.techpowerup.com/gpuz/',
       actionLabel: 'Open Official Download',
     ),
@@ -567,6 +609,7 @@ List<SystemTweak> createProgramToolTweaks() {
       description:
           'Opens the official download page; the binary is not bundled.',
       category: 'Drivers & Installers',
+      author: 'Geeks3D',
       url: 'https://geeks3d.com/furmark/',
       actionLabel: 'Open Official Download',
     ),
@@ -576,6 +619,7 @@ List<SystemTweak> createProgramToolTweaks() {
       description:
           'Opens the official download page; the binary is not bundled.',
       category: 'Drivers & Installers',
+      author: 'hellm',
       url:
           'https://www.igorslab.de/en/download-area-new-version-of-morepowertool-mpt-and-final-release-of-redbioseditor-rbe/',
       actionLabel: 'Open Official Download',
@@ -586,6 +630,7 @@ List<SystemTweak> createProgramToolTweaks() {
       description:
           'Opens the official download page; the binary is not bundled.',
       category: 'Drivers & Installers',
+      author: 'hellm',
       url:
           'https://www.igorslab.de/en/download-area-new-version-of-morepowertool-mpt-and-final-release-of-redbioseditor-rbe/',
       actionLabel: 'Open Official Download',
@@ -596,6 +641,7 @@ List<SystemTweak> createProgramToolTweaks() {
       description:
           'Opens the official download page; the binary is not bundled.',
       category: 'Drivers & Installers',
+      author: 'MSI',
       url: 'https://www.msi.com/Landing/afterburner/graphics-cards',
       actionLabel: 'Open Official Download',
     ),
@@ -605,6 +651,7 @@ List<SystemTweak> createProgramToolTweaks() {
       description:
           'Opens the official download page; the binary is not bundled.',
       category: 'Drivers & Installers',
+      author: 'Microsoft Sysinternals',
       url: 'https://learn.microsoft.com/sysinternals/downloads/autoruns',
       actionLabel: 'Open Official Download',
     ),
@@ -614,6 +661,7 @@ List<SystemTweak> createProgramToolTweaks() {
       description:
           'Opens the official download page; the binary is not bundled.',
       category: 'Drivers & Installers',
+      author: 'CPUID',
       url: 'https://www.cpuid.com/softwares/cpu-z.html',
       actionLabel: 'Open Official Download',
     ),
@@ -623,6 +671,7 @@ List<SystemTweak> createProgramToolTweaks() {
       description:
           'Opens the authoritative download or documentation page; the binary is not bundled.',
       category: 'Drivers & Installers',
+      author: 'ToastyX',
       url:
           'https://www.monitortests.com/forum/Thread-Custom-Resolution-Utility-CRU',
       actionLabel: 'Open Authoritative Page',
@@ -633,6 +682,7 @@ List<SystemTweak> createProgramToolTweaks() {
       description:
           'Opens the authoritative download or documentation page; the binary is not bundled.',
       category: 'Drivers & Installers',
+      author: 'SweetLow',
       url: 'https://github.com/LordOfMice/hidusbf/releases',
       actionLabel: 'Open Authoritative Page',
     ),
@@ -642,6 +692,7 @@ List<SystemTweak> createProgramToolTweaks() {
       description:
           'Opens the official download page; the binary is not bundled.',
       category: 'Drivers & Installers',
+      author: 'HWiNFO',
       url: 'https://www.hwinfo.com/download/',
       actionLabel: 'Open Official Download',
     ),
@@ -650,6 +701,7 @@ List<SystemTweak> createProgramToolTweaks() {
       title: 'Download NVIDIA Profile Inspector',
       description: 'Opens the official NVIDIA Profile Inspector releases page.',
       category: 'Drivers & Installers',
+      author: 'Orbmu2k',
       url: 'https://github.com/Orbmu2k/nvidiaProfileInspector/releases',
       actionLabel: 'Open Download',
     ),
@@ -659,6 +711,7 @@ List<SystemTweak> createProgramToolTweaks() {
       description:
           'Opens the authoritative download or documentation page; the binary is not bundled.',
       category: 'Drivers & Installers',
+      author: 'Orbmu2k',
       url: 'https://github.com/Orbmu2k/nvidiaProfileInspector/releases',
       actionLabel: 'Open Authoritative Page',
     ),
@@ -668,6 +721,7 @@ List<SystemTweak> createProgramToolTweaks() {
       description:
           'Opens the authoritative download or documentation page; the binary is not bundled.',
       category: 'Drivers & Installers',
+      author: 'Orbmu2k',
       url: 'https://github.com/Orbmu2k/nvidiaProfileInspector/releases',
       actionLabel: 'Open Authoritative Page',
     ),
@@ -677,6 +731,7 @@ List<SystemTweak> createProgramToolTweaks() {
       description:
           'Opens the official download page; the binary is not bundled.',
       category: 'Drivers & Installers',
+      author: 'Mersenne Research',
       url: 'https://www.mersenne.org/download/',
       actionLabel: 'Open Official Download',
     ),
@@ -686,6 +741,7 @@ List<SystemTweak> createProgramToolTweaks() {
       description:
           'Opens the authoritative download or documentation page; the binary is not bundled.',
       category: 'Drivers & Installers',
+      author: 'Serj',
       url:
           'https://www.overclock.net/threads/memory-testing-with-testmem5-tm5-with-custom-configs.1751608/',
       actionLabel: 'Open Authoritative Page',
@@ -698,6 +754,7 @@ List<SystemTweak> createProgramToolTweaks() {
       description:
           'Opens the official download page; the binary is not bundled.',
       category: 'Drivers & Installers',
+      author: 'Wagnardsoft',
       url: 'https://www.wagnardsoft.com/wtools',
       actionLabel: 'Open Official Download',
     ),
@@ -707,6 +764,7 @@ List<SystemTweak> createProgramToolTweaks() {
       description:
           'Opens the official Wagnardsoft page for downloads and updates.',
       category: 'Drivers & Installers',
+      author: 'Wagnardsoft',
       url: 'https://www.wagnardsoft.com/wtools',
       actionLabel: 'Open Download',
     ),
@@ -716,6 +774,7 @@ List<SystemTweak> createProgramToolTweaks() {
       description:
           'Opens the official download page; the binary is not bundled.',
       category: 'Drivers & Installers',
+      author: 'Microsoft Sysinternals',
       url: 'https://learn.microsoft.com/sysinternals/downloads/rammap',
       actionLabel: 'Open Official Download',
     ),
@@ -725,6 +784,7 @@ List<SystemTweak> createProgramToolTweaks() {
       description:
           'Opens the authoritative download or documentation page; the binary is not bundled.',
       category: 'Drivers & Installers',
+      author: 'Uwe Sieber',
       url: 'https://www.uwe-sieber.de/misc_tools_e.html',
       actionLabel: 'Open Authoritative Page',
     ),
@@ -734,6 +794,7 @@ List<SystemTweak> createProgramToolTweaks() {
       description:
           'Opens the authoritative download or documentation page; the binary is not bundled.',
       category: 'Drivers & Installers',
+      author: 'lostindark',
       url: 'https://github.com/lostindark/DriverStoreExplorer/releases',
       actionLabel: 'Open Authoritative Page',
     ),
@@ -743,6 +804,7 @@ List<SystemTweak> createProgramToolTweaks() {
       description:
           'Opens the authoritative download or documentation page; the binary is not bundled.',
       category: 'Drivers & Installers',
+      author: 'Chuyu Team',
       url: 'https://github.com/Chuyu-Team/Dism-Multi-language/releases',
       actionLabel: 'Open Authoritative Page',
     ),
@@ -752,6 +814,7 @@ List<SystemTweak> createProgramToolTweaks() {
       description:
           'Opens the authoritative download or documentation page; the binary is not bundled.',
       category: 'Drivers & Installers',
+      author: 'Belim (Builtbybel)',
       url: 'https://github.com/builtbybel/CleanmgrPlus/releases',
       actionLabel: 'Open Authoritative Page',
     ),
@@ -761,6 +824,7 @@ List<SystemTweak> createProgramToolTweaks() {
       description:
           'Opens the official download page; the binary is not bundled.',
       category: 'Drivers & Installers',
+      author: 'YuukiFST',
       url: 'https://github.com/YuukiFST/GPU-Dword-Manager/releases',
       actionLabel: 'Open Official Download',
     ),
@@ -770,6 +834,7 @@ List<SystemTweak> createProgramToolTweaks() {
       description:
           'Opens the authoritative download or documentation page; the binary is not bundled.',
       category: 'Drivers & Installers',
+      author: 'mbk1969',
       url:
           'https://forums.guru3d.com/threads/windows-line-based-vs-message-signaled-based-interrupts-msi-tool.378044/',
       actionLabel: 'Open Authoritative Page',
@@ -780,6 +845,7 @@ List<SystemTweak> createProgramToolTweaks() {
       description:
           'Opens the authoritative download or documentation page; the binary is not bundled.',
       category: 'Drivers & Installers',
+      author: 'Razer',
       url: 'https://www.razer.com/technology/razer-polling-rate-tester',
       actionLabel: 'Open Authoritative Page',
     ),
@@ -789,6 +855,7 @@ List<SystemTweak> createProgramToolTweaks() {
       description:
           'Opens the authoritative download or documentation page; the binary is not bundled.',
       category: 'Drivers & Installers',
+      author: 'GSDragoon',
       url: 'https://github.com/GSDragoon/RadeonTuner/releases',
       actionLabel: 'Open Authoritative Page',
     ),
@@ -798,6 +865,7 @@ List<SystemTweak> createProgramToolTweaks() {
       description:
           'Opens the authoritative download or documentation page; the binary is not bundled.',
       category: 'Drivers & Installers',
+      author: 'SpeedGuide.net',
       url: 'https://www.speedguide.net/downloads.php',
       actionLabel: 'Open Authoritative Page',
     ),
@@ -807,6 +875,7 @@ List<SystemTweak> createProgramToolTweaks() {
       description:
           'Opens the authoritative download or documentation page; the binary is not bundled.',
       category: 'Drivers & Installers',
+      author: 'thebookisclosed',
       url: 'https://github.com/thebookisclosed/ViVe/releases',
       actionLabel: 'Open Authoritative Page',
     ),
@@ -816,6 +885,7 @@ List<SystemTweak> createProgramToolTweaks() {
       description:
           'Opens the official download page; the binary is not bundled.',
       category: 'Drivers & Installers',
+      author: 'StarTrinity',
       url:
           'https://startrinity.com/InternetQuality/ContinuousBandwidthTester.aspx',
       actionLabel: 'Open Official Download',
@@ -826,6 +896,7 @@ List<SystemTweak> createProgramToolTweaks() {
       description:
           'Opens the official download page; the binary is not bundled.',
       category: 'Drivers & Installers',
+      author: 'StarTrinity',
       url:
           'https://startrinity.com/InternetQuality/ContinuousBandwidthTester.aspx',
       actionLabel: 'Open Official Download',
@@ -836,6 +907,7 @@ List<SystemTweak> createProgramToolTweaks() {
       description:
           'Opens the official download page; the helper script is not bundled.',
       category: 'Drivers & Installers',
+      author: 'StarTrinity',
       url:
           'https://startrinity.com/InternetQuality/ContinuousBandwidthTester.aspx',
       actionLabel: 'Open Official Download',
@@ -847,6 +919,7 @@ List<SystemTweak> createProgramToolTweaks() {
       description:
           'Opens the authoritative download or documentation page; the binary is not bundled.',
       category: 'Drivers & Installers',
+      author: 'Oblique Audio',
       url: 'https://oblique-audio.com/rtl-utility.php',
       actionLabel: 'Open Authoritative Page',
     ),

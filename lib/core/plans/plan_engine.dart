@@ -6,7 +6,11 @@ import '../persistence/operation_store.dart';
 import 'operation_plan.dart';
 
 abstract class OperationExecutor {
-  Future<void> apply(OperationDefinition definition, OperationRequest request);
+  Future<void> apply(
+    OperationDefinition definition,
+    OperationRequest request,
+    OperationSnapshot snapshot,
+  );
   Future<void> rollback(
     OperationDefinition definition,
     OperationRequest request,
@@ -21,7 +25,16 @@ class DirectOperationExecutor implements OperationExecutor {
   Future<void> apply(
     OperationDefinition definition,
     OperationRequest request,
-  ) => definition.apply(request);
+    OperationSnapshot snapshot,
+  ) {
+    if (definition is SnapshotApplyOperation) {
+      return (definition as SnapshotApplyOperation).applySnapshot(
+        request,
+        snapshot,
+      );
+    }
+    return definition.apply(request);
+  }
 
   @override
   Future<void> rollback(
@@ -38,6 +51,7 @@ class RejectingElevatedExecutor implements OperationExecutor {
   Future<void> apply(
     OperationDefinition definition,
     OperationRequest request,
+    OperationSnapshot snapshot,
   ) => throw StateError('No elevated helper is connected.');
 
   @override
@@ -117,6 +131,27 @@ class PlanEngine {
       return plan;
     }
 
+    final journaledRollback = plan.items.any(
+      (item) =>
+          registry.resolve(item.operationId) is JournaledRollbackOperation,
+    );
+    if (journaledRollback &&
+        (store == null ||
+            plan.items.any((item) => item.status == PlanItemStatus.skipped))) {
+      throw StateError(
+        'This plan requires a durable journal and every included operation to be supported.',
+      );
+    }
+    if (plan.status != PlanStatus.planned ||
+        plan.items.any(
+          (item) =>
+              item.status != PlanItemStatus.planned &&
+              item.status != PlanItemStatus.skipped,
+        )) {
+      throw StateError(
+        'An executed plan cannot be applied again; use journal recovery.',
+      );
+    }
     plan.status = PlanStatus.running;
     store?.save(plan);
     try {
@@ -126,6 +161,12 @@ class PlanEngine {
         final definition = registry.resolve(item.operationId);
         try {
           item.snapshot = await definition.captureSnapshot(item.request);
+          if (definition is JournaledRollbackOperation &&
+              !item.snapshot!.expectedAfterRollback.sameValue(item.before)) {
+            throw StateError(
+              'The configured state changed after plan preview.',
+            );
+          }
           item.status = PlanItemStatus.snapshotted;
         } catch (error) {
           item
@@ -167,15 +208,24 @@ class PlanEngine {
         }
 
         item.status = PlanItemStatus.applying;
+        if (definition is JournaledRollbackOperation) {
+          // Persist the attempted value before IPC/write so crash recovery is conflict-aware.
+          item.written = OperationState(
+            OperationStateKind.configured,
+            value: item.request.desiredValue,
+          );
+        }
         store?.save(plan);
         try {
           final executor =
               definition.privilege == OperationPrivilege.administrator
               ? elevatedExecutor
               : userExecutor;
-          await executor.apply(definition, item.request);
+          await executor.apply(definition, item.request, item.snapshot!);
           final observed = await definition.verify(item.request);
-          item.written = observed;
+          if (definition is! JournaledRollbackOperation) {
+            item.written = observed;
+          }
           final valueMatches = _valuesEqual(
             observed.value,
             item.request.desiredValue,
@@ -220,6 +270,10 @@ class PlanEngine {
       plan.status = hasFailure
           ? (mayNeedRollback ? PlanStatus.rollbackRequired : PlanStatus.failed)
           : PlanStatus.completed;
+      store?.save(plan);
+      if (hasFailure && mayNeedRollback && journaledRollback) {
+        await rollback(plan);
+      }
     } catch (error) {
       final current = plan.items.where(
         (item) => item.status == PlanItemStatus.applying,
@@ -293,27 +347,33 @@ class PlanEngine {
       (item) =>
           item.status == PlanItemStatus.verified ||
           item.status == PlanItemStatus.pendingRestart ||
-          item.status == PlanItemStatus.failed,
+          item.status == PlanItemStatus.failed ||
+          item.status == PlanItemStatus.applying ||
+          item.status == PlanItemStatus.rollbackConflict,
     )) {
       final definition = registry.resolve(item.operationId);
       final snapshot = item.snapshot;
-      if (snapshot == null ||
+      if ((definition is JournaledRollbackOperation && item.written == null) ||
+          snapshot == null ||
           definition.rollbackCapability == RollbackCapability.none ||
           definition.rollbackCapability == RollbackCapability.manual) {
         continue;
       }
-      final current = await definition.inspect(item.request);
-      if (item.written != null &&
-          !current.sameValue(item.written!) &&
-          !overwriteConflicts) {
-        item.status = PlanItemStatus.rollbackConflict;
-        conflict = true;
-        continue;
-      }
-      final executor = definition.privilege == OperationPrivilege.administrator
-          ? elevatedExecutor
-          : userExecutor;
       try {
+        final current = await definition.inspect(item.request);
+        if (item.written != null &&
+            !current.sameValue(item.written!) &&
+            !(definition is JournaledRollbackOperation &&
+                current.sameValue(snapshot.expectedAfterRollback)) &&
+            !overwriteConflicts) {
+          throw StateError(
+            'Rollback conflict: current state differs from the attempted write.',
+          );
+        }
+        final executor =
+            definition.privilege == OperationPrivilege.administrator
+            ? elevatedExecutor
+            : userExecutor;
         await executor.rollback(definition, item.request, snapshot);
         final restored = await definition.inspect(item.request);
         if (!restored.sameValue(snapshot.expectedAfterRollback)) {
@@ -323,9 +383,13 @@ class PlanEngine {
       } catch (error) {
         item
           ..status = PlanItemStatus.rollbackConflict
-          ..error = error.toString();
+          ..error = [
+            if (item.error != null) item.error!,
+            'Rollback: $error',
+          ].join('\n');
         conflict = true;
       }
+      store?.save(plan);
     }
     plan.status = conflict
         ? PlanStatus.rollbackConflict

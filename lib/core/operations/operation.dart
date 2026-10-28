@@ -119,6 +119,17 @@ class OperationContext {
   final bool hasBattery;
 }
 
+abstract class SnapshotApplyOperation {
+  /// Applies only the immutable data captured in the plan snapshot.
+  Future<void> applySnapshot(
+    OperationRequest request,
+    OperationSnapshot snapshot,
+  );
+}
+
+/// Requires a durable plan snapshot and recovery of every attempted write.
+abstract class JournaledRollbackOperation {}
+
 abstract class OperationDefinition {
   String get id;
   int get version;

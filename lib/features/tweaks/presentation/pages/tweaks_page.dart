@@ -1,5 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 
+import '../../../../app/widgets/ui_kit.dart';
 import '../../../../core/models/tweak_descriptor.dart';
 import '../../../../core/services/tweak_text_localizer.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -233,6 +234,7 @@ class _TweaksPageState extends State<TweaksPage> {
           title: text.title,
           description: text.description,
           details: text.details,
+          author: scriptTweak.author,
           value: scriptTweak.isApplied,
           enabled: available,
           isBusy: busy,
@@ -267,6 +269,10 @@ class _TweaksPageState extends State<TweaksPage> {
                     text.title,
                     style: FluentTheme.of(context).typography.bodyStrong,
                   ),
+                  if (scriptTweak.author != null) ...<Widget>[
+                    const SizedBox(height: 4),
+                    AttributionBadge(scriptTweak.author!),
+                  ],
                   const SizedBox(height: 2),
                   if (widget.controller.wasScriptExecuted(descriptor.id))
                     Row(
@@ -323,7 +329,7 @@ class _TweaksPageState extends State<TweaksPage> {
                       child: ProgressRing(strokeWidth: 2),
                     ),
                   ),
-                FilledButton(
+                Button(
                   onPressed:
                       busy ||
                           !available ||

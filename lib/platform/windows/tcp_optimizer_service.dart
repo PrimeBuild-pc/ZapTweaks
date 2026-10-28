@@ -10,6 +10,10 @@ class TcpSettingState {
     required this.value,
     required this.supportedValues,
     required this.writable,
+    this.configuredValue,
+    this.effectiveValue,
+    this.configurationStore,
+    this.inheritance = 'unknown',
   });
 
   final String target;
@@ -18,6 +22,35 @@ class TcpSettingState {
   final String value;
   final List<String> supportedValues;
   final bool writable;
+  final String? configuredValue;
+  final String? effectiveValue;
+  final String? configurationStore;
+  final String inheritance;
+
+  // These are native configuration objects, not effective per-connection/NDIS state.
+  bool get exactlyRestorable =>
+      writable &&
+      configuredValue != null &&
+      configuredValue == value &&
+      supportedValues.contains(configuredValue) &&
+      !const {
+        'Default',
+        'NotConfigured',
+        'NotChanged',
+      }.contains(configuredValue) &&
+      inheritance == 'none' &&
+      (effectiveValue == null || effectiveValue == configuredValue) &&
+      configurationStore ==
+          (target.startsWith('global:')
+              ? 'NetOffloadGlobalSetting'
+              : 'NetTCPSetting');
+
+  Map<String, Object?> get original => <String, Object?>{
+    'configured': configuredValue,
+    'effective': effectiveValue,
+    'inheritance': inheritance,
+    'store': configurationStore,
+  };
 
   factory TcpSettingState.fromJson(Map<String, dynamic> json) =>
       TcpSettingState(
@@ -27,13 +60,21 @@ class TcpSettingState {
         value: json['value']! as String,
         supportedValues: (json['supportedValues']! as List).cast<String>(),
         writable: json['writable']! as bool,
+        configuredValue: json['configuredValue'] as String?,
+        effectiveValue: json['effectiveValue'] as String?,
+        configurationStore: json['configurationStore'] as String?,
+        inheritance: json['inheritance'] as String? ?? 'unknown',
       );
 }
 
 abstract interface class TcpOptimizerStore {
   Future<List<TcpSettingState>> inventory();
   Future<TcpSettingState> inspect(String target);
-  Future<void> write(String target, String value);
+  Future<void> write(
+    String target,
+    String value, {
+    required TcpSettingState expected,
+  });
 }
 
 class WindowsTcpOptimizerService implements TcpOptimizerStore {
@@ -47,6 +88,7 @@ class WindowsTcpOptimizerService implements TcpOptimizerStore {
     'autotuning': 'AutoTuningLevelLocal',
     'heuristics': 'ScalingHeuristics',
     'ecn': 'EcnCapability',
+    'timestamps': 'Timestamps',
     'congestion': 'CongestionProvider',
   };
   static const Map<String, String> _globalProperties = <String, String>{
@@ -60,6 +102,7 @@ class WindowsTcpOptimizerService implements TcpOptimizerStore {
 $tcpCommand=Get-Command Set-NetTCPSetting -ErrorAction Stop
 $offloadCommand=Get-Command Set-NetOffloadGlobalSetting -ErrorAction Stop
 function EnumNames($command,$parameter) {
+  if(-not $command.Parameters.ContainsKey($parameter)) { return @() }
   $type=$command.Parameters[$parameter].ParameterType
   if(-not $type.IsEnum) { return @() }
   return @($type.GetEnumNames() | ForEach-Object { [string]$_ })
@@ -68,6 +111,7 @@ $fields=@(
   @{key='autotuning';property='AutoTuningLevelLocal'},
   @{key='heuristics';property='ScalingHeuristics'},
   @{key='ecn';property='EcnCapability'},
+  @{key='timestamps';property='Timestamps'},
   @{key='congestion';property='CongestionProvider'}
 )
 $rows=@()
@@ -80,12 +124,16 @@ foreach($setting in @(Get-NetTCPSetting -ErrorAction Stop)) {
     if($values.Count -gt 0 -and -not [string]::IsNullOrWhiteSpace($value)) {
       $rows += [ordered]@{
         target="template:${name}:$($field.key)";template=$name;field=$field.key
-        value=$value;supportedValues=$values;writable=$name.EndsWith('Custom',[StringComparison]::Ordinal)
+        value=$value;supportedValues=$values;writable=($name.EndsWith('Custom',[StringComparison]::Ordinal) -and $field.key -ne 'congestion')
+        configuredValue=$value;effectiveValue=$(if($field.key -eq 'autotuning' -and [string]$setting.AutoTuningLevelEffective -eq 'GroupPolicy') { [string]$setting.AutoTuningLevelGroupPolicy } else { $null });configurationStore='NetTCPSetting'
+        inheritance=$(if($field.key -eq 'autotuning' -and [string]$setting.AutoTuningLevelEffective -ne 'Local') {'policyOrUnknown'} elseif($value -in @('Default','NotConfigured','NotChanged')) {'defaultOrInherited'} else {'none'})
       }
     }
   }
 }
-$global=Get-NetOffloadGlobalSetting -ErrorAction Stop
+$globalRows=@(Get-NetOffloadGlobalSetting -ErrorAction Stop)
+if($globalRows.Count -ne 1) { throw 'Ambiguous global TCP configuration.' }
+$global=$globalRows[0]
 foreach($field in @(
   @{key='rsc';property='ReceiveSegmentCoalescing'},
   @{key='rss';property='ReceiveSideScaling'}
@@ -96,6 +144,7 @@ foreach($field in @(
     $rows += [ordered]@{
       target="global:$($field.key)";template='Global';field=$field.key
       value=$value;supportedValues=$values;writable=$true
+      configuredValue=$value;effectiveValue=$null;configurationStore='NetOffloadGlobalSetting';inheritance='none'
     }
   }
 }
@@ -121,13 +170,21 @@ foreach($field in @(
   }
 
   @override
-  Future<void> write(String target, String value) async {
+  Future<void> write(
+    String target,
+    String value, {
+    required TcpSettingState expected,
+  }) async {
     final parts = _parseTarget(target);
-    final current = await inspect(target);
-    if (!current.writable || !current.supportedValues.contains(value)) {
+    final current = expected;
+    if (current.target != target ||
+        !current.exactlyRestorable ||
+        !current.supportedValues.contains(value) ||
+        const {'Default', 'NotConfigured', 'NotChanged'}.contains(value)) {
       throw StateError('Unsupported TCP setting value.');
     }
     final encodedValue = base64Encode(utf8.encode(value));
+    final encodedBefore = base64Encode(utf8.encode(current.configuredValue!));
     if (parts.first == 'global') {
       final property = _globalProperties[parts[1]]!;
       final parameter = switch (property) {
@@ -137,6 +194,9 @@ foreach($field in @(
       };
       await _processRunner.runPowerShellForOutput('''
 \$v=[Text.Encoding]::UTF8.GetString([Convert]::FromBase64String('$encodedValue'))
+\$before=[Text.Encoding]::UTF8.GetString([Convert]::FromBase64String('$encodedBefore'))
+\$live=@(Get-NetOffloadGlobalSetting -ErrorAction Stop)
+if(\$live.Count -ne 1 -or [string]\$live[0].$property -cne \$before) { throw 'TCP configured state drifted before write.' }
 Set-NetOffloadGlobalSetting $parameter \$v -ErrorAction Stop
 'OK'
 ''');
@@ -156,10 +216,16 @@ Set-NetOffloadGlobalSetting $parameter \$v -ErrorAction Stop
     await _processRunner.runPowerShellForOutput('''
 \$n=[Text.Encoding]::UTF8.GetString([Convert]::FromBase64String('$encodedTemplate'))
 \$v=[Text.Encoding]::UTF8.GetString([Convert]::FromBase64String('$encodedValue'))
+\$before=[Text.Encoding]::UTF8.GetString([Convert]::FromBase64String('$encodedBefore'))
+\$live=@(Get-NetTCPSetting -SettingName \$n -ErrorAction Stop)
+if(\$live.Count -ne 1 -or [string]\$live[0].$property -cne \$before) { throw 'TCP configured state drifted before write.' }
+${property == 'AutoTuningLevelLocal' ? "if([string]\$live[0].AutoTuningLevelEffective -cne 'Local') { throw 'TCP autotuning became policy-managed.' }" : ''}
 Set-NetTCPSetting -SettingName \$n $parameter \$v -ErrorAction Stop
 'OK'
 ''');
   }
+
+  static List<String> validateTarget(String target) => _parseTarget(target);
 
   static List<String> _parseTarget(String target) {
     final parts = target.split(':');

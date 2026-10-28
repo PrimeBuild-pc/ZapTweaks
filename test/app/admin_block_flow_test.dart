@@ -5,6 +5,8 @@ import 'package:script_utility/core/models/hardware_profile.dart';
 import 'package:script_utility/core/models/restore_point_result.dart';
 import 'package:script_utility/core/models/tweak_descriptor.dart';
 import 'package:script_utility/core/models/update_info.dart';
+import 'package:script_utility/core/operations/operation.dart';
+import 'package:script_utility/core/plans/operation_plan.dart';
 import 'package:script_utility/core/services/hardware_detection_service.dart';
 import 'package:script_utility/core/services/metrics_sampling_service.dart';
 import 'package:script_utility/core/services/permission_service.dart';
@@ -115,5 +117,60 @@ void main() {
 
     expect(controller.isAdmin, isFalse);
     expect(controller.isLoading, isFalse);
+
+    final item = PlanItem(
+      operationId: 'sparkle.clock.short_time',
+      request: const OperationRequest(
+        operationId: 'sparkle.clock.short_time',
+        desiredValue: 'HH:mm',
+      ),
+      before: const OperationState(OperationStateKind.absent),
+      written: const OperationState(
+        OperationStateKind.configured,
+        value: 'HH:mm',
+      ),
+      status: PlanItemStatus.verified,
+      snapshot: const OperationSnapshot(
+        type: 'registryValue',
+        data: {},
+        expectedAfterRollback: OperationState(OperationStateKind.absent),
+      ),
+    );
+    final plan = OperationPlan(
+      id: 'manual',
+      createdAt: DateTime(2026),
+      user: 'test',
+      appVersion: 'test',
+      windowsBuild: 26100,
+      items: [item],
+      status: PlanStatus.completed,
+    );
+    expect(controller.canRestoreManualPlan(plan), isTrue);
+    item.status = PlanItemStatus.failed;
+    expect(controller.canRestoreManualPlan(plan), isFalse);
+    item.status = PlanItemStatus.verified;
+    plan.status = PlanStatus.interrupted;
+    expect(controller.canRestoreManualPlan(plan), isFalse);
+    plan.status = PlanStatus.completed;
+    item.snapshot = null;
+    expect(controller.canRestoreManualPlan(plan), isFalse);
+    expect(
+      controller.canRestoreManualPlan(
+        OperationPlan(
+          id: 'empty',
+          createdAt: DateTime(2026),
+          user: 'test',
+          appVersion: 'test',
+          windowsBuild: 26100,
+          items: [],
+          status: PlanStatus.completed,
+        ),
+      ),
+      isFalse,
+    );
+    await expectLater(
+      controller.restoreManualPlan('missing'),
+      throwsStateError,
+    );
   });
 }

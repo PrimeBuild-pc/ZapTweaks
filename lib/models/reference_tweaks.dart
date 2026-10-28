@@ -1,6 +1,12 @@
+import '../core/registry_manager.dart';
 import '../core/services/process_runner.dart';
 import '../features/apps/domain/microsoft_restore_catalog.dart';
+import '../platform/windows/service_control_manager.dart';
 import 'system_tweak.dart';
+
+const _graphicsDrivers =
+    r'HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers';
+const _systemPolicies = r'HKLM\SOFTWARE\Policies\Microsoft\Windows\System';
 
 /// Missing, individually controllable Windows options found during the
 /// reference-feature audit. Existing bundled profiles remain the source for
@@ -18,8 +24,12 @@ List<SystemTweak> createReferenceTweaks() => <SystemTweak>[
 Set-ItemProperty -Path 'HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient' -Name EnableMulticast -Type DWord -Value 0''',
     revertScript:
         r'''Remove-ItemProperty -Path 'HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient' -Name EnableMulticast -ErrorAction SilentlyContinue''',
-    checkScript:
-        r'''((Get-ItemProperty -Path 'HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient' -Name EnableMulticast -ErrorAction SilentlyContinue).EnableMulticast -eq 0).ToString().ToLower()''',
+    check: () async =>
+        await RegistryManager.readDword(
+          r'HKLM\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient',
+          'EnableMulticast',
+        ) ==
+        0,
   ),
   PowerShellStateTweak(
     id: 'network_delivery_optimization_off',
@@ -32,8 +42,12 @@ Set-ItemProperty -Path 'HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient' 
 Set-ItemProperty -Path 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization' -Name DODownloadMode -Type DWord -Value 0''',
     revertScript:
         r'''Remove-ItemProperty -Path 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization' -Name DODownloadMode -ErrorAction SilentlyContinue''',
-    checkScript:
-        r'''((Get-ItemProperty -Path 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization' -Name DODownloadMode -ErrorAction SilentlyContinue).DODownloadMode -eq 0).ToString().ToLower()''',
+    check: () async =>
+        await RegistryManager.readDword(
+          r'HKLM\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization',
+          'DODownloadMode',
+        ) ==
+        0,
   ),
   PowerShellStateTweak(
     id: 'network_fast_udp_datagram_send',
@@ -46,8 +60,12 @@ Set-ItemProperty -Path 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimi
 Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\Afd\Parameters' -Name FastSendDatagramThreshold -Type DWord -Value 65536''',
     revertScript:
         r'''Remove-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\Afd\Parameters' -Name FastSendDatagramThreshold -ErrorAction SilentlyContinue''',
-    checkScript:
-        r'''((Get-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\Afd\Parameters' -Name FastSendDatagramThreshold -ErrorAction SilentlyContinue).FastSendDatagramThreshold -eq 65536).ToString().ToLower()''',
+    check: () async =>
+        await RegistryManager.readDword(
+          r'HKLM\SYSTEM\CurrentControlSet\Services\Afd\Parameters',
+          'FastSendDatagramThreshold',
+        ) ==
+        65536,
   ),
   PowerShellStateTweak(
     id: 'gaming_variable_refresh_rate_on',
@@ -64,8 +82,12 @@ Set-ItemProperty -Path $path -Name DirectXUserGlobalSettings -Type String -Value
         r'''$path = 'HKCU:\Software\Microsoft\DirectX\UserGpuPreferences'
 $current = [string](Get-ItemProperty -Path $path -Name DirectXUserGlobalSettings -ErrorAction SilentlyContinue).DirectXUserGlobalSettings
 Set-ItemProperty -Path $path -Name DirectXUserGlobalSettings -Type String -Value ([regex]::Replace($current, 'VRROptimizeEnable=\d+;', 'VRROptimizeEnable=0;'))''',
-    checkScript:
-        r'''([string](Get-ItemProperty -Path 'HKCU:\Software\Microsoft\DirectX\UserGpuPreferences' -Name DirectXUserGlobalSettings -ErrorAction SilentlyContinue).DirectXUserGlobalSettings).Contains('VRROptimizeEnable=1;').ToString().ToLower()''',
+    check: () async =>
+        (await RegistryManager.readString(
+          r'HKCU\Software\Microsoft\DirectX\UserGpuPreferences',
+          'DirectXUserGlobalSettings',
+        ))?.contains('VRROptimizeEnable=1;') ??
+        false,
   ),
   PowerShellStateTweak(
     id: 'gaming_extended_gpu_timeout',
@@ -81,9 +103,9 @@ Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\GraphicsDrivers' 
     revertScript:
         r'''Remove-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\GraphicsDrivers' -Name TdrDelay -ErrorAction SilentlyContinue
 Remove-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\GraphicsDrivers' -Name TdrDdiDelay -ErrorAction SilentlyContinue''',
-    checkScript:
-        r'''$v = Get-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\GraphicsDrivers' -ErrorAction SilentlyContinue
-($v.TdrDelay -eq 10 -and $v.TdrDdiDelay -eq 20).ToString().ToLower()''',
+    check: () async =>
+        await RegistryManager.readDword(_graphicsDrivers, 'TdrDelay') == 10 &&
+        await RegistryManager.readDword(_graphicsDrivers, 'TdrDdiDelay') == 20,
   ),
   PowerShellStateTweak(
     id: 'ui_sticky_keys_shortcut_off',
@@ -95,8 +117,12 @@ Remove-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\GraphicsDriver
         r'''Set-ItemProperty -Path 'HKCU:\Control Panel\Accessibility\StickyKeys' -Name Flags -Type String -Value '506' ''',
     revertScript:
         r'''Set-ItemProperty -Path 'HKCU:\Control Panel\Accessibility\StickyKeys' -Name Flags -Type String -Value '510' ''',
-    checkScript:
-        r'''((Get-ItemProperty -Path 'HKCU:\Control Panel\Accessibility\StickyKeys' -Name Flags -ErrorAction SilentlyContinue).Flags -eq '506').ToString().ToLower()''',
+    check: () async =>
+        await RegistryManager.readString(
+          r'HKCU\Control Panel\Accessibility\StickyKeys',
+          'Flags',
+        ) ==
+        '506',
   ),
   PowerShellStateTweak(
     id: 'windows_ntfs_last_access_updates_off',
@@ -121,8 +147,12 @@ Remove-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\GraphicsDriver
 Set-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Maintenance' -Name MaintenanceDisabled -Type DWord -Value 1''',
     revertScript:
         r'''Remove-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Maintenance' -Name MaintenanceDisabled -ErrorAction SilentlyContinue''',
-    checkScript:
-        r'''((Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Maintenance' -Name MaintenanceDisabled -ErrorAction SilentlyContinue).MaintenanceDisabled -eq 1).ToString().ToLower()''',
+    check: () async =>
+        await RegistryManager.readDword(
+          r'HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Maintenance',
+          'MaintenanceDisabled',
+        ) ==
+        1,
   ),
   PowerShellStateTweak(
     id: 'windows_auto_reboot_after_bsod_off',
@@ -134,8 +164,12 @@ Set-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Sched
         r'''Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\CrashControl' -Name AutoReboot -Type DWord -Value 0''',
     revertScript:
         r'''Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\CrashControl' -Name AutoReboot -Type DWord -Value 1''',
-    checkScript:
-        r'''((Get-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\CrashControl' -Name AutoReboot -ErrorAction SilentlyContinue).AutoReboot -eq 0).ToString().ToLower()''',
+    check: () async =>
+        await RegistryManager.readDword(
+          r'HKLM\SYSTEM\CurrentControlSet\Control\CrashControl',
+          'AutoReboot',
+        ) ==
+        0,
   ),
   PowerShellStateTweak(
     id: 'checks_vbs_off',
@@ -149,8 +183,12 @@ Set-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Sched
 Set-ItemProperty -Path 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard' -Name EnableVirtualizationBasedSecurity -Type DWord -Value 0''',
     revertScript:
         r'''Remove-ItemProperty -Path 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard' -Name EnableVirtualizationBasedSecurity -ErrorAction SilentlyContinue''',
-    checkScript:
-        r'''((Get-ItemProperty -Path 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard' -Name EnableVirtualizationBasedSecurity -ErrorAction SilentlyContinue).EnableVirtualizationBasedSecurity -eq 0).ToString().ToLower()''',
+    check: () async =>
+        await RegistryManager.readDword(
+          r'HKLM\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard',
+          'EnableVirtualizationBasedSecurity',
+        ) ==
+        0,
   ),
   PowerShellStateTweak(
     id: 'checks_smart_screen_off',
@@ -164,8 +202,9 @@ Set-ItemProperty -Path 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard' -
 Set-ItemProperty -Path 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\System' -Name EnableSmartScreen -Type DWord -Value 0''',
     revertScript:
         r'''Remove-ItemProperty -Path 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\System' -Name EnableSmartScreen -ErrorAction SilentlyContinue''',
-    checkScript:
-        r'''((Get-ItemProperty -Path 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\System' -Name EnableSmartScreen -ErrorAction SilentlyContinue).EnableSmartScreen -eq 0).ToString().ToLower()''',
+    check: () async =>
+        await RegistryManager.readDword(_systemPolicies, 'EnableSmartScreen') ==
+        0,
   ),
   PowerShellStateTweak(
     id: 'toggle_printing_off',
@@ -176,8 +215,7 @@ Set-ItemProperty -Path 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\System' -Name 
     applyScript:
         r'''Set-Service -Name Spooler -StartupType Disabled; Stop-Service -Name Spooler -Force -ErrorAction SilentlyContinue''',
     revertScript: r'''Set-Service -Name Spooler -StartupType Manual''',
-    checkScript:
-        r'''((Get-CimInstance Win32_Service -Filter "Name='Spooler'" -ErrorAction SilentlyContinue).StartMode -eq 'Disabled').ToString().ToLower()''',
+    check: () async => serviceDisabled('Spooler'),
   ),
   PowerShellStateTweak(
     id: 'toggle_location_off',
@@ -190,8 +228,12 @@ Set-ItemProperty -Path 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\System' -Name 
 Set-ItemProperty -Path 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors' -Name DisableLocation -Type DWord -Value 1''',
     revertScript:
         r'''Remove-ItemProperty -Path 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors' -Name DisableLocation -ErrorAction SilentlyContinue''',
-    checkScript:
-        r'''((Get-ItemProperty -Path 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors' -Name DisableLocation -ErrorAction SilentlyContinue).DisableLocation -eq 1).ToString().ToLower()''',
+    check: () async =>
+        await RegistryManager.readDword(
+          r'HKLM\SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors',
+          'DisableLocation',
+        ) ==
+        1,
   ),
   PowerShellStateTweak(
     id: 'toggle_automatic_driver_updates_off',
@@ -205,8 +247,12 @@ Set-ItemProperty -Path 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\LocationAndSen
 Set-ItemProperty -Path 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate' -Name ExcludeWUDriversInQualityUpdate -Type DWord -Value 1''',
     revertScript:
         r'''Remove-ItemProperty -Path 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate' -Name ExcludeWUDriversInQualityUpdate -ErrorAction SilentlyContinue''',
-    checkScript:
-        r'''((Get-ItemProperty -Path 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate' -Name ExcludeWUDriversInQualityUpdate -ErrorAction SilentlyContinue).ExcludeWUDriversInQualityUpdate -eq 1).ToString().ToLower()''',
+    check: () async =>
+        await RegistryManager.readDword(
+          r'HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate',
+          'ExcludeWUDriversInQualityUpdate',
+        ) ==
+        1,
   ),
   PowerShellStateTweak(
     id: 'toggle_storage_sense_off',
@@ -217,8 +263,12 @@ Set-ItemProperty -Path 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate'
         r'''Set-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy' -Name 01 -Type DWord -Value 0''',
     revertScript:
         r'''Remove-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy' -Name 01 -ErrorAction SilentlyContinue''',
-    checkScript:
-        r'''((Get-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy' -Name 01 -ErrorAction SilentlyContinue).'01' -eq 0).ToString().ToLower()''',
+    check: () async =>
+        await RegistryManager.readDword(
+          r'HKCU\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy',
+          '01',
+        ) ==
+        0,
   ),
   PowerShellStateTweak(
     id: 'toggle_activity_history_off',
@@ -234,9 +284,22 @@ Set-ItemProperty -Path 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\System' -Name 
 Set-ItemProperty -Path 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\System' -Name UploadUserActivities -Type DWord -Value 0''',
     revertScript:
         r'''Remove-ItemProperty -Path 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\System' -Name EnableActivityFeed,PublishUserActivities,UploadUserActivities -ErrorAction SilentlyContinue''',
-    checkScript:
-        r'''$v = Get-ItemProperty -Path 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\System' -ErrorAction SilentlyContinue
-($v.EnableActivityFeed -eq 0 -and $v.PublishUserActivities -eq 0 -and $v.UploadUserActivities -eq 0).ToString().ToLower()''',
+    check: () async =>
+        await RegistryManager.readDword(
+              _systemPolicies,
+              'EnableActivityFeed',
+            ) ==
+            0 &&
+        await RegistryManager.readDword(
+              _systemPolicies,
+              'PublishUserActivities',
+            ) ==
+            0 &&
+        await RegistryManager.readDword(
+              _systemPolicies,
+              'UploadUserActivities',
+            ) ==
+            0,
   ),
   PowerShellStateTweak(
     id: 'toggle_scheduled_defrag_off',
@@ -261,8 +324,12 @@ Set-ItemProperty -Path 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\System' -Name 
         r'''Set-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced' -Name TaskbarAl -Type DWord -Value 1''',
     revertScript:
         r'''Set-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced' -Name TaskbarAl -Type DWord -Value 0''',
-    checkScript:
-        r'''((Get-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced' -Name TaskbarAl -ErrorAction SilentlyContinue).TaskbarAl -eq 1).ToString().ToLower()''',
+    check: () async =>
+        await RegistryManager.readDword(
+          r'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced',
+          'TaskbarAl',
+        ) ==
+        1,
   ),
   PowerShellStateTweak(
     id: 'checks_vulnerable_driver_blocklist_off',
@@ -275,8 +342,12 @@ Set-ItemProperty -Path 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\System' -Name 
         r'''Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\CI\Config' -Name VulnerableDriverBlocklistEnable -Type DWord -Value 0''',
     revertScript:
         r'''Remove-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\CI\Config' -Name VulnerableDriverBlocklistEnable -ErrorAction SilentlyContinue''',
-    checkScript:
-        r'''((Get-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\CI\Config' -Name VulnerableDriverBlocklistEnable -ErrorAction SilentlyContinue).VulnerableDriverBlocklistEnable -eq 0).ToString().ToLower()''',
+    check: () async =>
+        await RegistryManager.readDword(
+          r'HKLM\SYSTEM\CurrentControlSet\Control\CI\Config',
+          'VulnerableDriverBlocklistEnable',
+        ) ==
+        0,
   ),
   WindowsSettingsLauncherTweak(
     id: 'shortcut_device_manager',
@@ -488,7 +559,11 @@ WindowsSettingsLauncherTweak _toolShortcut(
 List<SystemTweak> _restoreTweaks() => <SystemTweak>[
   for (final app in microsoftRestoreCatalog.entries)
     WingetRestoreTweak(
-      legacyPackageName: app.key,
+      legacyPackageName: switch (app.key) {
+        'Microsoft.MicrosoftStickyNotes' => 'Microsoft.StickyNotes',
+        'MicrosoftCorporationII.QuickAssist' => 'Microsoft.QuickAssist',
+        _ => app.key,
+      },
       packageId: app.value.packageId,
       source: app.value.source,
       title: app.value.name,
@@ -539,13 +614,21 @@ class PowerShellStateTweak extends SystemTweak {
     required super.category,
     required this.applyScript,
     required this.revertScript,
-    required this.checkScript,
+    this.checkScript,
+    this.check,
     bool aggressive = false,
-  }) : super(isAggressive: aggressive);
+  }) : assert((checkScript == null) != (check == null)),
+       super(isAggressive: aggressive);
 
   final String applyScript;
   final String revertScript;
-  final String checkScript;
+
+  /// PowerShell that prints `true`; only for states the registry or SCM
+  /// cannot answer, since every check starts a PowerShell at launch.
+  final String? checkScript;
+
+  /// Native check (registry, SCM): no process at startup.
+  final Future<bool> Function()? check;
 
   @override
   Future<void> onApply() => runSilentPowerShell(applyScript, elevated: true);
@@ -555,8 +638,19 @@ class PowerShellStateTweak extends SystemTweak {
 
   @override
   Future<bool> checkState() async =>
-      (await runPowerShellForOutput(checkScript)).trim().toLowerCase() ==
-      'true';
+      await check?.call() ??
+      (await runPowerShellForOutput(checkScript!)).trim().toLowerCase() ==
+          'true';
+}
+
+/// Start type Disabled, read from the Service Control Manager.
+/// Missing or unreadable services count as not disabled.
+Future<bool> serviceDisabled(String name) async {
+  try {
+    return const ServiceControlManager().inspect(name).startType == 4;
+  } catch (_) {
+    return false;
+  }
 }
 
 class WingetRestoreTweak extends ActionSystemTweak {
@@ -681,13 +775,7 @@ Remove-Item -LiteralPath $backup -Force -ErrorAction SilentlyContinue
   );
 
   @override
-  Future<bool> checkState() async =>
-      (await runPowerShellForOutput(
-        r'''$service = Get-CimInstance Win32_Service -Filter "Name='__SERVICE__'" -ErrorAction SilentlyContinue
-($null -ne $service -and $service.StartMode -eq 'Disabled').ToString().ToLower()'''
-            .replaceAll('__SERVICE__', serviceName),
-      )).trim().toLowerCase() ==
-      'true';
+  Future<bool> checkState() => serviceDisabled(serviceName);
 }
 
 class WindowsSettingsLauncherTweak extends ActionSystemTweak {

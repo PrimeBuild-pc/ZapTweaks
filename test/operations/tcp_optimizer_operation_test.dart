@@ -1,5 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:sqlite3/sqlite3.dart';
 import 'package:script_utility/core/operations/operation.dart';
+import 'package:script_utility/core/operations/operation_registry.dart';
+import 'package:script_utility/core/persistence/operation_store.dart';
+import 'package:script_utility/core/plans/plan_engine.dart';
 import 'package:script_utility/core/operations/tcp_optimizer_operations.dart';
 import 'package:script_utility/platform/windows/tcp_optimizer_service.dart';
 
@@ -18,7 +22,11 @@ class _TcpStore implements TcpOptimizerStore {
   }
 
   @override
-  Future<void> write(String target, String value) async {
+  Future<void> write(
+    String target,
+    String value, {
+    required TcpSettingState expected,
+  }) async {
     writes++;
     state = TcpSettingState(
       target: state.target,
@@ -27,6 +35,9 @@ class _TcpStore implements TcpOptimizerStore {
       value: value,
       supportedValues: state.supportedValues,
       writable: state.writable,
+      configuredValue: value,
+      configurationStore: state.configurationStore,
+      inheritance: state.inheritance,
     );
   }
 }
@@ -101,6 +112,54 @@ void main() {
           template: 'Global',
           field: 'rsc',
           value: 'Enabled',
+          configuredValue: 'Enabled',
+          configurationStore: 'NetOffloadGlobalSetting',
+          inheritance: 'none',
+          supportedValues: <String>['Disabled', 'Enabled'],
+          writable: true,
+        ),
+      );
+      final database = sqlite3.openInMemory();
+      addTearDown(database.close);
+      final journal = OperationStore(database);
+      final operation = TcpSettingOperation(store, journal: journal);
+      const request = OperationRequest(
+        operationId: 'network.tcp.setting.configure',
+        target: 'global:rsc',
+        desiredValue: 'Disabled',
+      );
+      final engine = PlanEngine(
+        registry: OperationRegistry([operation]),
+        context: context,
+        user: 'test',
+        appVersion: 'test',
+        store: journal,
+        elevatedExecutor: const DirectOperationExecutor(),
+      );
+      final plan = await engine.plan([request]);
+      await engine.execute(plan);
+      final snapshot = plan.items.single.snapshot!;
+      expect(snapshot.data['original'], <String, Object?>{
+        'configured': 'Enabled',
+        'effective': null,
+        'inheritance': 'none',
+        'store': 'NetOffloadGlobalSetting',
+      });
+      expect((await operation.verify(request)).value, 'Disabled');
+      await engine.rollback(plan);
+      expect((await operation.inspect(request)).value, 'Enabled');
+    },
+  );
+
+  test(
+    'TCP rollback refuses ambiguous effective-only prior journals',
+    () async {
+      final store = _TcpStore(
+        const TcpSettingState(
+          target: 'global:rsc',
+          template: 'Global',
+          field: 'rsc',
+          value: 'Disabled',
           supportedValues: <String>['Disabled', 'Enabled'],
           writable: true,
         ),
@@ -112,11 +171,21 @@ void main() {
         desiredValue: 'Disabled',
       );
 
-      final snapshot = await operation.captureSnapshot(request);
-      await operation.apply(request);
-      expect((await operation.verify(request)).value, 'Disabled');
-      await operation.rollback(request, snapshot);
-      expect((await operation.inspect(request)).value, 'Enabled');
+      await expectLater(
+        operation.rollback(
+          request,
+          const OperationSnapshot(
+            type: 'tcpSetting',
+            data: <String, Object?>{'target': 'global:rsc', 'value': 'Enabled'},
+            expectedAfterRollback: OperationState(
+              OperationStateKind.configured,
+              value: 'Enabled',
+            ),
+          ),
+        ),
+        throwsStateError,
+      );
+      expect(store.writes, 0);
     },
   );
 
@@ -134,6 +203,10 @@ void main() {
       ).toJson(),
     );
     final present = await operation.captureSnapshot(update);
+    expect(
+      (present.data['original']! as Map)['configured'],
+      _originalPolicy.toJson(),
+    );
     await operation.apply(update);
     await operation.rollback(update, present);
     expect(

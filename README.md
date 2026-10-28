@@ -41,6 +41,15 @@ It is not intended to replace common baseline tools such as [CTT WinUtil](https:
 - 91 bundled power plans with import, activation, and previous-plan restore.
 - Direct access to CTT WinUtil and Winhance for complementary baseline work.
 
+## Manual `by Sparkle` controls
+
+- **Windows / Expert → by Sparkle:** explicit appearance/privacy choices and separately confirmed HVCI, RDP policy and allowlisted service controls. No preselected/recommended batch and no automatic service stop or reboot.
+- **Gaming & Performance → TCP Optimizer:** limited manual reference with capability-gated global RSS and optional custom-template variants. Exact journaled originals, read-back, partial-failure recovery and explicit restore—not reset-to-default. No full Sparkle parity or performance promise.
+- **Apps:** mVolt/Sparkle open official project sources only. AppX removal distinguishes account/image scopes, validates fresh protection/dependency metadata and requires opt-in; reinstall links are not rollback.
+- **Diagnostics & Recovery:** journal/history and eligible manual-settings restoration, plus selected frozen UserTemp identities. No Recycle Bin empty-all, Prefetch or Windows Update-cache deletion.
+
+Defender disabling, forced Edge removal and NVIDIA presets are **not available natively**; only clearly labeled external guidance is provided. No upstream scripts/binaries are executed. See [implementation status](docs/IMPLEMENTATION_STATUS.md) for supported fields, safety limits and checks. The recommended-profile approval gate remains closed.
+
 ## Languages
 
 The interface is available in **English, Italian, German, Spanish, French, Russian, and Simplified Chinese**. Select a language from **Settings**; the choice is saved locally.

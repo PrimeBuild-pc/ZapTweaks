@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import '../../platform/windows/service_control_manager.dart';
 import 'operation.dart';
 
@@ -5,17 +7,25 @@ class ServiceStartOperation implements OperationDefinition {
   const ServiceStartOperation({
     required this.store,
     required this.allowedServices,
+    this.allowService,
   });
 
   final ServiceConfigurationStore store;
   final Set<String> allowedServices;
 
-  String _target(OperationRequest request) {
+  /// Second gate for services outside [allowedServices], decided on what
+  /// the Service Control Manager reports, never on what the caller says.
+  final FutureOr<bool> Function(WindowsServiceInfo service)? allowService;
+
+  Future<String> _target(OperationRequest request) async {
     final target = request.target;
-    if (target == null ||
-        !allowedServices
-            .map((v) => v.toLowerCase())
-            .contains(target.toLowerCase())) {
+    if (target == null) throw StateError('Service is not allowlisted.');
+    if (!allowedServices
+        .map((v) => v.toLowerCase())
+        .contains(target.toLowerCase())) {
+      if (allowService != null && await allowService!(store.inspect(target))) {
+        return target;
+      }
       throw StateError('Service is not allowlisted.');
     }
     return allowedServices.firstWhere(
@@ -25,7 +35,10 @@ class ServiceStartOperation implements OperationDefinition {
 
   ({int startType, bool delayed}) _desired(OperationRequest request) {
     final value = request.desiredValue;
-    if (value is! Map ||
+    if (request.operationId != id ||
+        request.parameters.isNotEmpty ||
+        value is! Map ||
+        value.length != 2 ||
         value['startType'] is! int ||
         value['delayedAutoStart'] is! bool) {
       throw StateError('Typed service startup configuration is required.');
@@ -48,8 +61,11 @@ class ServiceStartOperation implements OperationDefinition {
       return const SupportResult.unsupported('Requires Windows 11 x64.');
     }
     try {
-      store.inspect(_target(request));
-      _desired(request);
+      final service = store.inspect(await _target(request));
+      final desired = _desired(request);
+      if (desired.startType == 4 && service.dependents.isNotEmpty) {
+        throw StateError('Cannot disable a service with dependent services.');
+      }
       return const SupportResult.supported();
     } catch (error) {
       return SupportResult.unsupported(error.toString());
@@ -59,7 +75,7 @@ class ServiceStartOperation implements OperationDefinition {
   @override
   Future<OperationState> inspect(OperationRequest request) async {
     try {
-      final service = store.inspect(_target(request));
+      final service = store.inspect(await _target(request));
       return OperationState(
         OperationStateKind.configured,
         value: <String, Object?>{
@@ -85,7 +101,7 @@ class ServiceStartOperation implements OperationDefinition {
     return OperationSnapshot(
       type: 'serviceStart',
       data: <String, Object?>{
-        'service': _target(request),
+        'service': await _target(request),
         'configuration': before.value,
       },
       expectedAfterRollback: before,
@@ -95,8 +111,12 @@ class ServiceStartOperation implements OperationDefinition {
   @override
   Future<void> apply(OperationRequest request) async {
     final desired = _desired(request);
+    final service = store.inspect(await _target(request));
+    if (desired.startType == 4 && service.dependents.isNotEmpty) {
+      throw StateError('Cannot disable a service with dependent services.');
+    }
     store.configureStart(
-      _target(request),
+      await _target(request),
       startType: desired.startType,
       delayedAutoStart: desired.delayed,
     );
@@ -111,16 +131,33 @@ class ServiceStartOperation implements OperationDefinition {
     OperationSnapshot snapshot,
   ) async {
     if (snapshot.type != 'serviceStart' ||
-        snapshot.data['service'] != _target(request)) {
+        snapshot.data['service'] != await _target(request)) {
       throw StateError('Invalid service snapshot.');
     }
-    final value = Map<String, Object?>.from(
-      snapshot.data['configuration']! as Map,
+    // Restore exactly what Windows had, which _desired would refuse for new
+    // requests: Manual with DelayedAutoStart=1 is shipped by Windows
+    // (dmwappushservice, BITS, DoSvc).
+    final configuration = snapshot.data['configuration'];
+    if (configuration is! Map ||
+        configuration.length != 2 ||
+        !const <int>{2, 3, 4}.contains(configuration['startType']) ||
+        configuration['delayedAutoStart'] is! bool) {
+      throw StateError('Invalid service snapshot.');
+    }
+    final desired = (
+      startType: configuration['startType']! as int,
+      delayed: configuration['delayedAutoStart']! as bool,
     );
+    final current = store.inspect(await _target(request));
+    if (desired.startType == 4 && current.dependents.isNotEmpty) {
+      throw StateError(
+        'Cannot restore disabled startup with dependent services.',
+      );
+    }
     store.configureStart(
-      _target(request),
-      startType: value['startType']! as int,
-      delayedAutoStart: value['delayedAutoStart']! as bool,
+      await _target(request),
+      startType: desired.startType,
+      delayedAutoStart: desired.delayed,
     );
   }
 

@@ -156,6 +156,7 @@ class ExecutableLauncherTweak extends ActionSystemTweak {
     super.actionLabel = 'Open',
     super.isAggressive,
     super.warningMessage,
+    super.author,
   }) : super(type: TweakUiType.launcher);
 
   final List<String> executableSegments;
@@ -202,6 +203,7 @@ class DirectoryLauncherTweak extends ActionSystemTweak {
     super.actionLabel = 'Open',
     super.isAggressive,
     super.warningMessage,
+    super.author,
   }) : super(type: TweakUiType.launcher);
 
   final List<String> directorySegments;
@@ -286,6 +288,7 @@ class ScriptInteractiveTweak extends ActionSystemTweak {
     super.actionLabel = 'Run Script',
     super.isAggressive,
     super.warningMessage,
+    super.author,
   }) : super(type: TweakUiType.interactiveScript);
 
   final List<String> scriptSegments;
@@ -327,6 +330,7 @@ class ExternalUrlLauncherTweak extends ActionSystemTweak {
     super.actionLabel = 'Open',
     super.isAggressive,
     super.warningMessage,
+    super.author,
   }) : super(type: TweakUiType.launcher);
 
   final String url;
@@ -361,6 +365,7 @@ class PowerShellTerminalCommandTweak extends ActionSystemTweak {
     super.actionLabel = 'Run',
     super.isAggressive,
     super.warningMessage,
+    super.author,
   }) : super(type: TweakUiType.interactiveScript);
 
   final String command;
@@ -406,6 +411,7 @@ class BatchScriptTweak extends ActionSystemTweak {
     super.actionLabel = 'Run Script',
     super.isAggressive,
     super.warningMessage,
+    super.author,
   }) : super(type: TweakUiType.launcher);
 
   final List<String> batchSegments;
@@ -465,6 +471,7 @@ class NvidiaProfileImportTweak extends ActionSystemTweak {
     super.actionLabel = 'Import',
     super.isAggressive,
     super.warningMessage,
+    super.author,
   }) : super(type: TweakUiType.launcher);
 
   NvidiaProfile? selectedProfile;
@@ -569,6 +576,7 @@ class ExplorerSelectFileTweak extends ActionSystemTweak {
     super.actionLabel = 'Show File',
     super.isAggressive,
     super.warningMessage,
+    super.author,
   }) : super(type: TweakUiType.launcher);
 
   final List<String> fileSegments;
@@ -613,6 +621,7 @@ class RegistryImportTweak extends ActionSystemTweak {
     super.actionLabel = 'Import',
     super.isAggressive,
     super.warningMessage,
+    super.author,
   }) : super(type: TweakUiType.launcher);
 
   final List<String> registrySegments;

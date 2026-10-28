@@ -11,7 +11,17 @@ class ElevatedOperationExecutor implements OperationExecutor {
   Future<void> apply(
     OperationDefinition definition,
     OperationRequest request,
-  ) => client.applyNativeOperation(request);
+    OperationSnapshot snapshot,
+  ) {
+    if (definition is SnapshotApplyOperation ||
+        definition.id == 'network.tcp.setting.configure' ||
+        definition.id == 'network.qos.policy.configure') {
+      throw StateError(
+        'This operation requires the elevated plan protocol to preserve its snapshot.',
+      );
+    }
+    return client.applyNativeOperation(request);
+  }
 
   @override
   Future<void> rollback(

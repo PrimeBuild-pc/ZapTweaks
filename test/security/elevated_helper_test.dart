@@ -273,6 +273,18 @@ void main() {
       await client.applyNativeOperation(request);
       expect(progress, containsAllInOrder(<String>['applying', 'completed']));
       expect((await operation.inspect(request)).value, 1);
+      await operation.apply(
+        const OperationRequest(
+          operationId: 'registry.admin.set',
+          desiredValue: 2,
+        ),
+      );
+      await expectLater(
+        client.rollbackNativeOperation(request, snapshot),
+        throwsStateError,
+      );
+      expect((await operation.inspect(request)).value, 2);
+      await operation.apply(request);
       await client.rollbackNativeOperation(request, snapshot);
       expect(
         (await operation.inspect(request)).kind,
@@ -387,6 +399,46 @@ void main() {
       expect(store.writes, 0);
     },
   );
+
+  test('helper rejects non-journaled TCP apply requests', () async {
+    final directory = await Directory.systemTemp.createTemp('zap-helper-');
+    addTearDown(() => directory.delete(recursive: true));
+    final store = _QosStore();
+    final operation = QosPolicyOperation(store);
+    final host = ElevatedHelperHost(
+      allowedDirectory: directory,
+      catalogService: _Catalog(),
+      tweakManager: _Manager(),
+      restorePointService: _Restore(),
+      operationRegistry: OperationRegistry(<OperationDefinition>[operation]),
+      operationContext: const OperationContext(
+        windowsBuild: 26100,
+        edition: 'Pro',
+      ),
+    );
+    final client = ElevatedHelperClient(
+      directory: directory,
+      secureDirectory: (_) async {},
+      launcher: (_, request, nonce, digest) => host.run(request, nonce, digest),
+    );
+
+    await expectLater(
+      client.applyNativeOperation(
+        OperationRequest(
+          operationId: operation.id,
+          target: 'ZapTweaks - Game',
+          desiredValue: const QosPolicy(
+            name: 'ZapTweaks - Game',
+            appPath: r'C:\Games\game.exe',
+            protocol: 'TCP',
+            dscp: 46,
+          ).toJson(),
+        ),
+      ),
+      throwsA(isA<StateError>()),
+    );
+    expect(store.writes, 0);
+  });
 
   test('helper refuses request files outside its private directory', () async {
     final directory = await Directory.systemTemp.createTemp('zap-helper-');

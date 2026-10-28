@@ -47,6 +47,7 @@ void main() {
               String executable,
               List<String> arguments, {
               bool runInShell = false,
+              Map<String, String>? environment,
             }) async {
               startCalls++;
               throw StateError('should not execute in dry-run');
@@ -72,6 +73,7 @@ void main() {
               String value,
               List<String> values, {
               bool runInShell = false,
+              Map<String, String>? environment,
             }) async {
               executable = value;
               arguments = values;
@@ -113,7 +115,7 @@ void main() {
       for (var index = 0; index < bytes.length; index += 2)
         bytes[index] | (bytes[index + 1] << 8),
     ]);
-    expect(decoded, script);
+    expect(decoded, '${ProcessRunner.powerShellPreamble}$script');
   });
 
   group('ProcessRunner security hardening', () {
@@ -248,5 +250,23 @@ void main() {
     expect(invoked, 2);
     expect(winget.success, isTrue);
     expect(pnputil.success, isTrue);
+  });
+
+  test('PowerShell 7 module folders are dropped from PSModulePath', () {
+    expect(
+      withoutPowerShell7Modules(
+        r'C:\Users\u\Documents\PowerShell\Modules;'
+        r'C:\Program Files\PowerShell\Modules;'
+        r'c:\program files\powershell\7\Modules;'
+        r'C:\Program Files\WindowsApps\Microsoft.PowerShell_7.6.7.0_x64\Modules;'
+        r'C:\Program Files\WindowsPowerShell\Modules;;'
+        r'C:\WINDOWS\system32\WindowsPowerShell\v1.0\Modules;'
+        r'C:\Tools\Modules',
+      ),
+      r'C:\Program Files\WindowsPowerShell\Modules;'
+      r'C:\WINDOWS\system32\WindowsPowerShell\v1.0\Modules;'
+      r'C:\Tools\Modules',
+    );
+    expect(withoutPowerShell7Modules(r'C:\Program Files\PowerShell'), '');
   });
 }

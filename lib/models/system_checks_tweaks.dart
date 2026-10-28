@@ -1,3 +1,4 @@
+import '../core/services/process_runner.dart';
 import '../core/registry_manager.dart';
 import 'system_tweak.dart';
 
@@ -229,19 +230,17 @@ class DataExecutionPreventionOffTweak extends _SystemChecksTweak {
   }
 
   @override
-  Future<bool> checkState() async {
-    final output = (await runPowerShellForOutput(r'''
-$current = cmd /c "bcdedit /enum {current}" | Out-String
-if ($current -match '(?im)^\s*nx\s+AlwaysOff\s*$') {
-  Write-Output 'true'
-} else {
-  Write-Output 'false'
-}
-''')).toLowerCase();
-
-    final applied = output.contains('true');
-    return applied;
-  }
+  Future<bool> checkState() async =>
+      RegExp(
+        r'^\s*nx\s+AlwaysOff\s*$',
+        caseSensitive: false,
+        multiLine: true,
+      ).hasMatch(
+        (await ProcessRunner.shared.run('bcdedit', <String>[
+          '/enum',
+          '{current}',
+        ])).stdout,
+      );
 }
 
 class CoreIsolationOffTweak extends SystemTweak {

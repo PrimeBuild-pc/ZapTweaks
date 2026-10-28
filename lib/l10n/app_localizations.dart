@@ -801,7 +801,7 @@ abstract class AppLocalizations {
   /// No description provided for @expertModeDescription.
   ///
   /// In en, this message translates to:
-  /// **'Show advanced operations and external tools. Safety restrictions still apply.'**
+  /// **'Show advanced operations and external tools only after explicit manual consent. It is off by default; safety restrictions still apply.'**
   String get expertModeDescription;
 
   /// No description provided for @searchOperations.
@@ -1877,6 +1877,42 @@ abstract class AppLocalizations {
   /// **'No ACPI thermal zones were exposed by this PC.'**
   String get noThermalSensors;
 
+  /// No description provided for @cpuFrequency.
+  ///
+  /// In en, this message translates to:
+  /// **'CPU clock and core parking'**
+  String get cpuFrequency;
+
+  /// No description provided for @cpuFrequencyDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Takes one sample of the Windows processor performance counters. The effective clock is the base clock × % Processor Performance, the same formula as Task Manager. Use it to check power plan, boost and core parking changes. Read-only.'**
+  String get cpuFrequencyDescription;
+
+  /// No description provided for @cpuEffectiveClock.
+  ///
+  /// In en, this message translates to:
+  /// **'{mhz} MHz effective · base {nominal} MHz'**
+  String cpuEffectiveClock(Object mhz, Object nominal);
+
+  /// No description provided for @cpuParkedCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{parked} of {total} logical processors parked'**
+  String cpuParkedCount(Object parked, Object total);
+
+  /// No description provided for @cpuParked.
+  ///
+  /// In en, this message translates to:
+  /// **'parked'**
+  String get cpuParked;
+
+  /// No description provided for @cpuFrequencySource.
+  ///
+  /// In en, this message translates to:
+  /// **'Source: Processor Information performance counters (Win32_PerfFormattedData_Counters_ProcessorInformation), one sample averaged over the last counter interval. Not a peak clock. Per-core values use one nominal clock, so efficiency cores of hybrid CPUs read high.'**
+  String get cpuFrequencySource;
+
   /// No description provided for @driverInventory.
   ///
   /// In en, this message translates to:
@@ -2652,6 +2688,1746 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Open recovery and journal'**
   String get openRecoveryHistory;
+
+  /// No description provided for @manualRestoreTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore original manual settings'**
+  String get manualRestoreTitle;
+
+  /// No description provided for @manualRestoreWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore the recorded originals, not defaults. Changed settings are not overwritten. High-risk settings require Expert mode and UAC. Review the journal after restoration; restart or sign-out requirements still apply.'**
+  String get manualRestoreWarning;
+
+  /// No description provided for @cleanupUserTemp.
+  ///
+  /// In en, this message translates to:
+  /// **'UserTemp cleanup'**
+  String get cleanupUserTemp;
+
+  /// No description provided for @cleanupUserTempDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Review and select exact files in the current user\'s Temp directory. No automatic selection, forced deletion or directory removal.'**
+  String get cleanupUserTempDescription;
+
+  /// No description provided for @cleanupSelectFiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Preview and select files'**
+  String get cleanupSelectFiles;
+
+  /// No description provided for @cleanupShaderCache.
+  ///
+  /// In en, this message translates to:
+  /// **'GPU shader cache cleanup'**
+  String get cleanupShaderCache;
+
+  /// No description provided for @cleanupShaderCacheDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Previews the DirectX, AMD, NVIDIA and Intel shader caches of the current user, folder by folder, and deletes exactly the files found by that preview. The driver rebuilds them, so the first launch of each game can stutter. Close games first. Not reversible.'**
+  String get cleanupShaderCacheDescription;
+
+  /// No description provided for @cleanupShaderCacheNone.
+  ///
+  /// In en, this message translates to:
+  /// **'No GPU shader cache files were found.'**
+  String get cleanupShaderCacheNone;
+
+  /// No description provided for @cleanupShaderCacheCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'The previewed shader cache files were deleted and verified absent.'**
+  String get cleanupShaderCacheCompleted;
+
+  /// No description provided for @cleanupPreview.
+  ///
+  /// In en, this message translates to:
+  /// **'Preview'**
+  String get cleanupPreview;
+
+  /// No description provided for @cleanupUserTempNone.
+  ///
+  /// In en, this message translates to:
+  /// **'No UserTemp files found.'**
+  String get cleanupUserTempNone;
+
+  /// No description provided for @cleanupPermanentWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Permanent deletion. No rollback or permission/lock override. Close applications first. If deletion fails, earlier files may already have been removed.'**
+  String get cleanupPermanentWarning;
+
+  /// No description provided for @cleanupUserTempSelectionHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing is selected. Select only files you recognize; files created after this preview are excluded.'**
+  String get cleanupUserTempSelectionHint;
+
+  /// No description provided for @cleanupPreviewCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} files, {bytes} bytes'**
+  String cleanupPreviewCount(int count, int bytes);
+
+  /// No description provided for @cleanupRecycleUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Recycle Bin cleanup is unavailable: exact item identities cannot be previewed and deleted safely. No empty-all action is performed.'**
+  String get cleanupRecycleUnavailable;
+
+  /// No description provided for @cleanupCrashReports.
+  ///
+  /// In en, this message translates to:
+  /// **'Crash dumps and error reports'**
+  String get cleanupCrashReports;
+
+  /// No description provided for @cleanupCrashReportsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Deletes the crash dumps of your programs (%LOCALAPPDATA%\\CrashDumps) and your Windows Error Reporting archive and queue. Useful after a game or app crashed many times. System minidumps (blue screens) are not touched.'**
+  String get cleanupCrashReportsDescription;
+
+  /// No description provided for @cleanupCrashReportsNone.
+  ///
+  /// In en, this message translates to:
+  /// **'No crash dumps or error reports to delete.'**
+  String get cleanupCrashReportsNone;
+
+  /// No description provided for @cleanupCrashReportsCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Crash dumps and error reports deleted.'**
+  String get cleanupCrashReportsCompleted;
+
+  /// No description provided for @cleanupBrowserCache.
+  ///
+  /// In en, this message translates to:
+  /// **'Browser caches'**
+  String get cleanupBrowserCache;
+
+  /// No description provided for @cleanupBrowserCacheDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Deletes the disk caches of Chrome, Edge, Brave (every profile) and Firefox. Cookies, history, passwords and extensions are not touched; pages load a little slower the first time.'**
+  String get cleanupBrowserCacheDescription;
+
+  /// No description provided for @cleanupBrowserCacheNone.
+  ///
+  /// In en, this message translates to:
+  /// **'No browser cache files to delete.'**
+  String get cleanupBrowserCacheNone;
+
+  /// No description provided for @cleanupBrowserCacheCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Browser caches deleted.'**
+  String get cleanupBrowserCacheCompleted;
+
+  /// No description provided for @cleanupBrowserRunning.
+  ///
+  /// In en, this message translates to:
+  /// **'Close {browsers} first (also from the system tray: Edge and Chrome can keep running in the background).'**
+  String cleanupBrowserRunning(String browsers);
+
+  /// No description provided for @thermalZoneLimited.
+  ///
+  /// In en, this message translates to:
+  /// **'firmware limits the CPU to {percent}%'**
+  String thermalZoneLimited(String percent);
+
+  /// No description provided for @thermalSourceCounters.
+  ///
+  /// In en, this message translates to:
+  /// **'Source: Windows \"Thermal Zone Information\" counters (ACPI zones defined by the firmware, no administrator rights needed). A zone is a sensor the manufacturer chose; it is often not the CPU die.'**
+  String get thermalSourceCounters;
+
+  /// No description provided for @thermalSourceAcpi.
+  ///
+  /// In en, this message translates to:
+  /// **'Source: MSAcpi_ThermalZoneTemperature (ACPI zones defined by the firmware). A zone is a sensor the manufacturer chose; it is often not the CPU die.'**
+  String get thermalSourceAcpi;
+
+  /// No description provided for @thermalSourceNone.
+  ///
+  /// In en, this message translates to:
+  /// **'The firmware of this PC exposes no ACPI thermal zone (common on desktop boards). Nothing is shown rather than a value that was not measured.'**
+  String get thermalSourceNone;
+
+  /// No description provided for @srumTab.
+  ///
+  /// In en, this message translates to:
+  /// **'App history'**
+  String get srumTab;
+
+  /// No description provided for @srumTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'App history (SRUM)'**
+  String get srumTitle;
+
+  /// No description provided for @srumDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Network, CPU and disk use of every program in the last 30 days, as recorded by Windows (System Resource Usage Monitor). Read-only: ZapTweaks reads a shadow copy of the database and deletes it afterwards. Needs administrator rights.'**
+  String get srumDescription;
+
+  /// No description provided for @srumRead.
+  ///
+  /// In en, this message translates to:
+  /// **'Read history'**
+  String get srumRead;
+
+  /// No description provided for @srumNotCollectingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Windows is not recording app history'**
+  String get srumNotCollectingTitle;
+
+  /// No description provided for @srumNotCollecting.
+  ///
+  /// In en, this message translates to:
+  /// **'The Diagnostic Policy Service, which records this history, is {status} ({startType}). The data ends on {date}.'**
+  String srumNotCollecting(String status, String startType, String date);
+
+  /// No description provided for @srumNoData.
+  ///
+  /// In en, this message translates to:
+  /// **'No usage recorded in the last 30 days.'**
+  String get srumNoData;
+
+  /// No description provided for @srumNetwork.
+  ///
+  /// In en, this message translates to:
+  /// **'Network (sent / received)'**
+  String get srumNetwork;
+
+  /// No description provided for @srumCpu.
+  ///
+  /// In en, this message translates to:
+  /// **'CPU time (share of all programs; part used in the background)'**
+  String get srumCpu;
+
+  /// No description provided for @srumCpuShare.
+  ///
+  /// In en, this message translates to:
+  /// **'{share}% · {background}% background'**
+  String srumCpuShare(String share, String background);
+
+  /// No description provided for @srumUnattributed.
+  ///
+  /// In en, this message translates to:
+  /// **'Not attributed to a program'**
+  String get srumUnattributed;
+
+  /// No description provided for @srumSource.
+  ///
+  /// In en, this message translates to:
+  /// **'Source: C:\\Windows\\System32\\sru\\SRUDB.dat, records from {first} to {last}. Windows writes them about once an hour.'**
+  String srumSource(String first, String last);
+
+  /// No description provided for @manualControls.
+  ///
+  /// In en, this message translates to:
+  /// **'Manual controls'**
+  String get manualControls;
+
+  /// No description provided for @upToDate.
+  ///
+  /// In en, this message translates to:
+  /// **'You are running the latest version ({version}).'**
+  String upToDate(String version);
+
+  /// No description provided for @startCapture.
+  ///
+  /// In en, this message translates to:
+  /// **'Start capture'**
+  String get startCapture;
+
+  /// No description provided for @batteryHealth.
+  ///
+  /// In en, this message translates to:
+  /// **'Battery health'**
+  String get batteryHealth;
+
+  /// No description provided for @batteryHealthDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Capacity the battery still holds compared with its design. Read-only.'**
+  String get batteryHealthDescription;
+
+  /// No description provided for @batteryGood.
+  ///
+  /// In en, this message translates to:
+  /// **'Good'**
+  String get batteryGood;
+
+  /// No description provided for @batteryFair.
+  ///
+  /// In en, this message translates to:
+  /// **'Worn'**
+  String get batteryFair;
+
+  /// No description provided for @batteryPoor.
+  ///
+  /// In en, this message translates to:
+  /// **'Replace soon'**
+  String get batteryPoor;
+
+  /// No description provided for @notAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Not available'**
+  String get notAvailable;
+
+  /// No description provided for @batteryDesigned.
+  ///
+  /// In en, this message translates to:
+  /// **'Design capacity'**
+  String get batteryDesigned;
+
+  /// No description provided for @batteryFullCharge.
+  ///
+  /// In en, this message translates to:
+  /// **'Full charge capacity'**
+  String get batteryFullCharge;
+
+  /// No description provided for @batteryWear.
+  ///
+  /// In en, this message translates to:
+  /// **'Wear'**
+  String get batteryWear;
+
+  /// No description provided for @batteryCycles.
+  ///
+  /// In en, this message translates to:
+  /// **'Charge cycles'**
+  String get batteryCycles;
+
+  /// No description provided for @batteryCharge.
+  ///
+  /// In en, this message translates to:
+  /// **'Current charge'**
+  String get batteryCharge;
+
+  /// No description provided for @batteryOnAc.
+  ///
+  /// In en, this message translates to:
+  /// **'Plugged in'**
+  String get batteryOnAc;
+
+  /// No description provided for @batteryOnBattery.
+  ///
+  /// In en, this message translates to:
+  /// **'On battery'**
+  String get batteryOnBattery;
+
+  /// No description provided for @batterySourceWmi.
+  ///
+  /// In en, this message translates to:
+  /// **'Source: root\\wmi BatteryStaticData, BatteryFullChargedCapacity, BatteryCycleCount and BatteryStatus, as reported by the battery firmware.'**
+  String get batterySourceWmi;
+
+  /// No description provided for @batterySourceReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Source: powercfg /batteryreport (temporary XML, deleted after reading), as reported by the battery firmware.'**
+  String get batterySourceReport;
+
+  /// No description provided for @appTypeSystem.
+  ///
+  /// In en, this message translates to:
+  /// **'System'**
+  String get appTypeSystem;
+
+  /// No description provided for @appTypeUser.
+  ///
+  /// In en, this message translates to:
+  /// **'User'**
+  String get appTypeUser;
+
+  /// No description provided for @appTypeStore.
+  ///
+  /// In en, this message translates to:
+  /// **'Store'**
+  String get appTypeStore;
+
+  /// No description provided for @appSafetyRemovable.
+  ///
+  /// In en, this message translates to:
+  /// **'Can remove'**
+  String get appSafetyRemovable;
+
+  /// No description provided for @appSafetyCheckFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Check first'**
+  String get appSafetyCheckFirst;
+
+  /// No description provided for @appSafetyKeep.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep it'**
+  String get appSafetyKeep;
+
+  /// No description provided for @appReasonSystemComponent.
+  ///
+  /// In en, this message translates to:
+  /// **'Hidden Windows or vendor component.'**
+  String get appReasonSystemComponent;
+
+  /// No description provided for @appReasonProtected.
+  ///
+  /// In en, this message translates to:
+  /// **'Its installer forbids removal.'**
+  String get appReasonProtected;
+
+  /// No description provided for @appReasonUpdate.
+  ///
+  /// In en, this message translates to:
+  /// **'Update of another program: remove that program instead.'**
+  String get appReasonUpdate;
+
+  /// No description provided for @appReasonWindowsPart.
+  ///
+  /// In en, this message translates to:
+  /// **'Part of Windows or a framework other apps need.'**
+  String get appReasonWindowsPart;
+
+  /// No description provided for @appReasonSharedDependency.
+  ///
+  /// In en, this message translates to:
+  /// **'Used by other apps (runtime, driver or vendor panel).'**
+  String get appReasonSharedDependency;
+
+  /// No description provided for @appReasonOptionalFeature.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional Windows feature: read what stops working.'**
+  String get appReasonOptionalFeature;
+
+  /// No description provided for @appReasonMissingUninstaller.
+  ///
+  /// In en, this message translates to:
+  /// **'No uninstaller registered.'**
+  String get appReasonMissingUninstaller;
+
+  /// No description provided for @appReasonUserInstalled.
+  ///
+  /// In en, this message translates to:
+  /// **'Installed by you or the PC maker; nothing else depends on it.'**
+  String get appReasonUserInstalled;
+
+  /// No description provided for @appLabelMissingUninstaller.
+  ///
+  /// In en, this message translates to:
+  /// **'No uninstaller'**
+  String get appLabelMissingUninstaller;
+
+  /// No description provided for @appLabelProtected.
+  ///
+  /// In en, this message translates to:
+  /// **'Protected'**
+  String get appLabelProtected;
+
+  /// No description provided for @appLabelSystemComponent.
+  ///
+  /// In en, this message translates to:
+  /// **'System component'**
+  String get appLabelSystemComponent;
+
+  /// No description provided for @appLabelUpdate.
+  ///
+  /// In en, this message translates to:
+  /// **'Update'**
+  String get appLabelUpdate;
+
+  /// No description provided for @filterAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get filterAll;
+
+  /// No description provided for @filterType.
+  ///
+  /// In en, this message translates to:
+  /// **'Type'**
+  String get filterType;
+
+  /// No description provided for @filterSafety.
+  ///
+  /// In en, this message translates to:
+  /// **'Safety'**
+  String get filterSafety;
+
+  /// No description provided for @filterSource.
+  ///
+  /// In en, this message translates to:
+  /// **'Source'**
+  String get filterSource;
+
+  /// No description provided for @sourceWholePc.
+  ///
+  /// In en, this message translates to:
+  /// **'Whole PC'**
+  String get sourceWholePc;
+
+  /// No description provided for @sortBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Sort'**
+  String get sortBy;
+
+  /// No description provided for @sortSize.
+  ///
+  /// In en, this message translates to:
+  /// **'Size'**
+  String get sortSize;
+
+  /// No description provided for @sortName.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get sortName;
+
+  /// No description provided for @sortDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Install date'**
+  String get sortDate;
+
+  /// No description provided for @appsShown.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} apps'**
+  String appsShown(int count);
+
+  /// No description provided for @selectionSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} selected · {size}'**
+  String selectionSummary(int count, String size);
+
+  /// No description provided for @selectionUnknownSizes.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} with unknown size'**
+  String selectionUnknownSizes(int count);
+
+  /// No description provided for @appsSource.
+  ///
+  /// In en, this message translates to:
+  /// **'Source: Uninstall registry keys (HKLM 64/32-bit, HKCU), Get-AppxPackage, winget export for reinstall ids. Size: EstimatedSize, otherwise the install folder.'**
+  String get appsSource;
+
+  /// No description provided for @noAppsMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'No app matches these filters.'**
+  String get noAppsMatch;
+
+  /// No description provided for @reinstallableVia.
+  ///
+  /// In en, this message translates to:
+  /// **'Reinstall: winget {id}'**
+  String reinstallableVia(String id);
+
+  /// No description provided for @uninstallQueueTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Uninstall queue'**
+  String get uninstallQueueTitle;
+
+  /// No description provided for @uninstallModeSilent.
+  ///
+  /// In en, this message translates to:
+  /// **'Silent'**
+  String get uninstallModeSilent;
+
+  /// No description provided for @uninstallModeWindowed.
+  ///
+  /// In en, this message translates to:
+  /// **'Opens its window'**
+  String get uninstallModeWindowed;
+
+  /// No description provided for @uninstallManualNoUninstaller.
+  ///
+  /// In en, this message translates to:
+  /// **'Manual: no uninstaller registered.'**
+  String get uninstallManualNoUninstaller;
+
+  /// No description provided for @uninstallManualUnsafe.
+  ///
+  /// In en, this message translates to:
+  /// **'Manual: the registered command runs a shell or script, so ZapTweaks does not start it.'**
+  String get uninstallManualUnsafe;
+
+  /// No description provided for @uninstallManualNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Manual: the uninstaller file is missing.'**
+  String get uninstallManualNotFound;
+
+  /// No description provided for @uninstallRunningWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Still running from its folder: {processes}. Close it first.'**
+  String uninstallRunningWarning(String processes);
+
+  /// No description provided for @uninstallSimulate.
+  ///
+  /// In en, this message translates to:
+  /// **'Simulation: plan and show the queue, uninstall nothing'**
+  String get uninstallSimulate;
+
+  /// No description provided for @uninstallRestorePointNote.
+  ///
+  /// In en, this message translates to:
+  /// **'A restore point is created first. Programs that open a window run first, one at a time; silent ones follow.'**
+  String get uninstallRestorePointNote;
+
+  /// No description provided for @uninstallStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Start uninstalling'**
+  String get uninstallStart;
+
+  /// No description provided for @restorePointCreating.
+  ///
+  /// In en, this message translates to:
+  /// **'Creating restore point…'**
+  String get restorePointCreating;
+
+  /// No description provided for @restorePointFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'The restore point was not created. System Protection may be off. Nothing has been changed.'**
+  String get restorePointFailed;
+
+  /// No description provided for @restorePointEnableAndRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on System Protection and retry'**
+  String get restorePointEnableAndRetry;
+
+  /// No description provided for @queueWaiting.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting'**
+  String get queueWaiting;
+
+  /// No description provided for @queueRunning.
+  ///
+  /// In en, this message translates to:
+  /// **'Running'**
+  String get queueRunning;
+
+  /// No description provided for @queueDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get queueDone;
+
+  /// No description provided for @queueFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed'**
+  String get queueFailed;
+
+  /// No description provided for @queueSkipped.
+  ///
+  /// In en, this message translates to:
+  /// **'Skipped'**
+  String get queueSkipped;
+
+  /// No description provided for @queueSkip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get queueSkip;
+
+  /// No description provided for @queueStop.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop after the current one'**
+  String get queueStop;
+
+  /// No description provided for @queueSimulated.
+  ///
+  /// In en, this message translates to:
+  /// **'Simulation: nothing was uninstalled.'**
+  String get queueSimulated;
+
+  /// No description provided for @uninstallStoreAppsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Store apps in the selection use the Uninstall menu on their row.'**
+  String get uninstallStoreAppsHint;
+
+  /// No description provided for @leftoverSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Look for leftovers'**
+  String get leftoverSearch;
+
+  /// No description provided for @leftoverTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Leftovers'**
+  String get leftoverTitle;
+
+  /// No description provided for @leftoverGood.
+  ///
+  /// In en, this message translates to:
+  /// **'Sure'**
+  String get leftoverGood;
+
+  /// No description provided for @leftoverMedium.
+  ///
+  /// In en, this message translates to:
+  /// **'Likely'**
+  String get leftoverMedium;
+
+  /// No description provided for @leftoverLow.
+  ///
+  /// In en, this message translates to:
+  /// **'Uncertain'**
+  String get leftoverLow;
+
+  /// No description provided for @leftoverKindFolder.
+  ///
+  /// In en, this message translates to:
+  /// **'Folder'**
+  String get leftoverKindFolder;
+
+  /// No description provided for @leftoverKindShortcut.
+  ///
+  /// In en, this message translates to:
+  /// **'Shortcut'**
+  String get leftoverKindShortcut;
+
+  /// No description provided for @leftoverKindRegistry.
+  ///
+  /// In en, this message translates to:
+  /// **'Registry key'**
+  String get leftoverKindRegistry;
+
+  /// No description provided for @leftoverKindRun.
+  ///
+  /// In en, this message translates to:
+  /// **'Startup entry'**
+  String get leftoverKindRun;
+
+  /// No description provided for @leftoverKindTask.
+  ///
+  /// In en, this message translates to:
+  /// **'Scheduled task'**
+  String get leftoverKindTask;
+
+  /// No description provided for @leftoverKindFirewall.
+  ///
+  /// In en, this message translates to:
+  /// **'Firewall rule'**
+  String get leftoverKindFirewall;
+
+  /// No description provided for @leftoverNone.
+  ///
+  /// In en, this message translates to:
+  /// **'No leftovers found.'**
+  String get leftoverNone;
+
+  /// No description provided for @leftoverRemoveSelected.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove selected ({count})'**
+  String leftoverRemoveSelected(int count);
+
+  /// No description provided for @leftoverBackupNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Only items marked Sure start selected. Before removal, registry keys are exported to .reg, tasks to XML and firewall rules to JSON; files and folders go to the Recycle Bin.'**
+  String get leftoverBackupNote;
+
+  /// No description provided for @leftoverRemoved.
+  ///
+  /// In en, this message translates to:
+  /// **'Leftovers removed. Backups: {path}'**
+  String leftoverRemoved(String path);
+
+  /// No description provided for @leftoverRefusedInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Not removed: malformed or unsafe entry.'**
+  String get leftoverRefusedInvalid;
+
+  /// No description provided for @leftoverRefusedOutside.
+  ///
+  /// In en, this message translates to:
+  /// **'Not removed: outside what ZapTweaks may clean here.'**
+  String get leftoverRefusedOutside;
+
+  /// No description provided for @leftoverRefusedShared.
+  ///
+  /// In en, this message translates to:
+  /// **'Not removed: shared with Windows or other programs.'**
+  String get leftoverRefusedShared;
+
+  /// No description provided for @orphanFolders.
+  ///
+  /// In en, this message translates to:
+  /// **'Orphan folders'**
+  String get orphanFolders;
+
+  /// No description provided for @orphanFoldersNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Program Files folders that no installed program points to. A portable tool or a driver kit can look the same, so nothing is selected: check each one first.'**
+  String get orphanFoldersNote;
+
+  /// No description provided for @openLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Open location'**
+  String get openLocation;
+
+  /// No description provided for @processesTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Processes'**
+  String get processesTab;
+
+  /// No description provided for @searchProcesses.
+  ///
+  /// In en, this message translates to:
+  /// **'Search processes'**
+  String get searchProcesses;
+
+  /// No description provided for @sortMemory.
+  ///
+  /// In en, this message translates to:
+  /// **'Memory'**
+  String get sortMemory;
+
+  /// No description provided for @sortCpu.
+  ///
+  /// In en, this message translates to:
+  /// **'CPU'**
+  String get sortCpu;
+
+  /// No description provided for @processKindWindows.
+  ///
+  /// In en, this message translates to:
+  /// **'Windows'**
+  String get processKindWindows;
+
+  /// No description provided for @processKindMicrosoft.
+  ///
+  /// In en, this message translates to:
+  /// **'Microsoft app'**
+  String get processKindMicrosoft;
+
+  /// No description provided for @processKindThirdParty.
+  ///
+  /// In en, this message translates to:
+  /// **'Third party'**
+  String get processKindThirdParty;
+
+  /// No description provided for @processCanClose.
+  ///
+  /// In en, this message translates to:
+  /// **'Can close'**
+  String get processCanClose;
+
+  /// No description provided for @processLeaveRunning.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave running'**
+  String get processLeaveRunning;
+
+  /// No description provided for @processReasonCritical.
+  ///
+  /// In en, this message translates to:
+  /// **'Windows needs it: closing it can sign you out or crash the system.'**
+  String get processReasonCritical;
+
+  /// No description provided for @processReasonWindowsFolder.
+  ///
+  /// In en, this message translates to:
+  /// **'Runs from the Windows folder or is protected.'**
+  String get processReasonWindowsFolder;
+
+  /// No description provided for @processReasonService.
+  ///
+  /// In en, this message translates to:
+  /// **'Runs a service: manage it from the Services tab.'**
+  String get processReasonService;
+
+  /// No description provided for @processReasonSelf.
+  ///
+  /// In en, this message translates to:
+  /// **'This is ZapTweaks.'**
+  String get processReasonSelf;
+
+  /// No description provided for @processReasonUserApp.
+  ///
+  /// In en, this message translates to:
+  /// **'An app you started: closing it loses unsaved work.'**
+  String get processReasonUserApp;
+
+  /// No description provided for @processEnd.
+  ///
+  /// In en, this message translates to:
+  /// **'End process'**
+  String get processEnd;
+
+  /// No description provided for @processEndConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'End {name}? Anything unsaved in it is lost.'**
+  String processEndConfirm(String name);
+
+  /// No description provided for @processEndChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'It had already closed, or its ID now belongs to another process: nothing was ended.'**
+  String get processEndChanged;
+
+  /// No description provided for @processEndFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Windows refused to end it. It may run as administrator.'**
+  String get processEndFailed;
+
+  /// No description provided for @searchOnline.
+  ///
+  /// In en, this message translates to:
+  /// **'Search online'**
+  String get searchOnline;
+
+  /// No description provided for @processOnlyClosable.
+  ///
+  /// In en, this message translates to:
+  /// **'Only ones you can close'**
+  String get processOnlyClosable;
+
+  /// No description provided for @processNote.
+  ///
+  /// In en, this message translates to:
+  /// **'A snapshot: CPU is a single sample, refresh to read it again. Signatures are checked after the list appears. System processes are never offered for closing.'**
+  String get processNote;
+
+  /// No description provided for @noProcessesMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'No process matches these filters.'**
+  String get noProcessesMatch;
+
+  /// No description provided for @signedBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Signed by {signer}'**
+  String signedBy(String signer);
+
+  /// No description provided for @servicesTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Services'**
+  String get servicesTab;
+
+  /// No description provided for @searchServices.
+  ///
+  /// In en, this message translates to:
+  /// **'Search services'**
+  String get searchServices;
+
+  /// No description provided for @filterOrigin.
+  ///
+  /// In en, this message translates to:
+  /// **'Origin'**
+  String get filterOrigin;
+
+  /// No description provided for @originMicrosoft.
+  ///
+  /// In en, this message translates to:
+  /// **'Microsoft'**
+  String get originMicrosoft;
+
+  /// No description provided for @serviceCanDisable.
+  ///
+  /// In en, this message translates to:
+  /// **'Can disable'**
+  String get serviceCanDisable;
+
+  /// No description provided for @serviceDependsOnUse.
+  ///
+  /// In en, this message translates to:
+  /// **'Depends on use'**
+  String get serviceDependsOnUse;
+
+  /// No description provided for @serviceKeep.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep it'**
+  String get serviceKeep;
+
+  /// No description provided for @serviceStartAutomatic.
+  ///
+  /// In en, this message translates to:
+  /// **'Automatic'**
+  String get serviceStartAutomatic;
+
+  /// No description provided for @serviceStartDelayed.
+  ///
+  /// In en, this message translates to:
+  /// **'Automatic (delayed)'**
+  String get serviceStartDelayed;
+
+  /// No description provided for @serviceStartManual.
+  ///
+  /// In en, this message translates to:
+  /// **'Manual'**
+  String get serviceStartManual;
+
+  /// No description provided for @serviceStartDisabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Disabled'**
+  String get serviceStartDisabled;
+
+  /// No description provided for @serviceStartBoot.
+  ///
+  /// In en, this message translates to:
+  /// **'Boot'**
+  String get serviceStartBoot;
+
+  /// No description provided for @serviceRunning.
+  ///
+  /// In en, this message translates to:
+  /// **'Running'**
+  String get serviceRunning;
+
+  /// No description provided for @serviceStopped.
+  ///
+  /// In en, this message translates to:
+  /// **'Stopped'**
+  String get serviceStopped;
+
+  /// No description provided for @serviceSetDisabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Disable'**
+  String get serviceSetDisabled;
+
+  /// No description provided for @serviceSetManual.
+  ///
+  /// In en, this message translates to:
+  /// **'Set to manual'**
+  String get serviceSetManual;
+
+  /// No description provided for @serviceSetAutomatic.
+  ///
+  /// In en, this message translates to:
+  /// **'Set to automatic'**
+  String get serviceSetAutomatic;
+
+  /// No description provided for @serviceChangeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Change {service}'**
+  String serviceChangeTitle(String service);
+
+  /// No description provided for @serviceChangeConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Start type: {from} → {to}.\n{reason}\nIt applies the next time the service or Windows starts. You can undo it right after.'**
+  String serviceChangeConfirm(String from, String to, String reason);
+
+  /// No description provided for @serviceChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'{service} is now {to}.'**
+  String serviceChanged(String service, String to);
+
+  /// No description provided for @serviceUndo.
+  ///
+  /// In en, this message translates to:
+  /// **'Undo'**
+  String get serviceUndo;
+
+  /// No description provided for @serviceNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Changes ask for administrator rights and take effect at the next start of the service or of Windows. Services Windows needs are never offered; disabling a service that others depend on is refused.'**
+  String get serviceNote;
+
+  /// No description provided for @noServicesMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'No service matches these filters.'**
+  String get noServicesMatch;
+
+  /// No description provided for @svcReasonTelemetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Sends usage and diagnostic data to Microsoft. Nothing you use stops working.'**
+  String get svcReasonTelemetry;
+
+  /// No description provided for @svcReasonDeviceManagement.
+  ///
+  /// In en, this message translates to:
+  /// **'Telemetry and work or school device management: only needed if an organization manages this PC.'**
+  String get svcReasonDeviceManagement;
+
+  /// No description provided for @svcReasonCrashReports.
+  ///
+  /// In en, this message translates to:
+  /// **'Sends crash reports to Microsoft. Crashes are still logged on this PC.'**
+  String get svcReasonCrashReports;
+
+  /// No description provided for @svcReasonRemoteRegistry.
+  ///
+  /// In en, this message translates to:
+  /// **'Lets other computers edit this PC\'s registry over the network. Off by default.'**
+  String get svcReasonRemoteRegistry;
+
+  /// No description provided for @svcReasonOfflineMaps.
+  ///
+  /// In en, this message translates to:
+  /// **'Keeps offline maps up to date for the Maps app.'**
+  String get svcReasonOfflineMaps;
+
+  /// No description provided for @svcReasonMediaSharing.
+  ///
+  /// In en, this message translates to:
+  /// **'Shares the Windows Media Player library on the network.'**
+  String get svcReasonMediaSharing;
+
+  /// No description provided for @svcReasonRetailDemo.
+  ///
+  /// In en, this message translates to:
+  /// **'Shop demo mode. Never needed at home.'**
+  String get svcReasonRetailDemo;
+
+  /// No description provided for @svcReasonXbox.
+  ///
+  /// In en, this message translates to:
+  /// **'Without it: Xbox app, Game Pass, cloud saves and Xbox accessories stop working.'**
+  String get svcReasonXbox;
+
+  /// No description provided for @svcReasonPrinting.
+  ///
+  /// In en, this message translates to:
+  /// **'Without it: printing stops working, Print to PDF included.'**
+  String get svcReasonPrinting;
+
+  /// No description provided for @svcReasonBluetooth.
+  ///
+  /// In en, this message translates to:
+  /// **'Without it: Bluetooth devices stop connecting.'**
+  String get svcReasonBluetooth;
+
+  /// No description provided for @svcReasonSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Without it: search in Start, Settings and File Explorer gets slow and incomplete.'**
+  String get svcReasonSearch;
+
+  /// No description provided for @svcReasonSysMain.
+  ///
+  /// In en, this message translates to:
+  /// **'Preloads apps you use often. Without it launches can be slower, mostly on hard disks.'**
+  String get svcReasonSysMain;
+
+  /// No description provided for @svcReasonTouchKeyboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Without it: touch keyboard, handwriting, the emoji panel and some input methods stop working.'**
+  String get svcReasonTouchKeyboard;
+
+  /// No description provided for @svcReasonLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Without it: apps and Find my device can no longer get your location.'**
+  String get svcReasonLocation;
+
+  /// No description provided for @svcReasonBiometrics.
+  ///
+  /// In en, this message translates to:
+  /// **'Without it: Windows Hello face and fingerprint sign-in stop working.'**
+  String get svcReasonBiometrics;
+
+  /// No description provided for @svcReasonPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Without it: calls through Phone Link stop working.'**
+  String get svcReasonPhone;
+
+  /// No description provided for @svcReasonRemoteDesktop.
+  ///
+  /// In en, this message translates to:
+  /// **'Without it: Remote Desktop into this PC stops working.'**
+  String get svcReasonRemoteDesktop;
+
+  /// No description provided for @svcReasonSmartCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Without it: smart cards and some security keys stop working.'**
+  String get svcReasonSmartCard;
+
+  /// No description provided for @svcReasonParental.
+  ///
+  /// In en, this message translates to:
+  /// **'Without it: Microsoft Family Safety limits are no longer enforced.'**
+  String get svcReasonParental;
+
+  /// No description provided for @svcReasonNfc.
+  ///
+  /// In en, this message translates to:
+  /// **'Without it: NFC and tap-to-pay stop working.'**
+  String get svcReasonNfc;
+
+  /// No description provided for @svcReasonHotspot.
+  ///
+  /// In en, this message translates to:
+  /// **'Without it: Mobile hotspot stops working.'**
+  String get svcReasonHotspot;
+
+  /// No description provided for @svcReasonScanner.
+  ///
+  /// In en, this message translates to:
+  /// **'Without it: scanners and some cameras stop working.'**
+  String get svcReasonScanner;
+
+  /// No description provided for @svcReasonCompatibility.
+  ///
+  /// In en, this message translates to:
+  /// **'Without it: Windows no longer offers fixes when an old program fails to run.'**
+  String get svcReasonCompatibility;
+
+  /// No description provided for @svcReasonFax.
+  ///
+  /// In en, this message translates to:
+  /// **'Without it: fax stops working.'**
+  String get svcReasonFax;
+
+  /// No description provided for @svcReasonInsider.
+  ///
+  /// In en, this message translates to:
+  /// **'Without it: Windows Insider preview builds stop arriving.'**
+  String get svcReasonInsider;
+
+  /// No description provided for @svcReasonUpdates.
+  ///
+  /// In en, this message translates to:
+  /// **'Windows Update needs it: without it security fixes stop arriving.'**
+  String get svcReasonUpdates;
+
+  /// No description provided for @svcReasonSecurity.
+  ///
+  /// In en, this message translates to:
+  /// **'Protects this PC (antivirus, firewall, security status).'**
+  String get svcReasonSecurity;
+
+  /// No description provided for @svcReasonWindowsCore.
+  ///
+  /// In en, this message translates to:
+  /// **'Windows needs it for sound, network, logs or basic system functions.'**
+  String get svcReasonWindowsCore;
+
+  /// No description provided for @svcReasonNotReviewed.
+  ///
+  /// In en, this message translates to:
+  /// **'Part of Windows and not reviewed: leave it as it is.'**
+  String get svcReasonNotReviewed;
+
+  /// No description provided for @svcReasonDriverService.
+  ///
+  /// In en, this message translates to:
+  /// **'Installed with a driver: leave it unless you know what it does.'**
+  String get svcReasonDriverService;
+
+  /// No description provided for @svcReasonMicrosoftApp.
+  ///
+  /// In en, this message translates to:
+  /// **'Belongs to a Microsoft app: without it that app may stop working or updating.'**
+  String get svcReasonMicrosoftApp;
+
+  /// No description provided for @svcReasonThirdParty.
+  ///
+  /// In en, this message translates to:
+  /// **'Installed with another program: without it that program may stop working or updating.'**
+  String get svcReasonThirdParty;
+
+  /// No description provided for @serviceStartTypeAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Change startup'**
+  String get serviceStartTypeAction;
+
+  /// No description provided for @presetsTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Presets'**
+  String get presetsTab;
+
+  /// No description provided for @presetDebloatName.
+  ///
+  /// In en, this message translates to:
+  /// **'Debloat only'**
+  String get presetDebloatName;
+
+  /// No description provided for @presetDebloatSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Removes preinstalled Microsoft apps few people use. Nothing else changes.'**
+  String get presetDebloatSummary;
+
+  /// No description provided for @presetCleanName.
+  ///
+  /// In en, this message translates to:
+  /// **'Clean'**
+  String get presetCleanName;
+
+  /// No description provided for @presetCleanSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Debloat, plus telemetry and unused services off and apps that start with Windows for no reason.'**
+  String get presetCleanSummary;
+
+  /// No description provided for @presetGamingName.
+  ///
+  /// In en, this message translates to:
+  /// **'Gaming'**
+  String get presetGamingName;
+
+  /// No description provided for @presetGamingSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Clean, plus settings for playing: no power throttling of running apps, End task in the taskbar. Xbox stays.'**
+  String get presetGamingSummary;
+
+  /// No description provided for @presetPrivacyName.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy'**
+  String get presetPrivacyName;
+
+  /// No description provided for @presetPrivacySummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Clean, plus the privacy settings from Microsoft\'s own guide: advertising ID, tracking, suggestions, diagnostic data to the minimum.'**
+  String get presetPrivacySummary;
+
+  /// No description provided for @presetCompetitiveName.
+  ///
+  /// In en, this message translates to:
+  /// **'Competitive'**
+  String get presetCompetitiveName;
+
+  /// No description provided for @presetCompetitiveSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Removes everything the other presets remove and more: apps many people use, Xbox, printing, launchers at startup, game recording. Plus a clean driver install and WinSux, done by hand.'**
+  String get presetCompetitiveSummary;
+
+  /// No description provided for @presetAttention.
+  ///
+  /// In en, this message translates to:
+  /// **'Attention'**
+  String get presetAttention;
+
+  /// No description provided for @presetAttentionNote.
+  ///
+  /// In en, this message translates to:
+  /// **'It removes a lot, including things many people use. No FPS, latency or other gain is promised: it is a set of changes, not a measured improvement.'**
+  String get presetAttentionNote;
+
+  /// No description provided for @presetGroupApps.
+  ///
+  /// In en, this message translates to:
+  /// **'Apps it removes (current user)'**
+  String get presetGroupApps;
+
+  /// No description provided for @presetGroupServices.
+  ///
+  /// In en, this message translates to:
+  /// **'Services it turns off'**
+  String get presetGroupServices;
+
+  /// No description provided for @presetGroupStartup.
+  ///
+  /// In en, this message translates to:
+  /// **'Startup entries it turns off'**
+  String get presetGroupStartup;
+
+  /// No description provided for @presetGroupTweaks.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get presetGroupTweaks;
+
+  /// No description provided for @presetGroupThirdParty.
+  ///
+  /// In en, this message translates to:
+  /// **'Third-party scripts and tools'**
+  String get presetGroupThirdParty;
+
+  /// No description provided for @presetGroupRestart.
+  ///
+  /// In en, this message translates to:
+  /// **'Restart'**
+  String get presetGroupRestart;
+
+  /// No description provided for @presetGroupReversible.
+  ///
+  /// In en, this message translates to:
+  /// **'What can be undone'**
+  String get presetGroupReversible;
+
+  /// No description provided for @presetRestartNeeded.
+  ///
+  /// In en, this message translates to:
+  /// **'Restart afterwards: services and startup entries change at the next start.'**
+  String get presetRestartNeeded;
+
+  /// No description provided for @presetRestartNone.
+  ///
+  /// In en, this message translates to:
+  /// **'No restart needed.'**
+  String get presetRestartNone;
+
+  /// No description provided for @presetReversibleApps.
+  ///
+  /// In en, this message translates to:
+  /// **'Apps: reinstall them from the Microsoft Store.'**
+  String get presetReversibleApps;
+
+  /// No description provided for @presetReversibleSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Services, startup entries and settings: undo them right after with Undo preset, or later with the restore point created first.'**
+  String get presetReversibleSettings;
+
+  /// No description provided for @presetReversibleManual.
+  ///
+  /// In en, this message translates to:
+  /// **'Third-party steps are not run by ZapTweaks: follow the author\'s own instructions to undo them.'**
+  String get presetReversibleManual;
+
+  /// No description provided for @presetManualWhy.
+  ///
+  /// In en, this message translates to:
+  /// **'Done by hand: the script downloads and runs other files that cannot be pinned to a hash, so ZapTweaks does not run it.'**
+  String get presetManualWhy;
+
+  /// No description provided for @presetManualDriverClean.
+  ///
+  /// In en, this message translates to:
+  /// **'Clean graphics driver install: DDU in Safe Mode, then the latest driver from the vendor.'**
+  String get presetManualDriverClean;
+
+  /// No description provided for @presetManualWinsux.
+  ///
+  /// In en, this message translates to:
+  /// **'WinSux: Windows debloat and settings in one script.'**
+  String get presetManualWinsux;
+
+  /// No description provided for @presetPreview.
+  ///
+  /// In en, this message translates to:
+  /// **'Preview on this PC'**
+  String get presetPreview;
+
+  /// No description provided for @presetPreviewLoading.
+  ///
+  /// In en, this message translates to:
+  /// **'Reading apps, services, startup entries and settings…'**
+  String get presetPreviewLoading;
+
+  /// No description provided for @presetStatusApply.
+  ///
+  /// In en, this message translates to:
+  /// **'To do'**
+  String get presetStatusApply;
+
+  /// No description provided for @presetStatusDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Already set'**
+  String get presetStatusDone;
+
+  /// No description provided for @presetStatusSkipped.
+  ///
+  /// In en, this message translates to:
+  /// **'Skipped'**
+  String get presetStatusSkipped;
+
+  /// No description provided for @presetStatusManual.
+  ///
+  /// In en, this message translates to:
+  /// **'By hand'**
+  String get presetStatusManual;
+
+  /// No description provided for @presetSkipNotInstalled.
+  ///
+  /// In en, this message translates to:
+  /// **'not installed'**
+  String get presetSkipNotInstalled;
+
+  /// No description provided for @presetSkipNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'not on this PC'**
+  String get presetSkipNotFound;
+
+  /// No description provided for @presetSkipUnsupported.
+  ///
+  /// In en, this message translates to:
+  /// **'not supported here'**
+  String get presetSkipUnsupported;
+
+  /// No description provided for @presetSkipDuplicate.
+  ///
+  /// In en, this message translates to:
+  /// **'same name twice: only the first is changed'**
+  String get presetSkipDuplicate;
+
+  /// No description provided for @presetCounts.
+  ///
+  /// In en, this message translates to:
+  /// **'{apply} to do · {done} already set · {skipped} skipped'**
+  String presetCounts(int apply, int done, int skipped);
+
+  /// No description provided for @presetConsent.
+  ///
+  /// In en, this message translates to:
+  /// **'I have read the full list and accept the risk.'**
+  String get presetConsent;
+
+  /// No description provided for @presetApply.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply preset'**
+  String get presetApply;
+
+  /// No description provided for @presetApplyNote.
+  ///
+  /// In en, this message translates to:
+  /// **'A restore point is created first; if it fails nothing changes. Administrator changes ask for UAC once.'**
+  String get presetApplyNote;
+
+  /// No description provided for @presetApplying.
+  ///
+  /// In en, this message translates to:
+  /// **'Applying…'**
+  String get presetApplying;
+
+  /// No description provided for @presetReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Done: {ok} changed, {failed} not changed.'**
+  String presetReport(int ok, int failed);
+
+  /// No description provided for @presetUndo.
+  ///
+  /// In en, this message translates to:
+  /// **'Undo preset'**
+  String get presetUndo;
+
+  /// No description provided for @presetUndone.
+  ///
+  /// In en, this message translates to:
+  /// **'Preset undone. Removed apps stay removed: reinstall them from the Store.'**
+  String get presetUndone;
+
+  /// No description provided for @presetNothingToDo.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing to do: everything is already set.'**
+  String get presetNothingToDo;
+
+  /// No description provided for @presetSaveAs.
+  ///
+  /// In en, this message translates to:
+  /// **'Save as my preset'**
+  String get presetSaveAs;
+
+  /// No description provided for @presetSaveNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Saves the items still ticked. Share the file to export it; put a file in the folder to import it.'**
+  String get presetSaveNote;
+
+  /// No description provided for @presetName.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get presetName;
+
+  /// No description provided for @presetSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved: {path}'**
+  String presetSaved(String path);
+
+  /// No description provided for @presetOpenFolder.
+  ///
+  /// In en, this message translates to:
+  /// **'Open presets folder'**
+  String get presetOpenFolder;
+
+  /// No description provided for @presetUserTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'My presets'**
+  String get presetUserTitle;
+
+  /// No description provided for @presetInvalidFile.
+  ///
+  /// In en, this message translates to:
+  /// **'{file} not loaded: {error}'**
+  String presetInvalidFile(String file, String error);
+
+  /// No description provided for @presetItemPowerThrottling.
+  ///
+  /// In en, this message translates to:
+  /// **'Power throttling of running apps off'**
+  String get presetItemPowerThrottling;
+
+  /// No description provided for @presetItemEndTask.
+  ///
+  /// In en, this message translates to:
+  /// **'End task in the taskbar menu'**
+  String get presetItemEndTask;
+
+  /// No description provided for @presetItemAdvertisingId.
+  ///
+  /// In en, this message translates to:
+  /// **'Advertising ID off'**
+  String get presetItemAdvertisingId;
+
+  /// No description provided for @presetItemLanguageList.
+  ///
+  /// In en, this message translates to:
+  /// **'Websites can\'t read your language list'**
+  String get presetItemLanguageList;
+
+  /// No description provided for @presetItemAppLaunchTracking.
+  ///
+  /// In en, this message translates to:
+  /// **'Windows doesn\'t track the apps you start'**
+  String get presetItemAppLaunchTracking;
+
+  /// No description provided for @presetItemTailoredExperiences.
+  ///
+  /// In en, this message translates to:
+  /// **'No tailored experiences from diagnostic data'**
+  String get presetItemTailoredExperiences;
+
+  /// No description provided for @presetItemCloudContent.
+  ///
+  /// In en, this message translates to:
+  /// **'No cloud-optimized content (suggestions)'**
+  String get presetItemCloudContent;
+
+  /// No description provided for @presetItemDiagnosticData.
+  ///
+  /// In en, this message translates to:
+  /// **'Diagnostic data: required only'**
+  String get presetItemDiagnosticData;
+
+  /// No description provided for @presetItemLockScreenOverlay.
+  ///
+  /// In en, this message translates to:
+  /// **'No tips over the lock screen'**
+  String get presetItemLockScreenOverlay;
+
+  /// No description provided for @presetItemLockScreenFacts.
+  ///
+  /// In en, this message translates to:
+  /// **'No fun facts on the lock screen'**
+  String get presetItemLockScreenFacts;
+
+  /// No description provided for @presetItemGameDvr.
+  ///
+  /// In en, this message translates to:
+  /// **'Game Bar game recording off'**
+  String get presetItemGameDvr;
+
+  /// No description provided for @presetSkipHasDependents.
+  ///
+  /// In en, this message translates to:
+  /// **'Other services depend on it, so Windows does not allow disabling it.'**
+  String get presetSkipHasDependents;
+
+  /// No description provided for @settingsGeneral.
+  ///
+  /// In en, this message translates to:
+  /// **'General'**
+  String get settingsGeneral;
+
+  /// No description provided for @settingsModes.
+  ///
+  /// In en, this message translates to:
+  /// **'Modes'**
+  String get settingsModes;
+
+  /// No description provided for @settingsMaintenance.
+  ///
+  /// In en, this message translates to:
+  /// **'Maintenance'**
+  String get settingsMaintenance;
+
+  /// No description provided for @settingsAbout.
+  ///
+  /// In en, this message translates to:
+  /// **'About'**
+  String get settingsAbout;
+
+  /// No description provided for @openLogFolderDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Session logs with every command ZapTweaks ran.'**
+  String get openLogFolderDescription;
+
+  /// No description provided for @redetectSystemStateDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Read the hardware and the state of every tweak again.'**
+  String get redetectSystemStateDescription;
+
+  /// No description provided for @profileTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings profile'**
+  String get profileTitle;
+
+  /// No description provided for @profileDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Save ZapTweaks preferences to a file or load them from one.'**
+  String get profileDescription;
+
+  /// No description provided for @resetAppSettingsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to default ZapTweaks preferences. Windows is not changed.'**
+  String get resetAppSettingsDescription;
+
+  /// No description provided for @expertModeOn.
+  ///
+  /// In en, this message translates to:
+  /// **'On'**
+  String get expertModeOn;
+
+  /// No description provided for @expertModeOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Off'**
+  String get expertModeOff;
 }
 
 class _AppLocalizationsDelegate

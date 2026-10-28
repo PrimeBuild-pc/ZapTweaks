@@ -3,20 +3,48 @@ import 'package:fluent_ui/fluent_ui.dart';
 import '../../../core/operations/operation.dart';
 import '../../../core/plans/operation_plan.dart';
 import '../../../core/services/process_runner.dart';
+import '../../../core/security/elevated_helper.dart';
 import '../../../features/apps/application/app_store_catalog.dart';
 import '../../../features/apps/application/app_store_service.dart';
 import '../../../features/apps/application/windows_app_inventory_service.dart';
 import '../../../features/apps/domain/app_package.dart';
+import '../../../features/apps/domain/appx_candidate_policy.dart';
 import '../../../features/apps/domain/store_app.dart';
 import '../../../features/drivers/application/setupapi_device_inventory_service.dart';
 import '../../../features/drivers/domain/device_identity.dart';
 import '../../../features/tweaks/application/tweak_controller.dart';
 import '../../../l10n/app_localizations.dart';
 
+Map<OperationPrivilege, List<OperationRequest>> setupRequestGroups(
+  List<OperationRequest> requests,
+) {
+  final groups = <OperationPrivilege, List<OperationRequest>>{};
+  for (final request in requests) {
+    final privilege = switch (request.operationId) {
+      'app.winget.set' ||
+      'app.appx.remove_current_user' => OperationPrivilege.user,
+      'ui_taskbar_end_task' ||
+      'app.appx.remove_system' => OperationPrivilege.administrator,
+      _ => throw StateError('Unknown guided setup operation.'),
+    };
+    (groups[privilege] ??= <OperationRequest>[]).add(request);
+  }
+  return groups;
+}
+
 class GuidedSetupPage extends StatefulWidget {
-  const GuidedSetupPage({required this.controller, super.key});
+  const GuidedSetupPage({
+    required this.controller,
+    this.catalogLoader,
+    this.deviceInventoryLoader,
+    this.systemAppsLoader,
+    super.key,
+  });
 
   final TweakController controller;
+  final Future<AppStoreCatalog> Function()? catalogLoader;
+  final Future<List<DeviceIdentity>> Function()? deviceInventoryLoader;
+  final Future<AppInventoryResult> Function()? systemAppsLoader;
 
   @override
   State<GuidedSetupPage> createState() => _GuidedSetupPageState();
@@ -33,12 +61,15 @@ class _GuidedSetupPageState extends State<GuidedSetupPage> {
   Set<String> _installedIds = const <String>{};
   final _selectedApps = <String>{};
   List<AppPackage> _appxPackages = const <AppPackage>[];
-  final _selectedAppx = <String>{};
+  List<AppPackage> _currentAppxPackages = const <AppPackage>[];
+  final _selectedAppx = <String, String>{};
+  bool _systemScopesComplete = false;
   bool _enableTaskbarEndTask = false;
   String _appQuery = '';
   bool _working = false;
   bool _updatesReviewed = false;
-  OperationPlan? _report;
+  final _reports = <OperationPlan>[];
+  final _appliedGroups = <OperationPrivilege>{};
   String? _message;
 
   @override
@@ -57,12 +88,13 @@ class _GuidedSetupPageState extends State<GuidedSetupPage> {
     });
     try {
       final results = await Future.wait<dynamic>(<Future<dynamic>>[
-        AppStoreCatalog.load(),
+        (widget.catalogLoader ?? AppStoreCatalog.load)(),
         _apps.installedWingetIds(),
         _appInventory.scanCurrentUser(),
-        Future<List<DeviceIdentity>>(
-          () => SetupApiDeviceInventoryService().scanPresent(),
-        ),
+        widget.deviceInventoryLoader?.call() ??
+            Future<List<DeviceIdentity>>(
+              () => SetupApiDeviceInventoryService().scanPresent(),
+            ),
       ]);
       final currentApps = results[2] as AppInventoryResult;
       if (!currentApps.currentUserComplete) {
@@ -76,7 +108,10 @@ class _GuidedSetupPageState extends State<GuidedSetupPage> {
         _catalog = (results[0] as AppStoreCatalog).apps;
         _installedIds = results[1] as Set<String>;
         _installedCount = _installedIds.length;
+        _currentAppxPackages = currentApps.packages;
         _appxPackages = currentApps.packages;
+        _selectedAppx.clear();
+        _systemScopesComplete = false;
         _deviceCount = devices.length;
         _devicesWithoutInf = devices
             .where((device) => device.driverInf == null)
@@ -98,17 +133,51 @@ class _GuidedSetupPageState extends State<GuidedSetupPage> {
     }
   }
 
-  Future<void> _apply() async {
+  Future<void> _scanSystemApps() async {
+    setState(() {
+      _working = true;
+      _systemScopesComplete = false;
+      _message = null;
+    });
+    try {
+      final result =
+          await (widget.systemAppsLoader ??
+              ElevatedHelperClient(
+                directory: defaultElevatedHelperDirectory(),
+              ).scanSystemApps)();
+      if (!mounted) return;
+      setState(() {
+        _appxPackages = mergeAppPackages(<AppPackage>[
+          ..._currentAppxPackages,
+          ...result.packages,
+        ]);
+        _systemScopesComplete =
+            result.allUsersComplete && result.provisionedComplete;
+        _selectedAppx.removeWhere(
+          (id, scope) => !_availableAppxScopes(id).contains(scope),
+        );
+        _message = result.message;
+      });
+    } catch (error) {
+      if (mounted) setState(() => _message = error.toString());
+    } finally {
+      if (mounted) setState(() => _working = false);
+    }
+  }
+
+  Future<void> _apply(OperationPrivilege privilege) async {
     setState(() {
       _working = true;
       _message = null;
     });
     try {
-      final plan = await widget.controller.executeNativeRequests(_requests);
+      final plan = await widget.controller.executeNativeRequests(
+        setupRequestGroups(_requests)[privilege]!,
+      );
       if (!mounted) return;
       setState(() {
-        _report = plan;
-        _step = 9;
+        _reports.add(plan);
+        _appliedGroups.add(privilege);
       });
     } catch (error) {
       if (mounted) setState(() => _message = error.toString());
@@ -159,7 +228,7 @@ class _GuidedSetupPageState extends State<GuidedSetupPage> {
           Row(
             children: <Widget>[
               Button(
-                onPressed: _step == 0 || _working
+                onPressed: _step == 0 || _working || _reports.isNotEmpty
                     ? null
                     : () => setState(() => _step--),
                 child: Text(strings.back),
@@ -177,20 +246,15 @@ class _GuidedSetupPageState extends State<GuidedSetupPage> {
                 )
               else if (_step == 8)
                 FilledButton(
-                  onPressed: _working
-                      ? null
-                      : _requests.isEmpty
-                      ? () => setState(() => _step = 9)
-                      : _apply,
-                  child: Text(
-                    _requests.isEmpty ? strings.finish : strings.applyPlan,
-                  ),
+                  onPressed: _working ? null : () => setState(() => _step = 9),
+                  child: Text(strings.wizardReport),
                 )
               else
                 FilledButton(
                   onPressed: () => setState(() {
                     _step = 0;
-                    _report = null;
+                    _reports.clear();
+                    _appliedGroups.clear();
                     _selectedApps.clear();
                     _selectedAppx.clear();
                     _enableTaskbarEndTask = false;
@@ -308,26 +372,95 @@ class _GuidedSetupPageState extends State<GuidedSetupPage> {
 
   Widget _debloatStep(AppLocalizations strings) => ListView(
     children: <Widget>[
-      Text(strings.wizardDebloatNotice),
+      Text(
+        'No defaults. Existing accounts and future-account provisioning are separate opt-in scopes. Restore sources are not rollback.',
+      ),
       const SizedBox(height: 10),
-      for (final package in _appxPackages)
-        Checkbox(
-          checked: _selectedAppx.contains(package.packageId),
-          content: Text(
-            '${package.name} · ${package.reinstallable ? strings.reinstallable : strings.notReinstallable}',
-          ),
-          onChanged: package.reinstallable
-              ? (value) => setState(() {
-                  if (value == true) {
-                    _selectedAppx.add(package.packageId);
-                  } else {
-                    _selectedAppx.remove(package.packageId);
-                  }
-                })
-              : null,
-        ),
+      Button(
+        onPressed: _working ? null : _scanSystemApps,
+        child: Text(strings.scanAllUsers),
+      ),
+      Text(
+        _systemScopesComplete
+            ? strings.systemScopesComplete
+            : strings.systemScopesIncomplete,
+      ),
+      for (final group in AppxCandidateGroup.values) ...<Widget>[
+        const SizedBox(height: 12),
+        Text(group.label, style: FluentTheme.of(context).typography.bodyStrong),
+        for (final entry in appxCandidatePolicy.entries.where(
+          (entry) => entry.value.group == group,
+        ))
+          _appxChoice(entry.key, entry.value, strings),
+      ],
     ],
   );
+
+  Widget _appxChoice(
+    String id,
+    AppxCandidate candidate,
+    AppLocalizations strings,
+  ) {
+    final scopes = _availableAppxScopes(id);
+    final available = scopes.isNotEmpty;
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text('${candidate.name} · $id'),
+          Text(candidate.consequence),
+          Text(
+            candidate.restore == null
+                ? strings.notReinstallable
+                : '${strings.recovery}: ${candidate.restore!.source} · ${candidate.restore!.packageId}',
+          ),
+          if (!available) const Text('Inventory only / unavailable metadata'),
+          if (available)
+            for (final scope in scopes)
+              Checkbox(
+                checked: _selectedAppx[id] == scope,
+                content: Text(_scopeLabel(scope, strings)),
+                onChanged: (checked) => setState(() {
+                  if (checked == true) {
+                    _selectedAppx[id] = scope;
+                  } else {
+                    _selectedAppx.remove(id);
+                  }
+                }),
+              ),
+        ],
+      ),
+    );
+  }
+
+  List<String> _availableAppxScopes(String id) {
+    final package = _appxPackages
+        .where((package) => package.packageId == id)
+        .firstOrNull;
+    if (package == null || !package.canRemoveAppx) return const <String>[];
+    return <String>[
+      if (package.scopes.contains(AppInstallScope.currentUser)) 'currentUser',
+      if (_systemScopesComplete &&
+          package.scopes.contains(AppInstallScope.allUsers))
+        'allUsers',
+      if (_systemScopesComplete &&
+          package.scopes.contains(AppInstallScope.provisioned))
+        'provisioned',
+      if (_systemScopesComplete &&
+          package.scopes.contains(AppInstallScope.allUsers) &&
+          package.scopes.contains(AppInstallScope.provisioned))
+        'allUsersAndProvisioned',
+    ];
+  }
+
+  String _scopeLabel(String scope, AppLocalizations strings) => switch (scope) {
+    'currentUser' => strings.currentUser,
+    'allUsers' => '${strings.allUsers} · existing accounts',
+    'provisioned' => '${strings.provisioned} · future accounts',
+    _ =>
+      '${strings.allUsers} + ${strings.provisioned} · existing + future accounts',
+  };
 
   Widget _privacyStep(AppLocalizations strings) => Column(
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -355,13 +488,16 @@ class _GuidedSetupPageState extends State<GuidedSetupPage> {
         target: id,
         desiredValue: true,
       ),
-    for (final id in _selectedAppx)
-      OperationRequest(
-        operationId: 'app.appx.remove_current_user',
-        target: id,
-        desiredValue: null,
-        parameters: const <String, Object?>{'scope': 'currentUser'},
-      ),
+    for (final entry in _selectedAppx.entries)
+      if (_availableAppxScopes(entry.key).contains(entry.value))
+        OperationRequest(
+          operationId: entry.value == 'currentUser'
+              ? 'app.appx.remove_current_user'
+              : 'app.appx.remove_system',
+          target: entry.key,
+          desiredValue: null,
+          parameters: <String, Object?>{'scope': entry.value},
+        ),
   ];
 
   Widget _previewStep(AppLocalizations strings) => _requests.isEmpty
@@ -370,30 +506,86 @@ class _GuidedSetupPageState extends State<GuidedSetupPage> {
           children: <Widget>[
             Text(strings.planContains(_requests.length)),
             const SizedBox(height: 8),
-            for (final request in _requests)
-              Text(
-                '${request.operationId} · ${request.target ?? 'current user'} · ${request.desiredValue}',
-              ),
+            Text(
+              'Separate user and administrator plans; no cross-plan transaction or automatic rollback.',
+            ),
+            for (final group in setupRequestGroups(
+              _requests,
+            ).entries) ...<Widget>[
+              const SizedBox(height: 10),
+              Text('${strings.wizardPreview} · ${group.key.name}'),
+              for (final request in group.value)
+                if (request.operationId.startsWith('app.appx.'))
+                  Text(
+                    strings.confirmAppxRemovalMessage(
+                      appxCandidatePolicy[request.target]!.name,
+                      request.target!,
+                      _scopeLabel(
+                        request.parameters['scope'] as String,
+                        strings,
+                      ),
+                      '${appxCandidatePolicy[request.target]!.group.label}\n'
+                      '${appxCandidatePolicy[request.target]!.consequence}\n'
+                      '${appxCandidatePolicy[request.target]!.restore?.packageId ?? strings.notReinstallable}',
+                    ),
+                  )
+                else
+                  Text(
+                    '${request.operationId} · ${request.target ?? 'current user'} · ${request.desiredValue}',
+                  ),
+            ],
           ],
         );
 
-  Widget _applyStep(AppLocalizations strings) => _notice(
-    _requests.isEmpty
-        ? strings.noAppsSelected
-        : strings.readyToApply(_requests.length),
+  Widget _applyStep(AppLocalizations strings) => ListView(
+    children: <Widget>[
+      Text(
+        _requests.isEmpty
+            ? strings.noAppsSelected
+            : strings.readyToApply(_requests.length),
+      ),
+      Text(
+        'Separate plans. Apply each explicitly; completing one does not guarantee the other succeeds.',
+      ),
+      for (final group in setupRequestGroups(_requests).entries)
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          child: Button(
+            onPressed: _working || _appliedGroups.contains(group.key)
+                ? null
+                : () => _apply(group.key),
+            child: Text(
+              '${strings.applyPlan} · ${group.key.name} · ${group.value.length}',
+            ),
+          ),
+        ),
+    ],
   );
 
   Widget _reportStep(AppLocalizations strings) {
-    final report = _report;
-    if (report == null) return _notice(strings.noPlanReport);
+    if (_reports.isEmpty) return _notice(strings.noPlanReport);
     return ListView(
       children: <Widget>[
-        Text('${strings.planStatus}: ${report.status.name}'),
-        const SizedBox(height: 8),
-        for (final item in report.items)
-          Text(
-            '${item.request.target}: ${item.status.name}${item.error == null ? '' : ' · ${item.error}'}',
-          ),
+        Text(
+          'Restore sources are not rollback: local app data, existing-user scopes and future-user provisioning are not restored.',
+        ),
+        for (final report in _reports) ...<Widget>[
+          Text('${strings.planStatus}: ${report.status.name}'),
+          const SizedBox(height: 8),
+          for (final item in report.items) ...<Widget>[
+            Text(
+              '${item.request.target ?? item.request.operationId}: ${item.status.name}${item.error == null ? '' : ' · ${item.error}'}',
+            ),
+            if (item.request.operationId.startsWith('app.appx.'))
+              Text(
+                '${strings.recovery}: ${item.snapshot?.data['restoreSource'] ?? strings.notReinstallable} · ${item.snapshot?.data['restorePackageId'] ?? ''}',
+              ),
+          ],
+        ],
+        for (final group in setupRequestGroups(
+          _requests,
+        ).keys.where((group) => !_appliedGroups.contains(group)))
+          Text('${group.name}: not executed'),
       ],
     );
   }

@@ -3,6 +3,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import '../../../../core/models/hardware_profile.dart';
 import '../../../../core/models/system_metrics_snapshot.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../app/widgets/ui_kit.dart';
 import '../widgets/metric_card.dart';
 
 class HomeStatsPage extends StatefulWidget {
@@ -14,6 +15,7 @@ class HomeStatsPage extends StatefulWidget {
     required this.memoryHistory,
     required this.gpuHistory,
     required this.vramHistory,
+    this.header,
   });
 
   final HardwareProfile hardwareProfile;
@@ -22,6 +24,9 @@ class HomeStatsPage extends StatefulWidget {
   final List<double> memoryHistory;
   final List<double> gpuHistory;
   final List<double> vramHistory;
+
+  /// Shown first, under the title (the expert mode switch).
+  final Widget? header;
 
   @override
   State<HomeStatsPage> createState() => _HomeStatsPageState();
@@ -33,35 +38,47 @@ class _HomeStatsPageState extends State<HomeStatsPage> {
   @override
   Widget build(BuildContext context) {
     final strings = AppLocalizations.of(context);
-    return ListView(
-      padding: const EdgeInsets.all(20),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        Text(
-          strings.homeAndStats,
-          style: FluentTheme.of(context).typography.title,
-        ),
-        const SizedBox(height: 16),
+        PageTitle(strings.homeAndStats),
+        Expanded(child: _content(context, strings)),
+      ],
+    );
+  }
+
+  Widget _content(BuildContext context, AppLocalizations strings) {
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+      children: <Widget>[
+        if (widget.header != null) ...[
+          widget.header!,
+          const SizedBox(height: 20),
+        ],
         if (widget.latestMetrics.gpus.isNotEmpty) ...[
-          ComboBox<String>(
-            value:
-                widget.latestMetrics.gpus.any(
-                  (gpu) => gpu.adapterId == _selectedGpuId,
-                )
-                ? _selectedGpuId
-                : widget.latestMetrics.primaryGpuId,
-            items: [
-              for (var i = 0; i < widget.latestMetrics.gpus.length; i++)
-                ComboBoxItem(
-                  value: widget.latestMetrics.gpus[i].adapterId,
-                  child: Tooltip(
-                    message: widget.latestMetrics.gpus[i].adapterId,
-                    child: Text(
-                      widget.latestMetrics.gpus[i].name ?? 'GPU ${i + 1}',
+          Align(
+            alignment: AlignmentDirectional.centerStart,
+            child: ComboBox<String>(
+              value:
+                  widget.latestMetrics.gpus.any(
+                    (gpu) => gpu.adapterId == _selectedGpuId,
+                  )
+                  ? _selectedGpuId
+                  : widget.latestMetrics.primaryGpuId,
+              items: [
+                for (var i = 0; i < widget.latestMetrics.gpus.length; i++)
+                  ComboBoxItem(
+                    value: widget.latestMetrics.gpus[i].adapterId,
+                    child: Tooltip(
+                      message: widget.latestMetrics.gpus[i].adapterId,
+                      child: Text(
+                        widget.latestMetrics.gpus[i].name ?? 'GPU ${i + 1}',
+                      ),
                     ),
                   ),
-                ),
-            ],
-            onChanged: (value) => setState(() => _selectedGpuId = value),
+              ],
+              onChanged: (value) => setState(() => _selectedGpuId = value),
+            ),
           ),
           const SizedBox(height: 12),
         ],

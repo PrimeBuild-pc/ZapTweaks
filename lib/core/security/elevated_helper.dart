@@ -12,12 +12,15 @@ import '../operations/operation_registry.dart';
 import '../persistence/operation_store.dart';
 import '../plans/operation_plan.dart';
 import '../plans/plan_engine.dart';
+import '../services/process_runner.dart';
+import 'helper_output_files.dart';
 import '../services/restore_point_service.dart';
 import '../services/tweak_catalog_service.dart';
 import '../tweak_manager.dart';
 import '../../features/apps/application/windows_app_inventory_service.dart';
 import '../../features/apps/domain/app_package.dart';
 import '../../features/apps/domain/windows_optional_feature.dart';
+import '../../platform/windows/srum_history_service.dart';
 
 Directory defaultElevatedHelperDirectory() => Directory(
   '${Platform.environment['LOCALAPPDATA'] ?? Directory.systemTemp.path}'
@@ -129,6 +132,17 @@ class ElevatedHelperClient {
           ),
         )
         .toList(growable: false);
+  }
+
+  /// Read-only: the helper takes no parameters for this request, so it can only read SRUM.
+  Future<SrumHistory> scanSrumHistory() async {
+    final response = await _send(<String, Object?>{'protocol': 'srumHistory'});
+    if (response['success'] != true || response['history'] is! Map) {
+      throw StateError(response['message'] ?? 'Elevated SRUM read failed.');
+    }
+    return SrumHistory.fromJson(
+      Map<String, Object?>.from(response['history'] as Map),
+    );
   }
 
   Future<AppInventoryResult> scanSystemApps() async {
@@ -260,14 +274,17 @@ class ElevatedHelperClient {
     if (domain == null || user == null) {
       throw StateError('Unable to identify the helper directory owner.');
     }
-    final result = await Process.run('icacls.exe', <String>[
-      directory.path,
-      '/inheritance:r',
-      '/grant:r',
-      '$domain\\$user:(OI)(CI)F',
-      '*S-1-5-18:(OI)(CI)F',
-      '*S-1-5-32-544:(OI)(CI)F',
-    ]);
+    final result = await Process.run(
+      ProcessRunner.resolveSystemExecutable('icacls.exe'),
+      <String>[
+        directory.path,
+        '/inheritance:r',
+        '/grant:r',
+        '$domain\\$user:(OI)(CI)F',
+        '*S-1-5-18:(OI)(CI)F',
+        '*S-1-5-32-544:(OI)(CI)F',
+      ],
+    );
     if (result.exitCode != 0) {
       throw StateError('Unable to secure the elevated helper directory.');
     }
@@ -285,11 +302,15 @@ class ElevatedHelperClient {
         jsonDecode(await request.readAsString()) as Map<String, dynamic>;
     final operations =
         (payload['requests'] as List<dynamic>?) ?? const <dynamic>[];
-    final isRepair = operations.any(
-      (item) => (item as Map<String, dynamic>)['operationId']
-          .toString()
-          .startsWith('recovery.'),
-    );
+    // Repairs, uninstallers (which may wait on their own window), restore
+    // points and Recycle Bin moves can legitimately outlast five minutes.
+    final isRepair = operations.any((item) {
+      final id = (item as Map<String, dynamic>)['operationId'].toString();
+      return id.startsWith('recovery.') ||
+          id.startsWith('app.win32.') ||
+          id.startsWith('app.leftovers.') ||
+          id == 'system.restore_point.create';
+    });
     // ponytail: repairs get a larger but finite ceiling; split per command if
     // progress-aware cancellation becomes necessary.
     final timeout = isRepair
@@ -303,12 +324,10 @@ class ElevatedHelperClient {
         '{Stop-Process -Id \$p.Id -Force;exit 124}; '
         r'exit $p.ExitCode';
     final encoded = base64.encode(const Utf16Encoder().convert(script));
-    final process = await Process.start('powershell.exe', <String>[
-      '-NoProfile',
-      '-NonInteractive',
-      '-EncodedCommand',
-      encoded,
-    ]);
+    final process = await Process.start(
+      ProcessRunner.resolveSystemExecutable('powershell.exe'),
+      <String>['-NoProfile', '-NonInteractive', '-EncodedCommand', encoded],
+    );
     try {
       return await process.exitCode.timeout(
         timeout + const Duration(minutes: 1),
@@ -339,7 +358,9 @@ class ElevatedHelperHost {
     OperationStore? operationStore,
     Future<AppInventoryResult> Function()? systemAppInventory,
     Future<List<WindowsOptionalFeature>> Function()? optionalFeatureInventory,
-  }) : _allowedDirectory = allowedDirectory,
+    Future<Map<String, Object?>> Function()? srumHistory,
+  }) : _srumHistory = srumHistory,
+       _allowedDirectory = allowedDirectory,
        _catalogService = catalogService,
        _tweakManager = tweakManager,
        _restorePointService = restorePointService,
@@ -359,6 +380,7 @@ class ElevatedHelperHost {
   final Future<AppInventoryResult> Function()? _systemAppInventory;
   final Future<List<WindowsOptionalFeature>> Function()?
   _optionalFeatureInventory;
+  final Future<Map<String, Object?>> Function()? _srumHistory;
 
   Future<int> run(
     File requestFile,
@@ -382,6 +404,7 @@ class ElevatedHelperHost {
       if (sha256.convert(payload).toString() != expectedDigest) {
         throw StateError('Helper request integrity check failed.');
       }
+      HelperOutputFiles.pin(_allowedDirectory);
       response = File('${requestFile.path}.response');
       final events = File('${requestFile.path}.events');
       await _writeEvent(events, 'requestAccepted');
@@ -396,6 +419,9 @@ class ElevatedHelperHost {
       }
       if (json['protocol'] == 'optionalFeatureInventory') {
         return await _runOptionalFeatureInventory(json, response, events);
+      }
+      if (json['protocol'] == 'srumHistory') {
+        return await _runSrumHistory(json, response, events);
       }
       if (json['protocol'] == 'nativeOperation') {
         return await _runNativeOperation(json, response, events);
@@ -452,7 +478,29 @@ class ElevatedHelperHost {
         });
       }
       return 2;
+    } finally {
+      HelperOutputFiles.closeAll();
     }
+  }
+
+  Future<int> _runSrumHistory(
+    Map<String, dynamic> json,
+    File response,
+    File events,
+  ) async {
+    if (json.length != 2 || _srumHistory == null) {
+      throw StateError('Invalid SRUM history request.');
+    }
+    await _writeEvent(events, 'inventoryScanning');
+    final history = await _srumHistory();
+    // Validate in the elevated process too: only a well-formed history leaves it.
+    SrumHistory.fromJson(history);
+    await _writeAtomic(response, <String, Object?>{
+      'success': true,
+      'history': history,
+    });
+    await _writeEvent(events, 'inventoryCompleted');
+    return 0;
   }
 
   Future<int> _runOptionalFeatureInventory(
@@ -589,6 +637,14 @@ class ElevatedHelperHost {
       throw StateError('Native operation is not helper-allowlisted.');
     }
     final definition = registry.resolve(operationId);
+    if (json['action'] == 'apply' &&
+        (operationId == 'network.tcp.setting.configure' ||
+            operationId == 'network.tcp.snapshot.restore' ||
+            operationId == 'network.qos.policy.configure')) {
+      throw StateError(
+        'TCP changes require the journaled native plan protocol.',
+      );
+    }
     await _writeEvent(events, 'resolved', operationId: operationId);
     if (definition.id != operationId ||
         definition.privilege != OperationPrivilege.administrator) {
@@ -631,6 +687,20 @@ class ElevatedHelperHost {
       final snapshot = OperationSnapshot.fromJson(
         Map<String, Object?>.from(json['snapshot'] as Map),
       );
+      final current = await definition.inspect(request);
+      final matchesWrite =
+          const {
+            OperationStateKind.configured,
+            OperationStateKind.pendingRestart,
+          }.contains(current.kind) &&
+          current.sameValue(
+            OperationState(current.kind, value: request.desiredValue),
+          );
+      if (!matchesWrite && !current.sameValue(snapshot.expectedAfterRollback)) {
+        throw StateError(
+          'Rollback conflict: state changed before elevated restoration.',
+        );
+      }
       await _writeEvent(events, 'rollingBack', operationId: operationId);
       await definition.rollback(request, snapshot);
       await _writeEvent(events, 'verifyingRollback', operationId: operationId);
@@ -654,20 +724,18 @@ class ElevatedHelperHost {
     String state, {
     String? operationId,
   }) async {
-    file.writeAsStringSync(
+    HelperOutputFiles.append(
+      file.path,
       '${jsonEncode(<String, Object?>{'state': state, if (operationId != null) 'operationId': operationId})}\n',
-      mode: FileMode.append,
-      flush: true,
     );
   }
 
+  // The client reads the response only after the helper exits, so a direct write is complete when it is read.
   static Future<void> _writeAtomic(
     File file,
     Map<String, Object?> value,
   ) async {
-    final temporary = File('${file.path}.tmp');
-    temporary.writeAsStringSync(jsonEncode(_encodeValue(value)), flush: true);
-    temporary.renameSync(file.path);
+    HelperOutputFiles.replace(file.path, jsonEncode(_encodeValue(value)));
   }
 }
 

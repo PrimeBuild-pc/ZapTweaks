@@ -1,5 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 
+import '../../../app/widgets/ui_kit.dart';
+
 import '../../../l10n/app_localizations.dart';
 import '../../tweaks/application/tweak_controller.dart';
 import '../../tweaks/presentation/pages/tweaks_page.dart';
@@ -39,10 +41,9 @@ class _GamingHubPageState extends State<GamingHubPage> {
   @override
   Widget build(BuildContext context) {
     final strings = AppLocalizations.of(context);
-    return TabView(
+    return SectionTabView(
       currentIndex: _index,
       onChanged: (index) => setState(() => _index = index),
-      closeButtonVisibility: CloseButtonVisibilityMode.never,
       tabs: <Tab>[
         Tab(
           text: Text(strings.powerPlans),
@@ -56,7 +57,7 @@ class _GamingHubPageState extends State<GamingHubPage> {
         ),
         Tab(
           text: Text(strings.tweaks),
-          icon: const Icon(FluentIcons.processing),
+          icon: const Icon(FluentIcons.rocket),
           body: TweaksPage(
             controller: widget.controller,
             category: 'Gaming & Performance',
@@ -66,7 +67,10 @@ class _GamingHubPageState extends State<GamingHubPage> {
         Tab(
           text: Text(strings.tcpOptimizer),
           icon: const Icon(FluentIcons.network_tower),
-          body: TcpOptimizerPage(controller: widget.controller),
+          body: TcpOptimizerPage(
+            controller: widget.controller,
+            journal: widget.controller.operationJournal,
+          ),
         ),
       ],
     );

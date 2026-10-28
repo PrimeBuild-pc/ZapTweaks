@@ -19,6 +19,7 @@ abstract class SystemTweak {
     this.requiredGpuVendors = const <String>{},
     this.minimumWindowsBuild,
     this.conflictingTweakIds = const <String>{},
+    this.author,
   });
 
   final String id;
@@ -33,6 +34,9 @@ abstract class SystemTweak {
   final Set<String> requiredGpuVendors;
   final int? minimumWindowsBuild;
   final Set<String> conflictingTweakIds;
+
+  /// Upstream author of a third-party script or tool; null for native tweaks.
+  final String? author;
   bool isApplied;
 
   bool get hasState => type == TweakUiType.toggle;
@@ -74,6 +78,7 @@ abstract class ActionSystemTweak extends SystemTweak {
     super.requiredGpuVendors,
     super.minimumWindowsBuild,
     super.conflictingTweakIds,
+    super.author,
   });
 
   @override

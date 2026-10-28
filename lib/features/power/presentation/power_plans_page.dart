@@ -1,4 +1,5 @@
 import 'dart:io';
+import '../../../app/widgets/ui_kit.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart';
 import 'package:win32/win32.dart';
@@ -419,24 +420,14 @@ class _PowerPlansPageState extends State<PowerPlansPage> {
 
   Future<void> _delete(PowerSchemeInfo scheme) async {
     final strings = AppLocalizations.of(context);
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (context) => ContentDialog(
-        title: Text(strings.deletePowerPlan),
-        content: Text(strings.deletePowerPlanWarning(scheme.name)),
-        actions: <Widget>[
-          Button(
-            onPressed: () => Navigator.pop(context, false),
-            child: Text(strings.cancel),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: Text(strings.delete),
-          ),
-        ],
-      ),
+    final confirmed = await confirmAction(
+      context,
+      title: strings.deletePowerPlan,
+      message: strings.deletePowerPlanWarning(scheme.name),
+      confirmLabel: strings.delete,
+      destructive: true,
     );
-    if (confirmed != true) return;
+    if (!confirmed || !mounted) return;
     setState(() => _busy = true);
     try {
       final plan = await widget.controller
@@ -462,24 +453,13 @@ class _PowerPlansPageState extends State<PowerPlansPage> {
 
   Future<void> _restoreDefaults() async {
     final strings = AppLocalizations.of(context);
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (context) => ContentDialog(
-        title: Text(strings.restoreDefaultPowerSchemes),
-        content: Text(strings.restoreDefaultPowerSchemesWarning),
-        actions: <Widget>[
-          Button(
-            onPressed: () => Navigator.pop(context, false),
-            child: Text(strings.cancel),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: Text(strings.continueAction),
-          ),
-        ],
-      ),
+    final confirmed = await confirmAction(
+      context,
+      title: strings.restoreDefaultPowerSchemes,
+      message: strings.restoreDefaultPowerSchemesWarning,
+      confirmLabel: strings.continueAction,
     );
-    if (confirmed != true) return;
+    if (!confirmed || !mounted) return;
     setState(() {
       _busy = true;
       _error = null;
@@ -609,8 +589,9 @@ class _PowerPlansPageState extends State<PowerPlansPage> {
           else
             ...visible.map(
               (scheme) => Padding(
-                padding: const EdgeInsets.only(bottom: 8),
+                padding: const EdgeInsets.only(bottom: 4),
                 child: Card(
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
                   child: ListTile(
                     title: Text(scheme.name),
                     subtitle: Text(scheme.id),

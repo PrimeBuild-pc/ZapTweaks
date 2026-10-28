@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
@@ -11,7 +12,10 @@ import 'package:script_utility/core/services/process_runner.dart';
 import 'package:script_utility/features/apps/application/app_inventory_parser.dart';
 import 'package:script_utility/features/apps/application/windows_app_inventory_service.dart';
 import 'package:script_utility/features/apps/domain/app_package.dart';
+import 'package:script_utility/features/apps/domain/appx_candidate_policy.dart';
 import 'package:script_utility/features/apps/domain/microsoft_restore_catalog.dart';
+
+import 'appx_test_fixtures.dart';
 
 void main() {
   test('AppX inventory keeps per-user and provisioned state distinct', () {
@@ -53,7 +57,11 @@ void main() {
           ProcessResult(
             1,
             0,
-            '[{"Name":"Microsoft.Sample","CurrentUser":true}]',
+            jsonEncode(
+              appxInventory(
+                installed: [appxMetadata(name: 'Microsoft.Sample')],
+              ),
+            ),
             '',
           ),
     );
@@ -74,10 +82,24 @@ void main() {
       final runner = ProcessRunner(
         processRunDelegate:
             (executable, arguments, {runInShell = false}) async =>
-                ProcessResult(1, 0, '''[
-              {"Name":"Microsoft.Sample","AllUsers":true},
-              {"Name":"Microsoft.Sample","Provisioned":true}
-            ]''', ''),
+                ProcessResult(
+                  1,
+                  0,
+                  jsonEncode(
+                    appxInventory(
+                      system: true,
+                      installed: [
+                        appxMetadata(name: 'Microsoft.Sample')
+                          ..['CurrentUser'] = false
+                          ..['AllUsers'] = true,
+                      ],
+                      provisioned: [
+                        appxProvision(appxMetadata(name: 'Microsoft.Sample')),
+                      ],
+                    ),
+                  ),
+                  '',
+                ),
       );
 
       final result = await WindowsAppInventoryService(
@@ -123,6 +145,144 @@ void main() {
     },
   );
 
+  test(
+    'missing and partial native output never claim complete inventory',
+    () async {
+      for (final output in [
+        '',
+        'null',
+        '[]',
+        '{}',
+        jsonEncode(
+          appxInventory(system: true)..['ProvisionedComplete'] = false,
+        ),
+      ]) {
+        final runner = ProcessRunner(
+          processRunDelegate:
+              (executable, arguments, {runInShell = false}) async =>
+                  ProcessResult(1, 0, output, ''),
+        );
+        final result = await WindowsAppInventoryService(
+          processRunner: runner,
+        ).scanSystemScopes();
+        expect(result.allUsersComplete, isFalse, reason: output);
+        expect(result.provisionedComplete, isFalse, reason: output);
+        expect(result.message, isNotNull);
+      }
+    },
+  );
+
+  test(
+    'APPX display removal policy is not a restore catalog or untrusted reinstallable flag',
+    () {
+      final parser = const AppInventoryParser();
+      final packages = parser.parseAppx(
+        jsonEncode([
+          appxMetadata(),
+          appxMetadata(name: 'Microsoft.WindowsStore')
+            ..['Reinstallable'] = true,
+          appxMetadata(name: 'Microsoft.Fake')..['Reinstallable'] = true,
+          appxMetadata(name: 'Microsoft.DevHome'),
+        ]),
+      );
+      expect(packages.first.name, 'Feedback Hub');
+      expect(packages.first.canRemoveAppx, isTrue);
+      expect(packages[1].reinstallable, isTrue);
+      expect(packages[1].canRemoveAppx, isFalse);
+      expect(packages[2].reinstallable, isFalse);
+      expect(packages[2].canRemoveAppx, isFalse);
+      expect(
+        packages[3].appxCandidate!.group,
+        AppxCandidateGroup.legacyInventoryOnly,
+      );
+      expect(packages[3].canRemoveAppx, isFalse);
+      expect(
+        parser
+            .previewRemoval(
+              packages.first,
+              scopes: {AppInstallScope.currentUser},
+              sharedDependencies: ['Dependent.App'],
+            )
+            .canRemove,
+        isFalse,
+      );
+    },
+  );
+
+  test(
+    'resource companions preserve removable main-app metadata, resource-only packages do not',
+    () {
+      final resource = appxMetadata()..['IsResourcePackage'] = true;
+      final parser = const AppInventoryParser();
+      final package = parser
+          .parseAppx(jsonEncode([appxMetadata(), resource]))
+          .single;
+      expect(package.canRemoveAppx, isTrue);
+      expect(
+        parser.parseAppx(jsonEncode([resource])).single.canRemoveAppx,
+        isFalse,
+      );
+    },
+  );
+
+  test(
+    'native protection, publisher and dependency metadata survive helper serialization and merge',
+    () {
+      final app = appxMetadata();
+      final parsed = const AppInventoryParser()
+          .parseAppx(
+            jsonEncode(
+              appxInventory(
+                installed: [app],
+                system: true,
+                provisioned: [appxProvision(app)],
+              ),
+            ),
+          )
+          .single;
+      final restored = AppPackage.fromJson(
+        Map<String, dynamic>.from(parsed.toJson()),
+      );
+      expect(restored.canRemoveAppx, isTrue);
+      expect(restored.appxMetadata, parsed.appxMetadata);
+      final merged = mergeAppPackages([parsed, restored]).single;
+      expect(merged.scopes, {
+        AppInstallScope.currentUser,
+        AppInstallScope.provisioned,
+      });
+      expect(merged.appxMetadata, hasLength(4));
+      expect(merged.canRemoveAppx, isTrue);
+      final incomplete = const AppInventoryParser()
+          .parseAppx(
+            '[{"Name":"Microsoft.WindowsFeedbackHub","CurrentUser":true}]',
+          )
+          .single;
+      expect(incomplete.canRemoveAppx, isFalse);
+      expect(
+        mergeAppPackages([parsed, incomplete]).single.canRemoveAppx,
+        isFalse,
+      );
+    },
+  );
+
+  test('provisioned metadata is not fabricated from an app name', () {
+    final app = appxMetadata();
+    final packages = const AppInventoryParser().parseAppx(
+      jsonEncode(
+        appxInventory(
+          installed: [app],
+          system: true,
+          provisioned: [
+            appxProvision(app)
+              ..['PackageName'] = '${feedbackHub}_2.0.0.0_x64__8wekyb3d8bbwe',
+          ],
+        ),
+      ),
+    );
+    expect(packages.single.reinstallable, isTrue);
+    expect(packages.single.canRemoveAppx, isFalse);
+  });
+
   test('app restore uses only its fixed verified source identity', () async {
     var installed = false;
     List<String>? wingetArguments;
@@ -136,9 +296,13 @@ void main() {
         return ProcessResult(
           1,
           0,
-          installed
-              ? '[{"Name":"Microsoft.WindowsStore","CurrentUser":true}]'
-              : '[]',
+          jsonEncode(
+            appxInventory(
+              installed: installed
+                  ? [appxMetadata(name: 'Microsoft.WindowsStore')]
+                  : [],
+            ),
+          ),
           '',
         );
       },
@@ -185,6 +349,14 @@ void main() {
       expect(microsoftRestoreCatalog, hasLength(17));
       expect(microsoftRestoreCatalog.keys, contains('Microsoft.WindowsStore'));
       expect(microsoftRestoreCatalog.keys, contains('Microsoft.GamingApp'));
+      expect(
+        microsoftRestoreCatalog.keys,
+        contains('Microsoft.MicrosoftStickyNotes'),
+      );
+      expect(
+        microsoftRestoreCatalog.keys,
+        contains('MicrosoftCorporationII.QuickAssist'),
+      );
       for (final entry in microsoftRestoreCatalog.entries) {
         expect(entry.value.source, anyOf('winget', 'msstore'));
         expect(entry.value.packageId, isNotEmpty, reason: entry.key);

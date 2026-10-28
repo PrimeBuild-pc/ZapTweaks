@@ -9,9 +9,14 @@ import 'package:path/path.dart' as path;
 import '../domain/store_app.dart';
 
 class AppStoreCatalog {
-  const AppStoreCatalog(this.apps);
+  const AppStoreCatalog(this.apps, {this.revision = 0});
 
   final List<StoreApp> apps;
+
+  /// `generatedFrom.revision` (0 when missing). A published or cached
+  /// catalog older than the one in this build is ignored, so a new build
+  /// never shows stale entries until its catalog reaches main.
+  final int revision;
   static const remoteUrl =
       'https://raw.githubusercontent.com/PrimeBuild-pc/ZapTweaks/main/assets/catalog/app_catalog.json';
   static const _maxBytes = 2 * 1024 * 1024;
@@ -57,14 +62,18 @@ class AppStoreCatalog {
     File? cache, {
     required bool remote,
   }) async {
-    var fallback = _parse(
+    final bundled = _parse(
       await bundle.loadString('assets/catalog/app_catalog.json'),
     );
+    var fallback = bundled;
     if (!remote) return fallback;
     if (cache != null) {
       try {
         if (await cache.length() <= _maxBytes) {
-          fallback = _parse(await cache.readAsString());
+          final cached = _parse(await cache.readAsString());
+          if (cached.revision >= bundled.revision) {
+            fallback = _withBundledTools(cached, bundled);
+          }
         }
       } catch (_) {
         /* Missing or invalid cache: keep bundled catalog. */
@@ -91,6 +100,7 @@ class AppStoreCatalog {
         return utf8.decode(bytes);
       })().timeout(const Duration(seconds: 5));
       final catalog = _parse(text);
+      if (catalog.revision < bundled.revision) return fallback;
       if (cache != null) {
         try {
           await cache.parent.create(recursive: true);
@@ -101,12 +111,49 @@ class AppStoreCatalog {
           /* A cache write failure must not hide valid catalog data. */
         }
       }
-      return catalog;
+      return _withBundledTools(catalog, bundled);
     } catch (_) {
       return fallback;
     } finally {
       if (ownedClient) client.close();
     }
+  }
+
+  // A published/cache catalog can lag behind the tools shipped in a new binary.
+  static AppStoreCatalog _withBundledTools(
+    AppStoreCatalog catalog,
+    AppStoreCatalog bundled,
+  ) {
+    final tools = bundled.apps.where(
+      (app) => const {'app_mvolt', 'app_sparkle'}.contains(app.id),
+    );
+    final missing = tools.where(
+      (tool) => !catalog.apps.any((app) => app.id == tool.id),
+    );
+    if (missing.isEmpty) return catalog;
+    final combined = [...catalog.apps, ...missing];
+    // Revalidate deduplication and the metadata-only contract after merging.
+    return _parse(
+      jsonEncode({
+        'schemaVersion': 1,
+        'generatedFrom': {'revision': catalog.revision},
+        'apps': [
+          for (final app in combined)
+            {
+              'id': app.id,
+              'name': app.name,
+              'category': app.category,
+              'wingetId': app.wingetId,
+              'url': app.url?.toString(),
+              'author': app.author,
+              'sources': app.sources,
+              if (app.description != null) 'description': app.description,
+              'requirements': app.requirements,
+              'warnings': app.warnings,
+            },
+        ],
+      }),
+    );
   }
 
   static AppStoreCatalog _parse(String text) {
@@ -199,7 +246,12 @@ class AppStoreCatalog {
       }
       apps.add(StoreApp.fromJson(data));
     }
-    return AppStoreCatalog(List.unmodifiable(apps));
+    final from = json['generatedFrom'];
+    final revision = from is Map ? from['revision'] : null;
+    return AppStoreCatalog(
+      List.unmodifiable(apps),
+      revision: revision is int ? revision : 0,
+    );
   }
 
   static void _text(Object? value, {required int max}) {

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import '../../../app/widgets/ui_kit.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 
 import '../../../core/operations/operation.dart';
@@ -107,28 +108,15 @@ class _DriverInventoryPageState extends State<DriverInventoryPage> {
     final device = _selectedDevice;
     if (verified == null || device == null) return;
     final strings = AppLocalizations.of(context);
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (context) => ContentDialog(
-        title: Text(strings.confirmLocalDriverInstall),
-        content: Text(
-          strings.confirmLocalDriverInstallMessage(
-            device.device.description,
-            verified.publisher,
-            verified.infSha256,
-          ),
-        ),
-        actions: <Widget>[
-          Button(
-            onPressed: () => Navigator.pop(context, false),
-            child: Text(strings.cancel),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: Text(strings.install),
-          ),
-        ],
+    final confirmed = await confirmAction(
+      context,
+      title: strings.confirmLocalDriverInstall,
+      message: strings.confirmLocalDriverInstallMessage(
+        device.device.description,
+        verified.publisher,
+        verified.infSha256,
       ),
+      confirmLabel: strings.install,
     );
     if (confirmed != true) return;
     setState(() => _loading = true);
@@ -164,29 +152,17 @@ class _DriverInventoryPageState extends State<DriverInventoryPage> {
 
   Future<void> _remove(DriverPackage package) async {
     final strings = AppLocalizations.of(context);
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (context) => ContentDialog(
-        title: Text(strings.confirmDriverRemoval),
-        content: Text(
-          strings.confirmDriverRemovalMessage(
-            package.publishedName,
-            package.infName,
-            package.publisher,
-            package.version,
-          ),
-        ),
-        actions: <Widget>[
-          Button(
-            onPressed: () => Navigator.pop(context, false),
-            child: Text(strings.cancel),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: Text(strings.uninstall),
-          ),
-        ],
+    final confirmed = await confirmAction(
+      context,
+      title: strings.confirmDriverRemoval,
+      message: strings.confirmDriverRemovalMessage(
+        package.publishedName,
+        package.infName,
+        package.publisher,
+        package.version,
       ),
+      confirmLabel: strings.uninstall,
+      destructive: true,
     );
     if (confirmed != true) return;
     setState(() => _loading = true);

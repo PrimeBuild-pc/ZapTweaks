@@ -1,18 +1,43 @@
 {
   "schemaVersion": 1,
   "generatedFrom": {
+    "revision": 2026102801,
     "ctt": "a0d3c719a6611b329422e9c56ee9b792cd596146",
     "winhance": "f23d554eb2d6400b1827bcc46b91294ffa53fbc9",
     "tweakHub": "bdc6e185ddc062bf906d2d9950b62d252f381110"
   },
   "apps": [
     {
+      "id": "app_mvolt",
+      "name": "mVolt",
+      "category": "GPU & Display",
+      "wingetId": null,
+      "url": "https://github.com/b00nz/mVolt",
+      "author": "b00nz",
+      "sources": ["Official project"],
+      "description": "External NVIDIA GPU tuning and monitoring utility.",
+      "requirements": ["A supported NVIDIA GPU, driver and VBIOS; consult the upstream compatibility list."],
+      "warnings": ["Voltage, clocks, power and fan changes can cause instability or hardware damage. Settings may persist after exit. ZapTweaks only opens the official project; it does not apply hardware settings."]
+    },
+    {
+      "id": "app_sparkle",
+      "name": "Sparkle",
+      "category": "System Utilities",
+      "wingetId": null,
+      "url": "https://github.com/thedogecraft/sparkle",
+      "author": "Sparkle",
+      "sources": ["Official project"],
+      "description": "External Windows tweaking, debloating and cleanup project.",
+      "requirements": ["Check the current upstream release and Windows support before use."],
+      "warnings": ["Some actions reduce security or remove apps and data. Review each action and its restore limitations. GPL-3.0 upstream code and binaries are not bundled or executed by ZapTweaks."]
+    },
+    {
       "id": "app_https_antigravity_google",
       "name": "Google Antigravity",
       "category": "AI Tools",
       "wingetId": null,
       "url": "https://antigravity.google/",
-      "author": "PrimeBuild",
+      "author": "Google",
       "sources": [
         "TweakHub"
       ]
@@ -56,7 +81,7 @@
       "category": "AI Tools",
       "wingetId": null,
       "url": "https://opencode.ai/",
-      "author": "PrimeBuild",
+      "author": "Anomaly",
       "sources": [
         "TweakHub"
       ]
@@ -67,7 +92,7 @@
       "category": "AI Tools",
       "wingetId": null,
       "url": "https://github.com/badlogic/pi-mono",
-      "author": "PrimeBuild",
+      "author": "Mario Zechner",
       "sources": [
         "TweakHub"
       ]
@@ -78,7 +103,7 @@
       "category": "AI Tools",
       "wingetId": null,
       "url": "https://unsloth.ai/docs/new/studio",
-      "author": "PrimeBuild",
+      "author": "Unsloth AI",
       "sources": [
         "TweakHub"
       ]
@@ -100,7 +125,7 @@
       "category": "Audio",
       "wingetId": null,
       "url": "https://sourceforge.net/projects/equalizerapo/",
-      "author": "PrimeBuild",
+      "author": "Jonas Thedering",
       "sources": [
         "TweakHub"
       ]
@@ -111,7 +136,7 @@
       "category": "Audio",
       "wingetId": null,
       "url": "https://sourceforge.net/projects/peace-equalizer-apo-extension/",
-      "author": "PrimeBuild",
+      "author": "Peter Verbeek",
       "sources": [
         "TweakHub"
       ]
@@ -133,7 +158,7 @@
       "category": "Benchmarks & Stability",
       "wingetId": null,
       "url": "https://benchmarks.ul.com/3dmark",
-      "author": "PrimeBuild",
+      "author": "UL Benchmarks",
       "sources": [
         "TweakHub"
       ]
@@ -166,7 +191,7 @@
       "category": "Benchmarks & Stability",
       "wingetId": null,
       "url": "https://opendata.blender.org/",
-      "author": "PrimeBuild",
+      "author": "Blender Foundation",
       "sources": [
         "TweakHub"
       ]
@@ -188,7 +213,7 @@
       "category": "Benchmarks & Stability",
       "wingetId": null,
       "url": "https://www.maxon.net/en/downloads/cinebench-downloads",
-      "author": "PrimeBuild",
+      "author": "Maxon",
       "sources": [
         "TweakHub"
       ]
@@ -199,7 +224,7 @@
       "category": "Benchmarks & Stability",
       "wingetId": null,
       "url": "https://www.techpowerup.com/download/maxon-cinebench/",
-      "author": "PrimeBuild",
+      "author": "Maxon",
       "sources": [
         "TweakHub"
       ]
@@ -243,7 +268,7 @@
       "category": "Benchmarks & Stability",
       "wingetId": null,
       "url": "https://www.techpowerup.com/download/linpack-xtreme/",
-      "author": "PrimeBuild",
+      "author": "Regeneration",
       "sources": [
         "TweakHub"
       ]
@@ -254,7 +279,7 @@
       "category": "Benchmarks & Stability",
       "wingetId": null,
       "url": "https://github.com/GpuZelenograd/memtest_vulkan",
-      "author": "PrimeBuild",
+      "author": "GPU Zelenograd",
       "sources": [
         "TweakHub"
       ]
@@ -265,7 +290,7 @@
       "category": "Benchmarks & Stability",
       "wingetId": null,
       "url": "https://msikombustor.com/#download",
-      "author": "PrimeBuild",
+      "author": "MSI",
       "sources": [
         "TweakHub"
       ]
@@ -309,7 +334,7 @@
       "category": "Benchmarks & Stability",
       "wingetId": null,
       "url": "https://www.numberworld.org/y-cruncher/",
-      "author": "PrimeBuild",
+      "author": "Alexander J. Yee",
       "sources": [
         "TweakHub"
       ]
@@ -800,7 +825,7 @@
       "category": "CPU & Memory",
       "wingetId": null,
       "url": "https://www.amd.com/en/support/download/drivers.html",
-      "author": "PrimeBuild",
+      "author": "AMD",
       "sources": [
         "TweakHub"
       ]
@@ -811,7 +836,7 @@
       "category": "CPU & Memory",
       "wingetId": null,
       "url": "https://www.amd.com/en/products/software/ryzen-master.html",
-      "author": "PrimeBuild",
+      "author": "AMD",
       "sources": [
         "TweakHub"
       ]
@@ -822,7 +847,7 @@
       "category": "CPU & Memory",
       "wingetId": null,
       "url": "https://github.com/sp00n/corecycler",
-      "author": "PrimeBuild",
+      "author": "sp00n",
       "sources": [
         "TweakHub"
       ]
@@ -833,7 +858,7 @@
       "category": "CPU & Memory",
       "wingetId": null,
       "url": "https://github.com/SimonvBez/CPUSetSetter",
-      "author": "PrimeBuild",
+      "author": "SimonvBez",
       "sources": [
         "TweakHub"
       ]
@@ -844,7 +869,7 @@
       "category": "CPU & Memory",
       "wingetId": null,
       "url": "https://www.techpowerup.com/download/ryzen-dram-calculator/",
-      "author": "PrimeBuild",
+      "author": "1usmus",
       "sources": [
         "TweakHub"
       ]
@@ -855,7 +880,7 @@
       "category": "CPU & Memory",
       "wingetId": null,
       "url": "https://www.intel.com/content/www/us/en/download/870620/intel-application-optimization-user-interface.html",
-      "author": "PrimeBuild",
+      "author": "Intel",
       "sources": [
         "TweakHub"
       ]
@@ -866,7 +891,7 @@
       "category": "CPU & Memory",
       "wingetId": null,
       "url": "https://github.com/jjgraphix/KGuiX",
-      "author": "PrimeBuild",
+      "author": "jjgraphix",
       "sources": [
         "TweakHub"
       ]
@@ -877,7 +902,7 @@
       "category": "CPU & Memory",
       "wingetId": null,
       "url": "https://www.memtest86.com/",
-      "author": "PrimeBuild",
+      "author": "PassMark Software",
       "sources": [
         "TweakHub"
       ]
@@ -899,7 +924,7 @@
       "category": "CPU & Memory",
       "wingetId": null,
       "url": "https://github.com/irusanov/SMUDebugTool",
-      "author": "PrimeBuild",
+      "author": "Ivan Rusanov",
       "sources": [
         "TweakHub"
       ]
@@ -910,7 +935,7 @@
       "category": "CPU & Memory",
       "wingetId": null,
       "url": "https://github.com/CoolCmd/TestMem5/releases/download/v0.13.1/TestMem5.7z",
-      "author": "PrimeBuild",
+      "author": "Serj, CoolCmd",
       "sources": [
         "TweakHub"
       ]
@@ -932,7 +957,7 @@
       "category": "CPU & Memory",
       "wingetId": null,
       "url": "https://www.techpowerup.com/download/techpowerup-throttlestop/",
-      "author": "PrimeBuild",
+      "author": "Kevin Glynn (UncleWebb)",
       "sources": [
         "TweakHub"
       ]
@@ -954,7 +979,7 @@
       "category": "CPU & Memory",
       "wingetId": null,
       "url": "https://zentimings.com/",
-      "author": "PrimeBuild",
+      "author": "Ivan Rusanov",
       "sources": [
         "TweakHub"
       ]
@@ -1924,7 +1949,7 @@
       "category": "Firmware & Power",
       "wingetId": null,
       "url": "https://www.mediafire.com/file/wt37sbsejk7iepm/PowerSettingsExplorer.zip/file",
-      "author": "PrimeBuild",
+      "author": "mbk1969",
       "sources": [
         "TweakHub"
       ]
@@ -1935,7 +1960,7 @@
       "category": "Firmware & Power",
       "wingetId": null,
       "url": "https://github.com/ab3lkaizen/SCEHUB",
-      "author": "PrimeBuild",
+      "author": "ab3lkaizen",
       "sources": [
         "TweakHub"
       ]
@@ -1946,7 +1971,7 @@
       "category": "Firmware & Power",
       "wingetId": null,
       "url": "https://github.com/loko8002/SCEWIN-GUI-BETTER1",
-      "author": "PrimeBuild",
+      "author": "eskezje",
       "sources": [
         "TweakHub"
       ]
@@ -1957,7 +1982,7 @@
       "category": "Firmware & Power",
       "wingetId": null,
       "url": "https://github.com/LongSoft/UEFITool",
-      "author": "PrimeBuild",
+      "author": "Nikolaj Schlej",
       "sources": [
         "TweakHub"
       ]
@@ -2173,7 +2198,7 @@
       "category": "Gaming & Input",
       "wingetId": null,
       "url": "https://github.com/artur-graniszewski/DLSS-Enabler",
-      "author": "PrimeBuild",
+      "author": "Artur Graniszewski",
       "sources": [
         "TweakHub"
       ]
@@ -2184,7 +2209,7 @@
       "category": "Gaming & Input",
       "wingetId": null,
       "url": "https://github.com/beeradmoore/dlss-swapper",
-      "author": "PrimeBuild",
+      "author": "beeradmoore",
       "sources": [
         "TweakHub"
       ]
@@ -2195,7 +2220,7 @@
       "category": "Gaming & Input",
       "wingetId": null,
       "url": "https://dualshock-tools.github.io/",
-      "author": "PrimeBuild",
+      "author": "Dualshock Tools",
       "sources": [
         "TweakHub"
       ]
@@ -2206,7 +2231,7 @@
       "category": "Gaming & Input",
       "wingetId": null,
       "url": "https://github.com/LordOfMice/hidusbf",
-      "author": "PrimeBuild",
+      "author": "SweetLow",
       "sources": [
         "TweakHub"
       ]
@@ -2281,7 +2306,7 @@
       "category": "Gaming & Input",
       "wingetId": null,
       "url": "https://github.com/optiscaler/OptiScaler",
-      "author": "PrimeBuild",
+      "author": "cdozdil",
       "sources": [
         "TweakHub"
       ]
@@ -2326,7 +2351,7 @@
       "category": "Gaming & Input",
       "wingetId": null,
       "url": "https://github.com/RawAccelOfficial/rawaccel",
-      "author": "PrimeBuild",
+      "author": "a1xd",
       "sources": [
         "TweakHub"
       ]
@@ -2337,7 +2362,7 @@
       "category": "Gaming & Input",
       "wingetId": null,
       "url": "https://rzr.to/pollingrate",
-      "author": "PrimeBuild",
+      "author": "Razer",
       "sources": [
         "TweakHub"
       ]
@@ -2372,7 +2397,7 @@
       "category": "Gaming & Input",
       "wingetId": null,
       "url": "https://www.techpowerup.com/download/visual-c-redistributable-runtime-package-all-in-one/",
-      "author": "PrimeBuild",
+      "author": "TechPowerUp",
       "sources": [
         "TweakHub"
       ]
@@ -2383,7 +2408,7 @@
       "category": "GPU & Display",
       "wingetId": null,
       "url": "https://drivers.amd.com/drivers/amdcleanuputility.exe",
-      "author": "PrimeBuild",
+      "author": "AMD",
       "sources": [
         "TweakHub"
       ]
@@ -2394,7 +2419,7 @@
       "category": "GPU & Display",
       "wingetId": null,
       "url": "https://www.techpowerup.com/download/ati-atiflash/",
-      "author": "PrimeBuild",
+      "author": "AMD",
       "sources": [
         "TweakHub"
       ]
@@ -2405,7 +2430,7 @@
       "category": "GPU & Display",
       "wingetId": null,
       "url": "https://www.monitortests.com/forum/Thread-Custom-Resolution-Utility-CRU",
-      "author": "PrimeBuild",
+      "author": "ToastyX",
       "sources": [
         "TweakHub"
       ]
@@ -2416,7 +2441,7 @@
       "category": "GPU & Display",
       "wingetId": null,
       "url": "https://www.igorslab.de/en/download-area-new-version-of-morepowertool-mpt-and-final-release-of-redbioseditor-rbe/",
-      "author": "PrimeBuild",
+      "author": "hellm",
       "sources": [
         "TweakHub"
       ]
@@ -2427,7 +2452,7 @@
       "category": "GPU & Display",
       "wingetId": null,
       "url": "https://apps.microsoft.com/detail/9N08X8C1QDQP",
-      "author": "PrimeBuild",
+      "author": "hellm",
       "sources": [
         "TweakHub"
       ]
@@ -2438,7 +2463,7 @@
       "category": "GPU & Display",
       "wingetId": null,
       "url": "https://www.igorslab.de/en/morepowertool-mpt-beta-program-new-features-the-community-tests/",
-      "author": "PrimeBuild",
+      "author": "hellm",
       "sources": [
         "TweakHub"
       ]
@@ -2449,7 +2474,7 @@
       "category": "GPU & Display",
       "wingetId": null,
       "url": "https://github.com/RedDot-3ND7355/MPO-GPU-FIX",
-      "author": "PrimeBuild",
+      "author": "RedDot-3ND7355",
       "sources": [
         "TweakHub"
       ]
@@ -2480,7 +2505,7 @@
       "category": "GPU & Display",
       "wingetId": null,
       "url": "https://www.techpowerup.com/download/nvidia-nvflash/",
-      "author": "PrimeBuild",
+      "author": "NVIDIA",
       "sources": [
         "TweakHub"
       ]
@@ -2491,7 +2516,7 @@
       "category": "GPU & Display",
       "wingetId": null,
       "url": "https://www.nvidia.com/en-us/software/nvidia-app/",
-      "author": "PrimeBuild",
+      "author": "NVIDIA",
       "sources": [
         "TweakHub"
       ]
@@ -2502,7 +2527,7 @@
       "category": "GPU & Display",
       "wingetId": null,
       "url": "https://www.nvidia.com/en-us/drivers/",
-      "author": "PrimeBuild",
+      "author": "NVIDIA",
       "sources": [
         "TweakHub"
       ]
@@ -2513,7 +2538,7 @@
       "category": "GPU & Display",
       "wingetId": null,
       "url": "https://github.com/Orbmu2k/nvidiaProfileInspector",
-      "author": "PrimeBuild",
+      "author": "Orbmu2k",
       "sources": [
         "TweakHub"
       ]
@@ -2558,7 +2583,7 @@
       "category": "GPU & Display",
       "wingetId": null,
       "url": "https://vibrancegui.com/",
-      "author": "PrimeBuild",
+      "author": "juv",
       "sources": [
         "TweakHub"
       ]
@@ -2897,7 +2922,7 @@
       "category": "Monitoring & Diagnostics",
       "wingetId": null,
       "url": "https://gpuopen.com/rgp/",
-      "author": "PrimeBuild",
+      "author": "AMD",
       "sources": [
         "TweakHub"
       ]
@@ -2930,7 +2955,7 @@
       "category": "Monitoring & Diagnostics",
       "wingetId": null,
       "url": "https://www.geeks3d.com/gpushark/",
-      "author": "PrimeBuild",
+      "author": "Geeks3D",
       "sources": [
         "TweakHub"
       ]
@@ -2941,7 +2966,7 @@
       "category": "Monitoring & Diagnostics",
       "wingetId": null,
       "url": "https://learn.microsoft.com/windows-hardware/drivers/display/using-gpuview",
-      "author": "PrimeBuild",
+      "author": "Microsoft",
       "sources": [
         "TweakHub"
       ]
@@ -2974,7 +2999,7 @@
       "category": "Monitoring & Diagnostics",
       "wingetId": null,
       "url": "https://developer.nvidia.com/nsight-systems",
-      "author": "PrimeBuild",
+      "author": "NVIDIA",
       "sources": [
         "TweakHub"
       ]
@@ -2985,7 +3010,7 @@
       "category": "Monitoring & Diagnostics",
       "wingetId": null,
       "url": "https://www.winitor.com/download",
-      "author": "PrimeBuild",
+      "author": "Marc Ochsenmeier (Winitor)",
       "sources": [
         "TweakHub"
       ]
@@ -3018,7 +3043,7 @@
       "category": "Monitoring & Diagnostics",
       "wingetId": null,
       "url": "https://learn.microsoft.com/windows-hardware/get-started/adk-install",
-      "author": "PrimeBuild",
+      "author": "Microsoft",
       "sources": [
         "TweakHub"
       ]
@@ -3497,7 +3522,7 @@
       "category": "Network",
       "wingetId": null,
       "url": "https://www.speedguide.net/downloads.php",
-      "author": "PrimeBuild",
+      "author": "SpeedGuide.net",
       "sources": [
         "TweakHub"
       ]
@@ -3596,7 +3621,7 @@
       "category": "OSINT & Security",
       "wingetId": null,
       "url": "https://github.com/owasp-amass/amass",
-      "author": "PrimeBuild",
+      "author": "OWASP",
       "sources": [
         "TweakHub"
       ]
@@ -3607,7 +3632,7 @@
       "category": "OSINT & Security",
       "wingetId": null,
       "url": "https://github.com/sherlock-project/sherlock",
-      "author": "PrimeBuild",
+      "author": "Sherlock Project",
       "sources": [
         "TweakHub"
       ]
@@ -3618,7 +3643,7 @@
       "category": "OSINT & Security",
       "wingetId": null,
       "url": "https://github.com/smicallef/spiderfoot",
-      "author": "PrimeBuild",
+      "author": "Steve Micallef",
       "sources": [
         "TweakHub"
       ]
@@ -3983,7 +4008,7 @@
       "category": "Recovery & Forensics",
       "wingetId": null,
       "url": "https://www.autopsy.com/download/",
-      "author": "PrimeBuild",
+      "author": "Sleuth Kit Labs",
       "sources": [
         "TweakHub"
       ]
@@ -4447,7 +4472,7 @@
       "category": "Storage & USB",
       "wingetId": null,
       "url": "https://tools.mariusheier.com/",
-      "author": "PrimeBuild",
+      "author": "Marius Heier",
       "sources": [
         "TweakHub"
       ]
@@ -4469,7 +4494,7 @@
       "category": "System Utilities",
       "wingetId": null,
       "url": "https://amelabs.net/",
-      "author": "PrimeBuild",
+      "author": "Ameliorated LLC",
       "sources": [
         "TweakHub"
       ]
@@ -4480,7 +4505,7 @@
       "category": "System Utilities",
       "wingetId": null,
       "url": "https://github.com/builtbybel/CleanmgrPlus",
-      "author": "PrimeBuild",
+      "author": "Belim",
       "sources": [
         "TweakHub"
       ]
@@ -4491,7 +4516,7 @@
       "category": "System Utilities",
       "wingetId": null,
       "url": "https://www.majorgeeks.com/files/details/device_cleanup_tool.html",
-      "author": "PrimeBuild",
+      "author": "Uwe Sieber",
       "sources": [
         "TweakHub"
       ]
@@ -4524,7 +4549,7 @@
       "category": "System Utilities",
       "wingetId": null,
       "url": "https://github.com/FancyWM/fancywm",
-      "author": "PrimeBuild",
+      "author": "Veselin Karaganev",
       "sources": [
         "TweakHub"
       ]
@@ -4535,7 +4560,7 @@
       "category": "System Utilities",
       "wingetId": null,
       "url": "https://github.com/Flow-Launcher/Flow.Launcher",
-      "author": "PrimeBuild",
+      "author": "Flow Launcher",
       "sources": [
         "TweakHub"
       ]
@@ -4568,7 +4593,7 @@
       "category": "System Utilities",
       "wingetId": null,
       "url": "https://apps.microsoft.com/detail/9P8LTPGCBZXD",
-      "author": "PrimeBuild",
+      "author": "Bogdan Pătrăucean",
       "sources": [
         "TweakHub"
       ]
@@ -4579,7 +4604,7 @@
       "category": "System Utilities",
       "wingetId": null,
       "url": "https://github.com/ChrisTitusTech/winutil",
-      "author": "PrimeBuild",
+      "author": "Chris Titus Tech",
       "sources": [
         "TweakHub"
       ]
