@@ -14,22 +14,34 @@ GameFolderFacts windowsGameFolderFacts() {
     for (final path in paths)
       if (path != null && path.isNotEmpty) resolveFinalPath(path)?.path ?? path,
   ];
+  final programFiles = knownFolderPath(FOLDERID_ProgramFiles);
+  final programFilesX86 = knownFolderPath(FOLDERID_ProgramFilesX86);
+  final profile = knownFolderPath(FOLDERID_Profile);
   return GameFolderFacts(
-    protectedFolders: folders(<String?>[
-      knownFolderPath(FOLDERID_ProgramFiles),
-      knownFolderPath(FOLDERID_ProgramFilesX86),
+    protectedFolders: folders(<String?>[programFiles, programFilesX86]),
+    // User-writable places (profiles, AppData, Startup, ProgramData) and the
+    // security software's own folders are never excluded, not even below.
+    forbiddenTrees: folders(<String?>[
+      knownFolderPath(FOLDERID_Windows),
       knownFolderPath(FOLDERID_ProgramData),
-      knownFolderPath(FOLDERID_Profile),
+      if (profile != null) p.windows.dirname(profile),
+      // Shell folders can be redirected outside the profile.
       knownFolderPath(FOLDERID_Desktop),
       knownFolderPath(FOLDERID_Documents),
+      knownFolderPath(FOLDERID_Downloads),
       knownFolderPath(FOLDERID_RoamingAppData),
       knownFolderPath(FOLDERID_LocalAppData),
       knownFolderPath(FOLDERID_Public),
-    ]),
-    forbiddenTrees: folders(<String?>[
-      knownFolderPath(FOLDERID_Windows),
-      knownFolderPath(FOLDERID_Downloads),
       Directory.systemTemp.path,
+      for (final root in <String?>[programFiles, programFilesX86])
+        if (root != null)
+          for (final name in const <String>[
+            'Windows Defender',
+            'Windows Defender Advanced Threat Protection',
+            'WindowsApps',
+            'Common Files',
+          ])
+            p.windows.join(root, name),
     ]),
     resolve: resolveFinalPath,
     separateGameFolders: countSeparateGameFolders,
