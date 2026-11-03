@@ -2521,4 +2521,14 @@ class AppLocalizationsZh extends AppLocalizations {
   String interruptLayoutRssManual(int cpu) {
     return 'RSS 从 CPU $cpu 开始。ZapTweaks 不会移动它：Windows 还会同时更改队列和处理器数量，且无法精确还原。如有需要，请在网卡的高级设置中更改。';
   }
+
+  @override
+  String get interruptLayoutGpuAudio => '显卡的 HDMI/DisplayPort 音频：不移动，它不是游戏音频。';
+
+  @override
+  String get interruptLayoutAudioUnused => '此控制器后面没有可用的音频设备（已禁用或不存在）：不移动。';
+
+  @override
+  String get interruptLayoutAudioUsb =>
+      '未使用板载声卡：USB 音频（耳机、DAC、音频接口）跟随其所连接 USB 控制器的核心。';
 }

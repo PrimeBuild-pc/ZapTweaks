@@ -808,5 +808,8 @@
   "interruptLayoutNothingToDo": "È già tutto a posto.",
   "interruptLayoutReminder": "Riavvia Windows con Riavvia, non con Arresta (l'Avvio rapido conserva lo stato precedente). Ricontrolla dopo ogni aggiornamento del driver della GPU, che può azzerare questi valori. Confronta i frame time 1% e 0,1% low e i tempi DPC/ISR in Diagnostica, non solo gli FPS medi.",
   "interruptLayoutApply": "Applica layout",
-  "interruptLayoutRssManual": "L'RSS parte dalla CPU {cpu}. ZapTweaks non lo sposta: Windows cambierebbe anche il numero di code e di processori, e non si potrebbe ripristinare esattamente. Se vuoi, cambialo nelle impostazioni avanzate della scheda."
+  "interruptLayoutRssManual": "L'RSS parte dalla CPU {cpu}. ZapTweaks non lo sposta: Windows cambierebbe anche il numero di code e di processori, e non si potrebbe ripristinare esattamente. Se vuoi, cambialo nelle impostazioni avanzate della scheda.",
+  "interruptLayoutGpuAudio": "Audio HDMI/DisplayPort della scheda video: non spostato, non è l'audio per giocare.",
+  "interruptLayoutAudioUnused": "Nessun dispositivo audio attivo dietro questo controller (disattivato o assente): non spostato.",
+  "interruptLayoutAudioUsb": "Nessuna scheda audio integrata in uso: l'audio USB (cuffie, DAC, schede audio esterne) segue il core del controller USB a cui è collegato."
 }

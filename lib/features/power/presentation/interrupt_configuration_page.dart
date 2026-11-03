@@ -432,6 +432,7 @@ class _InterruptConfigurationPageState
         .map((row) => row.request)
         .whereType<OperationRequest>()
         .toList(growable: false);
+    final audio = hasLayoutAudio(rows);
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => ContentDialog(
@@ -448,6 +449,7 @@ class _InterruptConfigurationPageState
                 const SizedBox(height: 8),
                 for (final note in layout.notes)
                   Text('- ${_layoutNote(strings, note)}'),
+                if (!audio) Text('- ${strings.interruptLayoutAudioUsb}'),
                 const SizedBox(height: 8),
                 InfoBar(
                   title: Text(strings.interruptChangeWarning),
@@ -460,11 +462,12 @@ class _InterruptConfigurationPageState
                   runSpacing: 4,
                   children: <Widget>[
                     for (final entry in layout.cpuByRole.entries)
-                      Text(
-                        '${_roleName(strings, entry.key)}: '
-                        '${_processorLabel(strings, topology, entry.value)}',
-                        style: FluentTheme.of(context).typography.bodyStrong,
-                      ),
+                      if (audio || entry.key != InterruptRole.audio)
+                        Text(
+                          '${_roleName(strings, entry.key)}: '
+                          '${_processorLabel(strings, topology, entry.value)}',
+                          style: FluentTheme.of(context).typography.bodyStrong,
+                        ),
                   ],
                 ),
                 const SizedBox(height: 12),
@@ -534,6 +537,8 @@ class _InterruptConfigurationPageState
       LayoutSkip.rssManual => strings.interruptLayoutRssManual(
         row.rssBase ?? 0,
       ),
+      LayoutSkip.gpuAudio => strings.interruptLayoutGpuAudio,
+      LayoutSkip.audioUnused => strings.interruptLayoutAudioUnused,
       null => row.msiOff && !row.rss ? strings.interruptLayoutMsiOff : null,
     };
     final typography = FluentTheme.of(context).typography;

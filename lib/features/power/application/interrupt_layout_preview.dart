@@ -7,7 +7,40 @@ import '../domain/interrupt_layout.dart';
 
 enum LayoutRowStatus { toDo, alreadySet, skipped }
 
-enum LayoutSkip { rssOff, rssUnreadable, rssManual }
+enum LayoutSkip { rssOff, rssUnreadable, rssManual, gpuAudio, audioUnused }
+
+/// Why an audio controller is not the one to move: the HDMI/DP audio of a
+/// graphics card (same slot and vendor as a display device), or one with no
+/// working audio device behind it. Gaming audio is then USB or elsewhere.
+LayoutSkip? _audioSkip(
+  PciInterruptCapability audio,
+  List<PciInterruptCapability> devices,
+) {
+  String? vendor(PciInterruptCapability item) => RegExp(
+    r'VEN_([0-9A-F]{4})',
+  ).firstMatch(item.device.instanceId.toUpperCase())?.group(1);
+  final bus = audio.busNumber;
+  final address = audio.address;
+  if (bus != null &&
+      address != null &&
+      devices.any(
+        (other) =>
+            interruptRole(other) == InterruptRole.gpu &&
+            other.busNumber == bus &&
+            other.address != null &&
+            other.address! >> 16 == address >> 16 &&
+            vendor(other) == vendor(audio),
+      )) {
+    return LayoutSkip.gpuAudio;
+  }
+  return audio.audioInUse ? null : LayoutSkip.audioUnused;
+}
+
+/// True when some audio device will actually get the audio core.
+bool hasLayoutAudio(List<LayoutRow> rows) => rows.any(
+  (row) =>
+      row.role == InterruptRole.audio && row.status != LayoutRowStatus.skipped,
+);
 
 /// One line of the preview: a device's interrupt affinity or a network
 /// adapter's RSS start processor.
@@ -51,6 +84,21 @@ List<LayoutRow> buildLayoutRows({
     final cpu = role == null ? null : layout.cpuByRole[role];
     if (role == null || cpu == null) continue;
     final id = device.device.instanceId;
+    final skip = role == InterruptRole.audio
+        ? _audioSkip(device, devices)
+        : null;
+    if (skip != null) {
+      rows.add(
+        LayoutRow(
+          label: device.device.description,
+          role: role,
+          cpu: cpu,
+          status: LayoutRowStatus.skipped,
+          skip: skip,
+        ),
+      );
+      continue;
+    }
     final current = configurations[id];
     final mask = layout.maskHex(role)!;
     final done =

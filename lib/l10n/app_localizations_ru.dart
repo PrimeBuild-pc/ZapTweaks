@@ -2676,4 +2676,16 @@ class AppLocalizationsRu extends AppLocalizations {
   String interruptLayoutRssManual(int cpu) {
     return 'RSS начинается с CPU $cpu. ZapTweaks его не переносит: Windows изменит также число очередей и процессоров, и точно отменить это нельзя. При желании измените это в дополнительных параметрах адаптера.';
   }
+
+  @override
+  String get interruptLayoutGpuAudio =>
+      'Звук HDMI/DisplayPort видеокарты: не переносится, это не игровой звук.';
+
+  @override
+  String get interruptLayoutAudioUnused =>
+      'За этим контроллером нет работающего аудиоустройства (отключено или отсутствует): не переносится.';
+
+  @override
+  String get interruptLayoutAudioUsb =>
+      'Встроенная звуковая карта не используется: USB-звук (гарнитуры, ЦАП, аудиоинтерфейсы) работает на ядре того USB-контроллера, к которому подключён.';
 }

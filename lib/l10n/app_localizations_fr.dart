@@ -2704,4 +2704,16 @@ class AppLocalizationsFr extends AppLocalizations {
   String interruptLayoutRssManual(int cpu) {
     return 'RSS commence au CPU $cpu. ZapTweaks ne le déplace pas : Windows modifierait aussi le nombre de files et de processeurs, ce qui ne peut pas être annulé exactement. Modifiez-le dans les paramètres avancés de la carte si vous le souhaitez.';
   }
+
+  @override
+  String get interruptLayoutGpuAudio =>
+      'Audio HDMI/DisplayPort de la carte graphique : non déplacé, ce n\'est pas l\'audio de jeu.';
+
+  @override
+  String get interruptLayoutAudioUnused =>
+      'Aucun périphérique audio actif derrière ce contrôleur (désactivé ou absent) : non déplacé.';
+
+  @override
+  String get interruptLayoutAudioUsb =>
+      'Aucune carte son intégrée utilisée : l\'audio USB (casques, DAC, interfaces audio) suit le cœur du contrôleur USB auquel il est branché.';
 }

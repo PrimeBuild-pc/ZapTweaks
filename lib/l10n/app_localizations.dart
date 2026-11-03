@@ -4728,6 +4728,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'RSS starts at CPU {cpu}. ZapTweaks does not move it: Windows would also change the number of queues and processors, which cannot be undone exactly. Change it in the adapter\'s advanced settings if you want.'**
   String interruptLayoutRssManual(int cpu);
+
+  /// No description provided for @interruptLayoutGpuAudio.
+  ///
+  /// In en, this message translates to:
+  /// **'HDMI/DisplayPort audio of the graphics card: not moved, it is not the gaming audio.'**
+  String get interruptLayoutGpuAudio;
+
+  /// No description provided for @interruptLayoutAudioUnused.
+  ///
+  /// In en, this message translates to:
+  /// **'No working audio device behind this controller (disabled or missing): not moved.'**
+  String get interruptLayoutAudioUnused;
+
+  /// No description provided for @interruptLayoutAudioUsb.
+  ///
+  /// In en, this message translates to:
+  /// **'No built-in sound card in use: USB audio (headsets, DACs, audio interfaces) follows the core of the USB controller it is plugged into.'**
+  String get interruptLayoutAudioUsb;
 }
 
 class _AppLocalizationsDelegate

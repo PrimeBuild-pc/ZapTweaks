@@ -870,5 +870,8 @@
   "interruptLayoutReminder": "Restart Windows with Restart, not Shut down (Fast Startup keeps the old state). Check again after every GPU driver update, which can reset these values. Compare 1% and 0.1% low frame times and DPC/ISR times in Diagnostics, not only average FPS.",
   "interruptLayoutApply": "Apply layout",
   "interruptLayoutRssManual": "RSS starts at CPU {cpu}. ZapTweaks does not move it: Windows would also change the number of queues and processors, which cannot be undone exactly. Change it in the adapter's advanced settings if you want.",
+  "interruptLayoutGpuAudio": "HDMI/DisplayPort audio of the graphics card: not moved, it is not the gaming audio.",
+  "interruptLayoutAudioUnused": "No working audio device behind this controller (disabled or missing): not moved.",
+  "interruptLayoutAudioUsb": "No built-in sound card in use: USB audio (headsets, DACs, audio interfaces) follows the core of the USB controller it is plugged into.",
   "@interruptLayoutRssManual": {"placeholders": {"cpu": {"type": "int"}}}
 }

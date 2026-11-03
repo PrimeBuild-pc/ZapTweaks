@@ -5,6 +5,9 @@ class PciInterruptCapability {
     required this.msi,
     required this.msiX,
     required this.messageMaximum,
+    this.busNumber,
+    this.address,
+    this.audioInUse = true,
   });
 
   final DeviceIdentity device;
@@ -12,6 +15,14 @@ class PciInterruptCapability {
   final bool msi;
   final bool msiX;
   final int messageMaximum;
+
+  /// PCI bus, and `device << 16 | function` on that bus.
+  final int? busNumber;
+  final int? address;
+
+  /// For HD Audio controllers: false when no audio function behind it works
+  /// (all disabled or missing).
+  final bool audioInUse;
 }
 
 class DeviceIdentity {

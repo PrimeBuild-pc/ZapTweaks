@@ -765,5 +765,8 @@
   "interruptLayoutNothingToDo": "Alles ist bereits eingestellt.",
   "interruptLayoutReminder": "Starten Sie Windows mit Neu starten, nicht mit Herunterfahren neu (der Schnellstart behält den alten Zustand). Prüfen Sie nach jedem GPU-Treiberupdate erneut, da es diese Werte zurücksetzen kann. Vergleichen Sie die 1%- und 0,1%-Low-Frametimes und die DPC/ISR-Zeiten in der Diagnose, nicht nur die durchschnittlichen FPS.",
   "interruptLayoutApply": "Layout anwenden",
-  "interruptLayoutRssManual": "RSS beginnt bei CPU {cpu}. ZapTweaks verschiebt es nicht: Windows würde auch die Anzahl der Warteschlangen und Prozessoren ändern, was sich nicht exakt rückgängig machen lässt. Ändern Sie es bei Bedarf in den erweiterten Einstellungen des Adapters."
+  "interruptLayoutRssManual": "RSS beginnt bei CPU {cpu}. ZapTweaks verschiebt es nicht: Windows würde auch die Anzahl der Warteschlangen und Prozessoren ändern, was sich nicht exakt rückgängig machen lässt. Ändern Sie es bei Bedarf in den erweiterten Einstellungen des Adapters.",
+  "interruptLayoutGpuAudio": "HDMI/DisplayPort-Audio der Grafikkarte: nicht verschoben, es ist nicht der Spielesound.",
+  "interruptLayoutAudioUnused": "Kein funktionierendes Audiogerät hinter diesem Controller (deaktiviert oder fehlend): nicht verschoben.",
+  "interruptLayoutAudioUsb": "Keine integrierte Soundkarte in Verwendung: USB-Audio (Headsets, DACs, Audio-Interfaces) folgt dem Kern des USB-Controllers, an dem es angeschlossen ist."
 }

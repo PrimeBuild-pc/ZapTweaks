@@ -765,5 +765,8 @@
   "interruptLayoutNothingToDo": "Tout est déjà en place.",
   "interruptLayoutReminder": "Redémarrez Windows avec Redémarrer, pas Arrêter (le démarrage rapide conserve l'ancien état). Vérifiez à nouveau après chaque mise à jour du pilote GPU, qui peut réinitialiser ces valeurs. Comparez les frame times 1 % et 0,1 % low et les temps DPC/ISR dans Diagnostic, pas seulement les FPS moyens.",
   "interruptLayoutApply": "Appliquer la disposition",
-  "interruptLayoutRssManual": "RSS commence au CPU {cpu}. ZapTweaks ne le déplace pas : Windows modifierait aussi le nombre de files et de processeurs, ce qui ne peut pas être annulé exactement. Modifiez-le dans les paramètres avancés de la carte si vous le souhaitez."
+  "interruptLayoutRssManual": "RSS commence au CPU {cpu}. ZapTweaks ne le déplace pas : Windows modifierait aussi le nombre de files et de processeurs, ce qui ne peut pas être annulé exactement. Modifiez-le dans les paramètres avancés de la carte si vous le souhaitez.",
+  "interruptLayoutGpuAudio": "Audio HDMI/DisplayPort de la carte graphique : non déplacé, ce n'est pas l'audio de jeu.",
+  "interruptLayoutAudioUnused": "Aucun périphérique audio actif derrière ce contrôleur (désactivé ou absent) : non déplacé.",
+  "interruptLayoutAudioUsb": "Aucune carte son intégrée utilisée : l'audio USB (casques, DAC, interfaces audio) suit le cœur du contrôleur USB auquel il est branché."
 }

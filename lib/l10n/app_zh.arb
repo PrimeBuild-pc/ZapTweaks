@@ -765,5 +765,8 @@
   "interruptLayoutNothingToDo": "已全部设置。",
   "interruptLayoutReminder": "请使用“重启”而不是“关机”来重启 Windows（快速启动会保留旧状态）。每次更新 GPU 驱动后请重新检查，驱动可能会重置这些值。请在“诊断”中比较 1% 和 0.1% low 帧时间以及 DPC/ISR 时间，而不只是平均 FPS。",
   "interruptLayoutApply": "应用布局",
-  "interruptLayoutRssManual": "RSS 从 CPU {cpu} 开始。ZapTweaks 不会移动它：Windows 还会同时更改队列和处理器数量，且无法精确还原。如有需要，请在网卡的高级设置中更改。"
+  "interruptLayoutRssManual": "RSS 从 CPU {cpu} 开始。ZapTweaks 不会移动它：Windows 还会同时更改队列和处理器数量，且无法精确还原。如有需要，请在网卡的高级设置中更改。",
+  "interruptLayoutGpuAudio": "显卡的 HDMI/DisplayPort 音频：不移动，它不是游戏音频。",
+  "interruptLayoutAudioUnused": "此控制器后面没有可用的音频设备（已禁用或不存在）：不移动。",
+  "interruptLayoutAudioUsb": "未使用板载声卡：USB 音频（耳机、DAC、音频接口）跟随其所连接 USB 控制器的核心。"
 }
