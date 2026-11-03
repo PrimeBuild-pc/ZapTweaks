@@ -2505,4 +2505,183 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get expertModeOff => 'Disattivata';
+
+  @override
+  String get gameFolderExclusionTab => 'Esclusione Defender';
+
+  @override
+  String get gameFolderExclusionTitle =>
+      'Esclusione Defender per la cartella di un gioco';
+
+  @override
+  String get gameFolderExclusionDescription =>
+      'Microsoft Defender smette di analizzare in tempo reale la cartella che scegli. Scegli la cartella di un solo gioco, non un launcher o un\'intera libreria. Puoi aggiungerla solo tu: nessun preset né la configurazione guidata lo fanno.';
+
+  @override
+  String get gameFolderExclusionClaim =>
+      'Può ridurre i tempi di caricamento; l\'effetto sugli FPS non è dimostrato.';
+
+  @override
+  String get gameFolderExclusionSecurityWarning =>
+      'Le esclusioni sono un bersaglio dei malware: i file in questa cartella, compresi mod, trainer e file scaricati, non verranno più analizzati in tempo reale.';
+
+  @override
+  String get gameFolderExclusionLauncherWarning =>
+      'Sembra un launcher o una libreria con più giochi. Scegli la cartella del singolo gioco: escludere tutto il launcher toglie la scansione anche a mod, trainer e file scaricati.';
+
+  @override
+  String get gameFolderExclusionChoose => 'Scegli la cartella del gioco';
+
+  @override
+  String get gameFolderExclusionPickerTitle => 'Scegli la cartella di un gioco';
+
+  @override
+  String get gameFolderExclusionConfirmTitle =>
+      'Escludere questa cartella da Defender?';
+
+  @override
+  String get gameFolderExclusionConfirm => 'Aggiungi esclusione';
+
+  @override
+  String get gameFolderExclusionLauncherTitle =>
+      'Cartella di un launcher o di una libreria';
+
+  @override
+  String get gameFolderExclusionLauncherConfirm =>
+      'Usa comunque questa cartella';
+
+  @override
+  String get gameFolderExclusionManaged => 'Esclusioni aggiunte da ZapTweaks';
+
+  @override
+  String get gameFolderExclusionNone => 'ZapTweaks non ha aggiunto esclusioni.';
+
+  @override
+  String get gameFolderExclusionRemove => 'Rimuovi';
+
+  @override
+  String gameFolderExclusionReminder(int count) {
+    return 'Cartelle di giochi escluse da Defender con ZapTweaks: $count. Non vengono analizzate in tempo reale; rimuovi l\'esclusione quando non ti serve più.';
+  }
+
+  @override
+  String get gameFolderExclusionAdded => 'Esclusione aggiunta.';
+
+  @override
+  String get gameFolderExclusionRemoved => 'Esclusione rimossa.';
+
+  @override
+  String get gameFolderRefusedNotLocal =>
+      'Scegli una cartella su un\'unità locale.';
+
+  @override
+  String get gameFolderRefusedMissing => 'La cartella non esiste.';
+
+  @override
+  String get gameFolderRefusedNotDirectory => 'Non è una cartella.';
+
+  @override
+  String get gameFolderRefusedLink =>
+      'Questa cartella è un collegamento o una giunzione verso un\'altra posizione. Scegli la cartella reale.';
+
+  @override
+  String get gameFolderRefusedDriveRoot =>
+      'Non si può escludere un\'intera unità.';
+
+  @override
+  String get gameFolderRefusedProtected =>
+      'È una cartella di sistema o personale (Windows, Programmi, il tuo profilo, Desktop, Documenti, Download, Temp) o ne contiene una. Scegli la cartella del gioco.';
+
+  @override
+  String get defenderNotActive =>
+      'Microsoft Defender non è l\'antivirus attivo, quindi un\'esclusione non avrebbe effetto.';
+
+  @override
+  String get defenderRealTimeOff =>
+      'La protezione in tempo reale di Defender è disattivata, quindi un\'esclusione non avrebbe effetto.';
+
+  @override
+  String get defenderExclusionsIgnored =>
+      'Un criterio su questo PC fa ignorare a Defender le esclusioni locali.';
+
+  @override
+  String get defenderStatusUnknown =>
+      'Impossibile leggere lo stato di Microsoft Defender.';
+
+  @override
+  String get interruptLayoutButton => 'Layout suggerito per ruolo';
+
+  @override
+  String get interruptLayoutTitle => 'Layout degli interrupt suggerito';
+
+  @override
+  String get interruptLayoutIntro =>
+      'Un core fisico ciascuno per grafica, USB, rete e audio, fuori dal core 0, scelto dalla topologia di questa CPU. È un layout suggerito da misurare: il beneficio non è dimostrato.';
+
+  @override
+  String get interruptRoleGpu => 'Grafica';
+
+  @override
+  String get interruptRoleUsb => 'USB';
+
+  @override
+  String get interruptRoleNetwork => 'Rete';
+
+  @override
+  String get interruptRoleAudio => 'Audio';
+
+  @override
+  String get interruptLayoutToDo => 'Da fare';
+
+  @override
+  String get interruptLayoutAlreadySet => 'Già a posto';
+
+  @override
+  String get interruptLayoutSkipped => 'Saltato';
+
+  @override
+  String interruptLayoutRssRow(String adapter) {
+    return 'RSS di rete ($adapter): parte dal core della rete';
+  }
+
+  @override
+  String get interruptLayoutRssOff => 'RSS è disattivato su questa scheda';
+
+  @override
+  String get interruptLayoutRssUnreadable =>
+      'Impossibile leggere l\'RSS di questa scheda';
+
+  @override
+  String get interruptLayoutMsiOff =>
+      'MSI è disattivato per questo dispositivo: attivalo prima per il risultato migliore.';
+
+  @override
+  String get interruptLayoutNoteHybrid => 'CPU ibrida: si usano solo i P-core.';
+
+  @override
+  String get interruptLayoutNoteCache =>
+      'CPU con più cache L3 (CCD): i dispositivi vanno sul CCD senza 3D V-Cache, o su quello senza la CPU 0 se le cache sono uguali.';
+
+  @override
+  String get interruptLayoutNoteShared =>
+      'Questa CPU ha 6 core o meno: rete e audio condividono un core.';
+
+  @override
+  String get interruptLayoutUnavailable =>
+      'Su questo PC non si può suggerire un layout: più gruppi di processori, troppo pochi core o topologia non leggibile.';
+
+  @override
+  String get interruptLayoutNothingToDo => 'È già tutto a posto.';
+
+  @override
+  String get interruptLayoutReminder =>
+      'Riavvia Windows con Riavvia, non con Arresta (l\'Avvio rapido conserva lo stato precedente). Ricontrolla dopo ogni aggiornamento del driver della GPU, che può azzerare questi valori. Confronta i frame time 1% e 0,1% low e i tempi DPC/ISR in Diagnostica, non solo gli FPS medi.';
+
+  @override
+  String get interruptLayoutApply => 'Applica layout';
+
+  @override
+  String interruptLayoutRssManual(int cpu) {
+    return 'L\'RSS parte dalla CPU $cpu. ZapTweaks non lo sposta: Windows cambierebbe anche il numero di code e di processori, e non si potrebbe ripristinare esattamente. Se vuoi, cambialo nelle impostazioni avanzate della scheda.';
+  }
 }

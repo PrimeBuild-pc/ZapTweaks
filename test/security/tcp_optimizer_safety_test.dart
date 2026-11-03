@@ -34,7 +34,7 @@ void main() {
       'lib/features/power/presentation/tcp_optimizer_page.dart',
     ).readAsStringSync();
     expect(tabs, contains('TcpOptimizerPage'));
-    expect(tabs, contains('clamp(0, 3)'));
+    expect(tabs, contains('clamp(0, 4)'));
     expect(search, contains('strings.tcpOptimizer'));
     expect(search, contains("'Gaming & Performance',\n                3,"));
     expect(page, contains('WindowsRssService'));

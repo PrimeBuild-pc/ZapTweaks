@@ -33,7 +33,7 @@ void main() {
         bundle: rootBundle,
         client: client,
       );
-      expect(catalog.apps, hasLength(467));
+      expect(catalog.apps, hasLength(469));
       for (final id in ['app_mvolt', 'app_sparkle']) {
         final tool = catalog.apps.singleWhere((app) => app.id == id);
         expect(tool.wingetId, isNull);
@@ -66,9 +66,9 @@ void main() {
           .map((url) => url.path.replaceFirst(RegExp(r'/$'), '').toLowerCase())
           .toList(growable: false);
 
-      expect(catalog.apps, hasLength(467));
-      expect(catalog.apps.map((app) => app.id).toSet(), hasLength(467));
-      expect(normalizedNames, hasLength(467));
+      expect(catalog.apps, hasLength(469));
+      expect(catalog.apps.map((app) => app.id).toSet(), hasLength(469));
+      expect(normalizedNames, hasLength(469));
       expect(wingetIds.toSet(), hasLength(wingetIds.length));
       expect(githubRepositories.toSet(), hasLength(githubRepositories.length));
       expect(

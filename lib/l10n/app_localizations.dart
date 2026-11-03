@@ -4428,6 +4428,306 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Off'**
   String get expertModeOff;
+
+  /// No description provided for @gameFolderExclusionTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Defender exclusion'**
+  String get gameFolderExclusionTab;
+
+  /// No description provided for @gameFolderExclusionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Defender exclusion for a game folder'**
+  String get gameFolderExclusionTitle;
+
+  /// No description provided for @gameFolderExclusionDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Microsoft Defender stops scanning the folder you choose in real time. Choose the folder of one game, not a launcher or a whole library. Only you can add it: no preset and no guided setup does.'**
+  String get gameFolderExclusionDescription;
+
+  /// No description provided for @gameFolderExclusionClaim.
+  ///
+  /// In en, this message translates to:
+  /// **'May reduce loading times; the effect on FPS is not proven.'**
+  String get gameFolderExclusionClaim;
+
+  /// No description provided for @gameFolderExclusionSecurityWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Exclusions are a target for malware: files in this folder, including mods, trainers and downloaded files, will no longer be scanned in real time.'**
+  String get gameFolderExclusionSecurityWarning;
+
+  /// No description provided for @gameFolderExclusionLauncherWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'This looks like a launcher or a library with several games. Choose the folder of the single game: excluding the whole launcher also stops scanning mods, trainers and downloaded files.'**
+  String get gameFolderExclusionLauncherWarning;
+
+  /// No description provided for @gameFolderExclusionChoose.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose the game folder'**
+  String get gameFolderExclusionChoose;
+
+  /// No description provided for @gameFolderExclusionPickerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose the folder of one game'**
+  String get gameFolderExclusionPickerTitle;
+
+  /// No description provided for @gameFolderExclusionConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Exclude this folder from Defender?'**
+  String get gameFolderExclusionConfirmTitle;
+
+  /// No description provided for @gameFolderExclusionConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Add exclusion'**
+  String get gameFolderExclusionConfirm;
+
+  /// No description provided for @gameFolderExclusionLauncherTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Launcher or library folder'**
+  String get gameFolderExclusionLauncherTitle;
+
+  /// No description provided for @gameFolderExclusionLauncherConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Use this folder anyway'**
+  String get gameFolderExclusionLauncherConfirm;
+
+  /// No description provided for @gameFolderExclusionManaged.
+  ///
+  /// In en, this message translates to:
+  /// **'Exclusions added by ZapTweaks'**
+  String get gameFolderExclusionManaged;
+
+  /// No description provided for @gameFolderExclusionNone.
+  ///
+  /// In en, this message translates to:
+  /// **'ZapTweaks has not added any exclusion.'**
+  String get gameFolderExclusionNone;
+
+  /// No description provided for @gameFolderExclusionRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get gameFolderExclusionRemove;
+
+  /// No description provided for @gameFolderExclusionReminder.
+  ///
+  /// In en, this message translates to:
+  /// **'Game folders excluded from Defender by ZapTweaks: {count}. They are not scanned in real time; remove an exclusion when you no longer need it.'**
+  String gameFolderExclusionReminder(int count);
+
+  /// No description provided for @gameFolderExclusionAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'Exclusion added.'**
+  String get gameFolderExclusionAdded;
+
+  /// No description provided for @gameFolderExclusionRemoved.
+  ///
+  /// In en, this message translates to:
+  /// **'Exclusion removed.'**
+  String get gameFolderExclusionRemoved;
+
+  /// No description provided for @gameFolderRefusedNotLocal.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a folder on a local drive.'**
+  String get gameFolderRefusedNotLocal;
+
+  /// No description provided for @gameFolderRefusedMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'The folder does not exist.'**
+  String get gameFolderRefusedMissing;
+
+  /// No description provided for @gameFolderRefusedNotDirectory.
+  ///
+  /// In en, this message translates to:
+  /// **'This is not a folder.'**
+  String get gameFolderRefusedNotDirectory;
+
+  /// No description provided for @gameFolderRefusedLink.
+  ///
+  /// In en, this message translates to:
+  /// **'This folder is a link or junction to another place. Choose the real folder.'**
+  String get gameFolderRefusedLink;
+
+  /// No description provided for @gameFolderRefusedDriveRoot.
+  ///
+  /// In en, this message translates to:
+  /// **'A whole drive cannot be excluded.'**
+  String get gameFolderRefusedDriveRoot;
+
+  /// No description provided for @gameFolderRefusedProtected.
+  ///
+  /// In en, this message translates to:
+  /// **'This is a system or personal folder (Windows, Program Files, your profile, Desktop, Documents, Downloads, Temp) or contains one. Choose the game\'s own folder.'**
+  String get gameFolderRefusedProtected;
+
+  /// No description provided for @defenderNotActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Microsoft Defender is not the active antivirus, so an exclusion would have no effect.'**
+  String get defenderNotActive;
+
+  /// No description provided for @defenderRealTimeOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Defender real-time protection is off, so an exclusion would have no effect.'**
+  String get defenderRealTimeOff;
+
+  /// No description provided for @defenderExclusionsIgnored.
+  ///
+  /// In en, this message translates to:
+  /// **'A policy on this PC makes Defender ignore local exclusions.'**
+  String get defenderExclusionsIgnored;
+
+  /// No description provided for @defenderStatusUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Cannot read the Microsoft Defender status.'**
+  String get defenderStatusUnknown;
+
+  /// No description provided for @interruptLayoutButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggested layout by role'**
+  String get interruptLayoutButton;
+
+  /// No description provided for @interruptLayoutTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggested interrupt layout'**
+  String get interruptLayoutTitle;
+
+  /// No description provided for @interruptLayoutIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'One physical core each for graphics, USB, network and audio, outside core 0, chosen from this CPU\'s topology. It is a suggested layout to measure: the benefit is not proven.'**
+  String get interruptLayoutIntro;
+
+  /// No description provided for @interruptRoleGpu.
+  ///
+  /// In en, this message translates to:
+  /// **'Graphics'**
+  String get interruptRoleGpu;
+
+  /// No description provided for @interruptRoleUsb.
+  ///
+  /// In en, this message translates to:
+  /// **'USB'**
+  String get interruptRoleUsb;
+
+  /// No description provided for @interruptRoleNetwork.
+  ///
+  /// In en, this message translates to:
+  /// **'Network'**
+  String get interruptRoleNetwork;
+
+  /// No description provided for @interruptRoleAudio.
+  ///
+  /// In en, this message translates to:
+  /// **'Audio'**
+  String get interruptRoleAudio;
+
+  /// No description provided for @interruptLayoutToDo.
+  ///
+  /// In en, this message translates to:
+  /// **'To do'**
+  String get interruptLayoutToDo;
+
+  /// No description provided for @interruptLayoutAlreadySet.
+  ///
+  /// In en, this message translates to:
+  /// **'Already set'**
+  String get interruptLayoutAlreadySet;
+
+  /// No description provided for @interruptLayoutSkipped.
+  ///
+  /// In en, this message translates to:
+  /// **'Skipped'**
+  String get interruptLayoutSkipped;
+
+  /// No description provided for @interruptLayoutRssRow.
+  ///
+  /// In en, this message translates to:
+  /// **'Network RSS ({adapter}): start from the network core'**
+  String interruptLayoutRssRow(String adapter);
+
+  /// No description provided for @interruptLayoutRssOff.
+  ///
+  /// In en, this message translates to:
+  /// **'RSS is off on this adapter'**
+  String get interruptLayoutRssOff;
+
+  /// No description provided for @interruptLayoutRssUnreadable.
+  ///
+  /// In en, this message translates to:
+  /// **'RSS cannot be read for this adapter'**
+  String get interruptLayoutRssUnreadable;
+
+  /// No description provided for @interruptLayoutMsiOff.
+  ///
+  /// In en, this message translates to:
+  /// **'MSI is off for this device: enable it first for the best result.'**
+  String get interruptLayoutMsiOff;
+
+  /// No description provided for @interruptLayoutNoteHybrid.
+  ///
+  /// In en, this message translates to:
+  /// **'Hybrid CPU: only P-cores are used.'**
+  String get interruptLayoutNoteHybrid;
+
+  /// No description provided for @interruptLayoutNoteCache.
+  ///
+  /// In en, this message translates to:
+  /// **'CPU with several L3 caches (CCDs): devices go to the CCD without 3D V-Cache, or to the one without CPU 0 when the caches are equal.'**
+  String get interruptLayoutNoteCache;
+
+  /// No description provided for @interruptLayoutNoteShared.
+  ///
+  /// In en, this message translates to:
+  /// **'This CPU has 6 cores or fewer: network and audio share one core.'**
+  String get interruptLayoutNoteShared;
+
+  /// No description provided for @interruptLayoutUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No layout can be suggested on this PC: several processor groups, too few cores or an unreadable topology.'**
+  String get interruptLayoutUnavailable;
+
+  /// No description provided for @interruptLayoutNothingToDo.
+  ///
+  /// In en, this message translates to:
+  /// **'Everything is already set.'**
+  String get interruptLayoutNothingToDo;
+
+  /// No description provided for @interruptLayoutReminder.
+  ///
+  /// In en, this message translates to:
+  /// **'Restart Windows with Restart, not Shut down (Fast Startup keeps the old state). Check again after every GPU driver update, which can reset these values. Compare 1% and 0.1% low frame times and DPC/ISR times in Diagnostics, not only average FPS.'**
+  String get interruptLayoutReminder;
+
+  /// No description provided for @interruptLayoutApply.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply layout'**
+  String get interruptLayoutApply;
+
+  /// No description provided for @interruptLayoutRssManual.
+  ///
+  /// In en, this message translates to:
+  /// **'RSS starts at CPU {cpu}. ZapTweaks does not move it: Windows would also change the number of queues and processors, which cannot be undone exactly. Change it in the adapter\'s advanced settings if you want.'**
+  String interruptLayoutRssManual(int cpu);
 }
 
 class _AppLocalizationsDelegate

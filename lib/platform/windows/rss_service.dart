@@ -112,6 +112,20 @@ class WindowsRssService implements RssStore {
     return (json['names'] as List? ?? const <Object>[]).cast<String>();
   }
 
+  /// Physical adapter names keyed by their upper-case PnP instance ID.
+  Future<Map<String, String>> adapterNamesByInstanceId() async {
+    final output = await _processRunner.runPowerShellForOutput(r'''
+ConvertTo-Json -Compress -InputObject @(Get-NetAdapter -Physical -ErrorAction Stop | ForEach-Object { [ordered]@{name=[string]$_.Name;id=[string]$_.PnPDeviceID} })
+''');
+    final rows = jsonDecode(output);
+    return <String, String>{
+      if (rows is List)
+        for (final row in rows.whereType<Map>())
+          if (row['id'] is String && row['name'] is String)
+            (row['id'] as String).toUpperCase(): row['name'] as String,
+    };
+  }
+
   @override
   Future<RssAdapterState> inspect(String adapterName) async {
     final name = _name(adapterName);

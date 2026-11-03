@@ -2499,4 +2499,181 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get expertModeOff => 'Выкл.';
+
+  @override
+  String get gameFolderExclusionTab => 'Исключение Defender';
+
+  @override
+  String get gameFolderExclusionTitle => 'Исключение Defender для папки игры';
+
+  @override
+  String get gameFolderExclusionDescription =>
+      'Microsoft Defender перестаёт проверять выбранную папку в реальном времени. Выберите папку одной игры, а не лаунчера или целой библиотеки. Добавить его можете только вы: ни пресеты, ни пошаговая настройка этого не делают.';
+
+  @override
+  String get gameFolderExclusionClaim =>
+      'Может сократить время загрузки; влияние на FPS не доказано.';
+
+  @override
+  String get gameFolderExclusionSecurityWarning =>
+      'Исключения — цель вредоносных программ: файлы в этой папке, включая моды, трейнеры и скачанные файлы, больше не будут проверяться в реальном времени.';
+
+  @override
+  String get gameFolderExclusionLauncherWarning =>
+      'Похоже на лаунчер или библиотеку с несколькими играми. Выберите папку конкретной игры: исключение всего лаунчера отключает проверку и модов, трейнеров и скачанных файлов.';
+
+  @override
+  String get gameFolderExclusionChoose => 'Выбрать папку игры';
+
+  @override
+  String get gameFolderExclusionPickerTitle => 'Выберите папку одной игры';
+
+  @override
+  String get gameFolderExclusionConfirmTitle =>
+      'Исключить эту папку из проверки Defender?';
+
+  @override
+  String get gameFolderExclusionConfirm => 'Добавить исключение';
+
+  @override
+  String get gameFolderExclusionLauncherTitle =>
+      'Папка лаунчера или библиотеки';
+
+  @override
+  String get gameFolderExclusionLauncherConfirm =>
+      'Всё равно использовать эту папку';
+
+  @override
+  String get gameFolderExclusionManaged => 'Исключения, добавленные ZapTweaks';
+
+  @override
+  String get gameFolderExclusionNone => 'ZapTweaks не добавлял исключений.';
+
+  @override
+  String get gameFolderExclusionRemove => 'Удалить';
+
+  @override
+  String gameFolderExclusionReminder(int count) {
+    return 'Папки игр, исключённые из Defender через ZapTweaks: $count. Они не проверяются в реальном времени; удалите исключение, когда оно больше не нужно.';
+  }
+
+  @override
+  String get gameFolderExclusionAdded => 'Исключение добавлено.';
+
+  @override
+  String get gameFolderExclusionRemoved => 'Исключение удалено.';
+
+  @override
+  String get gameFolderRefusedNotLocal => 'Выберите папку на локальном диске.';
+
+  @override
+  String get gameFolderRefusedMissing => 'Папка не существует.';
+
+  @override
+  String get gameFolderRefusedNotDirectory => 'Это не папка.';
+
+  @override
+  String get gameFolderRefusedLink =>
+      'Эта папка — ссылка или точка соединения, указывающая в другое место. Выберите настоящую папку.';
+
+  @override
+  String get gameFolderRefusedDriveRoot => 'Нельзя исключить весь диск.';
+
+  @override
+  String get gameFolderRefusedProtected =>
+      'Это системная или личная папка (Windows, Program Files, ваш профиль, рабочий стол, документы, загрузки, Temp) или она содержит такую папку. Выберите папку игры.';
+
+  @override
+  String get defenderNotActive =>
+      'Microsoft Defender не является активным антивирусом, поэтому исключение не подействует.';
+
+  @override
+  String get defenderRealTimeOff =>
+      'Защита Defender в реальном времени выключена, поэтому исключение не подействует.';
+
+  @override
+  String get defenderExclusionsIgnored =>
+      'Политика на этом ПК заставляет Defender игнорировать локальные исключения.';
+
+  @override
+  String get defenderStatusUnknown =>
+      'Не удалось прочитать состояние Microsoft Defender.';
+
+  @override
+  String get interruptLayoutButton => 'Рекомендуемая раскладка по ролям';
+
+  @override
+  String get interruptLayoutTitle => 'Рекомендуемая раскладка прерываний';
+
+  @override
+  String get interruptLayoutIntro =>
+      'По одному физическому ядру для графики, USB, сети и звука, вне ядра 0, по топологии этого процессора. Это рекомендуемая раскладка для измерения: польза не доказана.';
+
+  @override
+  String get interruptRoleGpu => 'Графика';
+
+  @override
+  String get interruptRoleUsb => 'USB';
+
+  @override
+  String get interruptRoleNetwork => 'Сеть';
+
+  @override
+  String get interruptRoleAudio => 'Звук';
+
+  @override
+  String get interruptLayoutToDo => 'Сделать';
+
+  @override
+  String get interruptLayoutAlreadySet => 'Уже настроено';
+
+  @override
+  String get interruptLayoutSkipped => 'Пропущено';
+
+  @override
+  String interruptLayoutRssRow(String adapter) {
+    return 'RSS сети ($adapter): начинается с сетевого ядра';
+  }
+
+  @override
+  String get interruptLayoutRssOff => 'RSS выключен на этом адаптере';
+
+  @override
+  String get interruptLayoutRssUnreadable =>
+      'Не удалось прочитать RSS этого адаптера';
+
+  @override
+  String get interruptLayoutMsiOff =>
+      'Для этого устройства выключен MSI: сначала включите его для лучшего результата.';
+
+  @override
+  String get interruptLayoutNoteHybrid =>
+      'Гибридный процессор: используются только P-ядра.';
+
+  @override
+  String get interruptLayoutNoteCache =>
+      'Процессор с несколькими кэшами L3 (CCD): устройства назначаются на CCD без 3D V-Cache или, при равных кэшах, на CCD без CPU 0.';
+
+  @override
+  String get interruptLayoutNoteShared =>
+      'У этого процессора 6 ядер или меньше: сеть и звук делят одно ядро.';
+
+  @override
+  String get interruptLayoutUnavailable =>
+      'На этом ПК нельзя предложить раскладку: несколько групп процессоров, слишком мало ядер или нечитаемая топология.';
+
+  @override
+  String get interruptLayoutNothingToDo => 'Всё уже настроено.';
+
+  @override
+  String get interruptLayoutReminder =>
+      'Перезагрузите Windows через «Перезагрузка», а не «Завершение работы» (быстрый запуск сохраняет старое состояние). Проверяйте снова после каждого обновления драйвера GPU — он может сбросить эти значения. Сравнивайте 1% и 0,1% low frame time и время DPC/ISR в «Диагностике», а не только средний FPS.';
+
+  @override
+  String get interruptLayoutApply => 'Применить раскладку';
+
+  @override
+  String interruptLayoutRssManual(int cpu) {
+    return 'RSS начинается с CPU $cpu. ZapTweaks его не переносит: Windows изменит также число очередей и процессоров, и точно отменить это нельзя. При желании измените это в дополнительных параметрах адаптера.';
+  }
 }

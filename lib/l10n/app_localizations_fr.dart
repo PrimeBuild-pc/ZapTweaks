@@ -2522,4 +2522,186 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get expertModeOff => 'Désactivé';
+
+  @override
+  String get gameFolderExclusionTab => 'Exclusion Defender';
+
+  @override
+  String get gameFolderExclusionTitle =>
+      'Exclusion Defender pour le dossier d\'un jeu';
+
+  @override
+  String get gameFolderExclusionDescription =>
+      'Microsoft Defender cesse d\'analyser en temps réel le dossier choisi. Choisissez le dossier d\'un seul jeu, pas un launcher ni toute une bibliothèque. Vous seul pouvez l\'ajouter : aucun préréglage ni la configuration guidée ne le font.';
+
+  @override
+  String get gameFolderExclusionClaim =>
+      'Peut réduire les temps de chargement ; l\'effet sur les FPS n\'est pas démontré.';
+
+  @override
+  String get gameFolderExclusionSecurityWarning =>
+      'Les exclusions sont une cible pour les logiciels malveillants : les fichiers de ce dossier, y compris mods, trainers et fichiers téléchargés, ne seront plus analysés en temps réel.';
+
+  @override
+  String get gameFolderExclusionLauncherWarning =>
+      'Cela ressemble à un launcher ou à une bibliothèque de plusieurs jeux. Choisissez le dossier du jeu lui-même : exclure tout le launcher retire aussi l\'analyse des mods, trainers et fichiers téléchargés.';
+
+  @override
+  String get gameFolderExclusionChoose => 'Choisir le dossier du jeu';
+
+  @override
+  String get gameFolderExclusionPickerTitle =>
+      'Choisissez le dossier d\'un jeu';
+
+  @override
+  String get gameFolderExclusionConfirmTitle =>
+      'Exclure ce dossier de Defender ?';
+
+  @override
+  String get gameFolderExclusionConfirm => 'Ajouter l\'exclusion';
+
+  @override
+  String get gameFolderExclusionLauncherTitle =>
+      'Dossier de launcher ou de bibliothèque';
+
+  @override
+  String get gameFolderExclusionLauncherConfirm =>
+      'Utiliser ce dossier quand même';
+
+  @override
+  String get gameFolderExclusionManaged => 'Exclusions ajoutées par ZapTweaks';
+
+  @override
+  String get gameFolderExclusionNone =>
+      'ZapTweaks n\'a ajouté aucune exclusion.';
+
+  @override
+  String get gameFolderExclusionRemove => 'Supprimer';
+
+  @override
+  String gameFolderExclusionReminder(int count) {
+    return 'Dossiers de jeux exclus de Defender par ZapTweaks : $count. Ils ne sont pas analysés en temps réel ; supprimez une exclusion dès qu\'elle n\'est plus utile.';
+  }
+
+  @override
+  String get gameFolderExclusionAdded => 'Exclusion ajoutée.';
+
+  @override
+  String get gameFolderExclusionRemoved => 'Exclusion supprimée.';
+
+  @override
+  String get gameFolderRefusedNotLocal =>
+      'Choisissez un dossier sur un lecteur local.';
+
+  @override
+  String get gameFolderRefusedMissing => 'Le dossier n\'existe pas.';
+
+  @override
+  String get gameFolderRefusedNotDirectory => 'Ce n\'est pas un dossier.';
+
+  @override
+  String get gameFolderRefusedLink =>
+      'Ce dossier est un lien ou une jonction vers un autre emplacement. Choisissez le vrai dossier.';
+
+  @override
+  String get gameFolderRefusedDriveRoot =>
+      'Un lecteur entier ne peut pas être exclu.';
+
+  @override
+  String get gameFolderRefusedProtected =>
+      'C\'est un dossier système ou personnel (Windows, Program Files, votre profil, Bureau, Documents, Téléchargements, Temp) ou il en contient un. Choisissez le dossier du jeu.';
+
+  @override
+  String get defenderNotActive =>
+      'Microsoft Defender n\'est pas l\'antivirus actif : une exclusion n\'aurait aucun effet.';
+
+  @override
+  String get defenderRealTimeOff =>
+      'La protection en temps réel de Defender est désactivée : une exclusion n\'aurait aucun effet.';
+
+  @override
+  String get defenderExclusionsIgnored =>
+      'Une stratégie de ce PC fait ignorer à Defender les exclusions locales.';
+
+  @override
+  String get defenderStatusUnknown =>
+      'Impossible de lire l\'état de Microsoft Defender.';
+
+  @override
+  String get interruptLayoutButton => 'Disposition suggérée par rôle';
+
+  @override
+  String get interruptLayoutTitle => 'Disposition des interruptions suggérée';
+
+  @override
+  String get interruptLayoutIntro =>
+      'Un cœur physique chacun pour le graphisme, l\'USB, le réseau et l\'audio, hors du cœur 0, choisi selon la topologie de ce processeur. C\'est une disposition suggérée à mesurer : le bénéfice n\'est pas démontré.';
+
+  @override
+  String get interruptRoleGpu => 'Graphisme';
+
+  @override
+  String get interruptRoleUsb => 'USB';
+
+  @override
+  String get interruptRoleNetwork => 'Réseau';
+
+  @override
+  String get interruptRoleAudio => 'Audio';
+
+  @override
+  String get interruptLayoutToDo => 'À faire';
+
+  @override
+  String get interruptLayoutAlreadySet => 'Déjà en place';
+
+  @override
+  String get interruptLayoutSkipped => 'Ignoré';
+
+  @override
+  String interruptLayoutRssRow(String adapter) {
+    return 'RSS réseau ($adapter) : commence au cœur du réseau';
+  }
+
+  @override
+  String get interruptLayoutRssOff => 'RSS est désactivé sur cette carte';
+
+  @override
+  String get interruptLayoutRssUnreadable =>
+      'Impossible de lire le RSS de cette carte';
+
+  @override
+  String get interruptLayoutMsiOff =>
+      'MSI est désactivé pour ce périphérique : activez-le d\'abord pour un meilleur résultat.';
+
+  @override
+  String get interruptLayoutNoteHybrid =>
+      'Processeur hybride : seuls les cœurs P sont utilisés.';
+
+  @override
+  String get interruptLayoutNoteCache =>
+      'Processeur à plusieurs caches L3 (CCD) : les périphériques vont sur le CCD sans 3D V-Cache, ou sur celui sans le CPU 0 si les caches sont égaux.';
+
+  @override
+  String get interruptLayoutNoteShared =>
+      'Ce processeur a 6 cœurs ou moins : le réseau et l\'audio partagent un cœur.';
+
+  @override
+  String get interruptLayoutUnavailable =>
+      'Aucune disposition ne peut être suggérée sur ce PC : plusieurs groupes de processeurs, trop peu de cœurs ou topologie illisible.';
+
+  @override
+  String get interruptLayoutNothingToDo => 'Tout est déjà en place.';
+
+  @override
+  String get interruptLayoutReminder =>
+      'Redémarrez Windows avec Redémarrer, pas Arrêter (le démarrage rapide conserve l\'ancien état). Vérifiez à nouveau après chaque mise à jour du pilote GPU, qui peut réinitialiser ces valeurs. Comparez les frame times 1 % et 0,1 % low et les temps DPC/ISR dans Diagnostic, pas seulement les FPS moyens.';
+
+  @override
+  String get interruptLayoutApply => 'Appliquer la disposition';
+
+  @override
+  String interruptLayoutRssManual(int cpu) {
+    return 'RSS commence au CPU $cpu. ZapTweaks ne le déplace pas : Windows modifierait aussi le nombre de files et de processeurs, ce qui ne peut pas être annulé exactement. Modifiez-le dans les paramètres avancés de la carte si vous le souhaitez.';
+  }
 }

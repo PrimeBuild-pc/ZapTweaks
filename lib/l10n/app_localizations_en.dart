@@ -2483,4 +2483,179 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get expertModeOff => 'Off';
+
+  @override
+  String get gameFolderExclusionTab => 'Defender exclusion';
+
+  @override
+  String get gameFolderExclusionTitle => 'Defender exclusion for a game folder';
+
+  @override
+  String get gameFolderExclusionDescription =>
+      'Microsoft Defender stops scanning the folder you choose in real time. Choose the folder of one game, not a launcher or a whole library. Only you can add it: no preset and no guided setup does.';
+
+  @override
+  String get gameFolderExclusionClaim =>
+      'May reduce loading times; the effect on FPS is not proven.';
+
+  @override
+  String get gameFolderExclusionSecurityWarning =>
+      'Exclusions are a target for malware: files in this folder, including mods, trainers and downloaded files, will no longer be scanned in real time.';
+
+  @override
+  String get gameFolderExclusionLauncherWarning =>
+      'This looks like a launcher or a library with several games. Choose the folder of the single game: excluding the whole launcher also stops scanning mods, trainers and downloaded files.';
+
+  @override
+  String get gameFolderExclusionChoose => 'Choose the game folder';
+
+  @override
+  String get gameFolderExclusionPickerTitle => 'Choose the folder of one game';
+
+  @override
+  String get gameFolderExclusionConfirmTitle =>
+      'Exclude this folder from Defender?';
+
+  @override
+  String get gameFolderExclusionConfirm => 'Add exclusion';
+
+  @override
+  String get gameFolderExclusionLauncherTitle => 'Launcher or library folder';
+
+  @override
+  String get gameFolderExclusionLauncherConfirm => 'Use this folder anyway';
+
+  @override
+  String get gameFolderExclusionManaged => 'Exclusions added by ZapTweaks';
+
+  @override
+  String get gameFolderExclusionNone =>
+      'ZapTweaks has not added any exclusion.';
+
+  @override
+  String get gameFolderExclusionRemove => 'Remove';
+
+  @override
+  String gameFolderExclusionReminder(int count) {
+    return 'Game folders excluded from Defender by ZapTweaks: $count. They are not scanned in real time; remove an exclusion when you no longer need it.';
+  }
+
+  @override
+  String get gameFolderExclusionAdded => 'Exclusion added.';
+
+  @override
+  String get gameFolderExclusionRemoved => 'Exclusion removed.';
+
+  @override
+  String get gameFolderRefusedNotLocal => 'Choose a folder on a local drive.';
+
+  @override
+  String get gameFolderRefusedMissing => 'The folder does not exist.';
+
+  @override
+  String get gameFolderRefusedNotDirectory => 'This is not a folder.';
+
+  @override
+  String get gameFolderRefusedLink =>
+      'This folder is a link or junction to another place. Choose the real folder.';
+
+  @override
+  String get gameFolderRefusedDriveRoot => 'A whole drive cannot be excluded.';
+
+  @override
+  String get gameFolderRefusedProtected =>
+      'This is a system or personal folder (Windows, Program Files, your profile, Desktop, Documents, Downloads, Temp) or contains one. Choose the game\'s own folder.';
+
+  @override
+  String get defenderNotActive =>
+      'Microsoft Defender is not the active antivirus, so an exclusion would have no effect.';
+
+  @override
+  String get defenderRealTimeOff =>
+      'Defender real-time protection is off, so an exclusion would have no effect.';
+
+  @override
+  String get defenderExclusionsIgnored =>
+      'A policy on this PC makes Defender ignore local exclusions.';
+
+  @override
+  String get defenderStatusUnknown =>
+      'Cannot read the Microsoft Defender status.';
+
+  @override
+  String get interruptLayoutButton => 'Suggested layout by role';
+
+  @override
+  String get interruptLayoutTitle => 'Suggested interrupt layout';
+
+  @override
+  String get interruptLayoutIntro =>
+      'One physical core each for graphics, USB, network and audio, outside core 0, chosen from this CPU\'s topology. It is a suggested layout to measure: the benefit is not proven.';
+
+  @override
+  String get interruptRoleGpu => 'Graphics';
+
+  @override
+  String get interruptRoleUsb => 'USB';
+
+  @override
+  String get interruptRoleNetwork => 'Network';
+
+  @override
+  String get interruptRoleAudio => 'Audio';
+
+  @override
+  String get interruptLayoutToDo => 'To do';
+
+  @override
+  String get interruptLayoutAlreadySet => 'Already set';
+
+  @override
+  String get interruptLayoutSkipped => 'Skipped';
+
+  @override
+  String interruptLayoutRssRow(String adapter) {
+    return 'Network RSS ($adapter): start from the network core';
+  }
+
+  @override
+  String get interruptLayoutRssOff => 'RSS is off on this adapter';
+
+  @override
+  String get interruptLayoutRssUnreadable =>
+      'RSS cannot be read for this adapter';
+
+  @override
+  String get interruptLayoutMsiOff =>
+      'MSI is off for this device: enable it first for the best result.';
+
+  @override
+  String get interruptLayoutNoteHybrid => 'Hybrid CPU: only P-cores are used.';
+
+  @override
+  String get interruptLayoutNoteCache =>
+      'CPU with several L3 caches (CCDs): devices go to the CCD without 3D V-Cache, or to the one without CPU 0 when the caches are equal.';
+
+  @override
+  String get interruptLayoutNoteShared =>
+      'This CPU has 6 cores or fewer: network and audio share one core.';
+
+  @override
+  String get interruptLayoutUnavailable =>
+      'No layout can be suggested on this PC: several processor groups, too few cores or an unreadable topology.';
+
+  @override
+  String get interruptLayoutNothingToDo => 'Everything is already set.';
+
+  @override
+  String get interruptLayoutReminder =>
+      'Restart Windows with Restart, not Shut down (Fast Startup keeps the old state). Check again after every GPU driver update, which can reset these values. Compare 1% and 0.1% low frame times and DPC/ISR times in Diagnostics, not only average FPS.';
+
+  @override
+  String get interruptLayoutApply => 'Apply layout';
+
+  @override
+  String interruptLayoutRssManual(int cpu) {
+    return 'RSS starts at CPU $cpu. ZapTweaks does not move it: Windows would also change the number of queues and processors, which cannot be undone exactly. Change it in the adapter\'s advanced settings if you want.';
+  }
 }

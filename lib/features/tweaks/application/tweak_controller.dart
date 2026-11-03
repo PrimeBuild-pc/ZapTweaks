@@ -195,6 +195,7 @@ class TweakController extends ChangeNotifier {
   bool get startWithWindows => _startWithWindows;
   bool get expertModeEnabled => _expertModeEnabled;
   OperationStore? get operationJournal => _operationStore;
+  ProcessRunner get processRunner => _processRunner;
   String get themeMode => _themeMode;
   String get searchQuery => _searchQuery;
   int get navigationTab => _navigationTab;

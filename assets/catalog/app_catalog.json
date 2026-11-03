@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "generatedFrom": {
-    "revision": 2026102801,
+    "revision": 2026110301,
     "ctt": "a0d3c719a6611b329422e9c56ee9b792cd596146",
     "winhance": "f23d554eb2d6400b1827bcc46b91294ffa53fbc9",
     "tweakHub": "bdc6e185ddc062bf906d2d9950b62d252f381110"
@@ -18,6 +18,26 @@
       "description": "External NVIDIA GPU tuning and monitoring utility.",
       "requirements": ["A supported NVIDIA GPU, driver and VBIOS; consult the upstream compatibility list."],
       "warnings": ["Voltage, clocks, power and fan changes can cause instability or hardware damage. Settings may persist after exit. ZapTweaks only opens the official project; it does not apply hardware settings."]
+    },
+    {
+      "id": "app_https_github_com_panchovix_nvidia_vbios_vix_editor",
+      "name": "NVIDIA VBIOS Vix Editor",
+      "category": "GPU & Display",
+      "wingetId": null,
+      "url": "https://github.com/Panchovix/nvidia-vbios-vix-editor",
+      "author": "Panchovix",
+      "sources": ["Direct request"],
+      "description": "Offline NVIDIA VBIOS image editor for Blackwell (GB20x) cards, with read-mostly support for Ada, Ampere and Turing. Each save writes a new ROM plus a JSON manifest; the original stays untouched and nothing is flashed. GPL-3.0-or-later.",
+      "requirements": [
+        "A supported NVIDIA GPU and a backup of your own original ROM.",
+        "Edited ROMs are loaded with a firmware override: the NVIDIA Windows VBIOS Vix Loader, or mVolt+ with BIOS override (Blackwell only). Both are separate projects."
+      ],
+      "warnings": [
+        "Edited ROMs no longer match the original signature: never flash them with nvflash.",
+        "Raising power, current or voltage limits can damage hardware. Use entirely at your own risk.",
+        "Many fields are experimental or untested on hardware, laptops included.",
+        "The Windows binaries are not code-signed, so SmartScreen may warn. ZapTweaks only opens the official project; it does not apply hardware settings."
+      ]
     },
     {
       "id": "app_sparkle",
@@ -2296,6 +2316,29 @@
       "wingetId": null,
       "url": "https://github.com/danielblnc/DLSS-NR-on-AMD",
       "author": "danielblnc",
+      "sources": [
+        "Direct request"
+      ]
+    },
+    {
+      "id": "app_https_github_com_3zwr1_amd_nr_optiscaler",
+      "name": "AMD-NR (OptiScaler)",
+      "description": "Alpha OptiScaler build with neural rendering on AMD GPUs (model interleave, residual composition, XeSS frame generation, FSR Ray Regeneration). It drives the DLSS-NR-on-AMD runtime or the lmxxf runtime, and AMDNR Anywhere (preview) covers games without an upscaler. GPL-3.0.",
+      "requirements": [
+        "AMD Radeon RX 9000 or RX 7000 (both runtimes), RX 6000 with AMD's HIP SDK (danielblnc runtime only), Strix Halo and some handheld APUs (lmxxf, experimental). Adrenalin 26.9.1 or newer, Windows 10 or 11 64-bit.",
+        "A DirectX 12, DirectX 11 or Vulkan game supported by OptiScaler and about 2 GB of spare VRAM.",
+        "Use it instead of a plain OptiScaler install in the same game; it already includes OptiScaler. Keep OptiScaler.dll, LmxxfNrRuntime.dll and LmxxfNrRuntime.pak from the same release."
+      ],
+      "warnings": [
+        "It loads as a proxy DLL next to the game and hooks the graphics API: anti-cheat may flag it. Do not use in anti-cheat-protected multiplayer games.",
+        "Alpha software: preview and experimental features, including Model E and Model L (RX 9070 / 9070 XT only).",
+        "May conflict with other mod loaders such as RED4ext, Cyber Engine Tweaks or ReShade.",
+        "ZapTweaks only opens the official project; it does not install or inject anything."
+      ],
+      "category": "Gaming & Input",
+      "wingetId": null,
+      "url": "https://github.com/3zwr1/AMD-NR---OptiScaler",
+      "author": "3zwr1",
       "sources": [
         "Direct request"
       ]
