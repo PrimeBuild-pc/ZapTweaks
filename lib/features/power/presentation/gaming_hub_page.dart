@@ -5,6 +5,7 @@ import '../../../app/widgets/ui_kit.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../tweaks/application/tweak_controller.dart';
 import '../../tweaks/presentation/pages/tweaks_page.dart';
+import 'game_folder_exclusion_page.dart';
 import 'interrupt_configuration_page.dart';
 import 'power_plans_page.dart';
 import 'tcp_optimizer_page.dart';
@@ -35,12 +36,21 @@ class _GamingHubPageState extends State<GamingHubPage> {
   @override
   void initState() {
     super.initState();
-    _index = widget.initialIndex.clamp(0, 3);
+    _index = widget.initialIndex.clamp(0, 4);
   }
 
   @override
   Widget build(BuildContext context) {
     final strings = AppLocalizations.of(context);
+    return Column(
+      children: <Widget>[
+        const DefenderExclusionReminder(),
+        Expanded(child: _tabs(strings)),
+      ],
+    );
+  }
+
+  Widget _tabs(AppLocalizations strings) {
     return SectionTabView(
       currentIndex: _index,
       onChanged: (index) => setState(() => _index = index),
@@ -71,6 +81,11 @@ class _GamingHubPageState extends State<GamingHubPage> {
             controller: widget.controller,
             journal: widget.controller.operationJournal,
           ),
+        ),
+        Tab(
+          text: Text(strings.gameFolderExclusionTab),
+          icon: const Icon(FluentIcons.shield),
+          body: GameFolderExclusionPage(controller: widget.controller),
         ),
       ],
     );

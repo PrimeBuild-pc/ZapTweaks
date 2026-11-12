@@ -107,6 +107,7 @@ class SetupApiDeviceInventoryService {
     }
     try {
       final result = <PciInterruptCapability>[];
+      final workingAudio = _controllersWithWorkingAudio();
       for (var index = 0; ; index++) {
         final data = calloc<SP_DEVINFO_DATA>()
           ..ref.cbSize = sizeOf<SP_DEVINFO_DATA>();
@@ -138,6 +139,11 @@ class SetupApiDeviceInventoryService {
               msi: support & 2 != 0,
               msiX: support & 4 != 0,
               messageMaximum: maximum,
+              busNumber: _registryUint32(devices, data, SPDRP_BUSNUMBER),
+              address: _registryUint32(devices, data, SPDRP_ADDRESS),
+              audioInUse:
+                  !device.hardwareIds.any((id) => id.contains('&CC_0403')) ||
+                  workingAudio.contains(device.instanceId.toUpperCase()),
             ),
           );
         } finally {
@@ -154,30 +160,117 @@ class SetupApiDeviceInventoryService {
     int devices,
     Pointer<SP_DEVINFO_DATA> data,
     int propertyId,
+  ) => _uint32Property(
+    devices,
+    data,
+    '{3AB22E31-8264-4B4E-9AF5-A8D2D8E33E62}',
+    propertyId,
+  );
+
+  // DEVPKEY_Device_* properties.
+  static const _deviceKeys = '{4340A6C5-93FA-4706-972C-7B648008A5A7}';
+
+  /// Upper-case instance IDs of the controllers that have at least one
+  /// working HD Audio function (not disabled, no problem code).
+  static Set<String> _controllersWithWorkingAudio() {
+    final enumerator = 'HDAUDIO'.toNativeUtf16();
+    final devices = SetupDiGetClassDevs(
+      nullptr,
+      enumerator,
+      0,
+      DIGCF_ALLCLASSES | DIGCF_PRESENT,
+    );
+    calloc.free(enumerator);
+    if (devices == INVALID_HANDLE_VALUE) return const <String>{};
+    final result = <String>{};
+    try {
+      for (var index = 0; ; index++) {
+        final data = calloc<SP_DEVINFO_DATA>()
+          ..ref.cbSize = sizeOf<SP_DEVINFO_DATA>();
+        try {
+          if (SetupDiEnumDeviceInfo(devices, index, data) == 0) break;
+          final problem = _uint32Property(devices, data, _deviceKeys, 3);
+          final parent = _stringDeviceProperty(devices, data, _deviceKeys, 8);
+          if ((problem ?? 0) == 0 && parent != null) {
+            result.add(parent.toUpperCase());
+          }
+        } finally {
+          calloc.free(data);
+        }
+      }
+    } finally {
+      SetupDiDestroyDeviceInfoList(devices);
+    }
+    return result;
+  }
+
+  static Uint8List? _deviceProperty(
+    int devices,
+    Pointer<SP_DEVINFO_DATA> data,
+    String fmtid,
+    int propertyId,
   ) => using((arena) {
     final key = arena<_DevPropKey>()
-      ..ref.fmtid = GUIDFromString(
-        '{3AB22E31-8264-4B4E-9AF5-A8D2D8E33E62}',
-        allocator: arena,
-      ).ref
+      ..ref.fmtid = GUIDFromString(fmtid, allocator: arena).ref
       ..ref.pid = propertyId;
     final type = arena<Uint32>();
-    final value = arena<Uint32>();
     final required = arena<Uint32>();
+    _getDeviceProperty(devices, data, key, type, nullptr, 0, required, 0);
+    if (required.value == 0) return null;
+    final buffer = arena<Uint8>(required.value);
     final success = _getDeviceProperty(
       devices,
       data,
       key,
       type,
-      value.cast<Uint8>(),
-      sizeOf<Uint32>(),
+      buffer,
+      required.value,
       required,
       0,
     );
-    return success == 0 || required.value != sizeOf<Uint32>()
+    return success == 0
         ? null
-        : value.value;
+        : Uint8List.fromList(buffer.asTypedList(required.value));
   });
+
+  static int? _uint32Property(
+    int devices,
+    Pointer<SP_DEVINFO_DATA> data,
+    String fmtid,
+    int propertyId,
+  ) {
+    final bytes = _deviceProperty(devices, data, fmtid, propertyId);
+    return bytes == null || bytes.length != 4
+        ? null
+        : ByteData.sublistView(bytes).getUint32(0, Endian.little);
+  }
+
+  static String? _stringDeviceProperty(
+    int devices,
+    Pointer<SP_DEVINFO_DATA> data,
+    String fmtid,
+    int propertyId,
+  ) {
+    final bytes = _deviceProperty(devices, data, fmtid, propertyId);
+    if (bytes == null || bytes.length < 2) return null;
+    final units = bytes.buffer.asUint16List(
+      bytes.offsetInBytes,
+      bytes.lengthInBytes ~/ 2,
+    );
+    final end = units.indexOf(0);
+    return String.fromCharCodes(end < 0 ? units : units.sublist(0, end));
+  }
+
+  static int? _registryUint32(
+    int devices,
+    Pointer<SP_DEVINFO_DATA> data,
+    int property,
+  ) {
+    final bytes = _property(devices, data, property);
+    return bytes == null || bytes.length != 4
+        ? null
+        : ByteData.sublistView(bytes).getUint32(0, Endian.little);
+  }
 
   static String? _driverInf(int devices, Pointer<SP_DEVINFO_DATA> data) {
     final key = SetupDiOpenDevRegKey(

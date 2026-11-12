@@ -24,7 +24,9 @@ import '../../platform/windows/scheduled_task_service.dart';
 import '../../platform/windows/tcp_optimizer_service.dart';
 import '../services/process_runner.dart';
 import '../persistence/operation_store.dart';
+import '../../platform/windows/game_folder_facts.dart';
 import 'app_restore_operation.dart';
+import 'defender_exclusion_operation.dart';
 import 'appx_removal_operation.dart';
 import 'device_interrupt_affinity_operation.dart';
 import 'device_msi_operation.dart';
@@ -220,6 +222,10 @@ List<OperationDefinition> createNativeOperationCatalog(
   Win32UninstallOperation(machine: true, dryRun: processRunner.isDryRun),
   Win32UninstallOperation(machine: false, dryRun: processRunner.isDryRun),
   RestorePointOperation(processRunner: processRunner),
+  DefenderGameFolderExclusionOperation(
+    powerShell: processRunner.runPowerShellForOutput,
+    facts: windowsGameFolderFacts,
+  ),
   LeftoverRemovalOperation(machine: true, dryRun: processRunner.isDryRun),
   LeftoverRemovalOperation(machine: false, dryRun: processRunner.isDryRun),
   RegistryDwordOperation(

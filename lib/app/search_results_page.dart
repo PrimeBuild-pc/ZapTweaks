@@ -84,6 +84,12 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                 'tcp optimizer winspar qos dscp congestion autotuning ecn rsc rss throughput latency jitter packet loss rete',
               ),
               _SearchDestination(
+                strings.gameFolderExclusionTab,
+                'Gaming & Performance',
+                4,
+                'defender exclusion esclusione antivirus game folder cartella gioco loading caricamento',
+              ),
+              _SearchDestination(
                 strings.manualControls,
                 'Windows',
                 1,

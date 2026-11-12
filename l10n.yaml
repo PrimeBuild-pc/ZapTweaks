@@ -3,3 +3,5 @@ output-dir: lib/l10n
 output-localization-file: app_localizations.dart
 template-arb-file: app_en.arb
 nullable-getter: false
+# shortcut: Flutter >=3.47 deprecates the Global*Localizations delegates gen-l10n still emits; drop once the generator imports material_ui/cupertino_ui.
+header: "// ignore_for_file: deprecated_member_use"

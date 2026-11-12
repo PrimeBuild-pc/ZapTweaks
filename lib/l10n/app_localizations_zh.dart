@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 // ignore: unused_import
 import 'package:intl/intl.dart' as intl;
 import 'app_localizations.dart';
@@ -2358,4 +2360,177 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get expertModeOff => '关';
+
+  @override
+  String get gameFolderExclusionTab => 'Defender 排除项';
+
+  @override
+  String get gameFolderExclusionTitle => '为游戏文件夹添加 Defender 排除项';
+
+  @override
+  String get gameFolderExclusionDescription =>
+      'Microsoft Defender 将不再实时扫描你选择的文件夹。请选择单个游戏的文件夹，而不是启动器或整个游戏库。只能由你手动添加：任何预设和引导式设置都不会添加。';
+
+  @override
+  String get gameFolderExclusionClaim => '可能缩短加载时间；对 FPS 的影响尚未得到证实。';
+
+  @override
+  String get gameFolderExclusionSecurityWarning =>
+      '排除项是恶意软件的攻击目标：此文件夹中的文件（包括模组、修改器和下载的文件）将不再被实时扫描。';
+
+  @override
+  String get gameFolderExclusionLauncherWarning =>
+      '这看起来像启动器或包含多个游戏的游戏库。请选择单个游戏的文件夹：排除整个启动器会让模组、修改器和下载的文件也不再被扫描。';
+
+  @override
+  String get gameFolderExclusionChoose => '选择游戏文件夹';
+
+  @override
+  String get gameFolderExclusionPickerTitle => '选择一个游戏的文件夹';
+
+  @override
+  String get gameFolderExclusionConfirmTitle => '要将此文件夹从 Defender 扫描中排除吗？';
+
+  @override
+  String get gameFolderExclusionConfirm => '添加排除项';
+
+  @override
+  String get gameFolderExclusionLauncherTitle => '启动器或游戏库文件夹';
+
+  @override
+  String get gameFolderExclusionLauncherConfirm => '仍然使用此文件夹';
+
+  @override
+  String get gameFolderExclusionManaged => 'ZapTweaks 添加的排除项';
+
+  @override
+  String get gameFolderExclusionNone => 'ZapTweaks 尚未添加任何排除项。';
+
+  @override
+  String get gameFolderExclusionRemove => '移除';
+
+  @override
+  String gameFolderExclusionReminder(int count) {
+    return 'ZapTweaks 从 Defender 中排除的游戏文件夹：$count 个。它们不会被实时扫描；不再需要时请移除排除项。';
+  }
+
+  @override
+  String get gameFolderExclusionAdded => '已添加排除项。';
+
+  @override
+  String get gameFolderExclusionRemoved => '已移除排除项。';
+
+  @override
+  String get gameFolderRefusedNotLocal => '请选择本地驱动器上的文件夹。';
+
+  @override
+  String get gameFolderRefusedMissing => '该文件夹不存在。';
+
+  @override
+  String get gameFolderRefusedNotDirectory => '这不是文件夹。';
+
+  @override
+  String get gameFolderRefusedLink => '此文件夹是指向其他位置的链接或联接点。请选择实际文件夹。';
+
+  @override
+  String get gameFolderRefusedDriveRoot => '不能排除整个驱动器。';
+
+  @override
+  String get gameFolderRefusedProtected =>
+      '这是系统或个人文件夹（Windows、Program Files、用户配置文件、桌面、文档、下载、Temp）或包含此类文件夹。请选择游戏自己的文件夹。';
+
+  @override
+  String get defenderNotActive => 'Microsoft Defender 不是当前使用的防病毒软件，因此排除项不会生效。';
+
+  @override
+  String get defenderRealTimeOff => 'Defender 实时保护已关闭，因此排除项不会生效。';
+
+  @override
+  String get defenderExclusionsIgnored => '此电脑上的策略使 Defender 忽略本地排除项。';
+
+  @override
+  String get defenderStatusUnknown => '无法读取 Microsoft Defender 状态。';
+
+  @override
+  String get interruptLayoutButton => '按用途的建议布局';
+
+  @override
+  String get interruptLayoutTitle => '建议的中断布局';
+
+  @override
+  String get interruptLayoutIntro =>
+      '根据此 CPU 的拓扑，为显卡、USB、网络和音频各分配一个物理核心，避开核心 0。这是需要实测的建议布局：效果尚未得到证实。';
+
+  @override
+  String get interruptRoleGpu => '显卡';
+
+  @override
+  String get interruptRoleUsb => 'USB';
+
+  @override
+  String get interruptRoleNetwork => '网络';
+
+  @override
+  String get interruptRoleAudio => '音频';
+
+  @override
+  String get interruptLayoutToDo => '待执行';
+
+  @override
+  String get interruptLayoutAlreadySet => '已设置';
+
+  @override
+  String get interruptLayoutSkipped => '已跳过';
+
+  @override
+  String interruptLayoutRssRow(String adapter) {
+    return '网络 RSS（$adapter）：从网络核心开始';
+  }
+
+  @override
+  String get interruptLayoutRssOff => '此网卡已关闭 RSS';
+
+  @override
+  String get interruptLayoutRssUnreadable => '无法读取此网卡的 RSS';
+
+  @override
+  String get interruptLayoutMsiOff => '此设备未启用 MSI：请先启用以获得最佳效果。';
+
+  @override
+  String get interruptLayoutNoteHybrid => '混合架构 CPU：只使用 P 核。';
+
+  @override
+  String get interruptLayoutNoteCache =>
+      '具有多个 L3 缓存（CCD）的 CPU：设备分配到没有 3D V-Cache 的 CCD；缓存相同时，分配到不含 CPU 0 的 CCD。';
+
+  @override
+  String get interruptLayoutNoteShared => '此 CPU 只有 6 个或更少核心：网络和音频共用一个核心。';
+
+  @override
+  String get interruptLayoutUnavailable => '无法在此电脑上建议布局：存在多个处理器组、核心太少或无法读取拓扑。';
+
+  @override
+  String get interruptLayoutNothingToDo => '已全部设置。';
+
+  @override
+  String get interruptLayoutReminder =>
+      '请使用“重启”而不是“关机”来重启 Windows（快速启动会保留旧状态）。每次更新 GPU 驱动后请重新检查，驱动可能会重置这些值。请在“诊断”中比较 1% 和 0.1% low 帧时间以及 DPC/ISR 时间，而不只是平均 FPS。';
+
+  @override
+  String get interruptLayoutApply => '应用布局';
+
+  @override
+  String interruptLayoutRssManual(int cpu) {
+    return 'RSS 从 CPU $cpu 开始。ZapTweaks 不会移动它：Windows 还会同时更改队列和处理器数量，且无法精确还原。如有需要，请在网卡的高级设置中更改。';
+  }
+
+  @override
+  String get interruptLayoutGpuAudio => '显卡的 HDMI/DisplayPort 音频：不移动，它不是游戏音频。';
+
+  @override
+  String get interruptLayoutAudioUnused => '此控制器后面没有可用的音频设备（已禁用或不存在）：不移动。';
+
+  @override
+  String get interruptLayoutAudioUsb =>
+      '未使用板载声卡：USB 音频（耳机、DAC、音频接口）跟随其所连接 USB 控制器的核心。';
 }

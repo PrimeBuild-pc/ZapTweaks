@@ -10,7 +10,10 @@ import '../../../platform/windows/hardware_capability_validators.dart';
 import '../../../platform/windows/interrupt_configuration_service.dart';
 import '../../../platform/windows/processor_topology.dart';
 import '../../../platform/windows/registry_value_store.dart';
+import '../../../platform/windows/rss_service.dart';
 import '../../tweaks/application/tweak_controller.dart';
+import '../application/interrupt_layout_preview.dart';
+import '../domain/interrupt_layout.dart';
 
 class InterruptConfigurationPage extends StatefulWidget {
   const InterruptConfigurationPage({required this.controller, super.key});
@@ -31,6 +34,7 @@ class _InterruptConfigurationPageState
   String? _busy;
   String? _message;
   bool _loading = true;
+  bool _layoutApplied = false;
 
   @override
   void initState() {
@@ -381,6 +385,212 @@ class _InterruptConfigurationPageState
     );
   }
 
+  Future<void> _showLayout() async {
+    final strings = AppLocalizations.of(context);
+    final topology = _topology;
+    if (topology == null) return;
+    final layout = planInterruptLayout(topology);
+    if (layout.unavailable != null) {
+      setState(() => _message = strings.interruptLayoutUnavailable);
+      return;
+    }
+    setState(() {
+      _busy = 'layout';
+      _message = null;
+    });
+    final rss = <String, RssAdapterState?>{};
+    try {
+      final service = WindowsRssService(
+        processRunner: widget.controller.processRunner,
+      );
+      final names = await service.adapterNamesByInstanceId();
+      final rssCapable = (await service.adapterNames()).toSet();
+      for (final device in _devices.where(
+        (item) => interruptRole(item) == InterruptRole.network,
+      )) {
+        final name = names[device.device.instanceId.toUpperCase()];
+        if (name == null || !rssCapable.contains(name)) continue;
+        try {
+          rss[device.device.instanceId] = await service.inspect(name);
+        } catch (_) {
+          rss[device.device.instanceId] = null;
+        }
+      }
+    } catch (_) {
+      /* RSS rows are optional: the interrupt layout still applies. */
+    } finally {
+      if (mounted) setState(() => _busy = null);
+    }
+    if (!mounted) return;
+    final rows = buildLayoutRows(
+      layout: layout,
+      devices: _devices,
+      configurations: _configurations,
+      rssByInstanceId: rss,
+    );
+    final requests = rows
+        .map((row) => row.request)
+        .whereType<OperationRequest>()
+        .toList(growable: false);
+    final audio = hasLayoutAudio(rows);
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => ContentDialog(
+        title: Text(strings.interruptLayoutTitle),
+        constraints: const BoxConstraints(maxWidth: 720),
+        content: ConstrainedBox(
+          constraints: const BoxConstraints(maxHeight: 560),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(strings.interruptLayoutIntro),
+                const SizedBox(height: 8),
+                for (final note in layout.notes)
+                  Text('- ${_layoutNote(strings, note)}'),
+                if (!audio) Text('- ${strings.interruptLayoutAudioUsb}'),
+                const SizedBox(height: 8),
+                InfoBar(
+                  title: Text(strings.interruptChangeWarning),
+                  severity: InfoBarSeverity.warning,
+                  isLong: true,
+                ),
+                const SizedBox(height: 12),
+                Wrap(
+                  spacing: 16,
+                  runSpacing: 4,
+                  children: <Widget>[
+                    for (final entry in layout.cpuByRole.entries)
+                      if (audio || entry.key != InterruptRole.audio)
+                        Text(
+                          '${_roleName(strings, entry.key)}: '
+                          '${_processorLabel(strings, topology, entry.value)}',
+                          style: FluentTheme.of(context).typography.bodyStrong,
+                        ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                if (rows.isEmpty) Text(strings.noCompatibleInterruptDevices),
+                for (final row in rows) _layoutRow(strings, row),
+                if (rows.isNotEmpty && requests.isEmpty) ...<Widget>[
+                  const SizedBox(height: 8),
+                  Text(strings.interruptLayoutNothingToDo),
+                ],
+              ],
+            ),
+          ),
+        ),
+        actions: <Widget>[
+          Button(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(strings.cancel),
+          ),
+          FilledButton(
+            onPressed: requests.isEmpty
+                ? null
+                : () => Navigator.pop(context, true),
+            child: Text(strings.interruptLayoutApply),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !mounted) return;
+    setState(() {
+      _busy = 'layout';
+      _message = null;
+    });
+    try {
+      final plan = await widget.controller.executeNativeRequests(requests);
+      if (plan.status != PlanStatus.completed) {
+        throw StateError(
+          plan.items
+                  .map((item) => item.error)
+                  .whereType<String>()
+                  .firstOrNull ??
+              'Operation failed.',
+        );
+      }
+      await _load();
+      if (mounted) {
+        setState(() {
+          _layoutApplied = true;
+          _message = strings.operationCompleted;
+        });
+      }
+    } catch (error) {
+      if (mounted) setState(() => _message = error.toString());
+    } finally {
+      if (mounted) setState(() => _busy = null);
+    }
+  }
+
+  Widget _layoutRow(AppLocalizations strings, LayoutRow row) {
+    final status = switch (row.status) {
+      LayoutRowStatus.toDo => strings.interruptLayoutToDo,
+      LayoutRowStatus.alreadySet => strings.interruptLayoutAlreadySet,
+      LayoutRowStatus.skipped => strings.interruptLayoutSkipped,
+    };
+    final reason = switch (row.skip) {
+      LayoutSkip.rssOff => strings.interruptLayoutRssOff,
+      LayoutSkip.rssUnreadable => strings.interruptLayoutRssUnreadable,
+      LayoutSkip.rssManual => strings.interruptLayoutRssManual(
+        row.rssBase ?? 0,
+      ),
+      LayoutSkip.gpuAudio => strings.interruptLayoutGpuAudio,
+      LayoutSkip.audioUnused => strings.interruptLayoutAudioUnused,
+      null => row.msiOff && !row.rss ? strings.interruptLayoutMsiOff : null,
+    };
+    final typography = FluentTheme.of(context).typography;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          SizedBox(
+            width: 120,
+            child: Text(status, style: typography.bodyStrong),
+          ),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  row.rss
+                      ? strings.interruptLayoutRssRow(row.label)
+                      : row.label,
+                ),
+                Text(
+                  '${_roleName(strings, row.role)} - CPU ${row.cpu.number}',
+                  style: typography.caption,
+                ),
+                if (reason != null) Text(reason, style: typography.caption),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  String _roleName(AppLocalizations strings, InterruptRole role) =>
+      switch (role) {
+        InterruptRole.gpu => strings.interruptRoleGpu,
+        InterruptRole.usb => strings.interruptRoleUsb,
+        InterruptRole.network => strings.interruptRoleNetwork,
+        InterruptRole.audio => strings.interruptRoleAudio,
+      };
+
+  String _layoutNote(
+    AppLocalizations strings,
+    InterruptLayoutNote note,
+  ) => switch (note) {
+    InterruptLayoutNote.hybridPerformanceOnly =>
+      strings.interruptLayoutNoteHybrid,
+    InterruptLayoutNote.cacheGroupChosen => strings.interruptLayoutNoteCache,
+    InterruptLayoutNote.sharedNetworkAudio => strings.interruptLayoutNoteShared,
+  };
+
   String _processorLabel(
     AppLocalizations strings,
     ProcessorTopology? topology,
@@ -456,8 +666,24 @@ class _InterruptConfigurationPageState
               onPressed: _loading || _busy != null ? null : _load,
               child: Text(strings.refreshInventory),
             ),
+            FilledButton(
+              onPressed: _loading || _busy != null || _topology == null
+                  ? null
+                  : _showLayout,
+              child: Text(strings.interruptLayoutButton),
+            ),
+            if (_busy == 'layout')
+              const SizedBox(width: 20, height: 20, child: ProgressRing()),
           ],
         ),
+        if (_layoutApplied) ...<Widget>[
+          const SizedBox(height: 12),
+          InfoBar(
+            title: Text(strings.interruptLayoutReminder),
+            severity: InfoBarSeverity.warning,
+            isLong: true,
+          ),
+        ],
         const SizedBox(height: 12),
         TextBox(
           placeholder: strings.searchDevices,

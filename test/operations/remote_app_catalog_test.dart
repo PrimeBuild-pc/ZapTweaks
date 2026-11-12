@@ -87,7 +87,7 @@ void main() {
         client: MockClient((_) async => http.Response('invalid', 200)),
         cacheFile: cache,
       );
-      expect(bundled.apps, hasLength(467));
+      expect(bundled.apps, hasLength(469));
     },
   );
 

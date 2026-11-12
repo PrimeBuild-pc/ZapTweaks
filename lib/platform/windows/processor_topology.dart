@@ -25,14 +25,23 @@ typedef _GetSystemCpuSetInformationNative =
     Int32 Function(Pointer<Uint8>, Uint32, Pointer<Uint32>, IntPtr, Uint32);
 typedef _GetSystemCpuSetInformationDart =
     int Function(Pointer<Uint8>, int, Pointer<Uint32>, int, int);
+typedef _GetLogicalProcessorInformationExNative =
+    Int32 Function(Int32, Pointer<Uint8>, Pointer<Uint32>);
+typedef _GetLogicalProcessorInformationExDart =
+    int Function(int, Pointer<Uint8>, Pointer<Uint32>);
 
 class ProcessorTopology {
   const ProcessorTopology({
     required this.processorsPerGroup,
     Set<ProcessorAddress>? processors,
+    this.lastLevelCacheBytes = const <int, int>{},
   }) : _processors = processors;
 
   final Map<int, int> processorsPerGroup;
+
+  /// Size of each last-level cache, keyed like
+  /// [ProcessorAddress.lastLevelCacheIndex]; empty when unknown.
+  final Map<int, int> lastLevelCacheBytes;
   final Set<ProcessorAddress>? _processors;
 
   int get logicalProcessorCount =>
@@ -133,6 +142,12 @@ class ProcessorTopology {
         _GetSystemCpuSetInformationNative,
         _GetSystemCpuSetInformationDart
       >('GetSystemCpuSetInformation');
+  static final _GetLogicalProcessorInformationExDart
+  _getLogicalProcessorInformationEx = _kernel32
+      .lookupFunction<
+        _GetLogicalProcessorInformationExNative,
+        _GetLogicalProcessorInformationExDart
+      >('GetLogicalProcessorInformationEx');
 
   static ProcessorTopology inspect() {
     final groups = GetActiveProcessorGroupCount();
@@ -150,7 +165,76 @@ class ProcessorTopology {
     return ProcessorTopology(
       processorsPerGroup: Map.unmodifiable(counts),
       processors: complete,
+      lastLevelCacheBytes: complete == null
+          ? const <int, int>{}
+          : Map.unmodifiable(
+              parseLastLevelCacheBytes(_readCacheRelations(), complete),
+            ),
     );
+  }
+
+  static ByteData _readCacheRelations() {
+    final required = calloc<Uint32>();
+    try {
+      _getLogicalProcessorInformationEx(RelationCache, nullptr, required);
+      if (required.value == 0) return ByteData(0);
+      final buffer = calloc<Uint8>(required.value);
+      try {
+        if (_getLogicalProcessorInformationEx(
+              RelationCache,
+              buffer,
+              required,
+            ) ==
+            FALSE) {
+          return ByteData(0);
+        }
+        return ByteData.sublistView(
+          Uint8List.fromList(buffer.asTypedList(required.value)),
+        );
+      } finally {
+        calloc.free(buffer);
+      }
+    } finally {
+      calloc.free(required);
+    }
+  }
+
+  /// Unified level-3 cache sizes from `SYSTEM_LOGICAL_PROCESSOR_INFORMATION_EX`
+  /// cache records, keyed by the last-level-cache index of their processors.
+  static Map<int, int> parseLastLevelCacheBytes(
+    ByteData data,
+    Set<ProcessorAddress> processors,
+  ) {
+    final result = <int, int>{};
+    var offset = 0;
+    while (offset + 8 <= data.lengthInBytes) {
+      final size = data.getUint32(offset + 4, Endian.little);
+      if (size < 56 || offset + size > data.lengthInBytes) break;
+      final relationship = data.getUint32(offset, Endian.little);
+      final level = data.getUint8(offset + 8);
+      final type = data.getUint32(offset + 16, Endian.little);
+      if (relationship == RelationCache && level == 3 && type == 0) {
+        final bytes = data.getUint32(offset + 12, Endian.little);
+        final groups = data.getUint16(offset + 38, Endian.little);
+        for (var index = 0; index < (groups == 0 ? 1 : groups); index++) {
+          final at = offset + 40 + index * 16;
+          if (at + 16 > offset + size) break;
+          final mask = data.getUint64(at, Endian.little);
+          final group = data.getUint16(at + 8, Endian.little);
+          for (final processor in processors) {
+            final cache = processor.lastLevelCacheIndex;
+            if (cache != null &&
+                processor.group == group &&
+                processor.number < 64 &&
+                (mask >> processor.number) & 1 == 1) {
+              result[cache] = bytes;
+            }
+          }
+        }
+      }
+      offset += size;
+    }
+    return result;
   }
 
   static Set<ProcessorAddress> _readCpuSets() {
