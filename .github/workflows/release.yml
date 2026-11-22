@@ -6,11 +6,16 @@ on:
       - "v*"
 
 permissions:
-  contents: write
+  contents: read
+
+concurrency:
+  group: zaptweaks-release-${{ github.ref_name }}
+  cancel-in-progress: false
 
 jobs:
-  release:
+  build:
     runs-on: windows-2022
+    timeout-minutes: 40
     env:
       RELEASE_TAG: ${{ github.ref_name }}
 
@@ -19,6 +24,7 @@ jobs:
         uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
         with:
           lfs: true
+          persist-credentials: false
 
       - name: Set up Flutter
         uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2
@@ -32,6 +38,9 @@ jobs:
       - name: Validate tag and project version
         shell: pwsh
         run: |
+          if ($env:RELEASE_TAG -cnotmatch '\Av[0-9]+\.[0-9]+\.[0-9]+(?:-[0-9A-Za-z]+(?:[.-][0-9A-Za-z]+)*)?\z') {
+            throw 'Expected a version tag such as v1.2.3 or v1.2.3-beta.1.'
+          }
           $tagVersion = $env:RELEASE_TAG.TrimStart('v')
           $projectVersion = ((Select-String -Path pubspec.yaml -Pattern '^version:\s*(.+)$').Matches[0].Groups[1].Value).Split('+')[0]
           if ($tagVersion -ne $projectVersion) {
@@ -39,9 +48,12 @@ jobs:
           }
 
       - name: Analyze and test
+        shell: pwsh
         run: |
           flutter analyze
+          if ($LASTEXITCODE) { throw 'Flutter analysis failed.' }
           flutter test
+          if ($LASTEXITCODE) { throw 'Flutter tests failed.' }
 
       - name: Build Windows release
         run: flutter build windows --release
@@ -54,7 +66,24 @@ jobs:
         shell: pwsh
         run: |
           choco install innosetup -y --no-progress
+          if ($LASTEXITCODE) { throw 'Inno Setup install failed.' }
           & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" installer.iss
+          if ($LASTEXITCODE) { throw 'Installer build failed.' }
+
+      - name: Verify the final Windows packages
+        shell: pwsh
+        run: |
+          $extracted = Join-Path $env:RUNNER_TEMP 'zaptweaks-portable'
+          Expand-Archive -LiteralPath output/ZapTweaks_Portable.zip -DestinationPath $extracted
+          foreach ($file in 'ZapTweaks.exe', 'flutter_windows.dll', 'data/icudtl.dat') {
+            if ((Get-Item -LiteralPath (Join-Path $extracted $file)).Length -le 0) {
+              throw "Missing or empty portable file: $file."
+            }
+          }
+          $version = $env:RELEASE_TAG.Substring(1)
+          if ((Get-Item -LiteralPath "output/ZapTweaks_Setup_v$version.exe").Length -le 0) {
+            throw 'Installer is empty.'
+          }
 
       - name: Generate release checksums
         shell: pwsh
@@ -65,18 +94,64 @@ jobs:
             "$hash  $([IO.Path]::GetFileName($_))"
           } | Set-Content -LiteralPath output/SHA256SUMS.txt -Encoding ascii
 
-      - name: Publish GitHub release
+      - name: Stage release notes
+        shell: pwsh
+        run: |
+          $notesPath = "docs/releases/$env:RELEASE_TAG.md"
+          if (Test-Path -LiteralPath $notesPath) { Copy-Item -LiteralPath $notesPath -Destination output/release-notes.md }
+
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: zaptweaks-release-assets
+          path: |
+            output/ZapTweaks_Portable.zip
+            output/ZapTweaks_Setup_${{ github.ref_name }}.exe
+            output/SHA256SUMS.txt
+            output/release-notes.md
+          if-no-files-found: error
+
+  publish:
+    if: github.repository == 'PrimeBuild-pc/ZapTweaks' && github.actor_id == '162145141' && github.triggering_actor == github.repository_owner
+    needs: build
+    runs-on: windows-2022
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: zaptweaks-release-assets
+          path: output
+      - name: Verify and publish the GitHub release
         shell: pwsh
         env:
           GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.ref_name }}
         run: |
           $version = $env:RELEASE_TAG.TrimStart('v')
-          $notesPath = "docs/releases/v$version.md"
-          $notesArgs = if (Test-Path -LiteralPath $notesPath) { @('--notes-file', $notesPath) } else { @('--generate-notes') }
-          gh release create "$env:RELEASE_TAG" `
-            "output/ZapTweaks_Portable.zip" `
-            "output/ZapTweaks_Setup_v$version.exe" `
-            "output/SHA256SUMS.txt" `
-            --verify-tag `
-            --title "ZapTweaks v$version" `
-            @notesArgs
+          $refs = git ls-remote "https://github.com/$env:GITHUB_REPOSITORY.git" "refs/tags/$env:RELEASE_TAG" "refs/tags/$env:RELEASE_TAG^{}"
+          if ($LASTEXITCODE -or !$refs) { throw 'Could not resolve the release tag.' }
+          $commit = ($refs | Select-Object -Last 1).Split("`t")[0]
+          if ($commit -cne $env:GITHUB_SHA) { throw 'The tag moved after the build.' }
+          $relation = gh api "repos/$env:GITHUB_REPOSITORY/compare/$commit...main" --jq .status
+          if ($LASTEXITCODE -or $relation -notin @('ahead', 'identical')) { throw 'The tag must point to a commit on main.' }
+          $installer = "output/ZapTweaks_Setup_v$version.exe"
+          $assets = @('output/ZapTweaks_Portable.zip', $installer)
+          $expected = foreach ($asset in $assets) {
+            $hash = (Get-FileHash -LiteralPath $asset -Algorithm SHA256).Hash.ToLowerInvariant()
+            "$hash  $([IO.Path]::GetFileName($asset))"
+          }
+          if (Compare-Object -ReferenceObject $expected -DifferenceObject (Get-Content -LiteralPath output/SHA256SUMS.txt) -CaseSensitive) {
+            throw 'Release checksums do not match the uploaded assets.'
+          }
+          $notice = 'Verify the SHA-256 checksums before running the installer or portable app. These Windows builds may be unsigned.'
+          $notesPath = 'output/release-notes.md'
+          $notesArgs = if (Test-Path -LiteralPath $notesPath) {
+            Add-Content -LiteralPath $notesPath -Value "`n$notice"
+            @('--notes-file', $notesPath)
+          } else {
+            @('--generate-notes', '--notes', $notice)
+          }
+          $kind = if ($version.Contains('-')) { '--prerelease' } else { '--latest' }
+          gh release create $env:RELEASE_TAG @assets output/SHA256SUMS.txt --repo $env:GITHUB_REPOSITORY --verify-tag --title "ZapTweaks v$version" $kind @notesArgs
+          if ($LASTEXITCODE) { throw 'GitHub Release creation failed.' }
